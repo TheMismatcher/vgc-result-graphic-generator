@@ -1,0 +1,165 @@
+.ar {
+  --ar-base: #0b0d18;
+  background: var(--ar-base);
+  font-family: 'Montserrat', sans-serif;
+}
+.ar-bg,
+.ar-bg-extra {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Background 1: Spotlight — colored glows and soft light beams on near-black. */
+.ar-spotlight .ar-bg {
+  background:
+    radial-gradient(ellipse 60% 45% at 85% 8%, color-mix(in srgb, var(--red) 70%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 50% at 5% 95%, color-mix(in srgb, var(--blue) 60%, transparent) 0%, transparent 70%),
+    var(--ar-base);
+}
+.ar-spotlight .ar-bg-extra {
+  background: repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.045) 0 70px, transparent 70px 190px);
+  mask-image: linear-gradient(180deg, #000 0%, transparent 75%);
+}
+
+/* Background 2: Grid — tech grid lines fading out, with a bold color band at the bottom. */
+.ar-grid .ar-bg {
+  background:
+    linear-gradient(180deg, transparent 0%, var(--ar-base) 70%),
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--blue) 35%, transparent) 0 2px, transparent 2px 54px),
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--blue) 35%, transparent) 0 2px, transparent 2px 54px),
+    var(--ar-base);
+}
+.ar-grid .ar-bg-extra {
+  background: linear-gradient(178deg, transparent 0 95.2%, var(--red) 95.2% 96.6%, var(--blue-dark) 96.6% 100%);
+}
+
+/* Background 3: Sunset — a warm gradient from main to second color with big fading dots. */
+.ar-sunset .ar-bg {
+  background: linear-gradient(165deg, var(--red) 0%, var(--red-dark) 35%, var(--blue-dark) 75%, #0b0d18 100%);
+}
+.ar-sunset .ar-bg-extra {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.14) 4px, transparent 4.5px);
+  background-size: 26px 26px;
+  mask-image: linear-gradient(200deg, #000 0%, transparent 55%);
+}
+
+.ar-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  height: 250px;
+  padding: 0 50px;
+}
+.ar-heading {
+  min-width: 0;
+}
+.ar-kicker {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+.ar-title {
+  margin-top: 8px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+.ar-underline {
+  width: 180px;
+  height: 8px;
+  margin: 16px 0 14px;
+  background: linear-gradient(90deg, var(--yellow), transparent);
+  transform: skewX(-20deg);
+}
+.ar-facts {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+}
+
+.ar-rows {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 50px;
+}
+.ar-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 117px;
+  padding: 0 22px 0 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+  border-left: 8px solid var(--red);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 26px), calc(100% - 26px) 100%, 0 100%);
+}
+.ar-row.first {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--yellow) 38%, transparent), rgba(255, 255, 255, 0.05));
+  border-left-color: var(--yellow);
+}
+.ar-place {
+  flex: none;
+  width: 112px;
+  text-align: center;
+  font-size: 84px;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 3px rgba(255, 255, 255, 0.85);
+}
+.ar-row.first .ar-place {
+  color: var(--yellow);
+  -webkit-text-stroke: 0;
+}
+.ar-player {
+  flex: 1;
+  min-width: 0;
+}
+.ar-name {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: #fff;
+}
+.ar-sub {
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+}
+.ar-team {
+  display: flex;
+  gap: 4px;
+}
+
+.ar-subrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+.ar-subrow .ar-sub {
+  margin-top: 0;
+}
+.ar-cp {
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  transform: skewX(-12deg);
+}

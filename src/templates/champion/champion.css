@@ -1,0 +1,120 @@
+.ch-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-conic-gradient(from 0deg at 80% 30%, rgba(255, 255, 255, 0.18) 0 6deg, transparent 6deg 14deg),
+    linear-gradient(115deg, var(--blue) 0 55%, var(--yellow) 55% 100%);
+}
+
+.ch-banner {
+  position: absolute;
+  top: 54px;
+  left: -40px;
+  padding: 18px 70px 18px 90px;
+  background: var(--red);
+  border: 7px solid var(--ink);
+  transform: skewX(-12deg);
+}
+.ch-label {
+  font-size: 64px;
+  transform: skewX(12deg);
+}
+
+.ch-name {
+  position: absolute;
+  top: 190px;
+  left: 50px;
+  right: 230px;
+}
+.ch-name .dmv-title {
+  white-space: nowrap;
+  padding: 8px 0 8px 6px;
+}
+.ch-sub {
+  margin-top: 6px;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--ink);
+  background: #fff;
+  display: inline-block;
+  padding: 4px 18px;
+  border: 4px solid var(--ink);
+  border-radius: 999px;
+}
+.ch-sub:empty {
+  display: none;
+}
+
+.ch-team {
+  position: absolute;
+  top: 400px;
+  left: 50px;
+  right: 50px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.ch-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 268px;
+  padding-top: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+}
+.ch-mon-name {
+  margin-top: 4px;
+  font-size: 24px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1;
+}
+.ch-item-name {
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.ch-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  height: 92px;
+  padding: 0 40px;
+  background: var(--ink);
+  font-size: 20px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.ch-event {
+  font-size: 26px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--yellow);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ch-subrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+.ch-subrow .ch-sub {
+  margin-top: 0;
+}
+.ch-cp {
+  font-size: 30px;
+  padding: 4px 18px;
+  border-width: 4px;
+}

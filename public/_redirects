@@ -1,0 +1,3 @@
+# Netlify: forward /rk9/* to rk9.gg so the Day 2 tab can read RK9 rosters,
+# team lists, and pairings (RK9 blocks direct requests from other websites).
+/rk9/*  https://rk9.gg/:splat  200

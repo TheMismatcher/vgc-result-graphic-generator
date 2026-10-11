@@ -1,0 +1,138 @@
+.br-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, var(--blue) 0 28%, var(--ink) 28% 28.8%, var(--blue-dark) 28.8% 100%);
+}
+
+.br-header {
+  position: absolute;
+  top: 26px;
+  left: 44px;
+  right: 44px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.br-heading {
+  flex: 1;
+  min-width: 0;
+}
+.br-tag {
+  display: inline-block;
+  margin: 0 0 8px 6px;
+  padding: 2px 22px;
+  background: var(--yellow);
+  border: 5px solid var(--ink);
+  color: var(--ink);
+  font-size: 26px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  transform: skewX(-12deg);
+}
+.br-heading .dmv-title {
+  padding: 4px 0 4px 6px;
+}
+.br-facts {
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.br-empty {
+  position: absolute;
+  top: 560px;
+  left: 120px;
+  right: 120px;
+  padding: 40px;
+  border: 6px dashed rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  font-size: 34px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.br-label {
+  position: absolute;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.br-entry {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-width: 5px;
+  border-radius: 16px;
+  background: #fff;
+  color: var(--ink);
+  overflow: hidden;
+}
+.br-entry.won {
+  background: var(--yellow);
+}
+.br-entry.lost {
+  opacity: 0.5;
+}
+.br-name {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.15;
+}
+.br-team {
+  display: flex;
+  gap: 2px;
+}
+.br-team img {
+  object-fit: contain;
+}
+
+.br-line {
+  position: absolute;
+  border: 6px solid var(--ink);
+  border-radius: 0 10px 10px 0;
+}
+.br-line-h {
+  position: absolute;
+  height: 6px;
+  background: var(--ink);
+}
+
+.br-champ {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 12px;
+  background: var(--yellow);
+  color: var(--ink);
+  box-shadow: 0 0 0 6px #fff;
+}
+.br-champ.open {
+  background: #fff;
+}
+.br-champ-label {
+  font-size: 20px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+}
+.br-champ-name {
+  margin: 6px 0 10px;
+  padding: 4px;
+}
+.br-champ-team {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px 6px;
+}

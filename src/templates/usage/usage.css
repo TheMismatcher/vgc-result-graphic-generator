@@ -1,0 +1,98 @@
+.us-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(200deg, var(--red) 0 30%, var(--ink) 30% 30.8%, var(--blue) 30.8% 100%);
+}
+
+.us-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  height: 260px;
+  padding: 0 44px;
+}
+.us-heading {
+  flex: 1;
+  min-width: 0;
+}
+.us-event {
+  margin-top: 10px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.us-facts {
+  margin-top: 6px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.us-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  padding: 10px 40px 0;
+}
+.us-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 330px;
+  padding: 10px 14px 14px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--ink);
+}
+.us-rank {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-size: 30px;
+  font-weight: 900;
+  font-style: italic;
+  color: var(--red);
+}
+.us-render {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.3));
+}
+.us-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.us-bar {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  border: 4px solid var(--ink);
+  border-radius: 999px;
+  background: #e8e8e8;
+  overflow: hidden;
+}
+.us-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--yellow);
+}
+.us-bar span {
+  position: relative;
+  display: block;
+  text-align: center;
+  line-height: 32px;
+  font-size: 22px;
+  font-weight: 900;
+}

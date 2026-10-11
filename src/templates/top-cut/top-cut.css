@@ -1,0 +1,100 @@
+.tc-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, var(--blue) 0 34%, var(--ink) 34% 34.8%, var(--red) 34.8% 100%);
+}
+
+.tc-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  height: 250px;
+  padding: 0 44px;
+}
+.tc-heading {
+  flex: 1;
+  min-width: 0;
+}
+.tc-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.tc-rows {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 40px;
+}
+
+.tc-row {
+  display: flex;
+  align-items: center;
+  height: 124px;
+  padding: 0 18px 0 0;
+  overflow: hidden;
+  background: var(--blue-dark);
+}
+.tc-row.red {
+  background: var(--red-dark);
+}
+.tc-row.first {
+  background: var(--yellow);
+}
+.tc-row.first .tc-place {
+  background: var(--ink);
+  color: var(--yellow);
+}
+.tc-row.first .tc-sub {
+  color: var(--ink);
+}
+
+.tc-place {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100%;
+  margin-right: 20px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 900;
+  font-style: italic;
+  font-size: 40px;
+  border-right: 7px solid var(--ink);
+}
+
+.tc-player {
+  flex: 1;
+  min-width: 0;
+}
+.tc-player .dmv-title {
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 6px 0 4px 4px;
+}
+.tc-sub {
+  margin-top: 4px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.tc-team {
+  display: flex;
+  gap: 4px;
+}
+
+.tc-cp {
+  font-size: 18px;
+  padding: 1px 8px;
+  border-width: 2px;
+}

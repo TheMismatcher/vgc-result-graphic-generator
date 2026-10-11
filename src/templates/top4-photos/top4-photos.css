@@ -1,0 +1,121 @@
+.p4-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, var(--blue) 0 50%, var(--ink) 50% 50.8%, var(--red) 50.8% 100%);
+}
+
+.p4-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  height: 200px;
+  padding: 0 44px;
+}
+.p4-heading {
+  flex: 1;
+  min-width: 0;
+}
+.p4-tag {
+  display: inline-block;
+  margin: 0 0 8px 6px;
+  padding: 2px 20px;
+  background: var(--yellow);
+  border: 5px solid var(--ink);
+  color: var(--ink);
+  font-size: 26px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  transform: skewX(-12deg);
+}
+.p4-heading .dmv-title {
+  padding: 4px 0 4px 6px;
+}
+.p4-facts {
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.p4-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 410px;
+  gap: 20px;
+  padding: 0 40px;
+}
+
+.p4-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  color: var(--ink);
+}
+.p4-card.first {
+  background: var(--yellow);
+}
+
+.p4-photo {
+  position: relative;
+  flex: none;
+  height: 252px;
+  border-bottom: 7px solid var(--ink);
+}
+.p4-place {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 2px 16px 4px 12px;
+  background: #fff;
+  border-right: 5px solid var(--ink);
+  border-bottom: 5px solid var(--ink);
+  border-bottom-right-radius: 16px;
+  font-size: 30px;
+  font-weight: 900;
+  font-style: italic;
+}
+.p4-card.first .p4-place {
+  background: var(--yellow);
+}
+.p4-plate {
+  position: absolute;
+  left: -12px;
+  bottom: 12px;
+  max-width: 420px;
+  padding: 4px 26px 4px 30px;
+  background: var(--ink);
+  transform: skewX(-12deg);
+}
+.p4-name {
+  color: #fff;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.2;
+  transform: skewX(12deg);
+}
+
+.p4-bottom {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.p4-sub {
+  min-height: 22px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #444;
+}
+.p4-team {
+  display: flex;
+  gap: 8px;
+}

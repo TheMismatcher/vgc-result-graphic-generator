@@ -1,0 +1,161 @@
+/* Shared DMV look for templates: colors, outlined italic text, halftone. */
+
+.dmv {
+  /* Set from the Branding tab (brand.ts brandVars); DMV colors otherwise. */
+  --red: var(--brand-red, #b3121b);
+  --red-dark: var(--brand-red-dark, #7f0b12);
+  --blue: var(--brand-blue, #6b9cf6);
+  --blue-dark: var(--brand-blue-dark, #1f4fa3);
+  --yellow: var(--brand-yellow, #ffd34e);
+  --ink: #111;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+  color: #fff;
+  background: var(--ink);
+}
+
+/* Big white italic text with a thick black outline and drop shadow, like the banner. */
+.dmv-title {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 0.95;
+  color: #fff;
+  -webkit-text-stroke: 0.14em var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0.06em 0.08em 0 rgba(0, 0, 0, 0.35);
+}
+
+.dmv-halftone {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.16) 2.5px, transparent 3px);
+  background-size: 16px 16px;
+}
+
+.dmv-panel {
+  border: 7px solid var(--ink);
+  border-radius: 24px;
+}
+
+.dmv-logo {
+  border-radius: 50%;
+  border: 6px solid var(--ink);
+  background: #fff;
+  object-fit: cover;
+}
+
+.dmv-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 20px;
+  border: 4px solid var(--ink);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 22px;
+  white-space: nowrap;
+}
+
+.dmv-mon {
+  position: relative;
+  flex: none;
+}
+.dmv-mon img.render {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.35));
+}
+.dmv-mon .item {
+  /* Item icon on its own (no bubble), with a dark outline-shadow so it reads on any background. */
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  width: 44%;
+  height: 44%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, 0.9)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+}
+/* Original look: item inside a white bubble. */
+.dmv-mon.item-bubble .item {
+  right: -4px;
+  bottom: -4px;
+  width: 36%;
+  height: 36%;
+  padding: 2px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--ink);
+  filter: none;
+}
+.dmv-mon.item-bubble.dark .item {
+  background: rgba(17, 17, 17, 0.85);
+  border: 3px solid var(--yellow);
+}
+.dmv-mon.item-bubble .item.pixel {
+  padding: 0;
+}
+.dmv-mon .item.pixel {
+  image-rendering: pixelated;
+}
+.dmv-mon .tera {
+  position: absolute;
+  left: -2px;
+  bottom: -2px;
+  width: 26%;
+  height: 26%;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+}
+
+.dmv-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dmv-photo-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.18) 2.5px, transparent 3px) 0 0 / 16px 16px,
+    linear-gradient(160deg, var(--blue) 0%, var(--blue-dark) 100%);
+}
+.dmv-photo-empty span {
+  font-weight: 900;
+  font-style: italic;
+  font-size: 96px;
+  color: rgba(255, 255, 255, 0.85);
+  -webkit-text-stroke: 10px var(--ink);
+  paint-order: stroke fill;
+}
+
+/* "+50 CP" chip (Show CP earned) */
+.dmv-cp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 10px;
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  background: var(--yellow);
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.dmv-cp.photo-cp {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 20px;
+}

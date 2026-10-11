@@ -1,0 +1,29 @@
+.d2 {
+  background: #b8434f;
+}
+.d2-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.d2-text {
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.d2-text.light {
+  color: #fff;
+}
+.d2-text.dark {
+  color: #8b3a40;
+}
+.d2-photo {
+  overflow: hidden;
+  border-radius: 12px;
+}
+/* Same slanted dark bar as the artwork, drawn on top of the photo. */
+.d2-caption {
+  background: #8a4646;
+  border-radius: 16px;
+  transform: skewX(-32deg);
+}

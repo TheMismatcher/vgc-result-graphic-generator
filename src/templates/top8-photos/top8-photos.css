@@ -1,0 +1,126 @@
+.p8-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, var(--red) 0 30%, var(--ink) 30% 30.8%, var(--blue) 30.8% 100%);
+}
+
+.p8-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  height: 230px;
+  padding: 0 44px;
+}
+.p8-heading {
+  flex: 1;
+  min-width: 0;
+}
+.p8-tag {
+  display: inline-block;
+  margin: 0 0 10px 6px;
+  padding: 4px 22px;
+  background: var(--yellow);
+  border: 5px solid var(--ink);
+  color: var(--ink);
+  font-size: 28px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  transform: skewX(-12deg);
+}
+.p8-heading .dmv-title {
+  padding: 4px 0 4px 6px;
+}
+.p8-facts {
+  margin-top: 8px;
+  font-size: 21px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.p8-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 255px;
+  gap: 20px;
+  padding: 0 40px;
+}
+
+.p8-card {
+  display: flex;
+  overflow: hidden;
+  background: #fff;
+  color: var(--ink);
+}
+.p8-card.first {
+  background: var(--yellow);
+}
+.p8-card.blue {
+  background: var(--blue-dark);
+  color: #fff;
+}
+.p8-card.red {
+  background: var(--red-dark);
+  color: #fff;
+}
+.p8-card.blue .p8-sub,
+.p8-card.red .p8-sub {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.p8-photo {
+  position: relative;
+  flex: none;
+  width: 210px;
+  height: 100%;
+  border-right: 7px solid var(--ink);
+}
+.p8-place {
+  position: absolute;
+  color: var(--ink);
+  top: 0;
+  left: 0;
+  padding: 2px 14px 4px 10px;
+  background: #fff;
+  border-right: 5px solid var(--ink);
+  border-bottom: 5px solid var(--ink);
+  border-bottom-right-radius: 16px;
+  font-size: 28px;
+  font-weight: 900;
+  font-style: italic;
+}
+.p8-card.first .p8-place {
+  background: var(--yellow);
+}
+
+.p8-info {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 12px 10px 14px;
+}
+.p8-name {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.15;
+}
+.p8-sub {
+  min-height: 22px;
+  margin-top: 2px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #444;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.p8-team {
+  display: grid;
+  grid-template-columns: repeat(3, 64px);
+  gap: 6px 10px;
+  margin-top: 10px;
+}

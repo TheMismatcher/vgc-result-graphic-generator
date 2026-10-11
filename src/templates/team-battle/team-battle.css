@@ -1,0 +1,224 @@
+.tb-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(98deg, var(--blue) 0 49.6%, var(--ink) 49.6% 50.4%, var(--red) 50.4% 100%);
+}
+
+.tb-kicker {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  height: 48px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tb-header {
+  position: absolute;
+  top: 82px;
+  left: 30px;
+  right: 30px;
+  display: grid;
+  grid-template-columns: 1fr 230px 1fr;
+  align-items: center;
+}
+.tb-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+.tb-team-name {
+  padding: 4px;
+}
+.tb-record {
+  padding: 2px 16px;
+  border: 4px solid var(--ink);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 22px;
+  font-weight: 900;
+}
+.tb-logo {
+  border-radius: 50%;
+  border: 6px solid var(--ink);
+  background: #fff;
+  object-fit: cover;
+}
+.tb-logo-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  font-weight: 900;
+  font-style: italic;
+}
+.tb-score {
+  text-align: center;
+  font-size: 120px;
+  font-style: normal;
+  white-space: nowrap;
+}
+.tb-dash {
+  margin: 0 6px;
+}
+
+.tb-row {
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+.tb-card {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 14px;
+  border-width: 5px;
+  border-radius: 16px;
+  background: var(--blue-dark);
+  overflow: hidden;
+}
+.tb-card.right {
+  align-items: flex-end;
+  background: var(--red-dark);
+}
+.tb-card.won {
+  background: var(--yellow);
+  color: var(--ink);
+}
+.tb-card.lost {
+  opacity: 0.7;
+}
+.tb-player {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.15;
+}
+.tb-mons {
+  display: flex;
+  gap: 4px;
+}
+.tb-set-score {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 104px;
+  border: 5px solid var(--ink);
+  border-radius: 16px;
+  background: #fff;
+  color: rgba(17, 17, 17, 0.45);
+  font-size: 36px;
+  font-weight: 900;
+}
+.tb-set-score .win {
+  color: var(--ink);
+}
+
+.tb-banner {
+  position: absolute;
+  left: -30px;
+  right: 120px;
+  bottom: 26px;
+  display: flex;
+  align-items: center;
+  height: 112px;
+  padding-left: 70px;
+  background: var(--yellow);
+  border: 7px solid var(--ink);
+  transform: rotate(-2deg);
+}
+.tb-banner .dmv-title {
+  padding: 6px;
+}
+
+/* ---- From your team's side: Win / Loss versions ---- */
+
+.tb-result-tag {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%) skewX(-12deg);
+  padding: 2px 26px;
+  border: 5px solid var(--ink);
+  font-size: 30px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  z-index: 1;
+}
+.tb-kicker.with-tag {
+  top: 72px;
+  height: 40px;
+  font-size: 20px;
+}
+.tb-win .tb-header,
+.tb-loss .tb-header {
+  top: 104px;
+}
+
+/* Win: bright sunburst in your colors, gold everywhere you won. */
+.tb-win .tb-bg {
+  background:
+    repeating-conic-gradient(from 0deg at 50% 16%, rgba(255, 255, 255, 0.2) 0 5deg, transparent 5deg 13deg),
+    radial-gradient(ellipse at 50% 12%, var(--yellow) 0%, transparent 45%),
+    linear-gradient(180deg, var(--blue) 0%, var(--blue-dark) 100%);
+}
+.tb-win .tb-result-tag {
+  background: var(--yellow);
+  color: var(--ink);
+}
+.tb-win .tb-card.right {
+  background: var(--red-dark);
+}
+.tb-win .tb-card.right.won {
+  background: #fff;
+  color: var(--ink);
+  opacity: 0.85;
+}
+
+/* Loss: dark and muted; your players' set wins still get credit (in your color). */
+.tb-loss .tb-bg {
+  background:
+    radial-gradient(ellipse at 20% 0%, color-mix(in srgb, var(--blue) 35%, transparent) 0%, transparent 55%),
+    linear-gradient(180deg, #2a2d3a 0%, #14151c 100%);
+}
+.tb-loss .dmv-halftone {
+  opacity: 0.4;
+}
+.tb-loss .tb-result-tag {
+  background: #2a2d3a;
+  color: #fff;
+  border-color: #fff;
+}
+.tb-loss .tb-card {
+  background: #343847;
+}
+.tb-loss .tb-card.left.won {
+  background: var(--blue);
+  color: #fff;
+}
+.tb-loss .tb-card.right.won {
+  background: #4a4f62;
+  color: #fff;
+}
+.tb-loss .tb-card.lost {
+  opacity: 0.6;
+}
+.tb-loss .tb-banner {
+  background: #14151c;
+  border-color: #fff;
+}
