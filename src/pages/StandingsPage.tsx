@@ -7,10 +7,51 @@ import { PlayerEditor } from '../components/PlayerEditor'
 import { Preview } from '../components/Preview'
 import { TournamentForm } from '../components/TournamentForm'
 import { LimitlessImport } from '../components/LimitlessImport'
+import { TdfUpload } from '../components/tdfUpload'
 import { BracketEditor } from '../components/BracketEditor'
-import { Button } from '../components/ui'
+import { Button, Card } from '../components/ui'
+import { Box, Tab, Tabs } from '@mui/material'
+import React from 'react'
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      tabIndex={0}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
+
 
 export function StandingsPage({ state, setState }: { state: AppState; setState: (fn: (s: AppState) => AppState) => void }) {
+  const [inputTab, setInputTab] = React.useState(0);
+
+  const handleInputTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setInputTab(newValue);
+  };
+  
+  function a11yProps(index: number) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
+
   const event = eventInfo(state.tournament)
   const setPlayers = (fn: (players: Player[]) => Player[]) => setState((s) => ({ ...s, players: fn(s.players) }))
   const move = (i: number, dir: -1 | 1) =>
@@ -23,7 +64,21 @@ export function StandingsPage({ state, setState }: { state: AppState; setState: 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div className="space-y-4">
-        <LimitlessImport setState={setState} />
+        <Card className="space-y-3">
+          <h2 className="text-lg font-bold text-slate-900">Data Source</h2>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={inputTab} onChange={handleInputTabChange} aria-label="basic tabs example">
+              <Tab label="Limitless" {...a11yProps(0)} />
+              <Tab label="TOM File" {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={inputTab} index={0}>
+            <LimitlessImport setState={setState} />
+          </CustomTabPanel>
+          <CustomTabPanel value={inputTab} index={1}>
+            <TdfUpload setState={setState} />
+          </CustomTabPanel>
+        </Card>
         <TournamentForm value={state.tournament} onChange={(tournament) => setState((s) => ({ ...s, tournament }))} />
 
         <div className="flex items-center justify-between">
