@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { AppState, Mon, Player } from '../types'
-import { Button, Card, Field, Input, Select } from './ui'
+import { Button, Field, Input, Select } from './ui'
 import { XMLParser } from 'fast-xml-parser'
 import type { Tournament } from '../types'
 import { TOURNAMENT_TYPES } from '../data/options'
@@ -11,11 +11,8 @@ function forceArray(val: any[]) {
   return Array.isArray(val) ? val : [val];
 }
 
-let type = TOURNAMENT_TYPES[1];
-
 export function TdfUpload({ setState }: { setState: (fn: (s: AppState) => AppState) => void }) {
     const [xmlFile, setXmlData] = useState<File | null>(null);
-    const [error, setError] = useState("");
     const [top, setTop] = useState(8)
     const [type, setType] = useState<{ id: string, name:string }>(TOURNAMENT_TYPES[1]);
     
@@ -48,7 +45,7 @@ export function TdfUpload({ setState }: { setState: (fn: (s: AppState) => AppSta
                 const parser = new XMLParser(options);
                 const tournamentData = parser.parse(xmlText).tournament;
                 
-                const finishedPods = tournamentData.standings.pod.filter(x=> x['@_type'] == 'finished');
+                const finishedPods = tournamentData.standings.pod.filter((x: { [x: string]: string })=> x['@_type'] == 'finished');
                 
                 // get tournament data
                 const t:Tournament = {
@@ -58,18 +55,18 @@ export function TdfUpload({ setState }: { setState: (fn: (s: AppState) => AppSta
                     ,format: ""
                     ,customFormat: ""
                     ,divisions: { 
-                        masters: forceArray(finishedPods.filter(x=>x['@_category'] == '2')[0].player).length ?? 0
-                        ,seniors: forceArray(finishedPods.filter(x=>x['@_category'] == '1')[0].player).length ?? 0
-                        ,juniors: forceArray(finishedPods.filter(x=>x['@_category'] == '0')[0].player).length ?? 0
+                        masters: forceArray(finishedPods.filter((x: { [x: string]: string })=>x['@_category'] == '2')[0].player).length ?? 0
+                        ,seniors: forceArray(finishedPods.filter((x: { [x: string]: string })=>x['@_category'] == '1')[0].player).length ?? 0
+                        ,juniors: forceArray(finishedPods.filter((x: { [x: string]: string })=>x['@_category'] == '0')[0].player).length ?? 0
                     }
                 }
 
                 const today = new Date();
 
                 //get players
-                const placements = finishedPods.flatMap(x=>forceArray(x.player));
+                const placements = finishedPods.flatMap((x: { player: any[] })=>forceArray(x.player));
                 const playerMap: Record<string, Player> = {};
-                tournamentData.players.player?.map(p=>{
+                tournamentData.players.player?.map((p: { [x: string]: any; birthdate: string | number | Date; firstname: string; lastname: string })=>{
                     const birthdate = new Date(p.birthdate);
                     const diffInMs = Math.abs(today.getTime() - birthdate.getTime());
                     const msPerYear = 1000 * 60 * 60 * 24 * 365.25;
@@ -88,12 +85,12 @@ export function TdfUpload({ setState }: { setState: (fn: (s: AppState) => AppSta
                         ties: 0,
                     };
                     player.division = division;
-                    const standing = placements.find(x=>x['@_id'] == player.uid)
+                    const standing = placements.find((x: { [x: string]: string })=>x['@_id'] == player.uid)
                     if(standing){
                         player.finalStanding = standing['@_place'] ?? Infinity
                     }
                     return player;
-                }).forEach(p=>{
+                }).forEach((p: Player)=>{
                     playerMap[p.uid] = p;
                 });
 
@@ -145,16 +142,14 @@ export function TdfUpload({ setState }: { setState: (fn: (s: AppState) => AppSta
                     // ,players: result.players
                     // , bracket: result.bracket
                 }))
-                setError("");
             } catch (err) {
                 alert(err);
-                setError("Failed to parse TDF Data. Please ensure the file is valid.");
                 setXmlData(null);
             }
         };
 
         reader.onerror = () => {
-            setError("Error reading the file.");
+            alert("Error reading the file.");
         };
 
         reader.readAsText((file as Blob));
