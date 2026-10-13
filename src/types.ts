@@ -14,6 +14,11 @@ export interface Player {
   team: Mon[] // always 6 slots
   photo?: string // resized JPEG data URL, for photo templates
   photoY?: number // vertical framing of the photo, 0 = top, 100 = bottom
+  wins?: number
+  losses?: number
+  ties?: number
+  finalStanding?: number
+  division?: 'masters' | 'seniors' | 'juniors';
 }
 
 export interface Tournament {
