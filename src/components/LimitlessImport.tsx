@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { AppState } from '../types'
 import { importLimitless, limitlessId } from '../lib/limitless'
-import { Button, Card, Field, Input } from './ui'
+import { Button, Field, Input } from './ui'
 import { useDialog } from './Dialog'
 
 export function LimitlessImport({ setState }: { setState: (fn: (s: AppState) => AppState) => void }) {

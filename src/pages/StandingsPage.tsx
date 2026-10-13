@@ -41,7 +41,7 @@ function CustomTabPanel(props: TabPanelProps) {
 export function StandingsPage({ state, setState }: { state: AppState; setState: (fn: (s: AppState) => AppState) => void }) {
   const [inputTab, setInputTab] = React.useState(0);
 
-  const handleInputTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleInputTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setInputTab(newValue);
   };
   
