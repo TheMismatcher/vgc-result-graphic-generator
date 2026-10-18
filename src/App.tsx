@@ -21,7 +21,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'usage', label: 'Usage' },
   { id: 'replay', label: 'Replay' },
   { id: 'teamBattle', label: 'Team Battle' },
-  { id: 'day2', label: 'Day 2' },
+  { id: 'day2', label: 'Regional Results' },
   { id: 'branding', label: 'Branding' },
 ]
 
@@ -85,10 +85,10 @@ export default function App() {
                 }}
               />
             </label>
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...sampleState(), brand: state.brand }, 'Replace everything on every tab (standings, usage, bracket, replay, team battle, and Day 2) with the sample? Branding is kept.', 'Load sample')}>
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...sampleState(), brand: state.brand }, 'Replace everything on every tab (standings, usage, bracket, replay, team battle, and regional results) with the sample? Branding is kept.', 'Load sample')}>
               Load sample
             </Button>
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...initialState(), brand: state.brand }, 'Clear the tournament, players, usage, bracket, replay, team battle, and Day 2 players? (Branding is kept.)', 'Clear everything')}>
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...initialState(), brand: state.brand }, 'Clear the tournament, players, usage, bracket, replay, team battle, and regional results? (Branding is kept.)', 'Clear everything')}>
               Start over
             </Button>
           </div>

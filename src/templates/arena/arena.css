@@ -117,12 +117,13 @@
   font-weight: 900;
   font-style: italic;
   line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 3px rgba(255, 255, 255, 0.85);
+  /* Solid, not outlined: Montserrat's italic numbers are built from overlapping shapes, and an
+     outline with a see-through middle traces those overlaps as stray lines. */
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 .ar-row.first .ar-place {
   color: var(--yellow);
-  -webkit-text-stroke: 0;
 }
 .ar-player {
   flex: 1;

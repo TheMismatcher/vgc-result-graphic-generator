@@ -272,7 +272,49 @@ function resizeHomeRenders() {
   })
 }
 
+// Data for reading team screenshots (src/lib/teamScan.ts): every species' abilities, types, and
+// learnable moves, so a team can be identified from ability + item + moves even when nicknamed.
+// Written to public/ so the app only downloads it when someone imports a screenshot.
+async function buildTeamScan() {
+  console.log('Building team-scan data…')
+  const get = async (f) => (await fetch(`https://play.pokemonshowdown.com/data/${f}`)).json()
+  const [dex, learnsets, moves] = await Promise.all([get('pokedex.json'), get('learnsets.json'), get('moves.json')])
+  const moveNames = Object.values(moves).filter((m) => !m.isNonstandard || m.isNonstandard === 'Past' || m.isNonstandard === 'Future').map((m) => m.name)
+  const moveIndex = new Map(moveNames.map((n, i) => [n.toLowerCase().replace(/[^a-z0-9]/g, ''), i]))
+  const abilityNames = []
+  const abilityIndex = new Map()
+  const ability = (name) => {
+    if (!abilityIndex.has(name)) abilityIndex.set(name, abilityNames.push(name) - 1)
+    return abilityIndex.get(name)
+  }
+  const ownMoves = (id) => Object.keys(learnsets[id]?.learnset ?? {})
+  const movesFor = (id, entry) => {
+    const all = new Set(ownMoves(id))
+    if (!all.size && entry.changesFrom) ownMoves(entry.changesFrom.toLowerCase().replace(/[^a-z0-9]/g, '')).forEach((m) => all.add(m))
+    if (!all.size && entry.baseSpecies) ownMoves(entry.baseSpecies.toLowerCase().replace(/[^a-z0-9]/g, '')).forEach((m) => all.add(m))
+    // Moves learned as a pre-evolution carry over.
+    for (let pre = entry.prevo; pre; ) {
+      const preId = pre.toLowerCase().replace(/[^a-z0-9]/g, '')
+      ownMoves(preId).forEach((m) => all.add(m))
+      pre = dex[preId]?.prevo
+    }
+    return [...all].map((m) => moveIndex.get(m)).filter((i) => i !== undefined)
+  }
+  const species = []
+  for (const [id, e] of Object.entries(dex)) {
+    if (e.isNonstandard && !['Past', 'Future', 'Unobtainable'].includes(e.isNonstandard)) continue
+    if (!e.baseStats || !e.abilities || !e.types) continue
+    if (e.battleOnly || /Mega|Gmax|Totem|Primal/.test(e.forme ?? '')) continue // team screens show the base form
+    const bst = Object.values(e.baseStats).reduce((a, b) => a + b, 0)
+    species.push([e.name, Object.values(e.abilities).map(ability), e.types, movesFor(id, e), e.evos ? 0 : 1, bst])
+  }
+  await mkdir(path.join(ROOT, 'public/data'), { recursive: true })
+  await writeFile(path.join(ROOT, 'public/data/team-scan.json'), JSON.stringify({ moves: moveNames, abilities: abilityNames, species }))
+  console.log(`Team-scan data: ${species.length} species, ${moveNames.length} moves, ${abilityNames.length} abilities.`)
+}
+
 const pokemon = await buildPokemon()
+await buildTeamScan()
 const items = await buildItems()
 await resizeHomeRenders()
 await mkdir(path.join(ROOT, 'src/data'), { recursive: true })

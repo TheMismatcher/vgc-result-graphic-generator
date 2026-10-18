@@ -23,8 +23,8 @@ const box = (left: number, top: number, width: number, height: number): CSSPrope
 
 const Day2Regionals: Day2Template = {
   id: 'dmv-day2-regionals',
-  name: 'Day 2 · Regionals',
-  description: 'One player who made Day 2: photo, record, and team.',
+  name: 'Regional Results',
+  description: 'One player at a Regional: photo, record, and team.',
   kind: 'day2',
   width: SIZE,
   height: SIZE,

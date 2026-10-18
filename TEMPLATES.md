@@ -14,7 +14,7 @@ Current templates:
 | `bracket/` | standings | 1080×1350 | Top cut bracket with results (set up under "Top cut bracket" or imported from Limitless) |
 | `arena/` | standings | 1080×1350 | Dark esports look; three backgrounds: Spotlight, Grid, Sunset |
 | `usage/` | usage | 1080×1350 | 12 most-used Pokémon |
-| `day2/` | day2 | 1644×1644 | One Day 2 player on the Regionals artist background (event, name, record, photo, team) |
+| `day2/` | day2 | 1644×1644 | One player on the Regionals artist background (Regional Results tab) (event, name, record, photo, team) |
 | `team-battle/` | teamBattle | 1080×1350 | Team vs team (e.g. USPL week): logos, records, every set with both teams, overall winner. Neutral, plus Win / Loss versions told from your team's side (Team A, left) |
 | `vs-result/` | match | 1080×1080 | Replay result: both teams, score, winner |
 

@@ -7,6 +7,7 @@ import { resizePhoto } from '../lib/photo'
 import { Combobox, type Option } from './Combobox'
 import { Button, Input, Select, Textarea } from './ui'
 import { useDialog } from './Dialog'
+import { ScreenshotImport } from './ScreenshotImport'
 
 const POKEMON_OPTIONS: Option[] = POKEMON.map((p) => ({ id: p.id, label: p.name, icon: sprites.icon(p.id) }))
 const ITEM_OPTIONS: Option[] = ITEMS.map((i) => ({ id: i.id, label: i.name, icon: sprites.item(i.id) || undefined }))
@@ -34,7 +35,7 @@ export function PlayerEditor({
 }) {
   const [open, setOpen] = useState(defaultOpen)
   const dialog = useDialog()
-  const [showImport, setShowImport] = useState(false)
+  const [showImport, setShowImport] = useState<'' | 'paste' | 'screenshot'>('')
   const set = <K extends keyof Player>(key: K, v: Player[K]) => onChange({ ...player, [key]: v })
   const setMon = (i: number, mon: Partial<Mon>) => set('team', player.team.map((m, j) => (j === i ? { ...m, ...mon } : m)))
 
@@ -83,10 +84,17 @@ export function PlayerEditor({
 
           <PhotoField player={player} onChange={onChange} />
 
-          {showImport ? (
-            <TeamImport onDone={(team) => { set('team', team); setShowImport(false) }} onCancel={() => setShowImport(false)} />
-          ) : (
-            <Button onClick={() => setShowImport(true)}>Import from Pokepaste</Button>
+          {showImport === 'paste' && (
+            <TeamImport onDone={(team) => { set('team', team); setShowImport('') }} onCancel={() => setShowImport('')} />
+          )}
+          {showImport === 'screenshot' && (
+            <ScreenshotImport onDone={(team) => { set('team', team); setShowImport('') }} onCancel={() => setShowImport('')} />
+          )}
+          {!showImport && (
+            <div className="flex flex-wrap gap-2">
+              <Button onClick={() => setShowImport('paste')}>Import from Pokepaste</Button>
+              <Button onClick={() => setShowImport('screenshot')}>Import from screenshot</Button>
+            </div>
           )}
 
           <div className="grid gap-2 sm:grid-cols-2">

@@ -55,7 +55,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
     if (!id) return setMessage('Load the roster again, then add the player.')
     const name = fullName(entry)
     if (day2.players.some((p) => p.name.trim().toLowerCase() === name.toLowerCase())) {
-      if (!(await dialog.confirm(`${name} is already in your Day 2 list. Add them again?`, 'Add again'))) return
+      if (!(await dialog.confirm(`${name} is already in your list. Add them again?`, 'Add again'))) return
     }
     setBusy(fullName(entry))
     setMessage('')
@@ -133,7 +133,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
         </Card>
 
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900">Day 2 players</h2>
+          <h2 className="text-lg font-bold text-slate-900">Players</h2>
           <span className="text-sm text-slate-500">One graphic per player</span>
         </div>
         {day2.players.map((p, i) => (
@@ -194,7 +194,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
           />
         ) : (
           <Card>
-            <p className="text-sm text-slate-600">Add a player to see their Day 2 graphic.</p>
+            <p className="text-sm text-slate-600">Add a player to see their graphic.</p>
           </Card>
         )}
       </div>
