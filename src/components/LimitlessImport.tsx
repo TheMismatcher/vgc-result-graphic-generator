@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { AppState } from '../types'
 import { importLimitless, limitlessId } from '../lib/limitless'
-import { Button, Card, Field, Input } from './ui'
+import { Button, Field, Input } from './ui'
 import { useDialog } from './Dialog'
 
 export function LimitlessImport({ setState }: { setState: (fn: (s: AppState) => AppState) => void }) {
@@ -34,8 +34,7 @@ export function LimitlessImport({ setState }: { setState: (fn: (s: AppState) => 
   }
 
   return (
-    <Card className="space-y-3">
-      <h2 className="text-lg font-bold text-slate-900">Import from Limitless</h2>
+    <div className="space-y-3">
       <p className="text-sm text-slate-600">Pulls the tournament name, date, format, player count, final standings, records, teams, top cut bracket, and usage stats for the whole field.</p>
       <div className="flex flex-wrap items-end gap-2">
         <Field label="Tournament link" className="min-w-0 flex-1">
@@ -48,6 +47,6 @@ export function LimitlessImport({ setState }: { setState: (fn: (s: AppState) => 
       </div>
       {error && <p className="text-sm text-red-700">{error}</p>}
       {message && <p className="text-sm text-slate-700">{message}</p>}
-    </Card>
+    </div>
   )
 }
