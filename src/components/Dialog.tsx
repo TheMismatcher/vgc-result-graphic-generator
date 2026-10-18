@@ -6,8 +6,9 @@ import { Button } from './ui'
 
 interface DialogRequest {
   message: string
-  confirmLabel?: string // set = confirm dialog with Cancel; unset = message with OK
-  resolve: (ok: boolean) => void
+  buttons: string[] // left to right; the last is the main (highlighted) one
+  cancel: boolean // show a Cancel button too
+  resolve: (choice: number | null) => void // index of the button, or null for Cancel/Escape
 }
 
 interface DialogApi {
@@ -15,11 +16,14 @@ interface DialogApi {
   confirm: (message: string, confirmLabel?: string) => Promise<boolean>
   /** Show a message with an OK button. */
   notify: (message: string) => Promise<void>
+  /** Ask with several choices (plus Cancel). Resolves the chosen index, or null if cancelled. */
+  choose: (message: string, buttons: string[]) => Promise<number | null>
 }
 
 const DialogContext = createContext<DialogApi>({
   confirm: async () => false,
   notify: async () => {},
+  choose: async () => null,
 })
 export const useDialog = () => useContext(DialogContext)
 
@@ -29,19 +33,20 @@ export function DialogProvider({ children }: { children: ReactNode }) {
   const okRef = useRef<HTMLButtonElement>(null)
 
   const open = useCallback(
-    (message: string, confirmLabel?: string) =>
-      new Promise<boolean>((resolve) => setQueue((q) => [...q, { message, confirmLabel, resolve }])),
+    (message: string, buttons: string[], cancel: boolean) =>
+      new Promise<number | null>((resolve) => setQueue((q) => [...q, { message, buttons, cancel, resolve }])),
     [],
   )
   const api: DialogApi = {
-    confirm: (message, confirmLabel = 'OK') => open(message, confirmLabel),
+    confirm: async (message, confirmLabel = 'OK') => (await open(message, [confirmLabel], true)) === 0,
     notify: async (message) => {
-      await open(message)
+      await open(message, ['OK'], false)
     },
+    choose: (message, buttons) => open(message, buttons, true),
   }
 
-  const close = (ok: boolean) => {
-    current?.resolve(ok)
+  const close = (choice: number | null) => {
+    current?.resolve(choice)
     setQueue((q) => q.slice(1))
   }
 
@@ -49,7 +54,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
     if (!current) return
     okRef.current?.focus()
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close(false)
+      if (e.key === 'Escape') close(null)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -59,7 +64,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
     <DialogContext.Provider value={api}>
       {children}
       {current && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => close(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => close(null)}>
           <div
             role="dialog"
             aria-modal="true"
@@ -68,9 +73,15 @@ export function DialogProvider({ children }: { children: ReactNode }) {
             onClick={(e) => e.stopPropagation()}
           >
             <p id="dialog-message" className="whitespace-pre-line text-slate-800">{current.message}</p>
-            <div className="mt-5 flex justify-end gap-2">
-              {current.confirmLabel && <Button variant="ghost" onClick={() => close(false)}>Cancel</Button>}
-              <Button ref={okRef} variant="primary" onClick={() => close(true)}>{current.confirmLabel ?? 'OK'}</Button>
+            <div className="mt-5 flex flex-wrap justify-end gap-2">
+              {current.cancel && <Button variant="ghost" onClick={() => close(null)}>Cancel</Button>}
+              {current.buttons.map((label, i) =>
+                i === current.buttons.length - 1 ? (
+                  <Button key={label} ref={okRef} variant="primary" onClick={() => close(i)}>{label}</Button>
+                ) : (
+                  <Button key={label} variant="secondary" onClick={() => close(i)}>{label}</Button>
+                ),
+              )}
             </div>
           </div>
         </div>
