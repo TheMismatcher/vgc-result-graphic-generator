@@ -8,19 +8,15 @@ import { useBrand } from '../../brand'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import './brand.css'
 
-/**
- * A Pokémon render with its held item (and Tera type when the format uses it).
- * `itemBubble` puts the item in a circle (white = the original look, dark = navy with a highlight ring)
- * instead of on its own.
- */
-export function MonSprite({ mon, size, showTera, itemBubble, style }: { mon: Mon; size: number; showTera?: boolean; itemBubble?: 'white' | 'dark'; style?: CSSProperties }) {
+/** A Pokémon render with its held item (and Tera type when the format uses it). */
+export function MonSprite({ mon, size, showTera, style }: { mon: Mon; size: number; showTera?: boolean; style?: CSSProperties }) {
   const { showMegas } = useDisplay()
   if (!mon.pokemon) return <div className="dmv-mon" style={{ width: size, height: size, ...style }} />
   const pokemon = displayPokemon(mon, showMegas)
   const item = mon.item ? sprites.item(mon.item) : ''
   const tera = showTera ? teraType(mon.tera) : undefined
   return (
-    <div className={`dmv-mon ${itemBubble ? `item-bubble ${itemBubble}` : ''}`} style={{ width: size, height: size, ...style }}>
+    <div className="dmv-mon" style={{ width: size, height: size, ...style }}>
       <img className="render" src={sprites.render(pokemon)} alt={getPokemon(pokemon)?.name ?? ''} />
       {item && <img className={`item ${sprites.itemIsPixel(mon.item) ? 'pixel' : ''}`} src={item} alt={getItem(mon.item)?.name ?? ''} />}
       {tera && <div className="tera" style={{ background: tera.color }} title={tera.name} />}

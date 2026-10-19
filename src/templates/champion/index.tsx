@@ -3,11 +3,12 @@ import { FitText, Logo, MonSprite, CpBadge } from '../shared/parts'
 import { eventFacts } from '../shared/format'
 import { getPokemon, getItem } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
+import { LoudBackground } from '../shared/LoudBackground'
 import './champion.css'
 
-const Champion: StandingsTemplate = {
-  id: 'dmv-champion',
-  name: 'Champion',
+const makeChampion = (loud = false): StandingsTemplate => ({
+  id: loud ? 'dmv-champion-loud' : 'dmv-champion',
+  name: loud ? 'Champion (Loud)' : 'Champion',
   description: 'Square spotlight on the winner and their team.',
   kind: 'standings',
   width: 1080,
@@ -18,9 +19,15 @@ const Champion: StandingsTemplate = {
     const winner = data.players[0]
     const name = winner?.name || 'Player'
     return (
-      <div className="dmv ch" style={{ width: 1080, height: 1080 }}>
-        <div className="ch-bg" />
-        <div className="dmv-halftone" />
+      <div className={`dmv ch ${loud ? 'loud' : ''}`} style={{ width: 1080, height: 1080 }}>
+        {loud ? (
+          <LoudBackground top="blue" bottom="yellow" split={[78, 22]} burst={[860, 330]} burstBelow />
+        ) : (
+          <>
+            <div className="ch-bg" />
+            <div className="dmv-halftone" />
+          </>
+        )}
 
         <div className="ch-banner">
           <div className="dmv-title ch-label">Champion</div>
@@ -52,6 +59,8 @@ const Champion: StandingsTemplate = {
       </div>
     )
   },
-}
+})
 
+const Champion = makeChampion()
 export default Champion
+export const ChampionLoud = makeChampion(true)

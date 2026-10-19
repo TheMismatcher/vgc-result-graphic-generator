@@ -22,16 +22,19 @@ const VsResult: MatchTemplate = {
           <Logo size={120} />
           <div className="vs-event">
             <FitText className="dmv-title" text={data.tournament.name || brand.name} max={46} width={600} />
+            <div className="vs-rule" />
+            {/* Round and set length on one line, the (long) format name under it. No bubbles. */}
             <div className="vs-meta">
-              {data.round && <span className="dmv-pill">{data.round}</span>}
-              <span className="vs-format">{data.formatLabel}</span>
-              {data.bestOf > 1 && (
-                <span className="vs-format">
-                  Best of {data.bestOf}
-                  {data.gamesPlayed ? ` · ${data.gamesPlayed} games` : ''}
-                </span>
-              )}
+              {[data.round, data.bestOf > 1 ? `Best of ${data.bestOf}${data.gamesPlayed ? ` · ${data.gamesPlayed} games` : ''}` : '']
+                .filter(Boolean)
+                .map((f, i) => (
+                  <span key={f}>
+                    {i > 0 && <span className="vs-dot">•</span>}
+                    {f}
+                  </span>
+                ))}
             </div>
+            {data.formatLabel && <div className="vs-format">{data.formatLabel}</div>}
           </div>
         </header>
 

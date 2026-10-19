@@ -97,7 +97,7 @@ export function UsagePage({ state, setState }: { state: AppState; setState: (fn:
         </Card>
       </div>
 
-      <div className="lg:sticky lg:top-4 lg:self-start">
+      <div className="lg:sticky lg:top-4 lg:self-start lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto lg:overscroll-contain">
         <Preview
           templates={USAGE_TEMPLATES}
           selectedId={state.templates.usage}

@@ -1,20 +1,27 @@
 import type { StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, PlayerPhoto, CpBadge } from '../shared/parts'
 import { eventFacts, ordinal } from '../shared/format'
+import { LoudBackground } from '../shared/LoudBackground'
 import './top4-photos.css'
 
-const Top4Photos: StandingsTemplate = {
-  id: 'dmv-top4-photos',
-  name: 'Top 4 Photos',
+const makeTop4Photos = (loud = false): StandingsTemplate => ({
+  id: loud ? 'dmv-top4-photos-loud' : 'dmv-top4-photos',
+  name: loud ? 'Top 4 Photos (Loud)' : 'Top 4 Photos',
   description: 'Square grid with big player photos and teams.',
   kind: 'standings',
   width: 1080,
   height: 1080,
   maxPlayers: 4,
   Component: ({ data }) => (
-    <div className="dmv p4" style={{ width: 1080, height: 1080 }}>
-      <div className="p4-bg" />
-      <div className="dmv-halftone" />
+    <div className={`dmv p4 ${loud ? 'loud' : ''}`} style={{ width: 1080, height: 1080 }}>
+      {loud ? (
+        <LoudBackground top="blue" bottom="red" split={[58, 30]} burst={[115, 110]} />
+      ) : (
+        <>
+          <div className="p4-bg" />
+          <div className="dmv-halftone" />
+        </>
+      )}
 
       <header className="p4-header">
         <Logo size={150} />
@@ -49,6 +56,8 @@ const Top4Photos: StandingsTemplate = {
       </main>
     </div>
   ),
-}
+})
 
+const Top4Photos = makeTop4Photos()
 export default Top4Photos
+export const Top4PhotosLoud = makeTop4Photos(true)

@@ -16,13 +16,6 @@
   flex: 1;
   min-width: 0;
 }
-.tc-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 18px;
-}
-
 .tc-rule {
   width: 120px;
   height: 8px;
@@ -172,4 +165,10 @@
   font-size: 18px;
   padding: 1px 8px;
   border-width: 2px;
+}
+
+/* ---------- Loud ---------- */
+.tc.loud .tc-rule {
+  height: 10px;
+  box-shadow: 4px 4px 0 var(--ink);
 }

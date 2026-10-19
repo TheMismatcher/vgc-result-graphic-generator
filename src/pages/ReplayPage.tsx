@@ -153,7 +153,7 @@ export function ReplayPage({ state, setState }: { state: AppState; setState: (fn
         ))}
       </div>
 
-      <div className="lg:sticky lg:top-4 lg:self-start">
+      <div className="lg:sticky lg:top-4 lg:self-start lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto lg:overscroll-contain">
         <Preview
           templates={MATCH_TEMPLATES}
           selectedId={state.templates.match}

@@ -1,23 +1,31 @@
 import type { StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, CpBadge } from '../shared/parts'
+import { LoudBackground } from '../shared/LoudBackground'
 import { eventFacts, ordinal } from '../shared/format'
 import './top-cut.css'
 
-// The bubble versions are kept to compare against the default (no bubbles) look. The "clean"
-// header swaps the white event pills for a single line of text.
+// Header variants: a "clean" single line of text, or a slanted caption banner (dark or white).
 const HEADER_NAMES = { clean: 'Clean Header', banner: 'Banner Header', 'banner-white': 'White Banner Header' }
-const makeTopCut = (itemBubbles?: 'white' | 'dark', header: 'pills' | 'clean' | 'banner' | 'banner-white' = 'pills'): StandingsTemplate => ({
-  id: header !== 'pills' ? `dmv-top-cut-${header}` : itemBubbles ? `dmv-top-cut-${itemBubbles === 'white' ? 'bubbles' : 'dark-bubbles'}` : 'dmv-top-cut',
-  name: header !== 'pills' ? `Top Cut (${HEADER_NAMES[header]})` : itemBubbles ? `Top Cut (${itemBubbles === 'white' ? '' : 'Dark '}Item Bubbles)` : 'Top Cut',
+// `loud` swaps the plain background for the comic-book look from the DMV artwork: sunburst,
+// speed lines, halftone that fades in, and a jagged black split between the colours.
+const makeTopCut = (header: 'clean' | 'banner' | 'banner-white', loud = false): StandingsTemplate => ({
+  id: `dmv-top-cut-${header}${loud ? '-loud' : ''}`,
+  name: loud ? 'Top Cut (Loud)' : `Top Cut (${HEADER_NAMES[header]})`,
   description: 'Portrait list of the top 8 with full teams.',
   kind: 'standings',
   width: 1080,
   height: 1350,
   maxPlayers: 8,
   Component: ({ data }) => (
-    <div className="dmv tc" style={{ width: 1080, height: 1350 }}>
-      <div className="tc-bg" />
-      <div className="dmv-halftone" />
+    <div className={`dmv tc ${loud ? 'loud' : ''}`} style={{ width: 1080, height: 1350 }}>
+      {loud ? (
+        <LoudBackground top="blue" bottom="red" split={[32, 12]} burst={[140, 125]} />
+      ) : (
+        <>
+          <div className="tc-bg" />
+          <div className="dmv-halftone" />
+        </>
+      )}
 
       <header className="tc-header">
         <Logo size={190} />
@@ -40,7 +48,7 @@ const makeTopCut = (itemBubbles?: 'white' | 'dark', header: 'pills' | 'clean' | 
               </div>
               {data.formatLabel && <div className="tc-format banner">{data.formatLabel}</div>}
             </>
-          ) : header === 'clean' ? (
+          ) : (
             <>
               <div className="tc-rule" />
               {/* Type · date · players on one line, the (long) format name under it. */}
@@ -56,12 +64,6 @@ const makeTopCut = (itemBubbles?: 'white' | 'dark', header: 'pills' | 'clean' | 
               </div>
               {data.formatLabel && <div className="tc-format">{data.formatLabel}</div>}
             </>
-          ) : (
-            <div className="tc-facts">
-              {eventFacts(data).map((f) => (
-                <span key={f} className="dmv-pill">{f}</span>
-              ))}
-            </div>
           )}
         </div>
       </header>
@@ -79,7 +81,7 @@ const makeTopCut = (itemBubbles?: 'white' | 'dark', header: 'pills' | 'clean' | 
             </div>
             <div className="tc-team">
               {p.team.map((m, j) => (
-                <MonSprite key={j} mon={m} size={86} showTera={data.format.tera} itemBubble={itemBubbles} />
+                <MonSprite key={j} mon={m} size={86} showTera={data.format.tera} />
               ))}
             </div>
           </div>
@@ -89,10 +91,7 @@ const makeTopCut = (itemBubbles?: 'white' | 'dark', header: 'pills' | 'clean' | 
   ),
 })
 
-const TopCut = makeTopCut()
-export default TopCut
-export const TopCutBubbles = makeTopCut('white')
-export const TopCutDarkBubbles = makeTopCut('dark')
-export const TopCutClean = makeTopCut(undefined, 'clean')
-export const TopCutBanner = makeTopCut(undefined, 'banner')
-export const TopCutBannerWhite = makeTopCut(undefined, 'banner-white')
+export const TopCutClean = makeTopCut('clean')
+export const TopCutBanner = makeTopCut('banner')
+export const TopCutBannerWhite = makeTopCut('banner-white')
+export const TopCutLoud = makeTopCut('clean', true)

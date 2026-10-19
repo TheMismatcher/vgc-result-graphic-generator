@@ -81,25 +81,6 @@
   object-fit: contain;
   filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, 0.9)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
 }
-/* Original look: item inside a white bubble. */
-.dmv-mon.item-bubble .item {
-  right: -4px;
-  bottom: -4px;
-  width: 36%;
-  height: 36%;
-  padding: 2px;
-  border-radius: 50%;
-  background: #fff;
-  border: 3px solid var(--ink);
-  filter: none;
-}
-.dmv-mon.item-bubble.dark .item {
-  background: rgba(17, 17, 17, 0.85);
-  border: 3px solid var(--yellow);
-}
-.dmv-mon.item-bubble .item.pixel {
-  padding: 0;
-}
 .dmv-mon .item.pixel {
   image-rendering: pixelated;
 }

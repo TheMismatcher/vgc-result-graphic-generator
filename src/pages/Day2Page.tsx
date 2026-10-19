@@ -1,3 +1,4 @@
+import { DEFAULT_HUE } from '../templates/day2/clean'
 import { useMemo, useState } from 'react'
 import type { AppState, Day2, Player } from '../types'
 import { DAY2_TEMPLATES } from '../templates/registry'
@@ -130,6 +131,25 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
           <Field label="Caption (bar on the photo)">
             <Input placeholder="e.g. DMV TO DAY 2" value={day2.caption} onChange={(e) => setDay2({ caption: e.target.value })} />
           </Field>
+          <div className="sm:col-span-2">
+            <div className="mb-1 flex items-center justify-between">
+              <label htmlFor="d2-hue" className="text-sm font-medium text-slate-700">Background colour</label>
+              <button type="button" className="text-xs font-semibold text-slate-500 hover:text-slate-800" onClick={() => setDay2({ hue: undefined })}>
+                Reset to red
+              </button>
+            </div>
+            <input
+              id="d2-hue"
+              type="range"
+              min={0}
+              max={359}
+              value={day2.hue ?? DEFAULT_HUE}
+              onChange={(e) => setDay2({ hue: Number(e.target.value) })}
+              className="h-3 w-full cursor-pointer appearance-none rounded-full"
+              style={{ background: 'linear-gradient(to right, hsl(0 50% 50%), hsl(60 50% 50%), hsl(120 50% 50%), hsl(180 50% 50%), hsl(240 50% 50%), hsl(300 50% 50%), hsl(359 50% 50%))' }}
+            />
+            <p className="mt-1 text-xs text-slate-500">For the Regional Results template (the artist original keeps its colours).</p>
+          </div>
         </Card>
 
         <div className="flex items-center justify-between">
@@ -167,7 +187,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
         </Button>
       </div>
 
-      <div className="space-y-3 lg:sticky lg:top-4 lg:self-start">
+      <div className="space-y-3 lg:sticky lg:top-4 lg:self-start lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto lg:overscroll-contain">
         {day2.players.length > 1 && (
           <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Player to preview">
             {day2.players.map((p) => (
@@ -190,7 +210,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
             selectedId={state.templates.day2}
             onSelect={(id) => setState((s) => ({ ...s, templates: { ...s.templates, day2: id } }))}
             filenameBase={`${day2.event} ${selected.name}`}
-            render={(t) => <t.Component data={{ event: day2.event, caption: day2.caption, player: selected, format }} />}
+            render={(t) => <t.Component data={{ event: day2.event, caption: day2.caption, player: selected, format, hue: day2.hue }} />}
           />
         ) : (
           <Card>

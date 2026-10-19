@@ -117,7 +117,7 @@ export function TeamBattlePage({ state, setState }: { state: AppState; setState:
         <Button className="w-full py-3" onClick={() => setBattle((x) => ({ ...x, sets: [...x.sets, newTeamSet()] }))}>+ Add set</Button>
       </div>
 
-      <div className="lg:sticky lg:top-4 lg:self-start">
+      <div className="lg:sticky lg:top-4 lg:self-start lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto lg:overscroll-contain">
         <Preview
           templates={TEAM_BATTLE_TEMPLATES}
           selectedId={state.templates.teamBattle}

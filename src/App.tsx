@@ -47,9 +47,9 @@ export default function App() {
   // offer to save it to a file first.
   const reset = async (next: typeof state, message: string) => {
     if (!isUnchanged(state, [sampleState(), initialState()])) {
-      const choice = await dialog.choose(`${message}\n\nYou have your own data on screen. Save it to a file first?`, ['Proceed', 'Save file first'])
+      const choice = await dialog.choose(`${message}\n\nYou have your own data on screen. Save it to a file first?`, ['Save file first', 'Proceed'])
       if (choice === null) return
-      if (choice === 1) saveTournamentFile(state)
+      if (choice === 0) saveTournamentFile(state)
     }
     setState(next)
   }

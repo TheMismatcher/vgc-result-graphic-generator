@@ -3,6 +3,7 @@ import { FitText, Logo, MonSprite, CpBadge } from '../shared/parts'
 import { eventFacts } from '../shared/format'
 import { sprites } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
+import { LoudBackground } from '../shared/LoudBackground'
 import './bracket.css'
 
 const W = 1080
@@ -33,9 +34,9 @@ function Entry({ entry, width, height, state }: { entry: BracketEntry; width: nu
   )
 }
 
-const Bracket: StandingsTemplate = {
-  id: 'dmv-bracket',
-  name: 'Bracket',
+const makeBracket = (loud = false): StandingsTemplate => ({
+  id: loud ? 'dmv-bracket-loud' : 'dmv-bracket',
+  name: loud ? 'Bracket (Loud)' : 'Bracket',
   description: 'Top cut bracket with results. Set it up under Top cut bracket.',
   kind: 'standings',
   width: W,
@@ -62,9 +63,15 @@ const Bracket: StandingsTemplate = {
     const champH = 330
 
     return (
-      <div className="dmv br" style={{ width: W, height: H }}>
-        <div className="br-bg" />
-        <div className="dmv-halftone" />
+      <div className={`dmv br ${loud ? 'loud' : ''}`} style={{ width: W, height: H }}>
+        {loud ? (
+          <LoudBackground top="blue" bottom="red" split={[24, 8]} burst={[120, 110]} />
+        ) : (
+          <>
+            <div className="br-bg" />
+            <div className="dmv-halftone" />
+          </>
+        )}
 
         <header className="br-header">
           <Logo size={160} />
@@ -122,6 +129,8 @@ const Bracket: StandingsTemplate = {
       </div>
     )
   },
-}
+})
 
+const Bracket = makeBracket()
 export default Bracket
+export const BracketLoud = makeBracket(true)

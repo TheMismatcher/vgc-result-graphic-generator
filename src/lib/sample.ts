@@ -15,15 +15,17 @@ const TEAMS: Mon[][] = [
   t(['rayquaza-mega', 'focus-sash'], ['kyogre', 'blue-orb'], ['gengar-mega', 'gengarite'], ['hitmontop', 'eject-button'], ['raichu', 'assault-vest'], ['bronzong', 'lum-berry']),
   // Wolfe Glick's 2013 Worlds team, rebuilt for Scarlet & Violet ("I Entered a Tournament with my Worst Pokemon Team").
   t(['registeel', 'leftovers'], ['hippowdon', 'sitrus-berry'], ['latios', 'soul-dew'], ['gliscor', 'toxic-orb'], ['rotom-wash', 'choice-scarf'], ['magmar', 'eviolite']),
-  // Ash's Masters Eight-winning team (Pokémon Journeys); Lucario Mega Evolved.
-  t(['pikachu', 'light-ball'], ['lucario-mega', 'lucarionite'], ['dragonite', 'choice-band'], ['gengar', 'focus-sash'], ['sirfetchd', 'stick'], ['dracovish', 'choice-scarf']),
-  t(['glimmora-mega', 'glimmoranite'], ['incineroar', 'sitrus-berry'], ['basculegion-male', 'choice-scarf'], ['sinistcha', 'leftovers'], ['kingambit', 'black-glasses'], ['talonflame', 'sharp-beak']),
-  t(['froslass-mega', 'froslassite'], ['gholdengo', 'leftovers'], ['garchomp', 'yache-berry'], ['primarina', 'throat-spray'], ['incineroar', 'sitrus-berry'], ['whimsicott', 'focus-sash']),
+  // Ash's Masters Eight-winning team (Pokémon Journeys); Lucario Mega Evolved, Gengar Gigantamaxed.
+  t(['pikachu', 'light-ball'], ['lucario-mega', 'lucarionite'], ['dragonite', 'choice-band'], ['gengar-gmax', 'focus-sash'], ['sirfetchd', 'stick'], ['dracovish', 'choice-scarf']),
+  // Tovah's team (Champions team screen, "Team 6"); Raichu Mega Evolves with Raichunite Y.
+  t(['mimikyu-disguised', 'life-orb'], ['incineroar', 'sitrus-berry'], ['raichu', 'raichunite-y'], ['sinistcha', 'kasib-berry'], ['milotic', 'leftovers'], ['ninetales-alola', 'focus-sash']),
+  // Adri's team (Charizard's item not confirmed yet).
+  t(['sableye', 'roseli-berry'], ['charizard', 'charizardite-y'], ['venusaur', 'focus-sash'], ['primarina', 'leftovers'], ['gholdengo', 'life-orb'], ['raichu', 'raichunite-y']),
   t(['delphox-mega', 'delphoxite'], ['milotic', 'sitrus-berry'], ['kingambit', 'lum-berry'], ['farigiraf', 'throat-spray'], ['dragonite', 'choice-band'], ['amoonguss', 'rocky-helmet']),
   t(['chandelure-mega', 'chandelurite'], ['tyranitar', 'assault-vest'], ['excadrill', 'focus-sash'], ['incineroar', 'sitrus-berry'], ['rotom-wash', 'leftovers'], ['sinistcha', 'mental-herb']),
 ]
 
-const NAMES = ['Nicholas Rubingh', 'Wolfe Glick', 'Darius Helmick', 'Ash Ketchum', 'Serena Yvonne', 'Gary Oak', 'Iris Opelucid', 'Cynthia Shirona']
+const NAMES = ['Nicholas Rubingh', 'Wolfe Glick', 'Darius Helmick', 'Ash Ketchum', 'Tovah', 'Adri', 'Iris Opelucid', 'Cynthia Shirona']
 const RECORDS = ['8-1', '7-2', '7-1', '6-2', '6-2', '5-3', '5-3', '5-3']
 
 export const sampleState = (): AppState => {
@@ -40,7 +42,7 @@ export const sampleState = (): AppState => {
       uid: crypto.randomUUID(),
       name: NAMES[i],
       record: RECORDS[i],
-      social: ['@nicholasrubingh', '@WolfeyGlick', '@HootieVGC'][i] ?? '',
+      social: ['@nicholasrubingh', '@WolfeyGlick', '@HootieVGC', '', '.tovah', '@.adri_dcdm'][i] ?? '',
       team,
     })),
   }

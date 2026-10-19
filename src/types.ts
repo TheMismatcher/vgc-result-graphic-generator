@@ -66,6 +66,7 @@ export interface Day2 {
   caption: string // bar on the photo, e.g. "DMV TO DAY 2"
   players: Player[]
   selected: string // uid of the player shown in the preview
+  hue?: number // background colour for the Regional Results graphic (colour-wheel degrees)
 }
 
 export interface TeamSide {

@@ -53,6 +53,7 @@ export interface Day2Data {
   caption: string
   player: Player
   format: Format
+  hue?: number // background colour for templates that support it (degrees on the colour wheel)
 }
 
 export interface TeamBattleData {

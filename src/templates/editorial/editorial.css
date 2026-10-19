@@ -1,0 +1,319 @@
+/* Editorial: upright type, numerals, hairlines. Paper = warm off-white, Night = deep navy. */
+
+.ed {
+  --bg: #f4f0e8;
+  --fg: #15161a;
+  --muted: #6d6a63;
+  --line: rgba(21, 22, 26, 0.14);
+  --accent: var(--red);
+  --band: #15161a;
+  --band-fg: #fff;
+  --band-num: var(--yellow);
+  background: var(--bg);
+  color: var(--fg);
+  font-style: normal;
+}
+.ed.ed-night {
+  --bg: #0e1424;
+  --fg: #f3f1ec;
+  --muted: #8f98ad;
+  --line: rgba(255, 255, 255, 0.12);
+  --accent: var(--yellow);
+  --band: var(--red);
+  --band-fg: #fff;
+  --band-num: #fff;
+  background:
+    radial-gradient(900px 600px at 85% -10%, color-mix(in srgb, var(--blue) 28%, transparent), transparent 70%),
+    var(--bg);
+}
+
+/* Header */
+.ed-head {
+  padding: 52px 40px 0;
+}
+.ed-kicker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 92px;
+}
+.ed-kicker {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.ed-title {
+  margin-top: 14px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--fg);
+}
+.ed-facts {
+  margin-top: 18px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+.ed-sep {
+  margin: 0 16px;
+  color: var(--accent);
+}
+.ed-format {
+  margin-top: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.ed-rule {
+  margin-top: 26px;
+  height: 8px;
+  background: var(--fg);
+  box-shadow: 0 14px 0 -12px var(--fg);
+}
+.ed-rule.thin {
+  height: 3px;
+  box-shadow: none;
+  margin: 22px 0 18px;
+}
+
+/* Winner band (full bleed) */
+.ed-winner {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  height: 178px;
+  margin-top: 30px;
+  padding: 0 40px;
+  background: var(--band);
+  color: var(--band-fg);
+}
+.ed-winner-num {
+  width: 150px;
+  font-size: 128px;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: var(--band-num);
+}
+.ed-winner-body {
+  width: 560px;
+}
+.ed-winner-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--band-num);
+}
+.ed-winner-name {
+  margin-top: 8px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+.ed-winner .ed-sub {
+  color: rgba(255, 255, 255, 0.72);
+}
+.ed-winner-team {
+  display: grid;
+  grid-template-columns: repeat(3, 92px);
+  gap: 0 6px;
+  margin-left: auto;
+}
+.ed-winner-team .dmv-mon {
+  width: 92px !important;
+  height: 80px !important;
+}
+
+/* Rows 2-8 */
+.ed-rows {
+  padding: 8px 40px 0;
+}
+.ed-row {
+  display: flex;
+  align-items: center;
+  height: 97px;
+  border-bottom: 2px solid var(--line);
+}
+.ed-num {
+  width: 150px;
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+}
+.ed-player {
+  width: 360px;
+}
+.ed-name {
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--fg);
+}
+.ed-sub {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: pre;
+}
+.ed-team {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+.ed .dmv-mon img.render {
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.18));
+}
+.ed .dmv-mon .tera {
+  border-width: 2px;
+}
+
+.ed-cp {
+  border-width: 2px;
+  font-style: normal;
+  letter-spacing: 0;
+}
+.ed-cp.small {
+  font-size: 15px;
+}
+
+.ed-foot {
+  position: absolute;
+  left: 40px;
+  right: 40px;
+  bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- Champion (square) ---------- */
+.edc {
+  display: flex;
+}
+.edc-band {
+  position: relative;
+  flex: none;
+  width: 250px;
+  height: 100%;
+  background: var(--red);
+}
+.edc-band .dmv-logo {
+  position: absolute;
+  left: 50px;
+  bottom: 50px;
+}
+.ed-night .edc-band {
+  background: var(--yellow);
+}
+.edc-vertical {
+  /* Reads bottom-to-top, filling the band above the logo. */
+  position: absolute;
+  top: 44px;
+  bottom: 240px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 122px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  color: #fff;
+}
+.ed-night .edc-vertical {
+  color: var(--bg);
+}
+.edc-main {
+  flex: 1;
+  padding: 58px 56px 0 54px;
+}
+.edc-event {
+  margin-top: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+}
+.edc-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--fg);
+}
+.edc-sub {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: pre;
+}
+.edc-team {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 34px;
+  border-top: 2px solid var(--line);
+  border-left: 2px solid var(--line);
+}
+.edc-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 282px;
+  padding-top: 18px;
+  border-right: 2px solid var(--line);
+  border-bottom: 2px solid var(--line);
+}
+.edc-mon {
+  margin-top: 12px;
+  font-size: 21px;
+  white-space: nowrap;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--fg);
+}
+.edc-item {
+  margin-top: 4px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.edc-format {
+  margin-top: 18px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}

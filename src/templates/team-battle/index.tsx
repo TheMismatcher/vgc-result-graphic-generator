@@ -1,5 +1,6 @@
 import type { TeamBattleTemplate } from '../types'
 import { FitText, MonSprite } from '../shared/parts'
+import { LoudBackground } from '../shared/LoudBackground'
 import './team-battle.css'
 
 const W = 1080
@@ -28,8 +29,9 @@ const INFO: Record<Variant, { id: string; name: string; description: string }> =
   loss: { id: 'dmv-team-battle-loss', name: 'Team Battle · Loss', description: 'Your team (left) lost: subdued version.' },
 }
 
-const makeTeamBattle = (variant: Variant): TeamBattleTemplate => ({
+const makeTeamBattle = (variant: Variant, loud = false): TeamBattleTemplate => ({
   ...INFO[variant],
+  ...(loud && { id: `${INFO[variant].id}-loud`, name: `${INFO[variant].name} (Loud)` }),
   kind: 'teamBattle',
   width: W,
   height: H,
@@ -52,9 +54,15 @@ const makeTeamBattle = (variant: Variant): TeamBattleTemplate => ({
             : data.week || 'Team Battle'
 
     return (
-      <div className={`dmv tb tb-${variant}`} style={{ width: W, height: H }}>
-        <div className="tb-bg" />
-        <div className="dmv-halftone" />
+      <div className={`dmv tb tb-${variant} ${loud ? 'loud' : ''}`} style={{ width: W, height: H }}>
+        {loud ? (
+          <LoudBackground top="blue" bottom="red" split={[54, 46]} burst={[540, 110]} vertical />
+        ) : (
+          <>
+            <div className="tb-bg" />
+            <div className="dmv-halftone" />
+          </>
+        )}
 
         {variant !== 'neutral' && <div className="tb-result-tag">{variant === 'win' ? 'Victory' : 'Final'}</div>}
         {kicker && <div className={`tb-kicker dmv-pill ${variant !== 'neutral' ? 'with-tag' : ''}`}>{kicker}</div>}
@@ -111,3 +119,4 @@ const TeamBattle = makeTeamBattle('neutral')
 export default TeamBattle
 export const TeamBattleWin = makeTeamBattle('win')
 export const TeamBattleLoss = makeTeamBattle('loss')
+export const TeamBattleLoud = makeTeamBattle('neutral', true)

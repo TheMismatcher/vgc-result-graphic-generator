@@ -6,16 +6,18 @@ Current templates:
 
 | Folder | Kind | Size | What |
 |---|---|---|---|
-| `top-cut/` | standings | 1080×1350 | Top 8 list with full teams (plus white / dark item-bubble versions for comparison) |
+| `shared/LoudBackground.tsx` | — | — | Shared "Loud" comic-book background (colour panels, lightning split, sunburst, halftone, speed lines). Add it to any template for a Loud version |
+| `top-cut/` | standings | 1080×1350 | Top 8 list with full teams (versions: Clean, Banner, White Banner headers, and Loud comic-book background) |
+| `editorial/` | standings | 1080×1350, 1080×1080 | "Editorial" magazine direction (upright type, big numerals, hairlines, brand colours as accents). Top Cut and Champion, each in Paper (off-white) and Night (navy) |
 | `top8-photos/` | standings | 1080×1350 | Top 8 cards with player photos and teams (alternating colors + a White version) |
 | `top8-mixed/` | standings | 1080×1350 | Photo cards for the top 4, compact rows for 5th–8th (alternating colors + a White version) |
 | `top4-photos/` | standings | 1080×1080 | Top 4 with big player photos and teams |
 | `champion/` | standings | 1080×1080 | Winner spotlight |
-| `bracket/` | standings | 1080×1350 | Top cut bracket with results (set up under "Top cut bracket" or imported from Limitless) |
+| `bracket/` | standings | 1080×1350 | Top cut bracket with results (set up under "Top cut bracket" or imported from Limitless). Plus a Loud version |
 | `arena/` | standings | 1080×1350 | Dark esports look; three backgrounds: Spotlight, Grid, Sunset |
 | `usage/` | usage | 1080×1350 | 12 most-used Pokémon |
-| `day2/` | day2 | 1644×1644 | One player on the Regionals artist background (Regional Results tab) (event, name, record, photo, team) |
-| `team-battle/` | teamBattle | 1080×1350 | Team vs team (e.g. USPL week): logos, records, every set with both teams, overall winner. Neutral, plus Win / Loss versions told from your team's side (Team A, left) |
+| `day2/` | day2 | 1644×1644 | One player at a Regional (event, name, record, photo, team). Default `clean.tsx` is redrawn as vector shapes with a hue slider (`day2.hue`); it also has an "Artist Match" version (sampled colours and shapes); `index.tsx` is the original artist background |
+| `team-battle/` | teamBattle | 1080×1350 | Team vs team (e.g. USPL week): logos, records, every set with both teams, overall winner. Neutral (and Loud), plus Win / Loss versions told from your team's side (Team A, left) |
 | `vs-result/` | match | 1080×1080 | Replay result: both teams, score, winner |
 
 Everything listed in `src/templates/registry.ts` appears in the template picker. To drop a version (e.g. the White ones), delete its line there.
