@@ -37,8 +37,12 @@
   color: #fff;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  white-space: nowrap;
+  display: flex;
+  flex-wrap: wrap;
   text-shadow: 0 2px 0 var(--ink);
+}
+.tc-facts-line-item {
+  white-space: nowrap;
 }
 .tc-format {
   margin-top: 4px;
