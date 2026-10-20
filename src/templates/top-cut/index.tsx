@@ -56,10 +56,12 @@ const makeTopCut = (header: 'clean' | 'banner' | 'banner-white', loud = false): 
                 {eventFacts(data)
                   .filter((f) => f !== data.formatLabel)
                   .map((f, i) => (
-                    <span key={f}>
-                      {i > 0 && <span className="tc-dot">•</span>}
-                      {f}
-                    </span>
+                    <div className="tc-facts-line-item">
+                      <span key={f}>
+                        {i > 0 && <span className="tc-dot">•</span>}
+                        {f}
+                      </span>
+                    </div>
                   ))}
               </div>
               {data.formatLabel && <div className="tc-format">{data.formatLabel}</div>}
