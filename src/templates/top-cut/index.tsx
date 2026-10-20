@@ -51,18 +51,19 @@ const makeTopCut = (header: 'clean' | 'banner' | 'banner-white', loud = false): 
           ) : (
             <>
               <div className="tc-rule" />
-              {/* Type · date · players on one line, the (long) format name under it. */}
+              {/* Type · date · players, wrapping between facts when too long; the (long) format name under it.
+                  Every fact has a dot in front, and the dot that starts each line is clipped off (see CSS). */}
               <div className="tc-facts-line">
-                {eventFacts(data)
-                  .filter((f) => f !== data.formatLabel)
-                  .map((f, i) => (
-                    <div className="tc-facts-line-item">
-                      <span key={f}>
-                        {i > 0 && <span className="tc-dot">•</span>}
+                <div className="tc-facts-wrap">
+                  {eventFacts(data)
+                    .filter((f) => f !== data.formatLabel)
+                    .map((f) => (
+                      <div key={f} className="tc-facts-line-item">
+                        <span className="tc-dot">•</span>
                         {f}
-                      </span>
-                    </div>
-                  ))}
+                      </div>
+                    ))}
+                </div>
               </div>
               {data.formatLabel && <div className="tc-format">{data.formatLabel}</div>}
             </>

@@ -25,17 +25,30 @@
 }
 .tc-facts-line {
   margin-top: 14px;
+  padding-bottom: 3px; /* room for the text shadow inside the clipped box */
   font-size: 28px;
   font-weight: 800;
   color: #fff;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  text-shadow: 0 2px 0 var(--ink);
+  overflow: hidden;
+}
+/* Shifted left by one dot's width, so the dot in front of whichever fact starts a line sits
+   outside .tc-facts-line and is hidden: no "•" at the start of the first or a wrapped line. */
+.tc-facts-wrap {
   display: flex;
   flex-wrap: wrap;
-  text-shadow: 0 2px 0 var(--ink);
+  margin-left: -42px;
 }
 .tc-facts-line-item {
   white-space: nowrap;
+}
+.tc-facts-line-item .tc-dot {
+  display: inline-block;
+  width: 42px;
+  margin: 0;
+  text-align: center;
 }
 .tc-format {
   margin-top: 4px;
