@@ -23,6 +23,81 @@
   margin-top: 18px;
 }
 
+.tc-rule {
+  width: 120px;
+  height: 8px;
+  margin-top: 14px;
+  border-radius: 4px;
+  background: var(--yellow);
+}
+.tc-facts-line {
+  margin-top: 14px;
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 0 2px 0 var(--ink);
+}
+.tc-format {
+  margin-top: 4px;
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  text-shadow: 0 2px 0 var(--ink);
+}
+.tc-banner {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 8px 26px;
+  background: var(--ink);
+  border-left: 10px solid var(--yellow);
+  transform: skewX(-14deg);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.25);
+}
+.tc-banner-text {
+  transform: skewX(14deg);
+  font-size: 26px;
+  font-weight: 900;
+  font-style: italic;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.tc-slash {
+  margin: 0 14px;
+  color: var(--yellow);
+}
+.tc-banner.white {
+  background: #fff;
+  border-left-color: var(--red);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.tc-banner.white .tc-banner-text {
+  color: var(--ink);
+}
+.tc-banner.white .tc-slash {
+  color: var(--red);
+}
+.tc-format.banner {
+  margin-top: 10px;
+  padding-left: 6px;
+  color: var(--yellow);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.tc-banner.white + .tc-format.banner {
+  color: #fff;
+}
+.tc-dot {
+  margin: 0 14px;
+  color: var(--yellow);
+}
+
 .tc-rows {
   position: relative;
   display: flex;

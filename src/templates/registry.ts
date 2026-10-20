@@ -1,7 +1,7 @@
 // Every template the generator can output. Add new designs here.
 
 import type { Day2Template, MatchTemplate, StandingsTemplate, TeamBattleTemplate, UsageTemplate } from './types'
-import TopCut, { TopCutBubbles, TopCutDarkBubbles } from './top-cut'
+import TopCut, { TopCutBanner, TopCutBannerWhite, TopCutBubbles, TopCutClean, TopCutDarkBubbles } from './top-cut'
 import Champion from './champion'
 import Usage from './usage'
 import Bracket from './bracket'
@@ -14,7 +14,10 @@ import Top4Photos from './top4-photos'
 import Top8Mixed, { Top8MixedWhite } from './top8-mixed'
 
 export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
+  TopCutClean, // first = the default
   TopCut,
+  TopCutBanner,
+  TopCutBannerWhite,
   TopCutBubbles,
   TopCutDarkBubbles,
   Top8Photos,

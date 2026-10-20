@@ -23,5 +23,5 @@ export const DisplayContext = createContext<Display>({
 })
 export const useDisplay = () => useContext(DisplayContext)
 
-/** The Pokémon id to draw: its Mega form when "Show Mega forms" is on and it holds its Mega Stone. */
+/** The Pokémon id to draw: its Mega (or Primal) form when "Show Mega forms" is on and it holds its Mega Stone (or orb). */
 export const displayPokemon = (mon: Mon, showMegas: boolean) => (showMegas && megaForm(mon.pokemon, mon.item)) || mon.pokemon

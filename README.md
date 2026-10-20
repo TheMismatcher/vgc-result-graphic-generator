@@ -10,7 +10,7 @@ Everything runs in the browser: graphics are drawn on the page and saved as PNGs
 - **Replay:** paste a Pokémon Showdown replay (the last game of a best-of-3 is enough) to get both teams with items, the set score, and the winner.
 - **Team Battle:** team-vs-team weeks (e.g. USPL): paste one replay per set for a graphic with every set, both teams, and the overall result. Neutral, Win, and Loss versions.
 - **Regional Results:** one graphic per player at a Regional (e.g. who made Day 2), with name, record, team, and photo pulled from RK9.
-- **Imports:** Limitless (standings, teams, bracket, usage), RK9 (rosters, team lists, records), TOM `.tdf` files, Pokepaste / Showdown exports, Showdown replays, and **Pokémon Champions team screenshots** (phone or Switch; read in the browser, even with nicknames).
+- **Imports:** Limitless (standings, teams, bracket, usage), RK9 (rosters, team lists, records), TOM `.tdf` files, **photos, screenshots, or PDFs of TOM standings pages** (for events that only post a picture; PDFs are read exactly), Pokepaste / Showdown exports, Showdown replays, and **Pokémon Champions team screenshots** (phone or Switch; read in the browser, even with nicknames).
 - **Branding:** DMV VGC built in, or your own name, logo, and colors.
 - **Extras:** Mega forms, player photos, save/open tournament files, copy image to clipboard.
 
@@ -57,6 +57,9 @@ Re-downloads the lists from [PokeAPI](https://pokeapi.co), rebuilds the screensh
 | `src/lib/replay.ts` | Showdown replay reader (teams, items, set score, best-of-3) |
 | `src/lib/teamBattle.ts` | Team battles: sets from replays, side detection, overall score |
 | `src/lib/pokepaste.ts` | Pokepaste / Showdown team import |
+| `src/lib/standingsScan.ts` | Standings photo reader: straightens the photo, reads the Name and Record columns, pairs them by row |
+| `src/lib/standingsDoc.ts` | Standings from a TOM standings PDF or .html report (exact text, every division) |
+| `src/lib/topCut.ts` | Top cut size: from the records (players with extra games), else the official size for the attendance (Tournament Rules Handbook, VG Single Day table) |
 | `src/lib/teamScan.ts` | Team screenshot reader: finds the cards, reads text (tesseract.js), identifies species from item, ability, moves, sprite, and gender icon |
 | `src/lib/bracket.ts` | Top cut bracket (seeding, winners, Limitless results) |
 | `src/lib/files.ts` | Save / open tournament files |

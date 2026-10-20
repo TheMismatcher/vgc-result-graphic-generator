@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { BrandContext, resolveBrand } from './brand'
 import { DisplayContext, type Display } from './lib/display'
 import { cpEventFor } from './lib/cp'
-import { initialState, usePersistentState } from './lib/state'
+import { initialState, isUnchanged, usePersistentState } from './lib/state'
 import { sampleState } from './lib/sample'
 import { openTournamentFile, saveTournamentFile } from './lib/files'
 import { StandingsPage } from './pages/StandingsPage'
@@ -43,8 +43,15 @@ export default function App() {
     setCpEvent: (type) => setState((s) => ({ ...s, tournament: { ...s.tournament, type } })),
   }
 
-  const reset = async (next: typeof state, message: string, label: string) => {
-    if (await dialog.confirm(message, label)) setState(next)
+  // Replacing everything: no questions if what's on screen is just the sample or empty; otherwise
+  // offer to save it to a file first.
+  const reset = async (next: typeof state, message: string) => {
+    if (!isUnchanged(state, [sampleState(), initialState()])) {
+      const choice = await dialog.choose(`${message}\n\nYou have your own data on screen. Save it to a file first?`, ['Proceed', 'Save file first'])
+      if (choice === null) return
+      if (choice === 1) saveTournamentFile(state)
+    }
+    setState(next)
   }
 
   return (
@@ -85,10 +92,10 @@ export default function App() {
                 }}
               />
             </label>
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...sampleState(), brand: state.brand }, 'Replace everything on every tab (standings, usage, bracket, replay, team battle, and regional results) with the sample? Branding is kept.', 'Load sample')}>
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...sampleState(), brand: state.brand }, 'Load sample replaces everything on every tab (standings, usage, bracket, replay, team battle, and regional results). Branding is kept.')}>
               Load sample
             </Button>
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...initialState(), brand: state.brand }, 'Clear the tournament, players, usage, bracket, replay, team battle, and regional results? (Branding is kept.)', 'Clear everything')}>
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...initialState(), brand: state.brand }, 'Start over clears the tournament, players, usage, bracket, replay, team battle, and regional results. Branding is kept.')}>
               Start over
             </Button>
           </div>

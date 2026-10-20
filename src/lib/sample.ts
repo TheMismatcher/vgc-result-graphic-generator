@@ -9,17 +9,21 @@ import { bracketFromStandings, setBracketWinner } from './bracket'
 const t = (...mons: [string, string][]): Mon[] => mons.map(([pokemon, item]) => ({ pokemon, item, tera: '' }))
 
 const TEAMS: Mon[][] = [
-  t(['garchomp-mega-z', 'garchompite-z'], ['incineroar', 'sitrus-berry'], ['kingambit', 'black-glasses'], ['whimsicott', 'focus-sash'], ['rotom-wash', 'leftovers'], ['amoonguss', 'rocky-helmet']),
-  t(['dragonite-mega', 'dragoninite'], ['sinistcha', 'sitrus-berry'], ['torkoal', 'charcoal'], ['venusaur', 'life-orb'], ['farigiraf', 'safety-goggles'], ['gholdengo', 'choice-specs']),
-  t(['charizard-mega-y', 'charizardite-y'], ['incineroar', 'safety-goggles'], ['garchomp', 'choice-scarf'], ['milotic', 'leftovers'], ['kingambit', 'lum-berry'], ['pelipper', 'focus-sash']),
-  t(['lucario-mega-z', 'lucarionite-z'], ['tyranitar', 'chople-berry'], ['excadrill', 'life-orb'], ['amoonguss', 'sitrus-berry'], ['rotom-heat', 'choice-scarf'], ['dragapult', 'focus-sash']),
+  // https://pokepast.es/70c1713429c93839
+  t(['archaludon', 'assault-vest'], ['basculegion-male', 'choice-band'], ['pelipper', 'focus-sash'], ['greninja', 'loaded-dice'], ['sinistcha', 'sitrus-berry'], ['annihilape', 'choice-scarf']),
+  // Wolfe Glick's 2016 World Championships-winning team (https://pokepast.es/15b011e74f43d99d).
+  t(['rayquaza-mega', 'focus-sash'], ['kyogre', 'blue-orb'], ['gengar-mega', 'gengarite'], ['hitmontop', 'eject-button'], ['raichu', 'assault-vest'], ['bronzong', 'lum-berry']),
+  // Wolfe Glick's 2013 Worlds team, rebuilt for Scarlet & Violet ("I Entered a Tournament with my Worst Pokemon Team").
+  t(['registeel', 'leftovers'], ['hippowdon', 'sitrus-berry'], ['latios', 'soul-dew'], ['gliscor', 'toxic-orb'], ['rotom-wash', 'choice-scarf'], ['magmar', 'eviolite']),
+  // Ash's Masters Eight-winning team (Pokémon Journeys); Lucario Mega Evolved.
+  t(['pikachu', 'light-ball'], ['lucario-mega', 'lucarionite'], ['dragonite', 'choice-band'], ['gengar', 'focus-sash'], ['sirfetchd', 'stick'], ['dracovish', 'choice-scarf']),
   t(['glimmora-mega', 'glimmoranite'], ['incineroar', 'sitrus-berry'], ['basculegion-male', 'choice-scarf'], ['sinistcha', 'leftovers'], ['kingambit', 'black-glasses'], ['talonflame', 'sharp-beak']),
   t(['froslass-mega', 'froslassite'], ['gholdengo', 'leftovers'], ['garchomp', 'yache-berry'], ['primarina', 'throat-spray'], ['incineroar', 'sitrus-berry'], ['whimsicott', 'focus-sash']),
   t(['delphox-mega', 'delphoxite'], ['milotic', 'sitrus-berry'], ['kingambit', 'lum-berry'], ['farigiraf', 'throat-spray'], ['dragonite', 'choice-band'], ['amoonguss', 'rocky-helmet']),
   t(['chandelure-mega', 'chandelurite'], ['tyranitar', 'assault-vest'], ['excadrill', 'focus-sash'], ['incineroar', 'sitrus-berry'], ['rotom-wash', 'leftovers'], ['sinistcha', 'mental-herb']),
 ]
 
-const NAMES = ['Ash Ketchum', 'Misty Waterflower', 'Brock Harrison', 'Dawn Berlitz', 'Serena Yvonne', 'Gary Oak', 'Iris Opelucid', 'Cynthia Shirona']
+const NAMES = ['Nicholas Rubingh', 'Wolfe Glick', 'Darius Helmick', 'Ash Ketchum', 'Serena Yvonne', 'Gary Oak', 'Iris Opelucid', 'Cynthia Shirona']
 const RECORDS = ['8-1', '7-2', '7-1', '6-2', '6-2', '5-3', '5-3', '5-3']
 
 export const sampleState = (): AppState => {
@@ -36,7 +40,7 @@ export const sampleState = (): AppState => {
       uid: crypto.randomUUID(),
       name: NAMES[i],
       record: RECORDS[i],
-      social: i < 3 ? `@${NAMES[i].split(' ')[0].toLowerCase()}vgc` : '',
+      social: ['@nicholasrubingh', '@WolfeyGlick', '@HootieVGC'][i] ?? '',
       team,
     })),
   }

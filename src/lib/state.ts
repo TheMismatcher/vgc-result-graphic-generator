@@ -41,6 +41,20 @@ export const initialState = (): AppState => ({
   templates: { standings: '', usage: '', match: '', day2: '', teamBattle: '' },
 })
 
+/**
+ * True if the data on screen matches one of `baselines` (e.g. the untouched sample or an empty
+ * tournament). Ignores branding, display settings, chosen templates, the date, and random IDs.
+ */
+export function isUnchanged(state: AppState, baselines: AppState[]): boolean {
+  const key = (s: AppState) =>
+    JSON.stringify({ ...s, brand: null, settings: null, templates: null, tournament: { ...s.tournament, date: null } }).replace(
+      /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g,
+      'id',
+    )
+  const mine = key(state)
+  return baselines.some((b) => key(b) === mine)
+}
+
 const KEY = 'dmv-generator:v1'
 
 /**

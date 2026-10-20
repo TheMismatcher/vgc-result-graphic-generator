@@ -8,6 +8,7 @@ import { Preview } from '../components/Preview'
 import { TournamentForm } from '../components/TournamentForm'
 import { LimitlessImport } from '../components/LimitlessImport'
 import { TdfUpload } from '../components/tdfUpload'
+import { StandingsPhotoImport } from '../components/StandingsPhotoImport'
 import { BracketEditor } from '../components/BracketEditor'
 import { Button, Card } from '../components/ui'
 import { Box, Tab, Tabs } from '@mui/material'
@@ -70,6 +71,7 @@ export function StandingsPage({ state, setState }: { state: AppState; setState: 
             <Tabs value={inputTab} onChange={handleInputTabChange} aria-label="basic tabs example">
               <Tab label="Limitless" {...a11yProps(0)} />
               <Tab label="TOM File" {...a11yProps(1)} />
+              <Tab label="Photo / PDF" {...a11yProps(2)} />
             </Tabs>
           </Box>
           <CustomTabPanel value={inputTab} index={0}>
@@ -77,6 +79,9 @@ export function StandingsPage({ state, setState }: { state: AppState; setState: 
           </CustomTabPanel>
           <CustomTabPanel value={inputTab} index={1}>
             <TdfUpload setState={setState} />
+          </CustomTabPanel>
+          <CustomTabPanel value={inputTab} index={2}>
+            <StandingsPhotoImport setState={setState} />
           </CustomTabPanel>
         </Card>
         <TournamentForm value={state.tournament} onChange={(tournament) => setState((s) => ({ ...s, tournament }))} />

@@ -108,9 +108,18 @@ for (const i of ITEMS) {
   itemByName.set(i.id.replace(/-/g, ''), i.id) // Showdown's packed ids, e.g. "FocusSash"
 }
 
-/** The Mega form a Pokémon becomes with this item, e.g. ("garchomp", "garchompite-z") -> "garchomp-mega-z"; "" if none. */
+// Primal Reversion works like Mega Evolution for display: the orb triggers the form.
+const PRIMAL_ORBS: Record<string, [string, string][]> = {
+  'blue-orb': [['Kyogre', 'Kyogre-Primal']],
+  'red-orb': [['Groudon', 'Groudon-Primal']],
+}
+
+/**
+ * The Mega (or Primal) form a Pokémon becomes with this item, e.g. ("garchomp", "garchompite-z")
+ * -> "garchomp-mega-z", ("kyogre", "blue-orb") -> "kyogre-primal"; "" if none.
+ */
 export function megaForm(pokemonId: string, itemId: string): string {
-  for (const [from, to] of itemById.get(itemId)?.mega ?? []) {
+  for (const [from, to] of itemById.get(itemId)?.mega ?? PRIMAL_ORBS[itemId] ?? []) {
     if (resolvePokemon(from) === pokemonId) {
       const mega = resolvePokemon(to)
       if (mega) return mega

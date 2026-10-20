@@ -31,6 +31,8 @@ const ITEM_CATEGORIES = new Set([
   'bad-held-items', 'plates', 'species-specific', 'type-enhancement',
   'scarves', 'jewels', 'mega-stones', 'memories',
 ])
+// Held items PokeAPI files under other categories (e.g. Primal Reversion orbs, for older teams).
+const EXTRA_ITEMS = new Set(['blue-orb', 'red-orb'])
 
 // Forms nobody brings to a tournament.
 const SKIP_POKEMON = /-(totem|starter)(-|$)|^pikachu-(rock-star|belle|pop-star|phd|libre|cosplay)$/
@@ -161,7 +163,7 @@ async function buildItems() {
   const english = new Map(names.filter((n) => n.local_language_id === ENGLISH).map((n) => [n.item_id, n.name]))
   const seenIds = new Set()
   const list = items
-    .filter((i) => wanted.has(i.category_id) && !seenIds.has(i.identifier) && seenIds.add(i.identifier))
+    .filter((i) => (wanted.has(i.category_id) || EXTRA_ITEMS.has(i.identifier)) && !seenIds.has(i.identifier) && seenIds.add(i.identifier))
     .map((i) => ({ id: i.identifier, name: english.get(i.id) ?? titleCase(i.identifier) }))
 
   const dir = path.join(ROOT, 'public/sprites/items')
