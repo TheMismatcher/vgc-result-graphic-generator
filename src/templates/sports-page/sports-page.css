@@ -1,0 +1,235 @@
+/* Sports Page: newsprint, condensed headline type, a box-score table, brand red as the spot ink. */
+
+.sp {
+  --paper: #ebe5d6;
+  --ink: #1b1a17;
+  --spot: var(--brand-red, #b3121b);
+  --grey: #5d574c;
+  position: relative;
+  overflow: hidden;
+  padding: 0 44px;
+  background:
+    radial-gradient(1200px 900px at 50% 40%, transparent 60%, rgba(120, 100, 60, 0.18)),
+    var(--paper);
+  color: var(--ink);
+  font-family: 'Montserrat', sans-serif;
+}
+.sp-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Masthead: double rule, section name, logo, date */
+.sp-mast {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin-top: 36px;
+  padding: 10px 0;
+  border-top: 6px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.sp-mast span:last-child {
+  text-align: right;
+}
+
+/* Headline, printed twice: a red layer a few pixels off, then black on top */
+.sp-head {
+  position: relative;
+  height: 128px;
+  margin-top: 14px;
+}
+.sp-headline {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: 'Anton', sans-serif;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+.sp-misprint {
+  color: var(--spot);
+  transform: translate(5px, 4px);
+  opacity: 0.9;
+}
+.sp-deck {
+  margin: 4px 0 0;
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--ink);
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--grey);
+}
+
+/* Lead: the winner's team, plus a side box with the stamp and facts */
+.sp-lead {
+  position: relative;
+  display: flex;
+  gap: 28px;
+  padding: 18px 0 14px;
+  border-bottom: 6px solid var(--ink);
+}
+.sp-team {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  flex: 1;
+  border-left: 2px solid var(--ink);
+}
+.sp-team figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0 6px;
+  border-right: 2px solid var(--ink);
+}
+.sp-team figure:nth-child(-n + 3) {
+  border-bottom: 1px dashed var(--ink);
+}
+.sp-team figcaption {
+  margin-top: 4px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  font-size: 19px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.sp .dmv-mon img.render {
+  filter: none;
+}
+.sp-side {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sp-stamp {
+  align-self: center;
+  padding: 6px 26px 2px;
+  border: 6px solid var(--spot);
+  border-radius: 10px;
+  color: var(--spot);
+  font-family: 'Anton', sans-serif;
+  font-size: 64px;
+  line-height: 1.05;
+  text-transform: uppercase;
+  transform: rotate(-7deg);
+  opacity: 0.88;
+  mix-blend-mode: multiply;
+}
+.sp-side dl {
+  margin: 26px 0 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 12px;
+  align-items: baseline;
+}
+.sp-side dt {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: var(--spot);
+}
+.sp-side dd {
+  margin: 0;
+  font-weight: 700;
+  font-size: 22px;
+  white-space: nowrap;
+}
+
+/* Box score */
+.sp-box {
+  position: relative;
+  width: 100%;
+  margin-top: 14px;
+  border-collapse: collapse;
+}
+.sp-box th {
+  padding: 6px 8px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  text-align: left;
+  letter-spacing: 0.04em;
+}
+.sp-box td {
+  height: 68px;
+  padding: 0 8px;
+  border-bottom: 1px dotted var(--ink);
+  vertical-align: middle;
+}
+.sp-pl {
+  width: 70px;
+  font-family: 'Anton', sans-serif;
+  font-size: 44px;
+  color: var(--spot);
+}
+.sp-name {
+  width: 350px;
+}
+.sp-name > div {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.sp-handle {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--grey);
+}
+.sp-rec {
+  width: 110px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sp-mons {
+  white-space: nowrap;
+}
+.sp-mons .dmv-mon {
+  display: inline-block;
+  vertical-align: middle;
+}
+.sp-cp {
+  margin-left: 8px;
+  border-width: 2px;
+  font-style: normal;
+  vertical-align: middle;
+}
+.sp-cp.small {
+  font-size: 14px;
+}
+
+.sp-foot {
+  position: absolute;
+  left: 44px;
+  right: 44px;
+  bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 2px solid var(--ink);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: var(--grey);
+}

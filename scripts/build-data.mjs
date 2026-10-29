@@ -35,6 +35,12 @@ const ITEM_CATEGORIES = new Set([
 const EXTRA_ITEMS = new Set(['blue-orb', 'red-orb'])
 
 // Forms nobody brings to a tournament.
+// Cosmetic forms that PokeAPI keeps as forms (not separate Pokémon) but players care about seeing,
+// e.g. Cynthia's blue East Sea Gastrodon. id → [name, species, dex, sprite file name on PokeAPI].
+const EXTRA_FORMS = {
+  'shellos-east': ['East Shellos', 'Shellos', 422, '422-east'],
+  'gastrodon-east': ['East Gastrodon', 'Gastrodon', 423, '423-east'],
+}
 const SKIP_POKEMON = /-(totem|starter)(-|$)|^pikachu-(rock-star|belle|pop-star|phd|libre|cosplay)$/
 
 async function csv(name) {
@@ -123,6 +129,10 @@ async function buildPokemon() {
       return { id: p.identifier, name, species: base, dex: Number(p.species_id), isDefault: p.is_default === '1', speciesId: sp.identifier, ...(form && { form }) }
     })
 
+  for (const [id, [name, base, dex]] of Object.entries(EXTRA_FORMS)) {
+    list.push({ id, name, species: base, dex, isDefault: false, speciesId: base.toLowerCase(), form: name.split(' ')[0] + ' Sea' })
+  }
+
   // Make duplicate names unique, e.g. male/female Mega Meowstic.
   const seen = new Map()
   for (const p of list) seen.set(p.name, (seen.get(p.name) ?? 0) + 1)
@@ -141,7 +151,7 @@ async function buildPokemon() {
   console.log(`Downloading sprites for ${list.length} Pokémon (existing files are skipped)…`)
   let done = 0
   const found = await pool(list, 24, async (p) => {
-    const n = numericId.get(p.id)
+    const n = EXTRA_FORMS[p.id]?.[3] ?? numericId.get(p.id)
     const small = await download(`${SPRITES}/pokemon/${n}.png`, path.join(dirs[0], `${p.id}.png`))
     const home =
       (await download(`${SPRITES}/pokemon/other/home/${n}.png`, path.join(dirs[1], `${p.id}.png`))) ||

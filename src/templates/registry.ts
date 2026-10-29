@@ -13,6 +13,7 @@ import TeamBattle, { TeamBattleLoss, TeamBattleLoud, TeamBattleWin } from './tea
 import Top8Photos, { Top8PhotosLoud, Top8PhotosWhite } from './top8-photos'
 import Top4Photos, { Top4PhotosLoud } from './top4-photos'
 import Top8Mixed, { Top8MixedWhite } from './top8-mixed'
+import SportsPage from './sports-page'
 import { EditorialChampionNight, EditorialChampionPaper, EditorialTopCutNight, EditorialTopCutPaper } from './editorial'
 
 export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
@@ -22,6 +23,7 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   TopCutLoud,
   EditorialTopCutPaper,
   EditorialTopCutNight,
+  SportsPage,
   Top8Photos,
   Top8PhotosWhite,
   Top8PhotosLoud,

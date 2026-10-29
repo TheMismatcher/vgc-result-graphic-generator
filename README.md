@@ -11,7 +11,7 @@ Everything runs in the browser: graphics are drawn on the page and saved as PNGs
 - **Team Battle:** team-vs-team weeks (e.g. USPL): paste one replay per set for a graphic with every set, both teams, and the overall result. Neutral, Win, and Loss versions.
 - **Regional Results:** one graphic per player at a Regional (e.g. who made Day 2), with name, record, team, and photo pulled from RK9.
 - **Imports:** Limitless (standings, teams, bracket, usage), RK9 (rosters, team lists, records), TOM `.tdf` files, **photos, screenshots, or PDFs of TOM standings pages** (for events that only post a picture; PDFs are read exactly), Pokepaste / Showdown exports, Showdown replays, and **Pokémon Champions team screenshots** (phone or Switch; read in the browser, even with nicknames).
-- **Branding:** DMV VGC built in, or your own name, logo, and colors.
+- **Branding:** DMV VGC built in, or your own name, logo, and colors (type or pick hex codes). Save as many brands as you like and switch between them; they stay in your browser and can be exported to a file to share or move to another device.
 - **Extras:** Mega forms, player photos, save/open tournament files, copy image to clipboard.
 
 ## Run it locally
@@ -50,6 +50,7 @@ Re-downloads the lists from [PokeAPI](https://pokeapi.co), rebuilds the screensh
 | `src/templates/` | The graphic designs, one folder each (see [TEMPLATES.md](TEMPLATES.md)) |
 | `src/pages/`, `src/components/` | The editing interface (one page per tab) |
 | `src/brand.ts`, `public/brand/` | Built-in DMV branding and custom branding |
+| `src/lib/brands.ts` | Saved brands (browser storage, export/import file) |
 | `src/data/options.ts` | Formats, tournament types, Tera types |
 | `src/lib/cp.ts` | Official League Cup / Challenge Championship Points tables (update each season) |
 | `src/lib/limitless.ts` | Limitless import (standings, teams, bracket, usage) |

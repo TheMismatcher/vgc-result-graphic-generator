@@ -21,11 +21,13 @@ const TEAMS: Mon[][] = [
   t(['mimikyu-disguised', 'life-orb'], ['incineroar', 'sitrus-berry'], ['raichu', 'raichunite-y'], ['sinistcha', 'kasib-berry'], ['milotic', 'leftovers'], ['ninetales-alola', 'focus-sash']),
   // Adri's team (Charizard's item not confirmed yet).
   t(['sableye', 'roseli-berry'], ['charizard', 'charizardite-y'], ['venusaur', 'focus-sash'], ['primarina', 'leftovers'], ['gholdengo', 'life-orb'], ['raichu', 'raichunite-y']),
-  t(['delphox-mega', 'delphoxite'], ['milotic', 'sitrus-berry'], ['kingambit', 'lum-berry'], ['farigiraf', 'throat-spray'], ['dragonite', 'choice-band'], ['amoonguss', 'rocky-helmet']),
-  t(['chandelure-mega', 'chandelurite'], ['tyranitar', 'assault-vest'], ['excadrill', 'focus-sash'], ['incineroar', 'sitrus-berry'], ['rotom-wash', 'leftovers'], ['sinistcha', 'mental-herb']),
+  // Marlee Warwick's team (Tyrantrum is shiny in her list; the maker has no shiny sprites).
+  t(['leafeon', 'life-orb'], ['rampardos', 'choice-scarf'], ['tyrantrum', 'delphoxite'], ['omastar', 'assault-vest'], ['empoleon', 'sitrus-berry'], ['walking-wake', 'booster-energy']),
+  // Cynthia's first Champion battle in Brilliant Diamond / Shining Pearl, with her held items (Serebii); her Gastrodon is East Sea.
+  t(['spiritomb', 'sitrus-berry'], ['roserade', 'expert-belt'], ['gastrodon-east', 'leftovers'], ['lucario', 'wise-glasses'], ['milotic', 'flame-orb'], ['garchomp', 'yache-berry']),
 ]
 
-const NAMES = ['Nicholas Rubingh', 'Wolfe Glick', 'Darius Helmick', 'Ash Ketchum', 'Tovah', 'Adri', 'Iris Opelucid', 'Cynthia Shirona']
+const NAMES = ['Nicholas Rubingh', 'Wolfe Glick', 'Darius Helmick', 'Ash Ketchum', 'Tovah', 'Adri', 'Marlee Warwick', 'Cynthia Shirona']
 const RECORDS = ['8-1', '7-2', '7-1', '6-2', '6-2', '5-3', '5-3', '5-3']
 
 export const sampleState = (): AppState => {
@@ -42,7 +44,7 @@ export const sampleState = (): AppState => {
       uid: crypto.randomUUID(),
       name: NAMES[i],
       record: RECORDS[i],
-      social: ['@nicholasrubingh', '@WolfeyGlick', '@HootieVGC', '', '.tovah', '@.adri_dcdm'][i] ?? '',
+      social: ['@nicholasrubingh', '@WolfeyGlick', '@HootieVGC', '', '.tovah', '@.adri_dcdm', 'pterrific'][i] ?? '',
       team,
     })),
   }

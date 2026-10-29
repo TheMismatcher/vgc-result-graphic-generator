@@ -2,6 +2,7 @@
 // two colour panels split by a jagged black lightning edge, a sunburst, halftone dots and
 // speed lines. Templates choose the colours, where the split runs and where the burst sits.
 
+import { useBrand } from '../../brand'
 import './loud.css'
 
 type Colour = 'red' | 'blue' | 'yellow'
@@ -44,6 +45,9 @@ export function LoudBackground({ top, bottom, split, burst, burstBelow, vertical
   const topClip = vertical ? `polygon(0 0, ${a}% 0, ${b}% 100%, 0 100%)` : `polygon(0 0, 100% 0, 100% ${b}%, 0 ${a}%)`
   const bottomClip = vertical ? `polygon(${a}% 0, 100% 0, 100% 100%, ${b}% 100%)` : `polygon(0 ${a}%, 100% ${b}%, 100% 100%, 0 100%)`
   const at = `${burst[0]}px ${burst[1]}px`
+  // Sunburst rays in the brand's highlight color, half see-through.
+  const n = parseInt(useBrand().colors.highlight.slice(1), 16)
+  const ray = `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, 0.5)`
   return (
     <>
       <div className={`loud-panel loud-${bottom}`} />
@@ -54,7 +58,7 @@ export function LoudBackground({ top, bottom, split, burst, burstBelow, vertical
         className="loud-burst"
         style={{
           clipPath: burstBelow ? bottomClip : topClip,
-          background: `repeating-conic-gradient(from 0deg at ${at}, rgba(255, 211, 78, 0.5) 0deg 5deg, transparent 5deg 12deg)`,
+          background: `repeating-conic-gradient(from 0deg at ${at}, ${ray} 0deg 5deg, transparent 5deg 12deg)`,
           WebkitMaskImage: `radial-gradient(circle at ${at}, #000 0%, #000 35%, transparent 75%)`,
           maskImage: `radial-gradient(circle at ${at}, #000 0%, #000 35%, transparent 75%)`,
         }}

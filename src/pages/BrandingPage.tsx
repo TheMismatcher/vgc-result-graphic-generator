@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { AppState, BrandSettings } from '../types'
 import { DMV_BRAND, defaultBrandSettings } from '../brand'
+import { brandFromSettings, openBrandsFile, saveBrandsFile, useSavedBrands, type SavedBrand } from '../lib/brands'
 import { STANDINGS_TEMPLATES } from '../templates/registry'
 import { standingsData } from '../lib/event'
 import { resizeLogo } from '../lib/photo'
@@ -18,8 +19,55 @@ export function BrandingPage({ state, setState }: { state: AppState; setState: (
   const brand = state.brand
   const [busy, setBusy] = useState(false)
   const dialog = useDialog()
-  const set = (patch: Partial<BrandSettings>) => setState((s) => ({ ...s, brand: { ...s.brand, ...patch } }))
+  const [saved, setSaved] = useSavedBrands(() => dialog.notify("Couldn't save your brands in this browser (storage is full). Try a smaller logo, or export your brands to a file."))
   const custom = brand.preset === 'custom'
+  const current = saved.find((b) => b.id === brand.savedId)
+
+  // Edits change what's on screen and, for a saved brand, the saved copy too.
+  const set = (patch: Partial<BrandSettings>) => {
+    setState((s) => ({ ...s, brand: { ...s.brand, ...patch } }))
+    if (brand.savedId) setSaved((list) => list.map((b) => (b.id === brand.savedId ? { ...b, ...brandFromSettings({ ...brand, ...patch }, b.id) } : b)))
+  }
+  const select = (b: SavedBrand) => setState((s) => ({ ...s, brand: { preset: 'custom', savedId: b.id, name: b.name, tagline: b.tagline, logo: b.logo, colors: { ...b.colors } } }))
+
+  // A custom brand made before brands could be saved: keep it by saving it once.
+  useEffect(() => {
+    if (custom && !brand.savedId && (brand.name || brand.logo)) {
+      const b = brandFromSettings(brand)
+      setSaved((list) => [...list, b])
+      setState((s) => ({ ...s, brand: { ...s.brand, savedId: b.id } }))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const newBrand = () => {
+    const b: SavedBrand = { ...brandFromSettings({ ...defaultBrandSettings(), preset: 'custom' }), name: 'New brand' }
+    setSaved((list) => [...list, b])
+    select(b)
+  }
+  const duplicate = () => {
+    if (!current) return
+    const b = { ...current, id: crypto.randomUUID(), name: `${current.name} (copy)` }
+    setSaved((list) => [...list, b])
+    select(b)
+  }
+  const remove = async () => {
+    if (!current) return
+    if (!(await dialog.confirm(`Delete the brand "${current.name || 'Untitled'}" from this browser? Graphics switch back to ${DMV_BRAND.name}.`, 'Delete'))) return
+    setSaved((list) => list.filter((b) => b.id !== current.id))
+    setState((s) => ({ ...s, brand: defaultBrandSettings() }))
+  }
+  const importFile = async (file: File | undefined) => {
+    if (!file) return
+    try {
+      const brands = await openBrandsFile(file)
+      setSaved((list) => [...list, ...brands])
+      select(brands[0])
+      dialog.notify(brands.length === 1 ? `Added "${brands[0].name}".` : `Added ${brands.length} brands.`)
+    } catch (e) {
+      dialog.notify(e instanceof Error ? e.message : "Couldn't read that file.")
+    }
+  }
 
   const upload = async (file: File | undefined) => {
     if (!file) return
@@ -39,20 +87,37 @@ export function BrandingPage({ state, setState }: { state: AppState; setState: (
         <Card className="space-y-3">
           <h2 className="text-lg font-bold text-slate-900">Branding</h2>
           <p className="text-sm text-slate-600">Choose whose look the graphics use. This applies to every template.</p>
-          <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Branding">
-            {(['dmv', 'custom'] as const).map((p) => (
-              <button
-                key={p}
-                type="button"
-                role="radio"
-                aria-checked={brand.preset === p}
-                onClick={() => set({ preset: p })}
-                className={`rounded-xl border-2 p-3 text-left transition ${brand.preset === p ? 'border-[#b3121b] bg-red-50' : 'border-slate-200 hover:border-slate-400'}`}
-              >
-                <div className="font-semibold text-slate-900">{p === 'dmv' ? DMV_BRAND.name : 'Custom'}</div>
-                <div className="text-xs text-slate-500">{p === 'dmv' ? 'Built-in logo and colors' : 'Your own name, logo, and colors'}</div>
-              </button>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3" role="radiogroup" aria-label="Branding">
+            <BrandCard
+              active={!custom}
+              onClick={() => setState((s) => ({ ...s, brand: { ...s.brand, preset: 'dmv' } }))}
+              title={DMV_BRAND.name}
+              subtitle="Built-in"
+              logo={DMV_BRAND.logo}
+              colors={DMV_BRAND.colors}
+            />
+            {saved.map((b) => (
+              <BrandCard key={b.id} active={custom && brand.savedId === b.id} onClick={() => select(b)} title={b.name || 'Untitled'} subtitle={b.tagline || 'Your brand'} logo={b.logo} colors={b.colors} />
             ))}
+            <button
+              type="button"
+              onClick={newBrand}
+              className="flex min-h-[72px] items-center justify-center rounded-xl border-2 border-dashed border-slate-300 p-3 text-sm font-semibold text-slate-600 transition hover:border-slate-500 hover:text-slate-900"
+            >
+              + New brand
+            </button>
+          </div>
+          <p className="text-xs text-slate-500">
+            Your brands are saved in this browser and stay when you start over or load the sample. To use them on another device or share one, export them to a file.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="ghost" onClick={() => saveBrandsFile(saved)} disabled={!saved.length}>
+              Export brands
+            </Button>
+            <label className="inline-flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 focus-within:ring-2 focus-within:ring-blue-200">
+              Import brands
+              <input type="file" accept=".json,application/json" className="sr-only" onChange={(e) => { importFile(e.target.files?.[0]); e.target.value = '' }} />
+            </label>
           </div>
         </Card>
 
@@ -84,23 +149,33 @@ export function BrandingPage({ state, setState }: { state: AppState; setState: (
 
             <div className="grid gap-3 sm:grid-cols-3">
               {COLOR_FIELDS.map((c) => (
-                <label key={c.key} className="block">
+                <div key={c.key}>
                   <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">{c.label}</span>
-                  <span className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white p-1.5 shadow-sm">
+                  <span className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white p-1.5 shadow-sm focus-within:ring-2 focus-within:ring-blue-200">
                     <input
                       type="color"
+                      aria-label={`${c.label} picker`}
                       value={brand.colors[c.key]}
                       onChange={(e) => set({ colors: { ...brand.colors, [c.key]: e.target.value } })}
-                      className="h-8 w-10 cursor-pointer rounded border-0 bg-transparent p-0"
+                      className="h-8 w-10 shrink-0 cursor-pointer rounded border-0 bg-transparent p-0"
                     />
-                    <span className="font-mono text-sm text-slate-700">{brand.colors[c.key]}</span>
+                    <HexInput label={c.label} value={brand.colors[c.key]} onChange={(hex) => set({ colors: { ...brand.colors, [c.key]: hex } })} />
                   </span>
                   <span className="mt-1 block text-xs text-slate-500">{c.hint}</span>
-                </label>
+                </div>
               ))}
             </div>
 
-            <Button variant="ghost" onClick={() => set({ colors: defaultBrandSettings().colors })}>Reset colors</Button>
+            <div className="flex flex-wrap gap-2 border-t border-slate-100 pt-3">
+              <Button variant="ghost" onClick={() => set({ colors: defaultBrandSettings().colors })}>Reset colors</Button>
+              {current && (
+                <>
+                  <Button variant="ghost" onClick={duplicate}>Duplicate</Button>
+                  <Button variant="ghost" onClick={() => saveBrandsFile([current])}>Export this brand</Button>
+                  <Button variant="danger" onClick={remove}>Delete brand</Button>
+                </>
+              )}
+            </div>
           </Card>
         )}
       </div>
@@ -116,5 +191,66 @@ export function BrandingPage({ state, setState }: { state: AppState; setState: (
         />
       </div>
     </div>
+  )
+}
+
+function BrandCard({ active, onClick, title, subtitle, logo, colors }: { active: boolean; onClick: () => void; title: string; subtitle: string; logo: string; colors: BrandSettings['colors'] }) {
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={active}
+      onClick={onClick}
+      className={`flex min-h-[72px] items-center gap-3 rounded-xl border-2 p-3 text-left transition ${active ? 'border-[#b3121b] bg-red-50' : 'border-slate-200 hover:border-slate-400'}`}
+    >
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-white">
+        {logo ? <img src={logo} alt="" className="h-full w-full object-cover" /> : <span className="h-full w-full" style={{ background: colors.main }} />}
+      </span>
+      <span className="min-w-0">
+        <span className="block truncate font-semibold text-slate-900">{title}</span>
+        <span className="mt-0.5 flex items-center gap-1">
+          {[colors.main, colors.second, colors.highlight].map((c, i) => (
+            <span key={i} className="h-3 w-3 rounded-full border border-black/10" style={{ background: c }} />
+          ))}
+          <span className="ml-1 truncate text-xs text-slate-500">{subtitle}</span>
+        </span>
+      </span>
+    </button>
+  )
+}
+
+/** "#B3121B", "b3121b", "#f00" → "#b3121b" / "#ff0000"; anything else → null. */
+function parseHex(text: string) {
+  const t = text.trim().replace(/^#/, '').toLowerCase()
+  if (/^[0-9a-f]{6}$/.test(t)) return `#${t}`
+  if (/^[0-9a-f]{3}$/.test(t)) return `#${[...t].map((ch) => ch + ch).join('')}`
+  return null
+}
+
+/** A hex code you can type or paste. Applies as soon as it's a valid color; resets if left invalid. */
+function HexInput({ label, value, onChange }: { label: string; value: string; onChange: (hex: string) => void }) {
+  const [draft, setDraft] = useState(value)
+  const [editing, setEditing] = useState(false)
+  const shown = editing ? draft : value
+  return (
+    <input
+      type="text"
+      aria-label={`${label} hex code`}
+      spellCheck={false}
+      maxLength={7}
+      value={shown}
+      onFocus={() => {
+        setDraft(value)
+        setEditing(true)
+      }}
+      onChange={(e) => {
+        setDraft(e.target.value)
+        const hex = parseHex(e.target.value)
+        if (hex && hex !== value) onChange(hex)
+      }}
+      onBlur={() => setEditing(false)}
+      onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
+      className={`w-full min-w-0 border-0 bg-transparent font-mono text-sm outline-none ${editing && !parseHex(draft) ? 'text-red-600' : 'text-slate-700'}`}
+    />
   )
 }

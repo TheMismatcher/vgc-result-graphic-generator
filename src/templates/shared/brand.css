@@ -7,6 +7,11 @@
   --blue: var(--brand-blue, #6b9cf6);
   --blue-dark: var(--brand-blue-dark, #1f4fa3);
   --yellow: var(--brand-yellow, #ffd34e);
+  /* Lighter/deeper shades for gradients (Loud background), worked out from the brand colors. */
+  --red-light: var(--brand-red-light, #e0242e);
+  --blue-light: var(--brand-blue-light, #8fb6ff);
+  --yellow-light: var(--brand-yellow-light, #fff2b0);
+  --yellow-deep: var(--brand-yellow-deep, #f2a900);
   --ink: #111;
   position: relative;
   overflow: hidden;

@@ -89,6 +89,7 @@ export function FitText({
   weight = 900,
   italic = true,
   uppercase = true,
+  family = 'Montserrat',
   className = '',
   style,
 }: {
@@ -99,11 +100,12 @@ export function FitText({
   weight?: number
   italic?: boolean
   uppercase?: boolean
+  family?: string // font to measure with (the element's CSS must use the same font)
   className?: string
   style?: CSSProperties
 }) {
   useFontsReady()
-  const measured = textWidth(uppercase ? text.toUpperCase() : text, `${italic ? 'italic ' : ''}${weight} ${max}px Montserrat`) * 1.08 // room for the outline
+  const measured = textWidth(uppercase ? text.toUpperCase() : text, `${italic ? 'italic ' : ''}${weight} ${max}px ${family}`) * 1.08 // room for the outline
   const size = measured > width ? Math.max(min, Math.floor((max * width) / measured)) : max
   return (
     <div className={className} style={{ fontSize: size, whiteSpace: 'nowrap', ...style }}>

@@ -9,6 +9,7 @@ Current templates:
 | `shared/LoudBackground.tsx` | — | — | Shared "Loud" comic-book background (colour panels, lightning split, sunburst, halftone, speed lines). Add it to any template for a Loud version |
 | `top-cut/` | standings | 1080×1350 | Top 8 list with full teams (versions: Clean, Banner, White Banner headers, and Loud comic-book background) |
 | `editorial/` | standings | 1080×1350, 1080×1080 | "Editorial" magazine direction (upright type, big numerals, hairlines, brand colours as accents). Top Cut and Champion, each in Paper (off-white) and Night (navy) |
+| `sports-page/` | standings | 1080×1350 | Newspaper sports page: a generated headline about the winner (Anton), their team with names, a FINAL stamp, and a box score for 2nd–8th. Uses @fontsource/anton + oswald |
 | `top8-photos/` | standings | 1080×1350 | Top 8 cards with player photos and teams (alternating colors + a White version) |
 | `top8-mixed/` | standings | 1080×1350 | Photo cards for the top 4, compact rows for 5th–8th (alternating colors + a White version) |
 | `top4-photos/` | standings | 1080×1080 | Top 4 with big player photos and teams |

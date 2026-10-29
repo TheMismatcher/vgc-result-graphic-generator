@@ -58,6 +58,7 @@ export interface BrandSettings {
   tagline: string
   logo: string // PNG data URL
   colors: { main: string; second: string; highlight: string }
+  savedId?: string // which saved brand this is (Branding tab), so edits update it
 }
 
 export interface Day2 {

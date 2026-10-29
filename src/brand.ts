@@ -43,14 +43,48 @@ function darken(hex: string, amount: number) {
   return `#${[16, 8, 0].map((s) => ch(s).toString(16).padStart(2, '0')).join('')}`
 }
 
+/** Shift a hex color's lightness by `delta` percentage points (HSL), keeping its hue and saturation. */
+function shiftLightness(hex: string, delta: number) {
+  const n = parseInt(hex.slice(1), 16)
+  const [r, g, b] = [16, 8, 0].map((s) => ((n >> s) & 255) / 255)
+  const max = Math.max(r, g, b)
+  const min = Math.min(r, g, b)
+  let h = 0
+  let s = 0
+  const l = (max + min) / 2
+  if (max !== min) {
+    const d = max - min
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
+    h = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4
+    h /= 6
+  }
+  const l2 = Math.min(1, Math.max(0, l + delta / 100))
+  const q = l2 < 0.5 ? l2 * (1 + s) : l2 + s - l2 * s
+  const p = 2 * l2 - q
+  const hue = (t: number) => {
+    t = (t + 1) % 1
+    return t < 1 / 6 ? p + (q - p) * 6 * t : t < 1 / 2 ? q : t < 2 / 3 ? p + (q - p) * (2 / 3 - t) * 6 : p
+  }
+  return `#${[hue(h + 1 / 3), hue(h), hue(h - 1 / 3)].map((v) => Math.round(v * 255).toString(16).padStart(2, '0')).join('')}`
+}
+
+// The DMV artwork's own light/deep shades, used exactly when the DMV colors are in use.
+const DMV_SHADES = { redLight: '#e0242e', blueLight: '#8fb6ff', yellowLight: '#fff2b0', yellowDeep: '#f2a900' }
+
 /** CSS variables the templates read (see templates/shared/brand.css). */
 export function brandVars(b: Brand): CSSProperties {
+  const c = b.colors
+  const dmv = c.main === DMV_BRAND.colors.main && c.second === DMV_BRAND.colors.second && c.highlight === DMV_BRAND.colors.highlight
   return {
-    '--brand-red': b.colors.main,
-    '--brand-red-dark': darken(b.colors.main, 0.3),
-    '--brand-blue': b.colors.second,
-    '--brand-blue-dark': darken(b.colors.second, 0.55),
-    '--brand-yellow': b.colors.highlight,
+    '--brand-red': c.main,
+    '--brand-red-dark': darken(c.main, 0.3),
+    '--brand-red-light': dmv ? DMV_SHADES.redLight : shiftLightness(c.main, 12),
+    '--brand-blue': c.second,
+    '--brand-blue-dark': darken(c.second, 0.55),
+    '--brand-blue-light': dmv ? DMV_SHADES.blueLight : shiftLightness(c.second, 9),
+    '--brand-yellow': c.highlight,
+    '--brand-yellow-light': dmv ? DMV_SHADES.yellowLight : shiftLightness(c.highlight, 20),
+    '--brand-yellow-deep': dmv ? DMV_SHADES.yellowDeep : shiftLightness(c.highlight, -18),
   } as CSSProperties
 }
 

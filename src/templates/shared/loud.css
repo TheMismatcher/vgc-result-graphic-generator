@@ -9,13 +9,13 @@
   pointer-events: none;
 }
 .loud-red {
-  background: radial-gradient(circle at 85% 100%, #e0242e 0%, var(--red) 45%, var(--red-dark) 100%);
+  background: radial-gradient(circle at 85% 100%, var(--red-light) 0%, var(--red) 45%, var(--red-dark) 100%);
 }
 .loud-blue {
-  background: linear-gradient(170deg, #8fb6ff 0%, var(--blue) 40%, var(--blue-dark) 100%);
+  background: linear-gradient(170deg, var(--blue-light) 0%, var(--blue) 40%, var(--blue-dark) 100%);
 }
 .loud-yellow {
-  background: radial-gradient(circle at 20% 20%, #fff2b0 0%, var(--yellow) 45%, #f2a900 100%);
+  background: radial-gradient(circle at 20% 20%, var(--yellow-light) 0%, var(--yellow) 45%, var(--yellow-deep) 100%);
 }
 .loud-fine-dots {
   background-image:
@@ -24,13 +24,13 @@
   background-size: 14px 14px, auto;
 }
 .loud-panel.loud-blue.loud-fine-dots {
-  --loud-fill: linear-gradient(170deg, #8fb6ff 0%, var(--blue) 40%, var(--blue-dark) 100%);
+  --loud-fill: linear-gradient(170deg, var(--blue-light) 0%, var(--blue) 40%, var(--blue-dark) 100%);
 }
 .loud-panel.loud-red.loud-fine-dots {
-  --loud-fill: radial-gradient(circle at 85% 100%, #e0242e 0%, var(--red) 45%, var(--red-dark) 100%);
+  --loud-fill: radial-gradient(circle at 85% 100%, var(--red-light) 0%, var(--red) 45%, var(--red-dark) 100%);
 }
 .loud-panel.loud-yellow.loud-fine-dots {
-  --loud-fill: radial-gradient(circle at 20% 20%, #fff2b0 0%, var(--yellow) 45%, #f2a900 100%);
+  --loud-fill: radial-gradient(circle at 20% 20%, var(--yellow-light) 0%, var(--yellow) 45%, var(--yellow-deep) 100%);
 }
 /* Big halftone dots that build up toward the bottom of the page. */
 .loud-dots {
