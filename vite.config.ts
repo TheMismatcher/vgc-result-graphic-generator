@@ -6,7 +6,7 @@ import { defineConfig } from 'vite'
 // directly. Netlify does the same in production (public/_redirects).
 const rk9Proxy = {
   '/rk9': {
-    target: 'https://rk9.gg',
+    target: 'https://www.rk9.gg',
     changeOrigin: true,
     rewrite: (path: string) => path.replace(/^\/rk9/, ''),
   },
