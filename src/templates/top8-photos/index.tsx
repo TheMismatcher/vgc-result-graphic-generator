@@ -8,7 +8,7 @@ import './top8-photos.css'
 // Two looks: alternating blue/red cards, or white cards. 1st place is gold in both.
 export const makeTop8Photos = (white: boolean, loud = false, theme?: Theme): StandingsTemplate => ({
   id: theme ? `${theme.id}-top8-photos` : loud ? 'dmv-top8-photos-loud' : white ? 'dmv-top8-photos-white' : 'dmv-top8-photos',
-  name: theme ? `Top 8 Photos (${theme.style})` : loud ? 'Top 8 Photos (Loud)' : white ? 'Top 8 Photos (White)' : 'Top 8 Photos',
+  name: theme ? `Top 8 Photos (${theme.style})` : loud ? 'Top 8 Photos (Comic Book)' : white ? 'Top 8 Photos (White)' : 'Top 8 Photos',
   description: 'Portrait cards with each player’s photo and team.',
   kind: 'standings',
   width: 1080,

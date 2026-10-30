@@ -37,7 +37,7 @@ function Entry({ entry, width, height, state }: { entry: BracketEntry; width: nu
 
 export const makeBracket = (loud = false, theme?: Theme): StandingsTemplate => ({
   id: theme ? `${theme.id}-bracket` : loud ? 'dmv-bracket-loud' : 'dmv-bracket',
-  name: theme ? `Bracket (${theme.style})` : loud ? 'Bracket (Loud)' : 'Bracket',
+  name: theme ? `Bracket (${theme.style})` : loud ? 'Bracket (Comic Book)' : 'Bracket',
   description: 'Top cut bracket with results. Set it up under Top cut bracket.',
   kind: 'standings',
   width: W,
@@ -61,7 +61,6 @@ export const makeBracket = (loud = false, theme?: Theme): StandingsTemplate => (
     const inner = 12 // gap between the two players of a match
     const champ = data.bracket?.champion
     const champCenter = R ? centers[R - 1][0] : 0
-    const champH = 330
 
     return (
       <div className={`dmv br ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : ''}`} style={{ width: W, height: H }}>
@@ -116,7 +115,7 @@ export const makeBracket = (loud = false, theme?: Theme): StandingsTemplate => (
         )}
 
         {R > 0 && (
-          <div className={`br-champ dmv-panel ${champ ? '' : 'open'}`} style={{ left: colX(R), top: champCenter - champH / 2, width: colW, height: champH }}>
+          <div className={`br-champ dmv-panel ${champ ? '' : 'open'}`} style={{ left: colX(R), top: champCenter, width: colW, transform: 'translateY(-50%)' }}>
             <div className="br-champ-label">★ Champion ★</div>
             {data.cp && champ && <CpBadge points={data.cp(1)} style={{ marginTop: 6, background: '#fff' }} />}
             <FitText className="dmv-title br-champ-name" text={champ?.name || 'TBD'} max={34} width={colW - 30} min={16} />

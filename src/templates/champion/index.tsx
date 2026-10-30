@@ -9,7 +9,7 @@ import './champion.css'
 
 export const makeChampion = (loud = false, theme?: Theme): StandingsTemplate => ({
   id: theme ? `${theme.id}-champion` : loud ? 'dmv-champion-loud' : 'dmv-champion',
-  name: theme ? `Champion (${theme.style})` : loud ? 'Champion (Loud)' : 'Champion',
+  name: theme ? `Champion (${theme.style})` : loud ? 'Champion (Comic Book)' : 'Champion',
   description: 'Square spotlight on the winner and their team.',
   kind: 'standings',
   width: 1080,

@@ -110,7 +110,7 @@ function silhouette(src: string, color: string) {
   return cache.get(key)!
 }
 
-function Silhouette({ src, color, style }: { src: string; color: string; style: React.CSSProperties }) {
+export function Silhouette({ src, color, style }: { src: string; color: string; style: React.CSSProperties }) {
   const [url, setUrl] = useState('')
   useEffect(() => {
     let live = true
@@ -125,11 +125,17 @@ function Silhouette({ src, color, style }: { src: string; color: string; style: 
 /** The tile wall of the top cut's Pokémon as silhouettes, filling the whole graphic (shared with
  * the Mosaic theme's other layouts). Size defaults to 1080×1350. */
 export function MosaicTiles({ data, gradient, squares, width = W, height = H }: { data: Parameters<StandingsTemplate['Component']>[0]['data']; gradient: boolean; squares: boolean; width?: number; height?: number }) {
-  const brand = useBrand()
   const { showMegas } = useDisplay()
+  const mons = data.players.flatMap((p) => p.team.map((m) => (m.pokemon ? displayPokemon(m, showMegas) : '')))
+  return <MosaicWall mons={mons} seed={`${data.tournament.name}|${data.dateLabel}`} gradient={gradient} squares={squares} width={width} height={height} />
+}
+
+/** The tile wall for any list of Pokémon ids (repeats removed); `seed` fixes the tile layout. */
+export function MosaicWall({ mons: list, seed, gradient, squares, width = W, height = H }: { mons: string[]; seed: string; gradient: boolean; squares: boolean; width?: number; height?: number }) {
+  const brand = useBrand()
   const { main, second } = brand.colors
-  const mons = [...new Set(data.players.flatMap((p) => p.team.map((m) => (m.pokemon ? displayPokemon(m, showMegas) : ''))).filter(Boolean))]
-  const tiles = layout(`${data.tournament.name}|${data.dateLabel}`, squares).filter((t) => t.y * CELL < height && t.x * CELL < width)
+  const mons = [...new Set(list.filter(Boolean))]
+  const tiles = layout(seed, squares).filter((t) => t.y * CELL < height && t.x * CELL < width)
   const lineColor = (t: Tile) => (gradient ? mix(main, second, (t.x + t.y) / (COLS + ROWS - 2)) : second)
   return (
     <div className="mz-wall" style={{ position: 'absolute', inset: 0, background: gradient ? `linear-gradient(135deg, ${main}, ${second})` : second }}>
@@ -147,9 +153,9 @@ export function MosaicTiles({ data, gradient, squares, width = W, height = H }: 
 }
 
 /** `cardTint`: soft brand-tinted cards like the Mosaic theme's other layouts, see-through or solid. */
-const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'solid'): StandingsTemplate => ({
-  id: `mosaic${squares ? '-squares' : ''}-${gradient ? 'gradient' : 'mono'}${cardTint ? `-tint-${cardTint}` : ''}`,
-  name: `Top Cut (Mosaic${squares ? ' Squares' : ''} ${gradient ? 'Gradient' : 'Mono'}${cardTint ? (cardTint === 'glass' ? ', Tinted Glass' : ', Tinted Solid') : ''})`,
+const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'semi' | 'solid', shadow = false): StandingsTemplate => ({
+  id: `mosaic${squares ? '-squares' : ''}-${gradient ? 'gradient' : 'mono'}${cardTint ? `-tint-${cardTint}` : ''}${shadow ? '-shadow' : ''}`,
+  name: `Top Cut (Mosaic${squares ? ' Squares' : ''} ${gradient ? 'Gradient' : 'Mono'}${cardTint ? `, Tinted ${{ glass: 'Glass', semi: 'Semi', solid: 'Solid' }[cardTint]}` : ''}${shadow ? ', Drop Shadow' : ''})`,
   description: 'The top 8 over a wall of tiles showing every Pokémon on their teams as one-colour silhouettes.',
   kind: 'standings',
   width: W,
@@ -166,7 +172,7 @@ const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'so
     const lineColor = (t: Tile) => (gradient ? mix(main, second, tint(t)) : second)
 
     return (
-      <div className={`dmv mz ${cardTint ? `mz-tint ${cardTint}` : ''}`} style={{ width: W, height: H, background: gradient ? `linear-gradient(135deg, ${main}, ${second})` : second }}>
+      <div className={`dmv mz ${cardTint ? `mz-tint ${cardTint}` : ''} ${shadow ? 'shadow' : ''}`} style={{ width: W, height: H, background: gradient ? `linear-gradient(135deg, ${main}, ${second})` : second }}>
         {tiles.map((t, i) => {
           const size = Math.min(t.w, t.h) * CELL - GAP - 14
           const id = mons.length ? mons[i % mons.length] : ''
@@ -220,3 +226,6 @@ export const MosaicSquaresMono = makeMosaic(false, true)
 export const MosaicSquaresGradient = makeMosaic(true, true)
 export const MosaicTintGlass = makeMosaic(true, true, 'glass')
 export const MosaicTintSolid = makeMosaic(true, true, 'solid')
+export const MosaicTintGlassShadow = makeMosaic(true, true, 'glass', true)
+export const MosaicTintSolidShadow = makeMosaic(true, true, 'solid', true)
+export const MosaicTintSemiShadow = makeMosaic(true, true, 'semi', true)

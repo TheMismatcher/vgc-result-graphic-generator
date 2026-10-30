@@ -6,22 +6,23 @@ Current templates:
 
 | Folder | Kind | Size | What |
 |---|---|---|---|
-| `shared/LoudBackground.tsx` | — | — | Shared "Loud" comic-book background (colour panels, lightning split, sunburst, halftone, speed lines). Add it to any template for a Loud version |
-| `top-cut/` | standings | 1080×1350 | Top 8 list with full teams (versions: Clean, Banner, White Banner headers, and Loud comic-book background) |
+| `shared/LoudBackground.tsx` | — | — | Shared "Comic Book" background (colour panels, lightning split, sunburst, halftone, speed lines; called "Loud" in the code). Add it to any template for a Comic Book version |
+| `top-cut/` | standings | 1080×1350 | Top 8 list with full teams (versions: Clean, Banner, White Banner headers, and Comic Book background) |
 | `editorial/` | standings | 1080×1350, 1080×1080 | "Editorial" magazine direction (upright type, big numerals, hairlines, brand colours as accents). Top Cut and Champion, each in Paper (off-white) and Night (navy) |
 | `sports-page/` | standings | 1080×1350 | Newspaper sports page: a generated headline about the winner (Anton), their team with names, a FINAL stamp, and a box score for 2nd–8th. Uses @fontsource/anton + oswald |
 | `mosaic/` | standings | 1080×1350 | Top 8 on white cards over a tile wall of the top cut's Pokémon as one-colour silhouettes (Mono = second colour; Gradient = main → second). Layout is seeded by event name + date |
 | `eras/` | standings | 1080×1350 | Game/region-styled top cuts: Kanto Game Boy (4 greens, Press Start 2P font, green-tinted pixel sprites), Paldea (Scarlet/Violet orange/purple + dark angled panels), Unova (Black/White monochrome bands); locations: Glimwood Tangle (glowing mushroom forest), Route 201 (sky, tall grass, wooden route-sign header), Snowpoint (falling snow, frosted panels). Scenery is inline SVG, seeded by event name |
 | `eras/more.tsx` | standings | 1080×1350 | Battle Tower (navy/gold spotlights), Mt. Coronet (Spear Pillar ruins + cosmic sky), Hoenn Gen 3 (GBA menu boxes), Pokédex (red device, players as No.001…), Ghost (Halloween dusk, wisps, tower), and Champion (Trading Card): winner as a holo card, ace in the art window, team as "attacks" |
+| `power/` | standings | 1080×1350, 1080×1080 | Battle-mechanic styles, each a Top Cut (`index.tsx`) plus a theme for the other 5 layouts (`themes.tsx`): Terastal (prismatic crystal shards, glassy cut-corner cards, jewel crown; tints to the champion's Tera type when the format uses Tera), Mega Evolution (original helix-in-a-ring symbol, prismatic rays, glowing purple-pink-orange borders), Dynamax (red cloud vortex, hexagon energy, red pillars, stadium lights, giant silhouette of the champion's ace, Anton type). `power.css` restyles cards from CSS variables; `terastal.css` / `mega.css` / `dynamax.css` set them |
 | `top8-photos/` | standings | 1080×1350 | Top 8 cards with player photos and teams (alternating colors + a White version) |
 | `top8-mixed/` | standings | 1080×1350 | Photo cards for the top 4, compact rows for 5th–8th (alternating colors + a White version) |
 | `top4-photos/` | standings | 1080×1080 | Top 4 with big player photos and teams |
 | `champion/` | standings | 1080×1080 | Winner spotlight |
-| `bracket/` | standings | 1080×1350 | Top cut bracket with results (set up under "Top cut bracket" or imported from Limitless). Plus a Loud version |
+| `bracket/` | standings | 1080×1350 | Top cut bracket with results (set up under "Top cut bracket" or imported from Limitless). Plus a Comic Book version |
 | `arena/` | standings | 1080×1350 | Dark esports look; three backgrounds: Spotlight, Grid, Sunset |
 | `usage/` | usage | 1080×1350 | 12 most-used Pokémon |
 | `day2/` | day2 | 1644×1644 | One player at a Regional (event, name, record, photo, team). Default `clean.tsx` is redrawn as vector shapes with a hue slider (`day2.hue`); it also has an "Artist Match" version (sampled colours and shapes); `index.tsx` is the original artist background |
-| `team-battle/` | teamBattle | 1080×1350 | Team vs team (e.g. USPL week): logos, records, every set with both teams, overall winner. Neutral (and Loud), plus Win / Loss versions told from your team's side (Team A, left) |
+| `team-battle/` | teamBattle | 1080×1350 | Team vs team (e.g. USPL week): logos, records, every set with both teams, overall winner. Neutral (and Comic Book), plus Win / Loss versions told from your team's side (Team A, left) |
 | `vs-result/` | match | 1080×1080 | Replay result: both teams, score, winner |
 
 Everything listed in `src/templates/registry.ts` appears in the template picker. To drop a version (e.g. the White ones), delete its line there.

@@ -139,6 +139,9 @@
 .mz-tint.glass {
   --mz-base: rgba(255, 255, 255, 0.78);
 }
+.mz-tint.semi {
+  --mz-base: rgba(255, 255, 255, 0.9);
+}
 .mz-tint .mz-head {
   background: var(--mz-base);
   box-shadow: 0 8px 22px rgba(20, 24, 40, 0.16);
@@ -172,4 +175,9 @@
 }
 .mz-tint .mz-sub {
   color: #5b6070;
+}
+/* Drop shadow: a solid offset edge plus a soft glow, so the cards lift off the tiles. */
+.mz-tint.shadow .mz-head,
+.mz-tint.shadow .mz-row {
+  box-shadow: 0 8px 0 rgba(20, 24, 40, 0.22), 0 16px 30px rgba(20, 24, 40, 0.28);
 }

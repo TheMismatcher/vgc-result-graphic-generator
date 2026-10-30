@@ -1,0 +1,391 @@
+/*
+ * Shared structure for the Terastal / Mega Evolution / Dynamax styles. Everything visual comes from
+ * CSS variables that terastal.css, mega.css and dynamax.css set on .pw-tera / .pw-mega / .pw-dyna:
+ *   --pw-ink / --pw-muted / --pw-accent    text, secondary text, kicker + facts
+ *   --pw-card / --pw-card-alt / --pw-card-first  card backgrounds (any background value)
+ *   --pw-border / --pw-border-color / --pw-border-first-color  card edges (no border-image: it
+ *     doesn't survive the PNG export)
+ *   --pw-radius / --pw-clip / --pw-shadow / --pw-shadow-first  card shape and glow
+ *   --pw-place / --pw-place-ink / --pw-place-first / --pw-place-first-ink / --pw-place-clip / --pw-place-radius
+ *   --pw-font / --pw-title-shadow / --pw-mon-shadow
+ * .pw = the Top Cut templates; .dmv.themed.theme-power = the standard layouts with these themes.
+ */
+
+.pw,
+.dmv.themed.theme-power {
+  font-style: normal;
+  color: var(--pw-ink);
+  background: #0a0612;
+}
+.pw-scene {
+  position: absolute;
+  inset: 0;
+}
+.tz-bg,
+.mg-bg,
+.dyn-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* A card in any layout. */
+.pw .pw-head,
+.pw .pw-row,
+.dmv.themed.theme-power .dmv-panel {
+  background: var(--pw-card);
+  border: var(--pw-border);
+  border-radius: var(--pw-radius);
+  clip-path: var(--pw-clip, none);
+  box-shadow: var(--pw-shadow);
+  color: var(--pw-ink);
+}
+.pw .pw-row:nth-child(even),
+.dmv.themed.theme-power .dmv-panel.red {
+  background: var(--pw-card-alt, var(--pw-card));
+}
+.pw .pw-row.first,
+.dmv.themed.theme-power .dmv-panel.first,
+.dmv.themed.theme-power .br-entry.won,
+.dmv.themed.theme-power .br-champ {
+  background: var(--pw-card-first, var(--pw-card));
+  border-color: var(--pw-border-first-color, var(--yellow));
+  box-shadow: var(--pw-shadow-first, var(--pw-shadow));
+}
+
+/* Place tags: a shape of the theme's own (gem, ring, hexagon). */
+.pw .pw-place span,
+.dmv.themed.theme-power .p8-place,
+.dmv.themed.theme-power .p4-place,
+.dmv.themed.theme-power .m8-place,
+.dmv.themed.theme-power .m8-row-place,
+.dmv.themed.theme-power .p8-tag,
+.dmv.themed.theme-power .p4-tag,
+.dmv.themed.theme-power .m8-tag,
+.dmv.themed.theme-power .br-tag {
+  background: var(--pw-place);
+  color: var(--pw-place-ink);
+  border: 0;
+  border-radius: var(--pw-place-radius, 0);
+  clip-path: var(--pw-place-clip, none);
+  box-shadow: none;
+  transform: none;
+  font-family: var(--pw-font);
+  font-style: normal;
+  text-shadow: none;
+  -webkit-text-stroke: 0;
+}
+.pw .pw-row.first .pw-place span,
+.dmv.themed.theme-power .first .p8-place,
+.dmv.themed.theme-power .first .p4-place,
+.dmv.themed.theme-power .first .m8-place {
+  background: var(--pw-place-first);
+  color: var(--pw-place-first-ink);
+}
+
+/* Titles and names: upright, no comic outline, a soft glow for contrast. */
+.dmv.themed.theme-power .dmv-title,
+.dmv.themed.theme-power .p8-name,
+.dmv.themed.theme-power .p4-name,
+.dmv.themed.theme-power .m8-name,
+.dmv.themed.theme-power .br-name,
+.dmv.themed.theme-power .ch-mon-name,
+.pw .pw-title,
+.pw .pw-name {
+  color: var(--pw-ink);
+  font-family: var(--pw-font);
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: var(--pw-title-shadow);
+  letter-spacing: 0.01em;
+}
+.dmv.themed.theme-power .p8-sub,
+.dmv.themed.theme-power .p4-sub,
+.dmv.themed.theme-power .m8-sub,
+.dmv.themed.theme-power .m8-row-sub,
+.dmv.themed.theme-power .ch-item-name,
+.pw .pw-sub {
+  color: var(--pw-muted);
+  text-shadow: none;
+}
+.dmv.themed.theme-power .p8-facts,
+.dmv.themed.theme-power .p4-facts,
+.dmv.themed.theme-power .m8-facts,
+.dmv.themed.theme-power .br-facts,
+.pw .pw-facts,
+.pw .pw-kicker {
+  color: var(--pw-accent);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+.dmv.themed.theme-power .dmv-mon img.render,
+.pw .dmv-mon img.render {
+  filter: var(--pw-mon-shadow);
+}
+.dmv.themed.theme-power .dmv-mon .tera,
+.pw .dmv-mon .tera {
+  border-color: #fff;
+}
+.dmv.themed.theme-power .dmv-logo,
+.pw .dmv-logo {
+  border: 4px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.25);
+}
+.dmv.themed.theme-power .dmv-cp,
+.pw .dmv-cp {
+  border: 0;
+  background: var(--yellow);
+  color: #1a1020;
+  font-style: normal;
+}
+
+/* ---------- Top Cut ---------- */
+.pw-head {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 100px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 28px;
+}
+.pw-head-text {
+  flex: 1;
+  min-width: 0;
+}
+.pw-kicker {
+  font-size: 18px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+}
+.pw-title {
+  margin-top: 6px;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.pw-facts {
+  margin-top: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.pw-rows {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pw-row {
+  display: flex;
+  align-items: center;
+  height: 112px;
+}
+.pw-place {
+  flex: none;
+  width: 128px;
+  display: flex;
+  justify-content: center;
+}
+.pw-place span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 76px;
+  font-size: 34px;
+  font-weight: 900;
+}
+.pw-player {
+  width: 322px;
+  padding: 0 14px 0 8px;
+}
+.pw-name {
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.pw-sub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 19px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.pw-cp {
+  font-size: 14px;
+}
+.pw-team {
+  display: flex;
+  margin-left: auto;
+  padding-right: 16px;
+}
+
+/* ---------- Standard layouts ---------- */
+
+/* Headers sit on a plate of the theme's card, inset from the edges (same total height). */
+.dmv.themed.theme-power .p8-header,
+.dmv.themed.theme-power .m8-header,
+.dmv.themed.theme-power .p4-header {
+  background: var(--pw-card);
+  border: var(--pw-border);
+  border-radius: var(--pw-radius);
+  clip-path: var(--pw-clip, none);
+  box-shadow: var(--pw-shadow);
+  margin: 0 30px;
+  padding: 0 20px 0 12px;
+}
+.dmv.themed.theme-power .p8-header {
+  height: 194px;
+  margin-top: 22px;
+  margin-bottom: 14px;
+}
+.dmv.themed.theme-power .m8-header {
+  height: 180px;
+  margin-top: 20px;
+  margin-bottom: 14px;
+}
+.dmv.themed.theme-power .p4-header {
+  height: 170px;
+  margin-top: 18px;
+  margin-bottom: 12px;
+}
+.dmv.themed.theme-power .br-header {
+  background: var(--pw-card);
+  border: var(--pw-border);
+  border-radius: var(--pw-radius);
+  clip-path: var(--pw-clip, none);
+  box-shadow: var(--pw-shadow);
+  top: 20px;
+  left: 30px;
+  right: 30px;
+  padding: 10px 20px 10px 12px;
+}
+.dmv.themed.theme-power .p8-tag,
+.dmv.themed.theme-power .p4-tag,
+.dmv.themed.theme-power .m8-tag,
+.dmv.themed.theme-power .br-tag {
+  padding: 2px 24px;
+  font-size: 22px;
+  letter-spacing: 0.08em;
+}
+
+/* Photos: no black dividers; a thin light edge instead. */
+.dmv.themed.theme-power .p8-photo,
+.dmv.themed.theme-power .m8-photo {
+  border-right: 2px solid rgba(255, 255, 255, 0.35);
+}
+.dmv.themed.theme-power .p4-photo {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.35);
+}
+.dmv.themed.theme-power .p8-place,
+.dmv.themed.theme-power .p4-place,
+.dmv.themed.theme-power .m8-place {
+  top: 10px;
+  left: 10px;
+  padding: 2px 22px 4px;
+}
+.dmv.themed.theme-power .m8-row-place {
+  height: 70px;
+  width: 92px;
+  margin: 0 14px 0 10px;
+  font-size: 28px;
+}
+.dmv.themed.theme-power .dmv-photo-empty {
+  background: var(--pw-photo);
+}
+.dmv.themed.theme-power .dmv-photo-empty span {
+  -webkit-text-stroke: 0;
+  font-style: normal;
+  font-family: var(--pw-font);
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+.dmv.themed.theme-power .p4-plate {
+  left: 12px;
+  background: rgba(10, 6, 20, 0.72);
+  border-radius: 10px;
+  transform: none;
+}
+.dmv.themed.theme-power .p4-name {
+  transform: none;
+}
+
+/* Champion */
+.dmv.themed.theme-power .ch-banner {
+  left: 50px;
+  top: 50px;
+  padding: 14px 40px;
+  background: var(--pw-place);
+  border: 0;
+  border-radius: var(--pw-place-radius, 0);
+  clip-path: var(--pw-place-clip, none);
+  transform: none;
+}
+.dmv.themed.theme-power .ch-label {
+  transform: none;
+  color: var(--pw-place-ink);
+  text-shadow: none;
+  font-size: 56px;
+  letter-spacing: 0.06em;
+}
+.dmv.themed.theme-power .ch-sub {
+  background: rgba(10, 6, 20, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: var(--pw-ink);
+}
+.dmv.themed.theme-power .ch-mon-name {
+  font-size: 22px;
+}
+.dmv.themed.theme-power .ch-footer {
+  background: var(--pw-card);
+  border-top: 2px solid var(--pw-accent);
+  color: var(--pw-muted);
+}
+.dmv.themed.theme-power .ch-event {
+  color: var(--pw-accent);
+  font-family: var(--pw-font);
+  font-style: normal;
+}
+
+/* Bracket */
+.dmv.themed.theme-power .br-label {
+  color: var(--pw-accent);
+  font-style: normal;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+}
+.dmv.themed.theme-power .br-entry {
+  border-width: 2px;
+}
+.dmv.themed.theme-power .br-entry.lost {
+  opacity: 1; /* keep the card solid so the background can't show through the text */
+}
+.dmv.themed.theme-power .br-entry.lost .br-name {
+  color: var(--pw-muted);
+  text-shadow: none;
+}
+.dmv.themed.theme-power .br-entry.lost .br-team img {
+  opacity: 0.5;
+}
+.dmv.themed.theme-power .br-line {
+  border-color: var(--pw-line);
+  border-width: 4px;
+  border-left: none;
+}
+.dmv.themed.theme-power .br-line-h {
+  height: 4px;
+  background: var(--pw-line);
+}
+.dmv.themed.theme-power .br-champ-label {
+  color: var(--pw-accent);
+  font-style: normal;
+  font-family: var(--pw-font);
+}
+.dmv.themed.theme-power .br-champ.open {
+  background: var(--pw-card);
+}

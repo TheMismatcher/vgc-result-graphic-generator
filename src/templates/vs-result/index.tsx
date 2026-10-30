@@ -1,22 +1,29 @@
 import type { MatchTemplate } from '../types'
 import { FitText, Logo, MonSprite } from '../shared/parts'
 import { useBrand } from '../../brand'
+import { displayPokemon, useDisplay } from '../../lib/display'
+import type { SideTheme } from '../themes/side'
 import './vs-result.css'
 
-const VsResult: MatchTemplate = {
-  id: 'dmv-vs-result',
-  name: 'VS Result',
+export const makeVsResult = (theme?: SideTheme): MatchTemplate => ({
+  id: theme ? `${theme.id}-vs-result` : 'dmv-vs-result',
+  name: theme ? `VS Result (${theme.style})` : 'VS Result',
   description: 'Both players, both teams, the score, and the winner.',
   kind: 'match',
   width: 1080,
   height: 1080,
   Component: ({ data }) => {
     const brand = useBrand()
+    const { showMegas } = useDisplay()
     const [p1, p2] = data.players
     const winnerName = data.winner === null ? '' : data.players[data.winner].name
     return (
-      <div className="dmv vs" style={{ width: 1080, height: 1080 }}>
-        <div className="vs-bg" />
+      <div className={`dmv vs ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1080 }}>
+        {theme ? (
+          <theme.Wall mons={data.players.flatMap((p) => p.team.map((m) => (m.pokemon ? displayPokemon(m, showMegas) : '')))} seed={`vs|${p1.name}|${p2.name}`} width={1080} height={1080} />
+        ) : (
+          <div className="vs-bg" />
+        )}
 
         <header className="vs-top">
           <Logo size={120} />
@@ -65,6 +72,7 @@ const VsResult: MatchTemplate = {
       </div>
     )
   },
-}
+})
 
+const VsResult = makeVsResult()
 export default VsResult

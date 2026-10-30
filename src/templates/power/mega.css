@@ -1,0 +1,76 @@
+/* Mega Evolution: violet night, prismatic rays, a giant faint symbol, cards with glowing
+ * purple-pink-orange energy borders. */
+.pw-mega {
+  --mg-energy: linear-gradient(120deg, #b44dff, #ff4fa3 50%, #ffa040);
+  --pw-ink: #fff;
+  --pw-muted: #ead2f4;
+  --pw-accent: #ffbce4;
+  --pw-font: 'Montserrat', sans-serif;
+  --pw-card: linear-gradient(rgba(28, 8, 42, 0.82), rgba(28, 8, 42, 0.82)) padding-box, var(--mg-energy) border-box;
+  --pw-card-alt: linear-gradient(rgba(36, 8, 36, 0.82), rgba(36, 8, 36, 0.82)) padding-box, linear-gradient(120deg, #ffa040, #ff4fa3 50%, #b44dff) border-box;
+  --pw-card-first: linear-gradient(rgba(46, 20, 34, 0.88), rgba(46, 20, 34, 0.88)) padding-box, linear-gradient(120deg, #fff4c2, var(--yellow) 45%, #ffa040) border-box;
+  --pw-border: 3px solid transparent;
+  --pw-border-first-color: transparent; /* the gold gradient shows through */
+  --pw-radius: 22px;
+  --pw-shadow: 0 0 22px rgba(255, 79, 163, 0.45), 0 0 5px rgba(180, 77, 255, 0.7);
+  --pw-shadow-first: 0 0 30px color-mix(in srgb, var(--yellow) 60%, transparent), 0 0 6px rgba(255, 255, 255, 0.6);
+  --pw-place: var(--mg-energy);
+  --pw-place-ink: #fff;
+  --pw-place-first: linear-gradient(120deg, #fff4c2, var(--yellow) 50%, #ffa040);
+  --pw-place-first-ink: #2a1020;
+  --pw-place-radius: 999px;
+  --pw-title-shadow: 0 0 16px rgba(255, 79, 163, 0.75), 0 2px 4px rgba(0, 0, 0, 0.6);
+  --pw-mon-shadow: drop-shadow(0 0 7px rgba(255, 110, 190, 0.6)) drop-shadow(0 3px 3px rgba(0, 0, 0, 0.4));
+  --pw-photo: linear-gradient(150deg, #b44dff, #ff4fa3 55%, #ffa040);
+  --pw-line: #ff7ac4;
+}
+
+.mg-bg {
+  background: radial-gradient(ellipse at 50% 52%, #4a1470 0%, #22082f 45%, #0d0314 100%);
+}
+.mg-rays {
+  position: absolute;
+  inset: 0;
+}
+.mg-core {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 52%, rgba(255, 214, 240, 0.4) 0, rgba(255, 79, 163, 0.2) 16%, transparent 42%);
+}
+.mg-watermark {
+  position: absolute;
+  opacity: 0.24;
+}
+.mg-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(6, 1, 10, 0.75) 100%);
+}
+
+/* Top Cut: the symbol in the header, ring-shaped place badges. */
+.mg-emblem {
+  flex: none;
+  filter: drop-shadow(0 0 12px rgba(255, 79, 163, 0.75));
+}
+.pw-mega .pw-place span {
+  width: 84px;
+  height: 84px;
+  font-size: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(28, 8, 42, 0.95) 0 58%, transparent 59%), conic-gradient(#b44dff, #ff4fa3, #ffa040, #ff4fa3, #b44dff);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(255, 79, 163, 0.6);
+}
+.pw-mega .pw-row.first .pw-place span {
+  background: radial-gradient(circle, rgba(46, 20, 34, 0.95) 0 58%, transparent 59%), conic-gradient(#fff4c2, var(--yellow), #ffa040, var(--yellow), #fff4c2);
+  color: var(--yellow);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--yellow) 70%, transparent);
+}
+.pw-mega .pw-kicker {
+  color: #ffd0ea;
+}
+
+/* Bracket entries keep the gradient border (thin) */
+.dmv.themed.pw-mega .br-entry {
+  border-width: 3px;
+}

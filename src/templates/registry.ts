@@ -14,10 +14,17 @@ import Top8Photos, { Top8PhotosLoud, Top8PhotosWhite } from './top8-photos'
 import Top4Photos, { Top4PhotosLoud } from './top4-photos'
 import Top8Mixed, { Top8MixedWhite } from './top8-mixed'
 import SportsPage from './sports-page'
+import { SIDE_THEMES } from './themes/side'
+import { makeUsage } from './usage'
+import { makeVsResult } from './vs-result'
+import { makeTeamBattle } from './team-battle'
+import { ArenaGridLayouts, ArenaSpotlightLayouts, ArenaSunsetLayouts } from './themes/arena'
 import { MosaicLayouts } from './themes/mosaic'
 import { BattleTower, Ghost, Hoenn, MtCoronet, Pokedex, TradingCard } from './eras/more'
 import { Glimwood, KantoGameBoy, Paldea, Route201, Snowpoint, Unova } from './eras'
-import { MosaicGradient, MosaicMono, MosaicSquaresGradient, MosaicSquaresMono, MosaicTintGlass, MosaicTintSolid } from './mosaic'
+import { MosaicGradient, MosaicMono, MosaicSquaresGradient, MosaicSquaresMono, MosaicTintGlass, MosaicTintGlassShadow, MosaicTintSemiShadow, MosaicTintSolid, MosaicTintSolidShadow } from './mosaic'
+import { DynamaxTopCut, MegaTopCut, TerastalTopCut } from './power'
+import { DynamaxLayouts, MegaLayouts, TerastalLayouts } from './power/themes'
 import { EditorialChampionNight, EditorialChampionPaper, EditorialTopCutNight, EditorialTopCutPaper } from './editorial'
 
 import type { StandingsLayout } from './types'
@@ -38,20 +45,23 @@ const tag = (style: string, entries: [StandingsTemplate, StandingsLayout][]) => 
 
 export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [Bracket, 'bracket']]),
-  ...tag('Loud', [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [BracketLoud, 'bracket']]),
+  ...tag('Comic Book', [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [BracketLoud, 'bracket']]),
   ...tag('White', [[TopCutBannerWhite, 'topcut'], [Top8PhotosWhite, 'top8photos'], [Top8MixedWhite, 'top8mixed']]),
-  ...tag('Mosaic', [[MosaicSquaresGradient, 'topcut'], ...MosaicLayouts]),
+  ...tag('Mosaic', [[MosaicTintSemiShadow, 'topcut'], ...MosaicLayouts]),
   ...tag('Mosaic (Tinted Glass)', [[MosaicTintGlass, 'topcut']]),
   ...tag('Mosaic (Tinted Solid)', [[MosaicTintSolid, 'topcut']]),
+  ...tag('Mosaic (Tinted Glass + Shadow)', [[MosaicTintGlassShadow, 'topcut']]),
+  ...tag('Mosaic (Tinted Solid + Shadow)', [[MosaicTintSolidShadow, 'topcut']]),
+  ...tag('Mosaic (Squares Gradient)', [[MosaicSquaresGradient, 'topcut']]),
   ...tag('Mosaic (Gradient)', [[MosaicGradient, 'topcut']]),
   ...tag('Mosaic (Mono)', [[MosaicMono, 'topcut']]),
   ...tag('Mosaic (Squares Mono)', [[MosaicSquaresMono, 'topcut']]),
   ...tag('Editorial Paper', [[EditorialTopCutPaper, 'topcut'], [EditorialChampionPaper, 'champion']]),
   ...tag('Editorial Night', [[EditorialTopCutNight, 'topcut'], [EditorialChampionNight, 'champion']]),
   ...tag('Sports Page', [[SportsPage, 'topcut']]),
-  ...tag('Arena Spotlight', [[ArenaSpotlight, 'topcut']]),
-  ...tag('Arena Grid', [[ArenaGrid, 'topcut']]),
-  ...tag('Arena Sunset', [[ArenaSunset, 'topcut']]),
+  ...tag('Arena Spotlight', [[ArenaSpotlight, 'topcut'], ...ArenaSpotlightLayouts]),
+  ...tag('Arena Grid', [[ArenaGrid, 'topcut'], ...ArenaGridLayouts]),
+  ...tag('Arena Sunset', [[ArenaSunset, 'topcut'], ...ArenaSunsetLayouts]),
   ...tag('Battle Tower', [[BattleTower, 'topcut']]),
   ...tag('Glimwood Tangle', [[Glimwood, 'topcut']]),
   ...tag('Route 201', [[Route201, 'topcut']]),
@@ -64,8 +74,11 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Unova', [[Unova, 'topcut']]),
   ...tag('Pokédex', [[Pokedex, 'topcut']]),
   ...tag('Trading Card', [[TradingCard, 'champion']]),
+  ...tag('Terastal', [[TerastalTopCut, 'topcut'], ...TerastalLayouts]),
+  ...tag('Mega Evolution', [[MegaTopCut, 'topcut'], ...MegaLayouts]),
+  ...tag('Dynamax', [[DynamaxTopCut, 'topcut'], ...DynamaxLayouts]),
 ]
-export const USAGE_TEMPLATES: UsageTemplate[] = [Usage]
-export const MATCH_TEMPLATES: MatchTemplate[] = [VsResult]
+export const USAGE_TEMPLATES: UsageTemplate[] = [Usage, ...SIDE_THEMES.map((t) => makeUsage(t))]
+export const MATCH_TEMPLATES: MatchTemplate[] = [VsResult, ...SIDE_THEMES.map((t) => makeVsResult(t))]
 export const DAY2_TEMPLATES: Day2Template[] = [Day2Clean, Day2Match, Day2Regionals] // first = the default
-export const TEAM_BATTLE_TEMPLATES: TeamBattleTemplate[] = [TeamBattle, TeamBattleLoud, TeamBattleWin, TeamBattleLoss]
+export const TEAM_BATTLE_TEMPLATES: TeamBattleTemplate[] = [TeamBattle, TeamBattleLoud, TeamBattleWin, TeamBattleLoss, ...SIDE_THEMES.map((t) => makeTeamBattle('neutral', false, t))]

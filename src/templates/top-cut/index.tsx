@@ -10,7 +10,7 @@ const HEADER_NAMES = { clean: 'Clean Header', banner: 'Banner Header', 'banner-w
 // speed lines, halftone that fades in, and a jagged black split between the colours.
 const makeTopCut = (header: 'clean' | 'banner' | 'banner-white', loud = false): StandingsTemplate => ({
   id: `dmv-top-cut-${header}${loud ? '-loud' : ''}`,
-  name: loud ? 'Top Cut (Loud)' : `Top Cut (${HEADER_NAMES[header]})`,
+  name: loud ? 'Top Cut (Comic Book)' : `Top Cut (${HEADER_NAMES[header]})`,
   description: 'Portrait list of the top 8 with full teams.',
   kind: 'standings',
   width: 1080,

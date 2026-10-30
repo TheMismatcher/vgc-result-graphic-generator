@@ -1,0 +1,83 @@
+/* Dynamax: red cloud vortex, hexagon energy, red pillars, stadium lights; dark cards with red
+ * energy glowing at the edges and tall condensed type for the giant-scale feel. */
+.pw-dyna {
+  --pw-ink: #fff;
+  --pw-muted: #f4bfcb;
+  --pw-accent: #ff95ab;
+  --pw-font: 'Anton', 'Montserrat', sans-serif;
+  --pw-card: linear-gradient(180deg, rgba(62, 6, 22, 0.7), rgba(22, 2, 10, 0.78));
+  --pw-card-alt: linear-gradient(180deg, rgba(48, 4, 18, 0.72), rgba(16, 2, 8, 0.8));
+  --pw-card-first: linear-gradient(180deg, rgba(86, 32, 10, 0.82), rgba(30, 8, 6, 0.88));
+  --pw-border: 2px solid #ff2d55;
+  --pw-radius: 16px;
+  --pw-shadow: 0 0 20px rgba(255, 30, 70, 0.6), inset 0 0 22px rgba(255, 30, 70, 0.24);
+  --pw-shadow-first: 0 0 26px color-mix(in srgb, var(--yellow) 70%, transparent), inset 0 0 22px color-mix(in srgb, var(--yellow) 26%, transparent);
+  --pw-place: linear-gradient(160deg, #ff6b88, #e0123f 50%, #8c0a25);
+  --pw-place-ink: #fff;
+  --pw-place-first: linear-gradient(160deg, #fff1b8, var(--yellow) 50%, #e08a00);
+  --pw-place-first-ink: #2a0a00;
+  --pw-place-clip: polygon(14px 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 14px 100%, 0 50%);
+  --pw-title-shadow: 0 0 18px rgba(255, 40, 80, 0.85), 0 2px 0 rgba(0, 0, 0, 0.6);
+  --pw-mon-shadow: drop-shadow(0 0 8px rgba(255, 45, 85, 0.65)) drop-shadow(0 3px 3px rgba(0, 0, 0, 0.5));
+  --pw-photo: linear-gradient(160deg, #ff2d55, #6a0418);
+  --pw-line: #ff2d55;
+  /* Anton has one weight: never fake a bold version of it. */
+  font-synthesis: none;
+}
+
+.dyn-bg {
+  background: linear-gradient(180deg, #3a0612 0%, #16020a 42%, #0a0108 100%);
+}
+.dyn-giant {
+  position: absolute;
+  opacity: 0.4;
+  filter: drop-shadow(0 0 30px #ff2d55);
+}
+.dyn-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 260px;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 45, 85, 0.45), transparent 70%);
+}
+
+/* Anton is condensed: names and titles in it, a touch of tracking. */
+.pw-dyna .pw-title,
+.pw-dyna .pw-name,
+.dmv.themed.pw-dyna .dmv-title,
+.dmv.themed.pw-dyna .p8-name,
+.dmv.themed.pw-dyna .p4-name,
+.dmv.themed.pw-dyna .m8-name,
+.dmv.themed.pw-dyna .br-name,
+.dmv.themed.pw-dyna .ch-mon-name {
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+.pw-dyna .pw-place span {
+  width: 96px;
+  height: 78px;
+  font-size: 36px;
+  font-weight: 400;
+}
+.pw-dyna .pw-row.first,
+.dmv.themed.pw-dyna .dmv-panel.first,
+.dmv.themed.pw-dyna .br-entry.won,
+.dmv.themed.pw-dyna .br-champ {
+  border-color: var(--yellow);
+}
+.dmv.themed.pw-dyna .p8-place,
+.dmv.themed.pw-dyna .p4-place,
+.dmv.themed.pw-dyna .m8-place,
+.dmv.themed.pw-dyna .m8-row-place,
+.dmv.themed.pw-dyna .ch-label,
+.dmv.themed.pw-dyna .br-champ-label {
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+.dmv.themed.pw-dyna .ch-label {
+  font-size: 64px;
+}
+.pw-dyna .pw-kicker {
+  color: #ffb3c3;
+}

@@ -3,20 +3,27 @@ import type { UsageTemplate } from '../types'
 import { FitText, Logo } from '../shared/parts'
 import { eventFacts } from '../shared/format'
 import { getPokemon, sprites } from '../../data/dex'
+import type { SideTheme } from '../themes/side'
 import './usage.css'
 
-const Usage: UsageTemplate = {
-  id: 'dmv-usage',
-  name: 'Usage Stats',
+export const makeUsage = (theme?: SideTheme): UsageTemplate => ({
+  id: theme ? `${theme.id}-usage` : 'dmv-usage',
+  name: theme ? `Usage Stats (${theme.style})` : 'Usage Stats',
   description: 'Portrait grid of the 12 most-used Pokémon.',
   kind: 'usage',
   width: 1080,
   height: 1350,
   maxEntries: 12,
   Component: ({ data }) => (
-    <div className="dmv us" style={{ width: 1080, height: 1350 }}>
-      <div className="us-bg" />
-      <div className="dmv-halftone" />
+    <div className={`dmv us ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1350 }}>
+      {theme ? (
+        <theme.Wall mons={data.entries.map((e) => e.pokemon)} seed={`usage|${data.tournament.name}`} width={1080} height={1350} />
+      ) : (
+        <>
+          <div className="us-bg" />
+          <div className="dmv-halftone" />
+        </>
+      )}
 
       <header className="us-header">
         <Logo size={170} />
@@ -46,6 +53,7 @@ const Usage: UsageTemplate = {
       </main>
     </div>
   ),
-}
+})
 
+const Usage = makeUsage()
 export default Usage

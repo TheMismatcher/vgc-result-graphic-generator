@@ -1,0 +1,238 @@
+/* Arena theme on the standard layouts: esports glass. White italic type without the comic
+   outline, translucent dark-glass panels with a coloured left edge and a cut corner, yellow
+   for first place. */
+.themed.theme-arena {
+  --ar-glass: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
+  --ar-glass-solid: rgba(14, 17, 32, 0.72);
+  color: #fff;
+}
+.themed.theme-arena .dmv-title {
+  color: #fff;
+  -webkit-text-stroke: 0;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+.themed.theme-arena .dmv-logo {
+  border: 0;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* Header: tag in yellow, facts in soft white. */
+.themed.theme-arena .p8-tag,
+.themed.theme-arena .p4-tag,
+.themed.theme-arena .m8-tag,
+.themed.theme-arena .br-tag {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  transform: none;
+  padding: 0;
+  color: var(--yellow);
+  font-style: normal;
+  letter-spacing: 0.3em;
+}
+.themed.theme-arena .p8-facts,
+.themed.theme-arena .p4-facts,
+.themed.theme-arena .m8-facts,
+.themed.theme-arena .br-facts {
+  color: rgba(255, 255, 255, 0.78);
+  text-shadow: none;
+  letter-spacing: 0.04em;
+}
+
+/* Cards: dark glass with a coloured left edge and a cut bottom-right corner. */
+.themed.theme-arena .dmv-panel {
+  border: 0;
+  border-left: 8px solid var(--red);
+  border-radius: 0;
+  background: var(--ar-glass), var(--ar-glass-solid);
+  box-shadow: none;
+  color: #fff;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%);
+}
+.themed.theme-arena .dmv-panel.blue {
+  border-left-color: var(--blue);
+}
+.themed.theme-arena .dmv-panel.first {
+  border-left-color: var(--yellow);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--yellow) 34%, transparent), rgba(255, 255, 255, 0.05)), var(--ar-glass-solid);
+}
+.themed.theme-arena .p8-name,
+.themed.theme-arena .p4-name,
+.themed.theme-arena .m8-name,
+.themed.theme-arena .br-name {
+  color: #fff;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+.themed.theme-arena .p8-sub,
+.themed.theme-arena .p4-sub,
+.themed.theme-arena .m8-sub,
+.themed.theme-arena .m8-row-sub,
+.themed.theme-arena .ch-sub,
+.themed.theme-arena .ch-item-name {
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: none;
+}
+
+/* Place numbers: big solid white italic; yellow for first. */
+.themed.theme-arena .p8-place,
+.themed.theme-arena .p4-place,
+.themed.theme-arena .m8-place,
+.themed.theme-arena .m8-row-place {
+  background: rgba(8, 10, 22, 0.75);
+  border: 0;
+  color: #fff;
+  -webkit-text-stroke: 0;
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+.themed.theme-arena .first .p8-place,
+.themed.theme-arena .first .p4-place,
+.themed.theme-arena .first .m8-place {
+  color: var(--yellow);
+}
+.themed.theme-arena .m8-row-place {
+  background: transparent;
+}
+.themed.theme-arena .p4-plate {
+  background: rgba(8, 10, 22, 0.85);
+  border-left: 6px solid var(--yellow);
+  box-shadow: none;
+}
+.themed.theme-arena .dmv-photo-empty {
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.1) 2.5px, transparent 3px) 0 0 / 16px 16px,
+    linear-gradient(160deg, color-mix(in srgb, var(--blue) 45%, #0b0d18), #0b0d18);
+}
+.themed.theme-arena .dmv-photo-empty span {
+  -webkit-text-stroke: 0;
+  color: rgba(255, 255, 255, 0.6);
+}
+.themed.theme-arena .dmv-mon img.render {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
+}
+
+/* Champion */
+.themed.theme-arena .ch-banner {
+  background: linear-gradient(90deg, var(--red), color-mix(in srgb, var(--red) 40%, transparent));
+  border: 0;
+  box-shadow: none;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 30px) 100%, 0 100%);
+}
+.themed.theme-arena .ch-sub {
+  background: rgba(8, 10, 22, 0.6);
+  border: 0;
+  box-shadow: none;
+}
+.themed.theme-arena .ch-card {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
+}
+.themed.theme-arena .ch-mon-name {
+  color: #fff;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+.themed.theme-arena .ch-footer {
+  background: rgba(8, 10, 22, 0.8);
+  border: 0;
+  border-top: 4px solid var(--yellow);
+  box-shadow: none;
+  color: rgba(255, 255, 255, 0.8);
+}
+.themed.theme-arena .ch-event {
+  color: var(--yellow);
+}
+
+/* Bracket */
+.themed.theme-arena .br-label {
+  color: var(--yellow);
+  text-shadow: none;
+  letter-spacing: 0.16em;
+}
+.themed.theme-arena .br-line {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+.themed.theme-arena .br-line-h {
+  background: rgba(255, 255, 255, 0.45);
+}
+.themed.theme-arena .br-entry.lost {
+  opacity: 0.55;
+}
+.themed.theme-arena .br-champ {
+  border: 0;
+  border-left: 8px solid var(--yellow);
+  border-radius: 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--yellow) 30%, transparent), rgba(255, 255, 255, 0.04)), var(--ar-glass-solid);
+  box-shadow: none;
+  color: #fff;
+}
+.themed.theme-arena .br-champ-label {
+  color: var(--yellow);
+}
+
+/* ---------- Usage / Replay / Team Battle ---------- */
+.themed.theme-arena .us-event,
+.themed.theme-arena .vs-meta {
+  color: var(--yellow);
+  text-shadow: none;
+  -webkit-text-stroke: 0;
+}
+.themed.theme-arena .us-facts,
+.themed.theme-arena .vs-format {
+  color: rgba(255, 255, 255, 0.75);
+  text-shadow: none;
+}
+.themed.theme-arena .us-name {
+  color: #fff;
+}
+.themed.theme-arena .us-bar {
+  border: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+.themed.theme-arena .us-bar span {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+.themed.theme-arena .vs-banner,
+.themed.theme-arena .tb-banner {
+  border: 0;
+  border-left: 10px solid var(--yellow);
+  background: linear-gradient(90deg, var(--red), color-mix(in srgb, var(--red) 55%, transparent));
+  transform: none;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 40px) 100%, 0 100%);
+}
+.themed.theme-arena .vs-banner .dmv-title,
+.themed.theme-arena .tb-banner .dmv-title {
+  color: #fff;
+}
+.themed.theme-arena .vs-word {
+  color: #fff;
+}
+.themed.theme-arena .vs-score {
+  color: #fff;
+  background: rgba(8, 10, 22, 0.6);
+}
+.themed.theme-arena .tb-kicker,
+.themed.theme-arena .tb-record {
+  border: 0;
+  background: rgba(8, 10, 22, 0.75);
+  color: #fff;
+}
+.themed.theme-arena .tb-logo {
+  border: 0;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+.themed.theme-arena .tb-set-score {
+  border: 0;
+  border-radius: 0;
+  background: rgba(8, 10, 22, 0.8);
+  color: rgba(255, 255, 255, 0.4);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
+}
+.themed.theme-arena .tb-set-score .win {
+  color: var(--yellow);
+}
+.themed.theme-arena .tb-player {
+  color: #fff;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}

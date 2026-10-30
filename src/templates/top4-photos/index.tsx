@@ -7,7 +7,7 @@ import './top4-photos.css'
 
 export const makeTop4Photos = (loud = false, theme?: Theme): StandingsTemplate => ({
   id: theme ? `${theme.id}-top4-photos` : loud ? 'dmv-top4-photos-loud' : 'dmv-top4-photos',
-  name: theme ? `Top 4 Photos (${theme.style})` : loud ? 'Top 4 Photos (Loud)' : 'Top 4 Photos',
+  name: theme ? `Top 4 Photos (${theme.style})` : loud ? 'Top 4 Photos (Comic Book)' : 'Top 4 Photos',
   description: 'Square grid with big player photos and teams.',
   kind: 'standings',
   width: 1080,

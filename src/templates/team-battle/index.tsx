@@ -1,6 +1,8 @@
 import type { TeamBattleTemplate } from '../types'
 import { FitText, MonSprite } from '../shared/parts'
 import { LoudBackground } from '../shared/LoudBackground'
+import { displayPokemon, useDisplay } from '../../lib/display'
+import type { SideTheme } from '../themes/side'
 import './team-battle.css'
 
 const W = 1080
@@ -29,13 +31,15 @@ const INFO: Record<Variant, { id: string; name: string; description: string }> =
   loss: { id: 'dmv-team-battle-loss', name: 'Team Battle · Loss', description: 'Your team (left) lost: subdued version.' },
 }
 
-const makeTeamBattle = (variant: Variant, loud = false): TeamBattleTemplate => ({
+export const makeTeamBattle = (variant: Variant, loud = false, theme?: SideTheme): TeamBattleTemplate => ({
   ...INFO[variant],
-  ...(loud && { id: `${INFO[variant].id}-loud`, name: `${INFO[variant].name} (Loud)` }),
+  ...(loud && { id: `${INFO[variant].id}-loud`, name: `${INFO[variant].name} (Comic Book)` }),
+  ...(theme && { id: `${theme.id}-${INFO[variant].id}`, name: `${INFO[variant].name} (${theme.style})` }),
   kind: 'teamBattle',
   width: W,
   height: H,
   Component: ({ data }) => {
+    const { showMegas } = useDisplay()
     const [a, b] = data.teams
     const n = Math.max(data.sets.length, 1)
     const rowH = Math.min(118, (ROWS_BOTTOM - ROWS_TOP - GAP * (n - 1)) / n)
@@ -54,8 +58,10 @@ const makeTeamBattle = (variant: Variant, loud = false): TeamBattleTemplate => (
             : data.week || 'Team Battle'
 
     return (
-      <div className={`dmv tb tb-${variant} ${loud ? 'loud' : ''}`} style={{ width: W, height: H }}>
-        {loud ? (
+      <div className={`dmv tb tb-${variant} ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : ''}`} style={{ width: W, height: H }}>
+        {theme ? (
+          <theme.Wall mons={data.sets.flatMap((st) => st.players.flatMap((p) => p.team.map((m) => (m.pokemon ? displayPokemon(m, showMegas) : ''))))} seed={`tb|${a.name}|${b.name}|${data.week}`} width={W} height={H} />
+        ) : loud ? (
           <LoudBackground top="blue" bottom="red" split={[54, 46]} burst={[540, 110]} vertical />
         ) : (
           <>

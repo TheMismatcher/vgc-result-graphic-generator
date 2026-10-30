@@ -1,0 +1,103 @@
+/* Terastal: night sky full of prismatic crystal, glassy cut-corner cards with iridescent edges. */
+.pw-tera {
+  /* Crystal accent: the brand's second colour (the background swaps in the champion's Tera colour). */
+  --tz-accent: color-mix(in srgb, var(--blue) 75%, #fff);
+  --pw-ink: #f5f7ff;
+  --pw-muted: #cdd2f4;
+  --pw-accent: #aaf0ff;
+  --pw-font: 'Montserrat', sans-serif;
+  /* Cut-corner facets: a light line along each clipped corner (clip-path removes the border there). */
+  --tz-cut:
+    linear-gradient(135deg, transparent 16.5px, #c8f7ff 16.5px 19px, transparent 19px) top left / 26px 26px no-repeat border-box,
+    linear-gradient(315deg, transparent 16.5px, #ffc4ec 16.5px 19px, transparent 19px) bottom right / 26px 26px no-repeat border-box;
+  --tz-cut-gold:
+    linear-gradient(135deg, transparent 16.5px, #fff3c4 16.5px 19px, transparent 19px) top left / 26px 26px no-repeat border-box,
+    linear-gradient(315deg, transparent 16.5px, #ffc65a 16.5px 19px, transparent 19px) bottom right / 26px 26px no-repeat border-box;
+  --pw-card:
+    var(--tz-cut),
+    linear-gradient(118deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.07) 28%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.07) 72%, rgba(200, 170, 255, 0.18) 100%),
+    rgba(16, 18, 62, 0.68);
+  --pw-card-alt:
+    var(--tz-cut),
+    linear-gradient(118deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 28%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.07) 72%, rgba(255, 160, 225, 0.18) 100%),
+    rgba(26, 16, 64, 0.68);
+  --pw-card-first:
+    var(--tz-cut-gold),
+    linear-gradient(118deg, rgba(255, 244, 200, 0.36) 0%, rgba(255, 255, 255, 0.08) 30%, rgba(255, 255, 255, 0) 52%, rgba(255, 214, 120, 0.22) 100%),
+    rgba(44, 30, 66, 0.72);
+  /* Iridescent edge: each side its own colour (cyan top/left, pink right, violet bottom). */
+  --pw-border: 2px solid;
+  --pw-border-first-color: #fff0b8 #ffc65a #ffb347 #fff6c8;
+  --pw-radius: 0;
+  --pw-clip: polygon(24px 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%, 0 24px);
+  --pw-shadow: inset 10px 0 24px rgba(159, 243, 255, 0.16), inset -10px 0 24px rgba(255, 155, 224, 0.14);
+  --pw-shadow-first: inset 0 0 28px rgba(255, 222, 140, 0.3);
+  --pw-place: linear-gradient(135deg, #f2feff 0%, #9ff3ff 30%, #c9a6ff 64%, #ff9be0 100%);
+  --pw-place-ink: #1b1846;
+  --pw-place-first: linear-gradient(135deg, #fffbe6, var(--yellow) 45%, #ffb347);
+  --pw-place-first-ink: #3a2400;
+  --pw-place-clip: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px);
+  --pw-title-shadow: 0 0 18px rgba(170, 230, 255, 0.45), 0 2px 4px rgba(0, 0, 0, 0.5);
+  --pw-mon-shadow: drop-shadow(0 0 6px rgba(190, 240, 255, 0.55)) drop-shadow(0 3px 3px rgba(0, 0, 0, 0.4));
+  --pw-photo: linear-gradient(150deg, #6fb8ff, #6a3bd0 60%, #ff9be0);
+  --pw-line: rgba(200, 235, 255, 0.75);
+}
+
+.tz-bg {
+  background:
+    radial-gradient(700px 520px at 18% 12%, rgba(120, 90, 255, 0.38), transparent 70%),
+    radial-gradient(760px 620px at 86% 88%, rgba(255, 90, 200, 0.3), transparent 70%),
+    radial-gradient(640px 520px at 50% 55%, color-mix(in srgb, var(--tz-accent) 26%, transparent), transparent 75%),
+    linear-gradient(165deg, #0d1340 0%, #160c3c 55%, #090720 100%);
+}
+
+/* Top Cut: crown sitting on the header plate; gem-cut place stones. */
+.tz-crown {
+  position: absolute;
+  left: 400px;
+  top: 4px;
+  filter: drop-shadow(0 0 14px rgba(190, 240, 255, 0.6));
+}
+.pw-tera .pw-place span {
+  width: 104px;
+  height: 86px;
+  padding-bottom: 16px;
+  clip-path: polygon(18% 0, 82% 0, 100% 36%, 50% 100%, 0 36%);
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0 20%, transparent 20.5%),
+    linear-gradient(200deg, transparent 0 62%, rgba(40, 20, 120, 0.18) 62.5%),
+    var(--pw-place);
+}
+.pw-tera .pw-row.first .pw-place span {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.7) 0 20%, transparent 20.5%),
+    linear-gradient(200deg, transparent 0 62%, rgba(120, 60, 0, 0.18) 62.5%),
+    var(--pw-place-first);
+}
+.pw-tera .pw-kicker {
+  letter-spacing: 0.42em;
+}
+
+/* Champion: the CHAMPION label as a cut gem plate. */
+.dmv.themed.pw-tera .ch-banner {
+  padding: 14px 44px;
+}
+.dmv.themed.pw-tera .ch-card {
+  padding-top: 12px;
+}
+
+.pw-tera .pw-head,
+.pw-tera .pw-row,
+.dmv.themed.pw-tera .dmv-panel,
+.dmv.themed.pw-tera .p8-header,
+.dmv.themed.pw-tera .m8-header,
+.dmv.themed.pw-tera .p4-header,
+.dmv.themed.pw-tera .br-header {
+  border-color: #bff6ff #ffb6e8 #d9b8ff #9ff3ff;
+}
+.pw-tera .pw-row.first,
+.dmv.themed.pw-tera .dmv-panel.first,
+.dmv.themed.pw-tera .br-entry.won,
+.dmv.themed.pw-tera .br-champ {
+  border-color: var(--pw-border-first-color);
+}
