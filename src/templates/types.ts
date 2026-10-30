@@ -54,6 +54,7 @@ export interface Day2Data {
   player: Player
   format: Format
   hue?: number // background colour for templates that support it (degrees on the colour wheel)
+  kind?: 'regionals' | 'internationals' | 'special' | 'worlds' // event type: badge + default colour
 }
 
 export interface TeamBattleData {
@@ -66,8 +67,13 @@ export interface TeamBattleData {
   format: Format
 }
 
+/** The standings layouts, chosen after the style in the picker. */
+export type StandingsLayout = 'topcut' | 'top8photos' | 'top8mixed' | 'top4photos' | 'champion' | 'bracket'
+
 interface TemplateBase {
   id: string
+  style?: string // the look it belongs to (standings picker: Style, then Layout)
+  layout?: StandingsLayout
   name: string
   description: string
   width: number

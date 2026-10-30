@@ -23,6 +23,22 @@ export const DMV_BRAND: Brand = {
   colors: { main: '#b3121b', second: '#6b9cf6', highlight: '#ffd34e' },
 }
 
+// Glimwood Tangle (Sword & Shield's glowing mushroom forest): magenta, deep night blue, glowing teal.
+// No logo of its own, so the header shows the name instead.
+export const GLIMWOOD_BRAND: Brand = {
+  name: 'Glimwood',
+  tagline: '',
+  logo: '',
+  banner: '',
+  colors: { main: '#c23fd6', second: '#2a3a8c', highlight: '#56f0ff' },
+}
+
+/** The built-in looks on the Branding tab, in order. */
+export const BUILT_IN_BRANDS = [
+  { id: 'dmv' as const, brand: DMV_BRAND },
+  { id: 'glimwood' as const, brand: GLIMWOOD_BRAND },
+]
+
 export const defaultBrandSettings = (): BrandSettings => ({
   preset: 'dmv',
   name: '',
@@ -32,7 +48,8 @@ export const defaultBrandSettings = (): BrandSettings => ({
 })
 
 export function resolveBrand(s: BrandSettings): Brand {
-  if (s.preset === 'dmv') return DMV_BRAND
+  const builtIn = BUILT_IN_BRANDS.find((b) => b.id === s.preset)
+  if (builtIn) return builtIn.brand
   return { name: s.name || 'VGC Tournament', tagline: s.tagline, logo: s.logo, banner: '', colors: s.colors }
 }
 

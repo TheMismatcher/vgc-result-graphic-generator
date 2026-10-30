@@ -1,4 +1,4 @@
-import { DEFAULT_HUE } from '../templates/day2/clean'
+import { DAY2_EVENTS, DAY2_EVENT_KINDS } from '../templates/day2/events'
 import { useMemo, useState } from 'react'
 import type { AppState, Day2, Player } from '../types'
 import { DAY2_TEMPLATES } from '../templates/registry'
@@ -12,6 +12,7 @@ import { useDialog } from '../components/Dialog'
 
 export function Day2Page({ state, setState }: { state: AppState; setState: (fn: (s: AppState) => AppState) => void }) {
   const day2 = state.day2
+  const kind = day2.kind ?? 'regionals'
   const format = eventInfo(state.tournament).format
   const setDay2 = (patch: Partial<Day2>) => setState((s) => ({ ...s, day2: { ...s.day2, ...patch } }))
   const setPlayers = (fn: (ps: Player[]) => Player[]) => setState((s) => ({ ...s, day2: { ...s.day2, players: fn(s.day2.players) } }))
@@ -125,17 +126,36 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
         </Card>
 
         <Card className="grid gap-3 sm:grid-cols-2">
+          <div className="sm:col-span-2">
+            <span className="mb-1 block text-sm font-medium text-slate-700">Event type</span>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4" role="radiogroup" aria-label="Event type">
+              {DAY2_EVENT_KINDS.map((k) => (
+                <button
+                  key={k}
+                  type="button"
+                  role="radio"
+                  aria-checked={kind === k}
+                  onClick={() => setDay2({ kind: k, hue: undefined })}
+                  className={`flex min-w-0 flex-col items-center gap-1 rounded-xl border-2 px-1 py-2 text-center text-xs font-semibold leading-tight transition sm:text-sm ${kind === k ? 'border-[#b3121b] bg-red-50 text-slate-900' : 'border-slate-200 text-slate-700 hover:border-slate-400'}`}
+                >
+                  <img src={DAY2_EVENTS[k].logo} alt="" className="h-9 w-9 shrink-0 object-contain" />
+                  <span className="w-full">{DAY2_EVENTS[k].label}</span>
+                </button>
+              ))}
+            </div>
+            <p className="mt-1 text-xs text-slate-500">Sets the badge and the starting background colour.</p>
+          </div>
           <Field label="Event (top bar)">
-            <Input placeholder="e.g. 2027 Louisville Regionals" value={day2.event} onChange={(e) => setDay2({ event: e.target.value })} />
+            <Input placeholder={DAY2_EVENTS[kind].example} value={day2.event} onChange={(e) => setDay2({ event: e.target.value })} />
           </Field>
-          <Field label="Caption (bar on the photo)">
-            <Input placeholder="e.g. DMV TO DAY 2" value={day2.caption} onChange={(e) => setDay2({ caption: e.target.value })} />
+          <Field label="Caption bar on the photo (optional)">
+            <Input placeholder="Leave empty for no caption bar" value={day2.caption} onChange={(e) => setDay2({ caption: e.target.value })} />
           </Field>
           <div className="sm:col-span-2">
             <div className="mb-1 flex items-center justify-between">
               <label htmlFor="d2-hue" className="text-sm font-medium text-slate-700">Background colour</label>
               <button type="button" className="text-xs font-semibold text-slate-500 hover:text-slate-800" onClick={() => setDay2({ hue: undefined })}>
-                Reset to red
+                Reset to {DAY2_EVENTS[kind].label} colour
               </button>
             </div>
             <input
@@ -143,12 +163,12 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
               type="range"
               min={0}
               max={359}
-              value={day2.hue ?? DEFAULT_HUE}
+              value={day2.hue ?? DAY2_EVENTS[kind].hue}
               onChange={(e) => setDay2({ hue: Number(e.target.value) })}
               className="h-3 w-full cursor-pointer appearance-none rounded-full"
               style={{ background: 'linear-gradient(to right, hsl(0 50% 50%), hsl(60 50% 50%), hsl(120 50% 50%), hsl(180 50% 50%), hsl(240 50% 50%), hsl(300 50% 50%), hsl(359 50% 50%))' }}
             />
-            <p className="mt-1 text-xs text-slate-500">For the Regional Results template (the artist original keeps its colours).</p>
+            <p className="mt-1 text-xs text-slate-500">For the Regional Results templates (the artist original keeps its colours and Regionals badge).</p>
           </div>
         </Card>
 
@@ -210,7 +230,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
             selectedId={state.templates.day2}
             onSelect={(id) => setState((s) => ({ ...s, templates: { ...s.templates, day2: id } }))}
             filenameBase={`${day2.event} ${selected.name}`}
-            render={(t) => <t.Component data={{ event: day2.event, caption: day2.caption, player: selected, format, hue: day2.hue }} />}
+            render={(t) => <t.Component data={{ event: day2.event, caption: day2.caption, player: selected, format, hue: day2.hue, kind }} />}
           />
         ) : (
           <Card>

@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 import type { Day2Template } from '../types'
 import { FitText, MonSprite, PlayerPhoto } from '../shared/parts'
 import background from './regionals-background.webp'
+import { DAY2_EVENTS } from './events'
 import './day2.css'
 
 // Built on an artist background (1644×1644). Every box below is positioned in that image's pixels.
@@ -36,7 +37,7 @@ const Day2Regionals: Day2Template = {
 
         {/* Top bar: event */}
         <div className="d2-bar" style={box(70, 105, 850, 105)}>
-          <FitText className="d2-text light" text={data.event || 'Regional Championships'} max={58} width={760} italic={false} weight={800} />
+          <FitText className="d2-text light" text={data.event || DAY2_EVENTS[data.kind ?? 'regionals'].title} max={58} width={760} italic={false} weight={800} />
         </div>
 
         {/* Big white bar: player name */}
@@ -56,11 +57,16 @@ const Day2Regionals: Day2Template = {
           </div>
         )}
 
-        {/* Caption bar over the bottom of the photo (redrawn so it sits on top of the photo) */}
-        <div className="d2-caption" style={box(150, 1383, 600, 117)} />
-        <div className="d2-bar" style={box(150, 1383, 600, 117)}>
-          <FitText className="d2-text light" text={data.caption} max={56} width={520} italic={false} weight={800} />
-        </div>
+        {/* Caption bar over the bottom of the photo (redrawn so it sits on top of the photo; left out
+            when the caption is empty, though the artwork's own bar still shows if there's no photo) */}
+        {data.caption.trim() && (
+          <>
+            <div className="d2-caption" style={box(150, 1383, 600, 117)} />
+            <div className="d2-bar" style={box(150, 1383, 600, 117)}>
+              <FitText className="d2-text light" text={data.caption} max={56} width={520} italic={false} weight={800} />
+            </div>
+          </>
+        )}
 
         {/* Team */}
         {p.team.map((m, i) => {

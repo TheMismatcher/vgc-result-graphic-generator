@@ -1,20 +1,21 @@
+import type { Theme } from '../themes/theme'
 import type { StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, PlayerPhoto, CpBadge } from '../shared/parts'
 import { eventFacts, ordinal } from '../shared/format'
 import { LoudBackground } from '../shared/LoudBackground'
 import './top4-photos.css'
 
-const makeTop4Photos = (loud = false): StandingsTemplate => ({
-  id: loud ? 'dmv-top4-photos-loud' : 'dmv-top4-photos',
-  name: loud ? 'Top 4 Photos (Loud)' : 'Top 4 Photos',
+export const makeTop4Photos = (loud = false, theme?: Theme): StandingsTemplate => ({
+  id: theme ? `${theme.id}-top4-photos` : loud ? 'dmv-top4-photos-loud' : 'dmv-top4-photos',
+  name: theme ? `Top 4 Photos (${theme.style})` : loud ? 'Top 4 Photos (Loud)' : 'Top 4 Photos',
   description: 'Square grid with big player photos and teams.',
   kind: 'standings',
   width: 1080,
   height: 1080,
   maxPlayers: 4,
   Component: ({ data }) => (
-    <div className={`dmv p4 ${loud ? 'loud' : ''}`} style={{ width: 1080, height: 1080 }}>
-      {loud ? (
+    <div className={`dmv p4 ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1080 }}>
+      {theme ? <theme.Background data={data} width={1080} height={1080} /> : loud ? (
         <LoudBackground top="blue" bottom="red" split={[58, 30]} burst={[115, 110]} />
       ) : (
         <>

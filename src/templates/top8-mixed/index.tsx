@@ -1,12 +1,13 @@
+import type { Theme } from '../themes/theme'
 import type { StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, PlayerPhoto, CpBadge } from '../shared/parts'
 import { cardColor, eventFacts, ordinal } from '../shared/format'
 import './top8-mixed.css'
 
 // Two looks: alternating blue/red cards, or white cards. 1st place is gold in both.
-const makeTop8Mixed = (white: boolean): StandingsTemplate => ({
-  id: white ? 'dmv-top8-mixed-white' : 'dmv-top8-mixed',
-  name: white ? 'Top 8 Mixed (White)' : 'Top 8 Mixed',
+export const makeTop8Mixed = (white: boolean, theme?: Theme): StandingsTemplate => ({
+  id: theme ? `${theme.id}-top8-mixed` : white ? 'dmv-top8-mixed-white' : 'dmv-top8-mixed',
+  name: theme ? `Top 8 + Top 4 Photos (${theme.style})` : white ? 'Top 8 Mixed (White)' : 'Top 8 Mixed',
   description: 'Photo cards for the top 4, compact rows for 5th–8th.',
   kind: 'standings',
   width: 1080,
@@ -16,9 +17,13 @@ const makeTop8Mixed = (white: boolean): StandingsTemplate => ({
     const top4 = data.players.slice(0, 4)
     const rest = data.players.slice(4)
     return (
-      <div className="dmv m8" style={{ width: 1080, height: 1350 }}>
-        <div className="m8-bg" />
-        <div className="dmv-halftone" />
+      <div className={`dmv m8 ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1350 }}>
+        {theme ? <theme.Background data={data} width={1080} height={1350} /> : (
+          <>
+            <div className="m8-bg" />
+            <div className="dmv-halftone" />
+          </>
+        )}
 
         <header className="m8-header">
           <Logo size={160} />

@@ -1,0 +1,175 @@
+/* Mosaic: tile wall of one-colour Pokémon silhouettes, with the results on white cards on top. */
+
+.mz {
+  position: relative;
+  overflow: hidden;
+  font-style: normal;
+}
+.mz-tile {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+}
+.mz-sil {
+  object-fit: contain;
+  opacity: 0.55;
+}
+
+.mz-head {
+  position: absolute;
+  left: 70px;
+  right: 70px;
+  top: 60px;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding: 0 28px;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.18);
+}
+.mz-head .dmv-logo {
+  border-width: 5px;
+}
+.mz-head-text {
+  min-width: 0;
+}
+.mz-title {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--ink);
+}
+.mz-facts {
+  margin-top: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--red);
+  white-space: nowrap;
+}
+
+.mz-format {
+  margin-top: 4px;
+  font-weight: 700;
+  color: #5b5f6b;
+}
+.mz-rows {
+  position: absolute;
+  left: 70px;
+  right: 70px;
+  top: 262px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.mz-row {
+  display: flex;
+  align-items: center;
+  height: 104px;
+  overflow: hidden;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.18);
+}
+.mz-place {
+  position: relative;
+  flex: none;
+  width: 110px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--red);
+  color: #fff;
+  font-size: 40px;
+  font-weight: 900;
+  font-style: italic;
+}
+.mz-row:nth-child(even) .mz-place {
+  background: var(--blue-dark);
+}
+.mz-row.first .mz-place {
+  background: var(--yellow);
+  color: var(--ink);
+}
+.mz-cp {
+  position: absolute;
+  bottom: 8px;
+  font-size: 15px;
+}
+.mz-player {
+  width: 330px;
+  padding: 0 22px;
+}
+.mz-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: var(--ink);
+}
+.mz-sub {
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #5b5f6b;
+  white-space: nowrap;
+}
+.mz-team {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+  padding-right: 14px;
+}
+.mz .dmv-mon img.render {
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.18));
+}
+
+/* Tinted versions: soft brand tints like the Mosaic theme's other layouts. `glass` lets the tiles
+   show through; `solid` keeps the cards opaque. */
+.mz-tint {
+  --mz-base: #fff;
+  --mz-ink: #1f2330;
+}
+.mz-tint.glass {
+  --mz-base: rgba(255, 255, 255, 0.78);
+}
+.mz-tint .mz-head {
+  background: var(--mz-base);
+  box-shadow: 0 8px 22px rgba(20, 24, 40, 0.16);
+}
+.mz-tint .mz-facts {
+  color: color-mix(in srgb, var(--red) 85%, #000);
+}
+.mz-tint .mz-format {
+  color: #5b6070;
+}
+.mz-tint .mz-row {
+  background: color-mix(in srgb, var(--red) 10%, var(--mz-base));
+  box-shadow: 0 8px 22px rgba(20, 24, 40, 0.16);
+}
+.mz-tint .mz-row:nth-child(even) {
+  background: color-mix(in srgb, var(--blue) 14%, var(--mz-base));
+}
+.mz-tint .mz-row.first {
+  background: color-mix(in srgb, var(--yellow) 28%, var(--mz-base));
+}
+.mz-tint .mz-place {
+  background: color-mix(in srgb, var(--red) 75%, #fff);
+  font-style: normal;
+}
+.mz-tint .mz-row:nth-child(even) .mz-place {
+  background: color-mix(in srgb, var(--blue-dark) 70%, #fff);
+}
+.mz-tint .mz-row.first .mz-place {
+  background: color-mix(in srgb, var(--yellow) 85%, #fff);
+  color: var(--mz-ink);
+}
+.mz-tint .mz-sub {
+  color: #5b6070;
+}

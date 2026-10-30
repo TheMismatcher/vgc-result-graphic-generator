@@ -1,7 +1,8 @@
 // Live preview of the selected template, the template picker, and the download button.
 
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import type { Template } from '../templates/types'
+import type { StandingsLayout, Template } from '../templates/types'
+import { STANDINGS_LAYOUTS } from '../templates/registry'
 import { copyPng, downloadPng, slugify } from '../lib/exportImage'
 import { brandVars, useBrand } from '../brand'
 import { useDisplay } from '../lib/display'
@@ -127,7 +128,9 @@ export function Preview<T extends Template>({
         </Scaled>
       </div>
 
-      {templates.length > 1 && (
+      {templates.length > 1 && templates.every((t) => t.style) ? (
+        <StylePicker templates={templates} current={template} onSelect={onSelect} render={render} />
+      ) : templates.length > 1 && (
         <div>
           <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Template</h3>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -150,5 +153,71 @@ export function Preview<T extends Template>({
         </div>
       )}
     </Card>
+  )
+}
+
+/**
+ * Standings picker: choose a layout, then a style (the look). Every layout can be picked: if the
+ * current style doesn't have it yet, the first style that does is used. Style cards preview each
+ * style in the chosen layout; styles without it are greyed out.
+ */
+function StylePicker<T extends Template>({ templates, current, onSelect, render }: { templates: T[]; current: T; onSelect: (id: string) => void; render: (t: T) => ReactNode }) {
+  const styles = [...new Set(templates.map((t) => t.style!))]
+  const inStyle = (style: string) => templates.filter((t) => t.style === style)
+  const find = (style: string, layout?: StandingsLayout) => inStyle(style).find((t) => t.layout === layout)
+  return (
+    <div className="space-y-4">
+      <div>
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">1. Layout</h3>
+        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Layout">
+          {STANDINGS_LAYOUTS.map(({ id, label }) => {
+            const t = find(current.style!, id) ?? templates.find((x) => x.layout === id)
+            return (
+              <button
+                key={id}
+                type="button"
+                role="radio"
+                aria-checked={current.layout === id}
+                disabled={!t}
+                onClick={() => t && onSelect(t.id)}
+                className={`rounded-lg border-2 px-3 py-1.5 text-sm font-semibold transition ${
+                  current.layout === id ? 'border-[#b3121b] bg-red-50 text-slate-900' : 'border-slate-200 text-slate-700 hover:border-slate-400'
+                }`}
+              >
+                {label}
+              </button>
+            )
+          })}
+        </div>
+        <p className="mt-1 text-xs text-slate-500">{current.description}</p>
+      </div>
+      <div>
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">2. Style</h3>
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+          {styles.map((style) => {
+            // Show the style in the chosen layout; styles without that layout yet are greyed out.
+            const own = find(style, current.layout)
+            const t = own ?? inStyle(style)[0]
+            const count = inStyle(style).length
+            return (
+              <button
+                key={style}
+                type="button"
+                disabled={!own}
+                title={own ? undefined : `${style} isn't made for this layout yet`}
+                onClick={() => own && onSelect(own.id)}
+                className={`rounded-xl border-2 p-1.5 text-left transition ${style === current.style ? 'border-[#b3121b] bg-red-50' : own ? 'border-slate-200 hover:border-slate-400' : 'cursor-not-allowed border-dashed border-slate-200 opacity-40'}`}
+              >
+                <div className="pointer-events-none mb-1.5 overflow-hidden rounded-md" aria-hidden>
+                  <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>
+                </div>
+                <div className="text-xs font-semibold leading-tight text-slate-900">{style}</div>
+                <div className="text-[11px] text-slate-500">{own ? (count === 1 ? '1 layout' : `${count} layouts`) : 'Not in this layout yet'}</div>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+    </div>
   )
 }

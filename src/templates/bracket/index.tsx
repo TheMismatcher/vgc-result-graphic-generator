@@ -1,3 +1,4 @@
+import type { Theme } from '../themes/theme'
 import type { BracketEntry, StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, CpBadge } from '../shared/parts'
 import { eventFacts } from '../shared/format'
@@ -34,9 +35,9 @@ function Entry({ entry, width, height, state }: { entry: BracketEntry; width: nu
   )
 }
 
-const makeBracket = (loud = false): StandingsTemplate => ({
-  id: loud ? 'dmv-bracket-loud' : 'dmv-bracket',
-  name: loud ? 'Bracket (Loud)' : 'Bracket',
+export const makeBracket = (loud = false, theme?: Theme): StandingsTemplate => ({
+  id: theme ? `${theme.id}-bracket` : loud ? 'dmv-bracket-loud' : 'dmv-bracket',
+  name: theme ? `Bracket (${theme.style})` : loud ? 'Bracket (Loud)' : 'Bracket',
   description: 'Top cut bracket with results. Set it up under Top cut bracket.',
   kind: 'standings',
   width: W,
@@ -63,8 +64,8 @@ const makeBracket = (loud = false): StandingsTemplate => ({
     const champH = 330
 
     return (
-      <div className={`dmv br ${loud ? 'loud' : ''}`} style={{ width: W, height: H }}>
-        {loud ? (
+      <div className={`dmv br ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : ''}`} style={{ width: W, height: H }}>
+        {theme ? <theme.Background data={data} width={W} height={H} /> : loud ? (
           <LoudBackground top="blue" bottom="red" split={[24, 8]} burst={[120, 110]} />
         ) : (
           <>

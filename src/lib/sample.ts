@@ -27,7 +27,7 @@ const TEAMS: Mon[][] = [
   t(['spiritomb', 'sitrus-berry'], ['roserade', 'expert-belt'], ['gastrodon-east', 'leftovers'], ['lucario', 'wise-glasses'], ['milotic', 'flame-orb'], ['garchomp', 'yache-berry']),
 ]
 
-const NAMES = ['Nicholas Rubingh', 'Wolfe Glick', 'Darius Helmick', 'Ash Ketchum', 'Tovah', 'Adri', 'Marlee Warwick', 'Cynthia Shirona']
+const NAMES = ['Nicholas Rubingh', 'Wolfe Glick', 'Darius Helmick', 'Ash Ketchum', 'Tovah Weiss', 'Adri', 'Marlee Warwick', 'Cynthia Shirona']
 const RECORDS = ['8-1', '7-2', '7-1', '6-2', '6-2', '5-3', '5-3', '5-3']
 
 export const sampleState = (): AppState => {

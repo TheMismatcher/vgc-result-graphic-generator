@@ -1,0 +1,221 @@
+/*
+ * Mosaic theme on the standard layouts: a soft, airy look that lets the tile wall show through.
+ * Replaces the comic-book styling (black outlines, outlined italic text, saturated panels) with
+ * semi-translucent white cards, soft brand tints and dark readable text.
+ */
+.themed.theme-mosaic {
+  --mz-card: rgba(255, 255, 255, 0.78);
+  --mz-ink: #1f2330;
+  --mz-muted: #5b6070;
+  --mz-shadow: 0 8px 22px rgba(20, 24, 40, 0.16);
+  color: var(--mz-ink);
+}
+
+/* Text: no outline, no italic, dark ink. */
+.themed.theme-mosaic .dmv-title {
+  color: var(--mz-ink);
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+  font-style: normal;
+  letter-spacing: -0.01em;
+}
+
+/* Headers sit on a soft white plate. */
+.themed.theme-mosaic .p8-header,
+.themed.theme-mosaic .p4-header,
+.themed.theme-mosaic .m8-header,
+.themed.theme-mosaic .br-header {
+  background: var(--mz-card);
+  border-radius: 28px;
+  box-shadow: var(--mz-shadow);
+  padding-right: 24px;
+}
+.themed.theme-mosaic .dmv-logo {
+  border: 4px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.themed.theme-mosaic .p8-facts,
+.themed.theme-mosaic .p4-facts,
+.themed.theme-mosaic .m8-facts,
+.themed.theme-mosaic .br-facts {
+  color: var(--mz-muted);
+  text-shadow: none;
+}
+.themed.theme-mosaic .p8-tag,
+.themed.theme-mosaic .p4-tag,
+.themed.theme-mosaic .m8-tag,
+.themed.theme-mosaic .br-tag {
+  background: color-mix(in srgb, var(--red) 80%, #fff);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: none;
+  transform: none;
+  font-style: normal;
+}
+
+/* Cards: translucent white with a faint brand tint; no black border. */
+.themed.theme-mosaic .dmv-panel {
+  border: 0;
+  border-radius: 22px;
+  box-shadow: var(--mz-shadow);
+  background: var(--mz-card);
+  color: var(--mz-ink);
+}
+.themed.theme-mosaic .dmv-panel.red {
+  background: color-mix(in srgb, var(--red) 10%, var(--mz-card));
+}
+.themed.theme-mosaic .dmv-panel.blue {
+  background: color-mix(in srgb, var(--blue) 14%, var(--mz-card));
+}
+.themed.theme-mosaic .dmv-panel.first {
+  background: color-mix(in srgb, var(--yellow) 28%, var(--mz-card));
+}
+.themed.theme-mosaic .p8-sub,
+.themed.theme-mosaic .p4-sub,
+.themed.theme-mosaic .m8-sub,
+.themed.theme-mosaic .m8-row-sub,
+.themed.theme-mosaic .ch-sub,
+.themed.theme-mosaic .ch-item-name {
+  color: var(--mz-muted);
+  text-shadow: none;
+}
+
+/* Place tags: soft brand colours. */
+.themed.theme-mosaic .p8-place,
+.themed.theme-mosaic .p4-place,
+.themed.theme-mosaic .m8-place,
+.themed.theme-mosaic .m8-row-place {
+  background: color-mix(in srgb, var(--blue-dark) 70%, #fff);
+  color: #fff;
+  border: 0;
+  text-shadow: none;
+  -webkit-text-stroke: 0;
+  font-style: normal;
+}
+.themed.theme-mosaic .red .p8-place,
+.themed.theme-mosaic .red .m8-place,
+.themed.theme-mosaic .m8-row.red .m8-row-place {
+  background: color-mix(in srgb, var(--red) 75%, #fff);
+}
+.themed.theme-mosaic .first .p8-place,
+.themed.theme-mosaic .first .p4-place,
+.themed.theme-mosaic .first .m8-place {
+  background: color-mix(in srgb, var(--yellow) 85%, #fff);
+  color: var(--mz-ink);
+}
+.themed.theme-mosaic .p4-plate {
+  background: rgba(255, 255, 255, 0.9);
+  border: 0;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Photo placeholders: lighter. */
+.themed.theme-mosaic .dmv-photo-empty {
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.25) 2.5px, transparent 3px) 0 0 / 16px 16px,
+    linear-gradient(160deg, color-mix(in srgb, var(--blue) 55%, #fff), color-mix(in srgb, var(--blue-dark) 55%, #fff));
+}
+.themed.theme-mosaic .dmv-photo-empty span {
+  -webkit-text-stroke: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-style: normal;
+}
+
+/* Pokémon: lighter drop shadow. */
+.themed.theme-mosaic .dmv-mon img.render {
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18));
+}
+
+/* Give the content some room so the wall shows around it. */
+.themed.theme-mosaic .p8-grid,
+.themed.theme-mosaic .p4-grid,
+.themed.theme-mosaic .m8-top4,
+.themed.theme-mosaic .m8-rest {
+  transform: scale(0.95);
+  transform-origin: 50% 0;
+}
+
+/* Champion */
+.themed.theme-mosaic .ch-banner {
+  background: color-mix(in srgb, var(--red) 80%, #fff);
+  border: 0;
+  box-shadow: var(--mz-shadow);
+}
+.themed.theme-mosaic .ch-label {
+  color: #fff;
+}
+.themed.theme-mosaic .ch-name .dmv-title {
+  text-shadow: 0 2px 12px rgba(255, 255, 255, 0.9);
+}
+.themed.theme-mosaic .ch-sub {
+  background: var(--mz-card);
+  border: 0;
+  box-shadow: none;
+}
+.themed.theme-mosaic .ch-card {
+  border: 0;
+  border-radius: 22px;
+  background: var(--mz-card);
+  box-shadow: var(--mz-shadow);
+}
+.themed.theme-mosaic .ch-mon-name {
+  color: var(--mz-ink);
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+  font-style: normal;
+}
+.themed.theme-mosaic .ch-footer {
+  background: var(--mz-card);
+  color: var(--mz-ink);
+  border: 0;
+  box-shadow: var(--mz-shadow);
+}
+.themed.theme-mosaic .ch-event {
+  color: color-mix(in srgb, var(--red) 85%, #000);
+}
+
+/* Bracket */
+.themed.theme-mosaic .br-label {
+  color: var(--mz-ink);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+}
+.themed.theme-mosaic .br-line {
+  border-color: rgba(31, 35, 48, 0.55);
+}
+.themed.theme-mosaic .br-line-h {
+  background: rgba(31, 35, 48, 0.55);
+}
+.themed.theme-mosaic .br-entry.won {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--yellow) 85%, #fff), var(--mz-shadow);
+}
+.themed.theme-mosaic .br-entry.lost {
+  opacity: 0.65;
+}
+.themed.theme-mosaic .br-champ {
+  border: 0;
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--yellow) 30%, var(--mz-card));
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--yellow) 85%, #fff), var(--mz-shadow);
+}
+
+/* Names and labels that have their own comic styling: plain dark text. */
+.themed.theme-mosaic .p8-name,
+.themed.theme-mosaic .p4-name,
+.themed.theme-mosaic .m8-name,
+.themed.theme-mosaic .br-name,
+.themed.theme-mosaic .ch-event,
+.themed.theme-mosaic .p4-name .dmv-title {
+  color: var(--mz-ink);
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+  font-style: normal;
+}
+.themed.theme-mosaic .p4-plate {
+  left: 14px;
+  border-radius: 12px;
+}
+.themed.theme-mosaic .p4-name {
+  transform: none;
+}

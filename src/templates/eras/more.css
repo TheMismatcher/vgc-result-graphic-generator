@@ -1,0 +1,543 @@
+/* Shared layout for the location-style templates added here (same structure as eras.css). */
+.bt, .mc, .h3, .gh {
+  font-style: normal;
+}
+.bt-scene, .mc-scene, .gh-scene {
+  position: absolute;
+  inset: 0;
+}
+.bt-head, .mc-head, .h3-head, .gh-head {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 46px;
+  height: 190px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 28px;
+}
+.bt-head-text, .mc-head-text, .h3-head-text, .gh-head-text {
+  min-width: 0;
+}
+.bt-kicker, .mc-kicker, .h3-kicker, .gh-kicker {
+  font-size: 18px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+.bt-title, .mc-title, .h3-title, .gh-title {
+  margin-top: 4px;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.bt-facts, .mc-facts, .h3-facts, .gh-facts {
+  margin-top: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.bt-rows, .mc-rows, .h3-rows, .gh-rows {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 268px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mc-rows {
+  left: 120px;
+  right: 120px;
+}
+.bt-row, .mc-row, .h3-row, .gh-row {
+  display: flex;
+  align-items: center;
+  height: 112px;
+  overflow: hidden;
+}
+.bt-place, .mc-place, .h3-place, .gh-place {
+  flex: none;
+  width: 120px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 900;
+}
+.mc-place {
+  width: 100px;
+  font-size: 34px;
+}
+.bt-player, .mc-player, .h3-player, .gh-player {
+  width: 330px;
+  padding: 0 20px;
+}
+.mc-player {
+  width: 270px;
+}
+.bt-name, .mc-name, .h3-name, .gh-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.bt-sub, .mc-sub, .h3-sub, .gh-sub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 19px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.bt-cp, .mc-cp, .h3-cp, .gh-cp {
+  font-size: 14px;
+}
+.bt-team, .mc-team, .h3-team, .gh-team {
+  display: flex;
+  margin-left: auto;
+  padding-right: 14px;
+}
+.mc-team .dmv-mon {
+  width: 66px !important;
+  height: 66px !important;
+}
+
+/* ---------- Battle Tower ---------- */
+.bt {
+  background: radial-gradient(1000px 700px at 50% 0%, #22305e 0%, #0d1630 60%, #070b1a 100%);
+  color: #fff;
+}
+.bt-head, .bt-row {
+  background: linear-gradient(180deg, rgba(20, 30, 64, 0.95), rgba(10, 16, 36, 0.95));
+  border: 3px solid #e8b84a;
+  box-shadow: 0 0 0 3px #0d1630, 0 0 0 5px rgba(232, 184, 74, 0.45);
+}
+.bt-head {
+  clip-path: polygon(3% 0, 97% 0, 100% 50%, 97% 100%, 3% 100%, 0 50%);
+  padding: 0 64px;
+}
+.bt-head .dmv-logo {
+  border-color: #e8b84a;
+}
+.bt-kicker, .bt-facts {
+  color: #e8b84a;
+}
+.bt-title {
+  background: linear-gradient(180deg, #fff6d8, #e8b84a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.bt-place {
+  background: linear-gradient(180deg, #f7d37a, #b98a2a);
+  color: #0d1630;
+}
+.bt-row:not(.first) .bt-place {
+  background: #1c2a56;
+  color: #e8b84a;
+  border-right: 3px solid #e8b84a;
+}
+.bt-sub {
+  color: #a9b4d8;
+}
+
+/* ---------- Mt. Coronet / Spear Pillar ---------- */
+.mc {
+  background: linear-gradient(180deg, #120a26 0%, #2a1652 45%, #3d2370 100%);
+  color: #2b2533;
+}
+.mc-head, .mc-row {
+  background: linear-gradient(180deg, #d9d4e2, #b3adc2);
+  border: 4px solid #4a4360;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.5), 0 6px 0 rgba(0, 0, 0, 0.35);
+}
+.mc-head .dmv-logo {
+  border-color: #4a4360;
+}
+.mc-kicker, .mc-facts {
+  color: #5b3fa0;
+}
+.mc-place {
+  background: linear-gradient(180deg, #7b4bd8, #3d2370);
+  color: #f2e6ff;
+}
+.mc-row.first .mc-place {
+  background: linear-gradient(180deg, #ff9be8, #b14bd8);
+}
+.mc-sub {
+  color: #5c5570;
+}
+
+/* ---------- Hoenn (Gen 3) ---------- */
+.h3 {
+  background: repeating-linear-gradient(-45deg, #58c8d8 0 36px, #4ab8ca 36px 72px);
+  color: #2c3a48;
+}
+.h3-head, .h3-row {
+  background: #f8f8f8;
+  border: 6px solid #3a6f9e;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 4px #a8d0f0, 0 6px 0 #2c5478;
+}
+.h3-head .dmv-logo {
+  border-color: #3a6f9e;
+}
+.h3-kicker {
+  font-family: 'Press Start 2P', monospace;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: #e8584a;
+}
+.h3-facts {
+  color: #3a6f9e;
+}
+.h3-place {
+  font-family: 'Press Start 2P', monospace;
+  font-weight: 400;
+  font-size: 24px;
+  background: #e8584a;
+  color: #fff;
+  border-right: 6px solid #3a6f9e;
+}
+.h3-row:nth-child(even) .h3-place {
+  background: #4878d0;
+}
+.h3-row.first .h3-place {
+  background: #f8c830;
+  color: #2c3a48;
+}
+.h3-sub {
+  color: #6a7d8f;
+}
+
+/* ---------- Pokédex ---------- */
+.dx {
+  background: linear-gradient(160deg, #e2303a, #a3161f);
+  color: #1d2a1d;
+  font-style: normal;
+}
+.dx-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 230px;
+  border-bottom: 10px solid #6e1015;
+}
+.dx-lens {
+  position: absolute;
+  left: 46px;
+  top: 40px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #c8f0ff 0 14%, #4ab4f0 30%, #1a6aaa 70%);
+  border: 10px solid #fff;
+  box-shadow: 0 0 0 6px #6e1015;
+}
+.dx-led {
+  position: absolute;
+  top: 46px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 4px solid #6e1015;
+}
+.dx-led.r {
+  left: 216px;
+  background: #ff5050;
+}
+.dx-led.y {
+  left: 262px;
+  background: #ffd84a;
+}
+.dx-led.g {
+  left: 308px;
+  background: #5ad85a;
+}
+.dx-top-text {
+  position: absolute;
+  left: 216px;
+  right: 50px;
+  top: 96px;
+  color: #fff;
+}
+.dx-title {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.dx-facts {
+  margin-top: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ffd2d4;
+}
+.dx-screen {
+  position: absolute;
+  left: 60px;
+  right: 60px;
+  top: 270px;
+  height: 920px;
+  padding: 18px 20px;
+  background: #cfe8c0;
+  border: 14px solid #e9e4dc;
+  border-radius: 14px 14px 14px 60px;
+  box-shadow: inset 0 0 0 4px #6e1015, 0 0 0 6px #6e1015;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.dx-entry {
+  display: flex;
+  align-items: center;
+  height: 100px;
+  padding: 0 10px;
+  border-bottom: 3px dashed #7ea36a;
+}
+.dx-entry:last-child {
+  border-bottom: 0;
+}
+.dx-entry.first {
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 10px;
+}
+.dx-no {
+  width: 130px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 18px;
+  color: #3f6a2c;
+}
+.dx-player {
+  width: 300px;
+}
+.dx-name {
+  font-weight: 900;
+  text-transform: uppercase;
+}
+.dx-sub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #4f6b45;
+  white-space: nowrap;
+}
+.dx-cp {
+  font-size: 13px;
+}
+.dx-team {
+  display: flex;
+  margin-left: auto;
+}
+.dx-bottom {
+  position: absolute;
+  left: 60px;
+  right: 60px;
+  bottom: 40px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.dx-btn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #2a2a2a;
+  border: 6px solid #6e1015;
+}
+.dx-pad {
+  width: 220px;
+  height: 26px;
+  border-radius: 13px;
+  background: #2a2a2a;
+  border: 4px solid #6e1015;
+  margin-right: auto;
+}
+
+/* ---------- Trading card ---------- */
+.tcg {
+  background: radial-gradient(900px 900px at 50% 40%, #2b2f45, #11131d);
+  font-style: normal;
+}
+.tcg-card {
+  position: absolute;
+  left: 110px;
+  right: 110px;
+  top: 60px;
+  bottom: 60px;
+  padding: 26px;
+  border-radius: 34px;
+  background: linear-gradient(160deg, #fff3a6, #f2c832 40%, #d9a514);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.tcg-card::before {
+  content: '';
+  position: absolute;
+  inset: 26px;
+  border-radius: 18px;
+  background: linear-gradient(170deg, color-mix(in srgb, var(--red) 25%, #fff), color-mix(in srgb, var(--red) 55%, #fff));
+  z-index: 0;
+}
+.tcg-card > * {
+  position: relative;
+}
+.tcg-top {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 10px 18px 0;
+  color: #1b1b1b;
+}
+.tcg-stage {
+  font-size: 16px;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 2px 10px;
+  border-radius: 8px;
+  background: #1b1b1b;
+  color: #f2c832;
+}
+.tcg-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 900;
+}
+.tcg-hp {
+  font-size: 40px;
+  font-weight: 900;
+  color: #c0141c;
+}
+.tcg-hp small {
+  font-size: 16px;
+  margin-right: 6px;
+}
+.tcg-art {
+  position: relative;
+  height: 600px;
+  margin: 0 18px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 8px solid #c9a227;
+  box-shadow: inset 0 0 0 3px #fff4b8;
+  background: linear-gradient(160deg, var(--blue), var(--blue-dark));
+}
+.tcg-holo {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(115deg, rgba(255, 255, 255, 0) 0 30px, rgba(255, 255, 255, 0.18) 30px 34px),
+    conic-gradient(from 200deg at 30% 30%, #ff9ae0, #9ad8ff, #a8ffb8, #fff19a, #ff9ae0);
+  mix-blend-mode: soft-light;
+  opacity: 0.9;
+}
+.tcg-cp {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: #1b1b1b;
+  color: #f2c832;
+  font-size: 22px;
+  font-weight: 900;
+}
+.tcg-info {
+  margin: 0 18px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #c9a227, #f2d77a, #c9a227);
+  color: #3a2c00;
+  font-size: 18px;
+  font-weight: 800;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.tcg-moves {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+  padding: 6px 26px 0;
+  color: #1b1b1b;
+}
+.tcg-move {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  align-items: center;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+  padding: 6px 0;
+}
+.tcg-move .dmv-mon {
+  grid-row: span 2;
+}
+.tcg-move-name {
+  font-size: 26px;
+  font-weight: 900;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tcg-move-item {
+  font-size: 19px;
+  font-weight: 700;
+  color: #5a4f2c;
+}
+.tcg-foot {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 26px 6px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #3a2c00;
+}
+.tcg-star {
+  font-size: 22px;
+}
+
+/* ---------- Ghost (Halloween) ---------- */
+.gh {
+  background: linear-gradient(180deg, #2a1640 0%, #3e1f5c 45%, #5a2f7a 100%);
+  color: #f1e8ff;
+}
+.gh-head, .gh-row {
+  background: rgba(30, 14, 48, 0.82);
+  border: 3px solid #b58cff;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(160, 120, 255, 0.4);
+}
+.gh-head .dmv-logo {
+  border-color: #b58cff;
+}
+.gh-kicker {
+  color: #8fd3ff;
+}
+.gh-facts {
+  color: #c9a8ff;
+}
+.gh-place {
+  color: #8fd3ff;
+  text-shadow: 0 0 14px #5ab4ff;
+}
+.gh-row.first .gh-place {
+  color: #ffd77a;
+  text-shadow: 0 0 14px #ffb84a;
+}
+.gh-sub {
+  color: #b9a8d6;
+}

@@ -95,6 +95,5 @@ const makeTopCut = (header: 'clean' | 'banner' | 'banner-white', loud = false): 
 })
 
 export const TopCutClean = makeTopCut('clean')
-export const TopCutBanner = makeTopCut('banner')
 export const TopCutBannerWhite = makeTopCut('banner-white')
 export const TopCutLoud = makeTopCut('clean', true)

@@ -4,7 +4,7 @@
 import type { CSSProperties } from 'react'
 import type { Day2Template } from '../types'
 import { FitText, MonSprite, PlayerPhoto } from '../shared/parts'
-import logo from './regionals-logo.png'
+import { DAY2_EVENTS } from './events'
 import './day2.css'
 
 const SIZE = 1644
@@ -90,7 +90,8 @@ const makeDay2 = (match: boolean): Day2Template => ({
   height: SIZE,
   Component: ({ data }) => {
     const p = data.player
-    const hue = data.hue ?? DEFAULT_HUE
+    const event = DAY2_EVENTS[data.kind ?? 'regionals']
+    const hue = data.hue ?? event.hue
     const c = regionalPalette(hue)
     const m = matchPalette(hue)
     const bar = match ? m.bar : c.bar
@@ -155,10 +156,10 @@ const makeDay2 = (match: boolean): Day2Template => ({
           ))}
         </svg>
 
-        <img src={logo} alt="" style={box(1028, 98, 572, 520)} />
+        <img src={event.logo} alt="" style={{ ...box(1028, 98, 572, 520), objectFit: 'contain' }} />
 
         <div className="d2-bar" style={box(70, 105, 850, 105)}>
-          <FitText className="d2-text light" text={data.event || 'Regional Championships'} max={58} width={760} italic={false} weight={800} />
+          <FitText className="d2-text light" text={data.event || event.title} max={58} width={760} italic={false} weight={800} />
         </div>
         <div className="d2-bar" style={box(150, 245, 840, 157)}>
           <FitText className="d2-text" style={{ color: match ? m.nameText : c.nameText }} text={p.name || 'Player Name'} max={100} width={740} italic={false} weight={800} />
@@ -173,17 +174,21 @@ const makeDay2 = (match: boolean): Day2Template => ({
           </div>
         )}
 
-        {/* Caption bar over the bottom of the photo */}
-        <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`} style={{ ...box(0, 0, SIZE, SIZE), pointerEvents: 'none' }}>
-          {match ? (
-            <OuterSlant top={1383} bottom={1500} tl={175} tr={797} bl={115} br={740} r={20} fill={bar} />
-          ) : (
-            <Slant points={[[186, 1394], [786, 1394], [730, 1489], [126, 1489]]} fill={c.bar} />
-          )}
-        </svg>
-        <div className="d2-bar" style={box(150, 1383, 600, 117)}>
-          <FitText className="d2-text light" text={data.caption} max={56} width={520} italic={false} weight={800} />
-        </div>
+        {/* Caption bar over the bottom of the photo (left out when the caption is empty) */}
+        {data.caption.trim() && (
+          <>
+            <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`} style={{ ...box(0, 0, SIZE, SIZE), pointerEvents: 'none' }}>
+              {match ? (
+                <OuterSlant top={1383} bottom={1500} tl={175} tr={797} bl={115} br={740} r={20} fill={bar} />
+              ) : (
+                <Slant points={[[186, 1394], [786, 1394], [730, 1489], [126, 1489]]} fill={c.bar} />
+              )}
+            </svg>
+            <div className="d2-bar" style={box(150, 1383, 600, 117)}>
+              <FitText className="d2-text light" text={data.caption} max={56} width={520} italic={false} weight={800} />
+            </div>
+          </>
+        )}
 
         {p.team.map((m, i) => {
           const [x, y] = TEAM_CELLS[i]

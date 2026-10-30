@@ -1,0 +1,610 @@
+/* ---------- Kanto Game Boy: the original Game Boy's four greens ---------- */
+.gb {
+  --g0: #0f380f;
+  --g1: #306230;
+  --g2: #8bac0f;
+  --g3: #9bbc0f;
+  background: var(--g3);
+  color: var(--g0);
+  font-family: 'Press Start 2P', monospace;
+  font-style: normal;
+}
+/* A dot-matrix grid over the whole screen. */
+.gb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(15, 56, 15, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 56, 15, 0.07) 1px, transparent 1px);
+  background-size: 6px 6px;
+}
+/* Gen 1 text box: thick dark frame with a light inner line. */
+.gb-box {
+  position: absolute;
+  left: 36px;
+  right: 36px;
+  background: var(--g3);
+  border: 8px solid var(--g0);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 6px var(--g3), inset 0 0 0 10px var(--g1);
+  padding: 30px 34px;
+}
+.gb-head {
+  top: 36px;
+  height: 196px;
+}
+.gb-title {
+  line-height: 1.3;
+}
+.gb-facts {
+  margin-top: 16px;
+  font-size: 16px;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.gb-facts.dim {
+  margin-top: 10px;
+  color: var(--g1);
+}
+.gb-list {
+  top: 252px;
+  height: 920px;
+  padding: 22px 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.gb-row {
+  display: flex;
+  align-items: center;
+  height: 104px;
+  border-bottom: 4px dotted var(--g1);
+}
+.gb-row:last-child {
+  border-bottom: 0;
+}
+.gb-cursor {
+  width: 34px;
+  font-size: 22px;
+}
+.gb-place {
+  width: 92px;
+  font-size: 22px;
+}
+.gb-player {
+  width: 380px;
+}
+.gb-rec {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--g1);
+}
+.gb-cp {
+  border-color: var(--g0);
+  background: var(--g2);
+  color: var(--g0);
+  font-family: 'Press Start 2P', monospace;
+  font-style: normal;
+  font-size: 10px;
+}
+.gb-team {
+  display: flex;
+  margin-left: auto;
+}
+.gb-mon {
+  display: block;
+  width: 72px;
+  height: 72px;
+  image-rendering: pixelated;
+  /* Recolor the pixel sprites into the Game Boy's greens. */
+  filter: grayscale(1) contrast(1.6) brightness(0.85) sepia(1) hue-rotate(40deg) saturate(2.2) brightness(0.75);
+}
+.gb-foot {
+  top: 1190px;
+  height: 124px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 20px;
+  line-height: 1.5;
+}
+.gb-blink {
+  font-size: 18px;
+}
+
+/* ---------- Paldea: Scarlet & Violet ---------- */
+.pd {
+  --pd-ink: #15151f;
+  --pd-panel: #22222e;
+  --pd-yellow: #f5e000;
+  --pd-orange: #f2622d;
+  --pd-purple: #7c3fc3;
+  background: var(--pd-ink);
+  color: #fff;
+}
+.pd-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, var(--pd-orange) 0 49.6%, var(--pd-ink) 49.6% 50.4%, var(--pd-purple) 50.4% 100%);
+}
+.pd-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.12) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 2px, transparent 2px);
+  background-size: 54px 54px;
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 70%);
+  mask-image: linear-gradient(to bottom, #000, transparent 70%);
+}
+.pd-head {
+  position: absolute;
+  left: 40px;
+  right: 40px;
+  top: 40px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding: 0 30px;
+  background: var(--pd-panel);
+  clip-path: polygon(0 0, 100% 0, 100% 78%, 96% 100%, 0 100%);
+  border-left: 14px solid var(--pd-yellow);
+}
+.pd-head-text {
+  min-width: 0;
+}
+.pd-kicker {
+  display: inline-block;
+  padding: 4px 16px;
+  background: var(--pd-yellow);
+  color: var(--pd-ink);
+  font-size: 18px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  transform: skewX(-12deg);
+}
+.pd-title {
+  margin-top: 8px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.pd-facts {
+  margin-top: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--pd-yellow);
+  white-space: nowrap;
+}
+.pd-rows {
+  position: absolute;
+  left: 40px;
+  right: 40px;
+  top: 270px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pd-row {
+  display: flex;
+  align-items: center;
+  height: 112px;
+  background: var(--pd-panel);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 2.5% 100%, 0 75%);
+  box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.35);
+}
+.pd-place {
+  flex: none;
+  width: 140px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: var(--pd-ink);
+  font-size: 40px;
+  font-weight: 900;
+  font-style: italic;
+  clip-path: polygon(0 0, 100% 0, 86% 100%, 0 100%);
+}
+.pd-row.first .pd-place {
+  background: var(--pd-yellow);
+}
+.pd-player {
+  width: 340px;
+  padding: 0 14px 0 6px;
+}
+.pd-name {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.pd-row.first .pd-name {
+  color: var(--pd-yellow);
+}
+.pd-sub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 19px;
+  font-weight: 700;
+  color: #b8b8c8;
+  white-space: nowrap;
+}
+.pd-cp {
+  font-size: 14px;
+}
+.pd-team {
+  display: flex;
+  margin-left: auto;
+  padding-right: 18px;
+}
+.pd-foot {
+  position: absolute;
+  right: 40px;
+  bottom: 30px;
+  padding: 6px 20px;
+  background: var(--pd-ink);
+  color: var(--pd-yellow);
+  font-size: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  transform: skewX(-12deg);
+}
+
+/* ---------- Unova: Black & White ---------- */
+.uv {
+  background: #f4f4f2;
+  color: #0b0b0b;
+  font-style: normal;
+}
+.uv-band {
+  position: absolute;
+  background: #0b0b0b;
+  transform: rotate(-24deg);
+  transform-origin: center;
+}
+.uv-band.a {
+  left: -300px;
+  top: 120px;
+  width: 1900px;
+  height: 120px;
+}
+.uv-band.b {
+  left: -300px;
+  top: 1210px;
+  width: 1900px;
+  height: 60px;
+}
+.uv-head {
+  position: absolute;
+  left: 44px;
+  right: 44px;
+  top: 44px;
+  height: 180px;
+  padding: 18px 170px 0 28px;
+  background: #0b0b0b;
+  color: #fff;
+}
+.uv-title {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.uv-facts {
+  margin-top: 14px;
+  font-size: 22px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.uv-format {
+  margin-top: 6px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #b9b9b9;
+}
+.uv-head .dmv-logo {
+  margin: 20px 18px 0 0;
+}
+.uv-rows {
+  position: absolute;
+  left: 44px;
+  right: 44px;
+  top: 252px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.uv-row {
+  display: flex;
+  align-items: center;
+  height: 118px;
+  border: 5px solid #0b0b0b;
+}
+.uv-row.light {
+  background: #fff;
+}
+.uv-row.dark {
+  background: #0b0b0b;
+  color: #fff;
+}
+.uv-place {
+  flex: none;
+  width: 110px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 62px;
+  font-weight: 900;
+  border-right: 5px solid currentColor;
+}
+.uv-player {
+  width: 350px;
+  padding: 0 22px;
+}
+.uv-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.uv-sub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 19px;
+  font-weight: 700;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+.uv-cp {
+  font-size: 14px;
+}
+.uv-team {
+  display: flex;
+  margin-left: auto;
+  padding-right: 12px;
+}
+.uv-row.dark .dmv-mon img.render {
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+}
+
+/* ---------- Locations: shared layout ---------- */
+.gw, .rt, .sp2 {
+  font-style: normal;
+}
+.gw-scene, .rt-scene, .sp2-scene {
+  position: absolute;
+  inset: 0;
+}
+.gw-head, .rt-head, .sp2-head {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 46px;
+  height: 190px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 28px;
+}
+.gw-head-text, .rt-head-text, .sp2-head-text {
+  min-width: 0;
+}
+.gw-kicker, .rt-kicker, .sp2-kicker {
+  font-size: 18px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+.gw-title, .rt-title, .sp2-title {
+  margin-top: 4px;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.gw-facts, .rt-facts, .sp2-facts {
+  margin-top: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.gw-rows, .rt-rows, .sp2-rows {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 268px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.gw-row, .rt-row, .sp2-row {
+  display: flex;
+  align-items: center;
+  height: 112px;
+  overflow: hidden;
+}
+.gw-place, .rt-place, .sp2-place {
+  flex: none;
+  width: 120px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 900;
+}
+.gw-player, .rt-player, .sp2-player {
+  width: 330px;
+  padding: 0 20px;
+}
+.gw-name, .rt-name, .sp2-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.gw-sub, .rt-sub, .sp2-sub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 19px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.gw-cp, .rt-cp, .sp2-cp {
+  font-size: 14px;
+}
+.gw-team, .rt-team, .sp2-team {
+  display: flex;
+  margin-left: auto;
+  padding-right: 14px;
+}
+
+/* ---------- Glimwood Tangle ---------- */
+.gw {
+  background: radial-gradient(900px 700px at 50% 30%, #1f2a5c 0%, #120f2e 55%, #07071a 100%);
+  color: #e9f6ff;
+}
+.gw-head, .gw-row {
+  background: rgba(10, 12, 36, 0.78);
+  border: 3px solid #56f0ff;
+  border-radius: 22px;
+  box-shadow: 0 0 22px rgba(86, 240, 255, 0.55), inset 0 0 18px rgba(86, 240, 255, 0.18);
+}
+.gw-row:nth-child(even) {
+  border-color: #ff6fe0;
+  box-shadow: 0 0 22px rgba(255, 111, 224, 0.5), inset 0 0 18px rgba(255, 111, 224, 0.16);
+}
+.gw-head .dmv-logo {
+  border-color: #56f0ff;
+}
+.gw-kicker {
+  color: #56f0ff;
+}
+.gw-facts {
+  color: #ff9cec;
+}
+.gw-place {
+  color: #56f0ff;
+  text-shadow: 0 0 14px #56f0ff;
+}
+.gw-row:nth-child(even) .gw-place {
+  color: #ff6fe0;
+  text-shadow: 0 0 14px #ff6fe0;
+}
+.gw-row.first .gw-place {
+  color: #fff6a8;
+  text-shadow: 0 0 16px #ffe45c;
+}
+.gw-sub {
+  color: #9fb3d9;
+}
+
+/* ---------- Route 201 ---------- */
+.rt {
+  color: #2b2b2b;
+}
+/* Wooden route sign for the header, on two posts. */
+.rt-post {
+  position: absolute;
+  top: 210px;
+  width: 26px;
+  height: 70px;
+  background: #8a5a2b;
+  border: 4px solid #4a2e12;
+}
+.rt-post.l {
+  left: 150px;
+}
+.rt-post.r {
+  right: 150px;
+}
+.rt-head {
+  background: #d9a066;
+  border: 6px solid #4a2e12;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 6px #e8bb86, 0 8px 0 rgba(0, 0, 0, 0.2);
+  background-image: repeating-linear-gradient(0deg, transparent 0 34px, rgba(74, 46, 18, 0.18) 34px 37px);
+}
+.rt-head .dmv-logo {
+  border-color: #4a2e12;
+}
+.rt-kicker {
+  color: #6b3f15;
+}
+.rt-title {
+  color: #2e1a07;
+}
+.rt-facts {
+  color: #6b3f15;
+}
+/* DS-style text boxes for the rows. */
+.rt-row {
+  background: #fff;
+  border: 5px solid #5a7894;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 4px #dce8f2, 0 6px 0 rgba(0, 40, 0, 0.25);
+}
+.rt-place {
+  background: #e84848;
+  color: #fff;
+  border-right: 5px solid #5a7894;
+}
+.rt-row:nth-child(even) .rt-place {
+  background: #3a78d8;
+}
+.rt-row.first .rt-place {
+  background: #f8d030;
+  color: #2b2b2b;
+}
+.rt-sub {
+  color: #5f6b77;
+}
+
+/* ---------- Snowpoint ---------- */
+.sp2 {
+  color: #173a5c;
+}
+.sp2-head, .sp2-row {
+  background: rgba(255, 255, 255, 0.78);
+  border: 4px solid #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 8px 24px rgba(40, 90, 140, 0.25), inset 0 0 0 2px rgba(127, 178, 220, 0.6);
+}
+.sp2-head .dmv-logo {
+  border-color: #fff;
+}
+.sp2-kicker {
+  color: #3f7fb8;
+}
+.sp2-facts {
+  color: #3f7fb8;
+}
+.sp2-place {
+  color: #fff;
+  background: linear-gradient(160deg, #7fb2dc, #2f6aa3);
+  border-radius: 18px 0 0 18px;
+}
+.sp2-row.first .sp2-place {
+  background: linear-gradient(160deg, #e8f6ff, #8cc8f0);
+  color: #173a5c;
+}
+.sp2-sub {
+  color: #557a9c;
+}

@@ -10,6 +10,9 @@ Current templates:
 | `top-cut/` | standings | 1080×1350 | Top 8 list with full teams (versions: Clean, Banner, White Banner headers, and Loud comic-book background) |
 | `editorial/` | standings | 1080×1350, 1080×1080 | "Editorial" magazine direction (upright type, big numerals, hairlines, brand colours as accents). Top Cut and Champion, each in Paper (off-white) and Night (navy) |
 | `sports-page/` | standings | 1080×1350 | Newspaper sports page: a generated headline about the winner (Anton), their team with names, a FINAL stamp, and a box score for 2nd–8th. Uses @fontsource/anton + oswald |
+| `mosaic/` | standings | 1080×1350 | Top 8 on white cards over a tile wall of the top cut's Pokémon as one-colour silhouettes (Mono = second colour; Gradient = main → second). Layout is seeded by event name + date |
+| `eras/` | standings | 1080×1350 | Game/region-styled top cuts: Kanto Game Boy (4 greens, Press Start 2P font, green-tinted pixel sprites), Paldea (Scarlet/Violet orange/purple + dark angled panels), Unova (Black/White monochrome bands); locations: Glimwood Tangle (glowing mushroom forest), Route 201 (sky, tall grass, wooden route-sign header), Snowpoint (falling snow, frosted panels). Scenery is inline SVG, seeded by event name |
+| `eras/more.tsx` | standings | 1080×1350 | Battle Tower (navy/gold spotlights), Mt. Coronet (Spear Pillar ruins + cosmic sky), Hoenn Gen 3 (GBA menu boxes), Pokédex (red device, players as No.001…), Ghost (Halloween dusk, wisps, tower), and Champion (Trading Card): winner as a holo card, ace in the art window, team as "attacks" |
 | `top8-photos/` | standings | 1080×1350 | Top 8 cards with player photos and teams (alternating colors + a White version) |
 | `top8-mixed/` | standings | 1080×1350 | Photo cards for the top 4, compact rows for 5th–8th (alternating colors + a White version) |
 | `top4-photos/` | standings | 1080×1080 | Top 4 with big player photos and teams |
@@ -105,3 +108,5 @@ Standings templates get `data: StandingsData`, usage templates `data: UsageData`
 - Use fixed pixel sizes; the preview scales the whole graphic down for you.
 - Use images from `public/` or imported into the folder. Images from other websites can block the export.
 - Load fonts in `src/index.css` (installed via `@fontsource/...` or as files) so they're embedded in the PNG.
+
+Regional Results (Day 2) templates support an event type (Regionals, Internationals, Special Event, Worlds) that sets the badge, default colour and default top-bar text (`src/templates/day2/events.ts`). An empty caption hides the caption bar.

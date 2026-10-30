@@ -1,7 +1,7 @@
 // Every template the generator can output. Add new designs here.
 
 import type { Day2Template, MatchTemplate, StandingsTemplate, TeamBattleTemplate, UsageTemplate } from './types'
-import { TopCutBanner, TopCutBannerWhite, TopCutClean, TopCutLoud } from './top-cut'
+import { TopCutBannerWhite, TopCutClean, TopCutLoud } from './top-cut'
 import Champion, { ChampionLoud } from './champion'
 import Usage from './usage'
 import Bracket, { BracketLoud } from './bracket'
@@ -14,32 +14,56 @@ import Top8Photos, { Top8PhotosLoud, Top8PhotosWhite } from './top8-photos'
 import Top4Photos, { Top4PhotosLoud } from './top4-photos'
 import Top8Mixed, { Top8MixedWhite } from './top8-mixed'
 import SportsPage from './sports-page'
+import { MosaicLayouts } from './themes/mosaic'
+import { BattleTower, Ghost, Hoenn, MtCoronet, Pokedex, TradingCard } from './eras/more'
+import { Glimwood, KantoGameBoy, Paldea, Route201, Snowpoint, Unova } from './eras'
+import { MosaicGradient, MosaicMono, MosaicSquaresGradient, MosaicSquaresMono, MosaicTintGlass, MosaicTintSolid } from './mosaic'
 import { EditorialChampionNight, EditorialChampionPaper, EditorialTopCutNight, EditorialTopCutPaper } from './editorial'
 
+import type { StandingsLayout } from './types'
+
+/** Layouts in picker order, with their labels. */
+export const STANDINGS_LAYOUTS: { id: StandingsLayout; label: string }[] = [
+  { id: 'topcut', label: 'Top Cut' },
+  { id: 'top8photos', label: 'Top 8 Photos' },
+  { id: 'top8mixed', label: 'Top 8 + Top 4 Photos' },
+  { id: 'top4photos', label: 'Top 4 Photos' },
+  { id: 'champion', label: 'Champion' },
+  { id: 'bracket', label: 'Bracket' },
+]
+
+// Every standings template, grouped by style (the picker shows styles in this order, then the
+// layouts each style has). Styles missing a layout get it as they're converted to themes.
+const tag = (style: string, entries: [StandingsTemplate, StandingsLayout][]) => entries.map(([t, layout]) => ({ ...t, style, layout }))
+
 export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
-  TopCutClean, // first = the default
-  TopCutBanner,
-  TopCutBannerWhite,
-  TopCutLoud,
-  EditorialTopCutPaper,
-  EditorialTopCutNight,
-  SportsPage,
-  Top8Photos,
-  Top8PhotosWhite,
-  Top8PhotosLoud,
-  Top8Mixed,
-  Top8MixedWhite,
-  Top4Photos,
-  Top4PhotosLoud,
-  Champion,
-  ChampionLoud,
-  EditorialChampionPaper,
-  EditorialChampionNight,
-  Bracket,
-  BracketLoud,
-  ArenaSpotlight,
-  ArenaGrid,
-  ArenaSunset,
+  ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [Bracket, 'bracket']]),
+  ...tag('Loud', [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [BracketLoud, 'bracket']]),
+  ...tag('White', [[TopCutBannerWhite, 'topcut'], [Top8PhotosWhite, 'top8photos'], [Top8MixedWhite, 'top8mixed']]),
+  ...tag('Mosaic', [[MosaicSquaresGradient, 'topcut'], ...MosaicLayouts]),
+  ...tag('Mosaic (Tinted Glass)', [[MosaicTintGlass, 'topcut']]),
+  ...tag('Mosaic (Tinted Solid)', [[MosaicTintSolid, 'topcut']]),
+  ...tag('Mosaic (Gradient)', [[MosaicGradient, 'topcut']]),
+  ...tag('Mosaic (Mono)', [[MosaicMono, 'topcut']]),
+  ...tag('Mosaic (Squares Mono)', [[MosaicSquaresMono, 'topcut']]),
+  ...tag('Editorial Paper', [[EditorialTopCutPaper, 'topcut'], [EditorialChampionPaper, 'champion']]),
+  ...tag('Editorial Night', [[EditorialTopCutNight, 'topcut'], [EditorialChampionNight, 'champion']]),
+  ...tag('Sports Page', [[SportsPage, 'topcut']]),
+  ...tag('Arena Spotlight', [[ArenaSpotlight, 'topcut']]),
+  ...tag('Arena Grid', [[ArenaGrid, 'topcut']]),
+  ...tag('Arena Sunset', [[ArenaSunset, 'topcut']]),
+  ...tag('Battle Tower', [[BattleTower, 'topcut']]),
+  ...tag('Glimwood Tangle', [[Glimwood, 'topcut']]),
+  ...tag('Route 201', [[Route201, 'topcut']]),
+  ...tag('Snowpoint', [[Snowpoint, 'topcut']]),
+  ...tag('Mt. Coronet', [[MtCoronet, 'topcut']]),
+  ...tag('Ghost', [[Ghost, 'topcut']]),
+  ...tag('Kanto Game Boy', [[KantoGameBoy, 'topcut']]),
+  ...tag('Hoenn Gen 3', [[Hoenn, 'topcut']]),
+  ...tag('Paldea', [[Paldea, 'topcut']]),
+  ...tag('Unova', [[Unova, 'topcut']]),
+  ...tag('Pokédex', [[Pokedex, 'topcut']]),
+  ...tag('Trading Card', [[TradingCard, 'champion']]),
 ]
 export const USAGE_TEMPLATES: UsageTemplate[] = [Usage]
 export const MATCH_TEMPLATES: MatchTemplate[] = [VsResult]

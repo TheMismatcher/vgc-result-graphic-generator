@@ -53,7 +53,7 @@ export interface Match {
 }
 
 export interface BrandSettings {
-  preset: 'dmv' | 'custom'
+  preset: 'dmv' | 'glimwood' | 'custom' // built-in looks, or the user's own (saved brands)
   name: string
   tagline: string
   logo: string // PNG data URL
@@ -68,6 +68,7 @@ export interface Day2 {
   players: Player[]
   selected: string // uid of the player shown in the preview
   hue?: number // background colour for the Regional Results graphic (colour-wheel degrees)
+  kind?: 'regionals' | 'internationals' | 'special' | 'worlds' // which event: badge + default colour
 }
 
 export interface TeamSide {

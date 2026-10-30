@@ -1,3 +1,4 @@
+import type { Theme } from '../themes/theme'
 import type { StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, CpBadge } from '../shared/parts'
 import { eventFacts } from '../shared/format'
@@ -6,9 +7,9 @@ import { displayPokemon, useDisplay } from '../../lib/display'
 import { LoudBackground } from '../shared/LoudBackground'
 import './champion.css'
 
-const makeChampion = (loud = false): StandingsTemplate => ({
-  id: loud ? 'dmv-champion-loud' : 'dmv-champion',
-  name: loud ? 'Champion (Loud)' : 'Champion',
+export const makeChampion = (loud = false, theme?: Theme): StandingsTemplate => ({
+  id: theme ? `${theme.id}-champion` : loud ? 'dmv-champion-loud' : 'dmv-champion',
+  name: theme ? `Champion (${theme.style})` : loud ? 'Champion (Loud)' : 'Champion',
   description: 'Square spotlight on the winner and their team.',
   kind: 'standings',
   width: 1080,
@@ -19,8 +20,8 @@ const makeChampion = (loud = false): StandingsTemplate => ({
     const winner = data.players[0]
     const name = winner?.name || 'Player'
     return (
-      <div className={`dmv ch ${loud ? 'loud' : ''}`} style={{ width: 1080, height: 1080 }}>
-        {loud ? (
+      <div className={`dmv ch ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1080 }}>
+        {theme ? <theme.Background data={data} width={1080} height={1080} /> : loud ? (
           <LoudBackground top="blue" bottom="yellow" split={[78, 22]} burst={[860, 330]} burstBelow />
         ) : (
           <>

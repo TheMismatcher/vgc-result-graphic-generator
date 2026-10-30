@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { AppState, BrandSettings } from '../types'
-import { DMV_BRAND, defaultBrandSettings } from '../brand'
+import { BUILT_IN_BRANDS, DMV_BRAND, defaultBrandSettings } from '../brand'
 import { brandFromSettings, openBrandsFile, saveBrandsFile, useSavedBrands, type SavedBrand } from '../lib/brands'
 import { STANDINGS_TEMPLATES } from '../templates/registry'
 import { standingsData } from '../lib/event'
@@ -88,14 +88,17 @@ export function BrandingPage({ state, setState }: { state: AppState; setState: (
           <h2 className="text-lg font-bold text-slate-900">Branding</h2>
           <p className="text-sm text-slate-600">Choose whose look the graphics use. This applies to every template.</p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3" role="radiogroup" aria-label="Branding">
-            <BrandCard
-              active={!custom}
-              onClick={() => setState((s) => ({ ...s, brand: { ...s.brand, preset: 'dmv' } }))}
-              title={DMV_BRAND.name}
-              subtitle="Built-in"
-              logo={DMV_BRAND.logo}
-              colors={DMV_BRAND.colors}
-            />
+            {BUILT_IN_BRANDS.map(({ id, brand: b }) => (
+              <BrandCard
+                key={id}
+                active={brand.preset === id}
+                onClick={() => setState((s) => ({ ...s, brand: { ...s.brand, preset: id } }))}
+                title={b.name}
+                subtitle="Built-in"
+                logo={b.logo}
+                colors={b.colors}
+              />
+            ))}
             {saved.map((b) => (
               <BrandCard key={b.id} active={custom && brand.savedId === b.id} onClick={() => select(b)} title={b.name || 'Untitled'} subtitle={b.tagline || 'Your brand'} logo={b.logo} colors={b.colors} />
             ))}
