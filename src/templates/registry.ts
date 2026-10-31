@@ -26,7 +26,7 @@ import { EditorialNightLayouts, EditorialPaperLayouts } from './themes/editorial
 import { BattleTower, Ghost, Hoenn, MtCoronet, Pokedex, PokedexChampion, TradingCard } from './eras/more'
 import { GhostPixel, GhostPixelDense, GhostPixelGlass, GhostPixelGlassTeam, GhostPixelGlassLine } from './eras/ghostpixel'
 import { Glimwood, KantoGameBoy, Paldea, Route201, Unova } from './eras'
-import { DynamaxOfficial, GlimwoodOfficial, SnowpointOfficial, SnowpointOfficialGlass, Route217, Route217Glass, AcuityLakefront, AcuityLakefrontGlass, ScarletBook, VioletBook, TerastalOfficial, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillar, SpearPillarArt, SpearPillarGlass, SpearPillarHall, SpearPillarHallChampion } from './places'
+import { DynamaxOfficial, GlimwoodOfficial, SnowpointOfficial, SnowpointOfficialGlass, SnowpointFull, SnowpointFullGlass, Route217, Route217Glass, AcuityLakefront, AcuityLakefrontGlass, ScarletBook, VioletBook, TerastalOfficial, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillar, SpearPillarArt, SpearPillarGlass, SpearPillarHall, SpearPillarHallChampion, SpearPillarHallChampionGlass, SpearPillarSky, SpearPillarSkyGlass, SpearPillarCutscene, SpearPillarCutsceneGlass, CustomGlass, CustomLight } from './places'
 import { PLACE_LAYOUTS } from './themes/places'
 import { DynamaxCloud, DynamaxCloudLayouts, FX_SIDE_THEMES, sideFx, TerastalPrism, TerastalPrismLayouts, TeraRaidDen, TeraRaidDenLayouts, TeraRaidDenPrism, TeraRaidDenPrismLayouts } from './power/recreated'
 import { MosaicGradient, MosaicMono, MosaicSquaresGradient, MosaicSquaresMono, MosaicTintGlass, MosaicTintGlassShadow, MosaicTintSemiShadow, MosaicTintSolid, MosaicTintSolidShadow } from './mosaic'
@@ -35,7 +35,7 @@ import { DynamaxLayouts, MegaLayouts, TerastalLayouts } from './power/themes'
 import { TradingCardClassic, TradingCardClassicPhoto, TradingCardModern, TradingCardModernPhoto } from './cards'
 import { EditorialChampionNight, EditorialChampionPaper, EditorialTopCutNight, EditorialTopCutPaper } from './editorial'
 
-import type { StandingsLayout } from './types'
+import type { Look, StandingsLayout } from './types'
 
 /** Layouts in picker order, with their labels. */
 export const STANDINGS_LAYOUTS: { id: StandingsLayout; label: string }[] = [
@@ -52,11 +52,24 @@ export const STANDINGS_LAYOUTS: { id: StandingsLayout; label: string }[] = [
 const tag = (style: string, entries: [StandingsTemplate, StandingsLayout][]) => entries.map(([t, layout]) => ({ ...t, style, layout }))
 // Retired: kept so saved selections still open, hidden from the picker unless 'Show retired styles' is ticked.
 const retire = (style: string, entries: [StandingsTemplate, StandingsLayout][]) => tag(style, entries).map((t) => ({ ...t, retired: true }))
+// Paired styles (Solid / Glass panels, Classic / Modern card): one picker card (`style`, opens as `look`);
+// the Preview's switch swaps to the other half.
+const pair = (
+  style: string,
+  look: Look,
+  entries: [StandingsTemplate, StandingsLayout][],
+  otherStyle: string,
+  otherLook: Look,
+  otherEntries: [StandingsTemplate, StandingsLayout][],
+) => [...tag(style, entries).map((t) => ({ ...t, look })), ...tag(otherStyle, otherEntries).map((t) => ({ ...t, look: otherLook, variantOf: style }))]
+const glassPair = (style: string, solid: StandingsTemplate, glass: StandingsTemplate) =>
+  pair(style, 'solid', [[solid, 'topcut'], ...PLACE_LAYOUTS[style]], `${style} Glass`, 'glass', [[glass, 'topcut'], ...PLACE_LAYOUTS[`${style} Glass`]])
 
 export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [Bracket, 'bracket']]),
   ...tag('Comic Book', [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [BracketLoud, 'bracket']]),
   ...tag('White', [[TopCutBannerWhite, 'topcut'], [Top8PhotosWhite, 'top8photos'], [Top8MixedWhite, 'top8mixed']]),
+  ...pair('Custom Glass', 'glass', [[CustomGlass, 'topcut'], ...PLACE_LAYOUTS['Custom Glass']], 'Custom Glass Light', 'solid', [[CustomLight, 'topcut'], ...PLACE_LAYOUTS['Custom Glass Light']]),
   ...tag('Mosaic', [[MosaicTintSemiShadow, 'topcut'], ...MosaicLayouts]),
   ...retire('Mosaic (Tinted Glass)', [[MosaicTintGlass, 'topcut']]),
   ...retire('Mosaic (Tinted Solid)', [[MosaicTintSolid, 'topcut']]),
@@ -76,26 +89,21 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Glimwood Tangle', [[Glimwood, 'topcut']]),
   ...tag('Glimwood Tangle Official', [[GlimwoodOfficial, 'topcut'], ...PLACE_LAYOUTS['Glimwood Tangle Official']]),
   ...retire('Route 201', [[Route201, 'topcut']]),
-  ...tag('Route 201 Official', [[Route201Tiles, 'topcut'], ...PLACE_LAYOUTS['Route 201 Official']]),
-  ...tag('Route 201 Official Glass', [[Route201TilesGlass, 'topcut'], ...PLACE_LAYOUTS['Route 201 Official Glass']]),
-  ...tag('Snowpoint Official', [[SnowpointOfficial, 'topcut'], ...PLACE_LAYOUTS['Snowpoint Official']]),
-  ...tag('Snowpoint Official Glass', [[SnowpointOfficialGlass, 'topcut'], ...PLACE_LAYOUTS['Snowpoint Official Glass']]),
-  ...tag('Route 217', [[Route217, 'topcut'], ...PLACE_LAYOUTS['Route 217']]),
-  ...tag('Route 217 Glass', [[Route217Glass, 'topcut'], ...PLACE_LAYOUTS['Route 217 Glass']]),
-  ...tag('Acuity Lakefront', [[AcuityLakefront, 'topcut'], ...PLACE_LAYOUTS['Acuity Lakefront']]),
-  ...tag('Acuity Lakefront Glass', [[AcuityLakefrontGlass, 'topcut'], ...PLACE_LAYOUTS['Acuity Lakefront Glass']]),
+  ...glassPair('Route 201 Official', Route201Tiles, Route201TilesGlass),
+  ...glassPair('Snowpoint Official', SnowpointOfficial, SnowpointOfficialGlass),
+  ...glassPair('Snowpoint Full Map', SnowpointFull, SnowpointFullGlass),
+  ...glassPair('Route 217', Route217, Route217Glass),
+  ...glassPair('Lake Acuity', AcuityLakefront, AcuityLakefrontGlass),
   ...retire('Mt. Coronet', [[MtCoronet, 'topcut']]),
-  ...tag('Spear Pillar', [[SpearPillar, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar']]),
-  ...tag('Spear Pillar Glass', [[SpearPillarGlass, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Glass']]),
+  ...glassPair('Spear Pillar', SpearPillar, SpearPillarGlass),
   ...tag('Spear Pillar Hall of Origin', [[SpearPillarHall, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Hall of Origin']]),
-  ...tag('Spear Pillar Hall Champion', [[SpearPillarHallChampion, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Hall Champion']]),
+  ...glassPair('Spear Pillar Hall Champion', SpearPillarHallChampion, SpearPillarHallChampionGlass),
+  ...glassPair('Spear Pillar Sky Champion', SpearPillarSky, SpearPillarSkyGlass),
+  ...glassPair('Spear Pillar Cutscene Sky', SpearPillarCutscene, SpearPillarCutsceneGlass),
   ...tag('Spear Pillar Concept Art', [[SpearPillarArt, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Concept Art']]),
-  ...tag('Route 119', [[Route119, 'topcut'], ...PLACE_LAYOUTS['Route 119']]),
-  ...tag('Route 119 Glass', [[Route119Glass, 'topcut'], ...PLACE_LAYOUTS['Route 119 Glass']]),
-  ...tag('Route 119 Bridge', [[Route119Bridge, 'topcut'], ...PLACE_LAYOUTS['Route 119 Bridge']]),
-  ...tag('Route 119 Bridge Glass', [[Route119BridgeGlass, 'topcut'], ...PLACE_LAYOUTS['Route 119 Bridge Glass']]),
-  ...tag('Route 120', [[Route120, 'topcut'], ...PLACE_LAYOUTS['Route 120']]),
-  ...tag('Route 120 Glass', [[Route120Glass, 'topcut'], ...PLACE_LAYOUTS['Route 120 Glass']]),
+  ...glassPair('Route 119', Route119, Route119Glass),
+  ...glassPair('Route 119 Bridge', Route119Bridge, Route119BridgeGlass),
+  ...glassPair('Route 120', Route120, Route120Glass),
   ...retire('Ghost', [[Ghost, 'topcut']]),
   ...retire('Ghost Pixel', [[GhostPixel, 'topcut']]),
   ...retire('Ghost Pixel Dense', [[GhostPixelDense, 'topcut']]),
@@ -107,11 +115,9 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...retire('Paldea', [[Paldea, 'topcut']]),
   ...tag('Unova', [[Unova, 'topcut']]),
   ...tag('Pokédex', [[Pokedex, 'topcut'], [PokedexChampion, 'champion']]),
-  ...tag('Trading Card Classic', [[TradingCardClassic, 'champion']]),
-  ...tag('Trading Card Modern', [[TradingCardModern, 'champion']]),
-  ...tag('Trading Card Classic Photo', [[TradingCardClassicPhoto, 'champion']]),
-  ...tag('Trading Card Modern Photo', [[TradingCardModernPhoto, 'champion']]),
-  ...retire('Trading Card', [[TradingCard, 'champion']]),
+  ...pair('Trading Card', 'classic', [[TradingCardClassic, 'champion']], 'Trading Card Modern', 'modern', [[TradingCardModern, 'champion']]),
+  ...pair('Trading Card Photo', 'classic', [[TradingCardClassicPhoto, 'champion']], 'Trading Card Photo Modern', 'modern', [[TradingCardModernPhoto, 'champion']]),
+  ...retire('Trading Card (Old)', [[TradingCard, 'champion']]),
   ...tag('Scarlet Book', [[ScarletBook, 'topcut'], ...PLACE_LAYOUTS['Scarlet Book']]),
   ...tag('Violet Book', [[VioletBook, 'topcut'], ...PLACE_LAYOUTS['Violet Book']]),
   ...tag('Terastal', [[TerastalTopCut, 'topcut'], ...TerastalLayouts]),

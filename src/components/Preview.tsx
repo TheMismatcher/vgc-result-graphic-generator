@@ -1,17 +1,19 @@
 // Live preview of the selected template, the template picker, and the download button.
 
-import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { useLayoutEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
 import type { StandingsLayout, Template } from '../templates/types'
 import { STANDINGS_LAYOUTS } from '../templates/registry'
 import { copyPng, downloadPng, slugify } from '../lib/exportImage'
 import { brandVars, useBrand } from '../brand'
 import { useDisplay } from '../lib/display'
+import { BackdropContext, DEFAULT_OPACITY, isBackdropTemplate, opacityVars, readBackdrop, startDrag, useBackdrop } from '../lib/backdrop'
+import type { BackdropPhoto } from '../types'
 import { useDialog } from './Dialog'
 import { Button, Card } from './ui'
 
 /** Shows a fixed-size graphic scaled down to fit its container. */
 export function Scaled({ width, height, maxWidth, children, nodeRef }: { width: number; height: number; maxWidth?: number; children: ReactNode; nodeRef?: React.Ref<HTMLDivElement> }) {
-  const vars = brandVars(useBrand())
+  const vars = { ...brandVars(useBrand()), ...opacityVars(useBackdrop().opacity) }
   const box = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(0.4)
   useLayoutEffect(() => {
@@ -55,6 +57,22 @@ export function Preview<T extends Template>({
   const [copied, setCopied] = useState(false)
   const { showMegas, setShowMegas, showCP, setShowCP, cpEvent, setCpEvent } = useDisplay()
   const dialog = useDialog()
+  // Custom Glass: the photo is dragged on the preview; the live position stays local until the drag ends.
+  const backdropCtx = useBackdrop()
+  const { backdrop, setBackdrop } = backdropCtx
+  const [dragging, setDragging] = useState<BackdropPhoto | null>(null)
+  const custom = isBackdropTemplate(template.id)
+  // Paired styles (Solid / Glass, Classic / Modern): the same style and layout, the other look.
+  const family = (t: T) => t.variantOf ?? t.style
+  const twin = template.look && templates.find((t) => t.look && t.look !== template.look && family(t) === family(template) && t.layout === template.layout)
+  const looks = twin ? (['solid', 'glass', 'classic', 'modern'] as const).filter((k) => k === template.look || k === twin.look) : []
+  const drag = (e: PointerEvent) => {
+    if (!custom || !backdrop || !node.current) return
+    startDrag(e, node.current, backdrop, template.width, template.height, setDragging, (b) => {
+      setBackdrop(b)
+      setDragging(null)
+    })
+  }
 
   const copy = async () => {
     if (!node.current) return
@@ -124,10 +142,37 @@ export function Preview<T extends Template>({
         <p className="-mt-2 text-xs text-slate-500">Official 2027 CP table. Placings below the attendance kicker earn 0 and show no CP; attendance uses the Masters count (or the total if Masters is blank).</p>
       )}
 
-      <div className="rounded-xl bg-slate-100 p-2">
-        <Scaled width={template.width} height={template.height} nodeRef={node}>
-          {render(template)}
-        </Scaled>
+      {twin && (
+        <div className="flex items-center gap-3 text-sm text-slate-700">
+          {looks.includes('glass') ? 'Panels' : 'Card'}
+          <div className="flex overflow-hidden rounded-lg border border-slate-300" role="radiogroup" aria-label="Look">
+            {looks.map((k) => (
+              <button
+                key={k}
+                type="button"
+                role="radio"
+                aria-checked={template.look === k}
+                onClick={() => template.look !== k && onSelect(twin.id)}
+                className={`px-3 py-1 font-semibold ${template.look === k ? 'bg-[#b3121b] text-white' : 'bg-white text-slate-700 hover:bg-slate-50'}`}
+              >
+                {k[0].toUpperCase() + k.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {custom && <BackdropControls glass={template.look !== 'solid'} />}
+
+      <div
+        className={`rounded-xl bg-slate-100 p-2 ${custom && backdrop ? 'cursor-grab touch-none select-none active:cursor-grabbing' : ''}`}
+        onPointerDown={drag}
+      >
+        <BackdropContext.Provider value={{ ...backdropCtx, backdrop: dragging ?? backdrop }}>
+          <Scaled width={template.width} height={template.height} nodeRef={node}>
+            {render(template)}
+          </Scaled>
+        </BackdropContext.Provider>
       </div>
 
       {showTemplates &&
@@ -162,6 +207,73 @@ export function Preview<T extends Template>({
   )
 }
 
+/** Custom Glass: upload, zoom, centre and remove the background photo. */
+function BackdropControls({ glass }: { glass: boolean }) {
+  const { backdrop, setBackdrop, opacity, setOpacity } = useBackdrop()
+  const mode = glass ? 'glass' : 'solid'
+  const dialog = useDialog()
+  const [busy, setBusy] = useState(false)
+  const upload = async (file?: File) => {
+    if (!file) return
+    setBusy(true)
+    try {
+      setBackdrop(await readBackdrop(file))
+    } catch (e) {
+      dialog.notify(`Couldn't use that photo: ${e instanceof Error ? e.message : e}`)
+    } finally {
+      setBusy(false)
+    }
+  }
+  return (
+    <div className="space-y-2 rounded-xl border border-slate-200 p-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <h3 className="mr-auto text-xs font-semibold uppercase tracking-wide text-slate-500">Background photo</h3>
+        <label className="inline-flex cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50 focus-within:ring-2 focus-within:ring-blue-200">
+          {busy ? 'Loading…' : backdrop ? 'Change photo' : 'Upload photo'}
+          <input type="file" accept="image/*" className="sr-only" onChange={(e) => { upload(e.target.files?.[0]); e.target.value = '' }} />
+        </label>
+        {backdrop && <Button onClick={() => setBackdrop({ ...backdrop, x: 0.5, y: 0.5, zoom: 1 })}>Reset position</Button>}
+        {backdrop && <Button variant="danger" onClick={() => setBackdrop(null)}>Remove</Button>}
+      </div>
+      {backdrop ? (
+        <>
+          <label className="flex items-center gap-3 text-sm text-slate-700">
+            <span className="w-14">Zoom</span>
+            <input
+              type="range"
+              min={1}
+              max={3}
+              step={0.01}
+              value={backdrop.zoom}
+              onChange={(e) => setBackdrop({ ...backdrop, zoom: Number(e.target.value) })}
+              className="flex-1 accent-[#b3121b]"
+            />
+          </label>
+          <p className="text-xs text-slate-500">Drag the preview to move the photo. Panel and number colours come from the Branding tab.</p>
+        </>
+      ) : (
+        <p className="text-xs text-slate-500">Upload any photo for the background; you can drag it into place. Panel and number colours come from the Branding tab.</p>
+      )}
+      <label className="flex items-center gap-3 text-sm text-slate-700">
+        <span className="w-14">Opacity</span>
+        <input
+          type="range"
+          min={0}
+          max={1}
+          step={0.01}
+          value={opacity[mode]}
+          onChange={(e) => setOpacity({ ...opacity, [mode]: Number(e.target.value) })}
+          className="flex-1 accent-[#b3121b]"
+        />
+        <span className="w-10 text-right tabular-nums text-slate-500">{Math.round(opacity[mode] * 100)}%</span>
+        <button type="button" className="text-xs font-semibold text-slate-500 hover:text-slate-800" onClick={() => setOpacity({ ...opacity, [mode]: DEFAULT_OPACITY[mode] })}>
+          Default
+        </button>
+      </label>
+    </div>
+  )
+}
+
 /**
  * Standings picker: choose a layout, then a style (the look). Every layout can be picked: if the
  * current style doesn't have it yet, the first style that does is used. Style cards preview each
@@ -171,8 +283,10 @@ export function Preview<T extends Template>({
 export function StylePicker<T extends Template>({ templates, current, onSelect, render }: { templates: T[]; current: T; onSelect: (id: string) => void; render: (t: T) => ReactNode }) {
   // Retired styles stay hidden unless asked for (the current one always shows, so a saved pick isn't lost).
   const [showRetired, setShowRetired] = useState(false)
+  // The other half of a Light / Glass pair has no card: its card is the pair's (`variantOf`).
+  const currentStyle = current.variantOf ?? current.style
   const retiredCount = new Set(templates.filter((t) => t.retired).map((t) => t.style)).size
-  const styles = [...new Set(templates.filter((t) => showRetired || !t.retired || t.style === current.style).map((t) => t.style!))]
+  const styles = [...new Set(templates.filter((t) => !t.variantOf && (showRetired || !t.retired || t.style === currentStyle)).map((t) => t.style!))]
   const inStyle = (style: string) => templates.filter((t) => t.style === style)
   const find = (style: string, layout?: StandingsLayout) => inStyle(style).find((t) => t.layout === layout)
   // What a style opens as when it doesn't have the chosen layout: Top Cut, then whatever it has.
@@ -226,7 +340,7 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
                 type="button"
                 title={own ? undefined : `${style} isn't made for this layout yet, so it opens as ${STANDINGS_LAYOUTS.find((l) => l.id === target.layout)?.label ?? 'its own layout'}`}
                 onClick={() => onSelect(target.id)}
-                className={`rounded-xl border-2 p-1.5 text-left transition ${style === current.style ? 'border-[#b3121b] bg-red-50' : own ? 'border-slate-200 hover:border-slate-400' : 'border-dashed border-slate-300 hover:border-slate-500'}`}
+                className={`rounded-xl border-2 p-1.5 text-left transition ${style === currentStyle ? 'border-[#b3121b] bg-red-50' : own ? 'border-slate-200 hover:border-slate-400' : 'border-dashed border-slate-300 hover:border-slate-500'}`}
               >
                 <div className="pointer-events-none mb-1.5 overflow-hidden rounded-md" aria-hidden>
                   <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>

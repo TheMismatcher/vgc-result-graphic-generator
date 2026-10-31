@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BrandContext, resolveBrand } from './brand'
+import { BackdropContext, DEFAULT_OPACITY } from './lib/backdrop'
 import { DisplayContext, type Display } from './lib/display'
 import { cpEventFor } from './lib/cp'
 import { initialState, isUnchanged, usePersistentState } from './lib/state'
@@ -54,8 +55,16 @@ export default function App() {
     setState(next)
   }
 
+  const backdrop = {
+    backdrop: state.backdrop ?? null,
+    setBackdrop: (b: typeof state.backdrop) => setState((s) => ({ ...s, backdrop: b })),
+    opacity: state.customPanels ?? DEFAULT_OPACITY,
+    setOpacity: (o: typeof DEFAULT_OPACITY) => setState((s) => ({ ...s, customPanels: o })),
+  }
+
   return (
     <BrandContext.Provider value={brand}>
+    <BackdropContext.Provider value={backdrop}>
     <DisplayContext.Provider value={display}>
     <div className="min-h-screen bg-slate-100">
       <header className="bg-[#111]">
@@ -92,10 +101,10 @@ export default function App() {
                 }}
               />
             </label>
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...sampleState(), brand: state.brand }, 'Load sample replaces everything on every tab (standings, usage, bracket, replay, team battle, and regional results). Branding is kept.')}>
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...sampleState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels }, 'Load sample replaces everything on every tab (standings, usage, bracket, replay, team battle, and regional results). Branding is kept.')}>
               Load sample
             </Button>
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...initialState(), brand: state.brand }, 'Start over clears the tournament, players, usage, bracket, replay, team battle, and regional results. Branding is kept.')}>
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...initialState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels }, 'Start over clears the tournament, players, usage, bracket, replay, team battle, and regional results. Branding is kept.')}>
               Start over
             </Button>
           </div>
@@ -124,6 +133,7 @@ export default function App() {
       </main>
     </div>
     </DisplayContext.Provider>
+    </BackdropContext.Provider>
     </BrandContext.Provider>
   )
 }

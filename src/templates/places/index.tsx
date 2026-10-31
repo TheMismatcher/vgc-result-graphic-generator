@@ -15,8 +15,12 @@
 //   stone panels; the champion sits on the platform's own glass floor tile (hall-of-origin-floor.png).
 // - Spear Pillar: Platinum's Spear Pillar map (Bulbapedia rip) with the NPCs painted out using the
 //   floor's own repeating texture, and the Brilliant Diamond / Shining Pearl concept art.
-// - Snowpoint City, Route 217, Acuity Lakefront: Platinum's own maps (Bulbapedia rips); the walking NPCs and the
+// - Snowpoint City, Route 217, Lake Acuity: Platinum's own maps (Bulbapedia rips); the walking NPCs and the
 //   half-buried trainers are painted out with tile-aligned copies of the snow around them (the Ice Rock stays).
+//   Snowpoint Full Map: the whole town (temple to docks) widened to 4:5 with the map's own tiles: the right edge
+//   repeats each row's last 32px (forest, harbour wall, sea), the left gets the 32px forest tile (snowpoint-full-pt.png).
+// - Custom Glass: the user's own photo (uploaded and dragged into place on the Preview) behind dark glass
+//   panels whose lines and place numbers use the Branding tab's colours (.pl-custom).
 
 import { useEffect, useState } from 'react'
 import type { StandingsTemplate } from '../types'
@@ -28,8 +32,9 @@ import spearPillar from './spear-pillar-pt.png'
 import hallOfOrigin from './hall-of-origin-pt.png'
 import spearPillarArt from './spear-pillar-bdsp-art.jpg'
 import snowpoint from './snowpoint-pt.png'
+import snowpointFull from './snowpoint-full-pt.png'
 import route217 from './route-217-pt.png'
-import acuity from './acuity-lakefront-pt.png'
+import lakeAcuity from './lake-acuity-pt.png'
 import glimwood from './glimwood-tangle-swsh.jpg'
 import teraStellar from './terastal-stellar-sv.jpg'
 import maxRaid from './max-raid-battle-art.jpg'
@@ -37,6 +42,7 @@ import scarletBookCover from './scarlet-book-cover-sv.jpg'
 import violetBookCover from './violet-book-cover-sv.jpg'
 import scarletBookSquare from './scarlet-book-square-sv.jpg'
 import violetBookSquare from './violet-book-square-sv.jpg'
+import { BackdropImage } from '../../lib/backdrop'
 import '../eras/eras.css'
 import './places.css'
 
@@ -104,12 +110,14 @@ export const R201: Crop = { src: route201, sx: 0, sy: 0, sw: 360 }
 export const SPEAR: Crop = { src: spearPillar, sx: 0, sy: 110, sw: 351 }
 // Hall of Origin map, same framing as Spear Pillar: the glass platform and Arceus under the header, stairs down the middle.
 export const HALL: Crop = { src: hallOfOrigin, sx: 0, sy: 110, sw: 351 }
-// Snowpoint City (512x864): full width from the houses down past the Gym, Pokémon Center and Mart to the harbour fence.
-export const SNOWPOINT: Crop = { src: snowpoint, sx: 0, sy: 112, sw: 512 }
+// Snowpoint City (512x864): full width from the Gym down past the Pokémon Center and Mart to the docks, the ship and the icy sea.
+export const SNOWPOINT: Crop = { src: snowpoint, sx: 0, sy: 224, sw: 512 }
+// The whole of Snowpoint (691x864 = 4:5), from the temple to the icy sea; square frames take the middle.
+export const SNOWPOINT_FULL: Crop = { src: snowpointFull, sx: 0, sy: 86, sw: 691 }
 // Route 217 (north end of the 528x1589 map, trimmed to 528x700): the tall grass and the two cabins in the blizzard.
 export const R217: Crop = { src: route217, sx: 0, sy: 0, sw: 528 }
-// Acuity Lakefront (1008x797) at an exact 2x: the frozen pond, the stepped ledges and the tall grass.
-export const ACUITY: Crop = { src: acuity, sx: 240, sy: 60, sw: 540 }
+// Lake Acuity (752x612) at full height, centred on Uxie's cavern island; square frames take the middle (sy 60).
+export const ACUITY: Crop = { src: lakeAcuity, sx: 105, sy: 60, sw: 490 }
 // Official art: each crop is the 4:5 window over the art's focal point (they're scaled up smoothly).
 // Frame from the official 24-hour 'Pokémon Live Camera' stream (Oct 2019); the window skips a Pokémon at the far right.
 export const GLIMWOOD: Crop = { src: glimwood, sx: 720, sy: 2, sw: 659, smooth: true }
@@ -156,12 +164,42 @@ export const SpearPillar = makePlace('place-spear-pillar', 'Top Cut (Spear Pilla
 export const SpearPillarGlass = makePlace('place-spear-pillar-glass', 'Top Cut (Spear Pillar Glass)', 'Spear Pillar map with see-through panels so the pillars show.', SPEAR, 'pl-spear', 'glass')
 export const SpearPillarHall = makePlace('place-spear-pillar-hall', 'Top Cut (Spear Pillar Hall of Origin)', 'Platinum’s Hall of Origin map with Arceus; the champion stands on the Hall’s glass floor tiles.', HALL, 'pl-spear', 'hoo')
 export const SpearPillarHallChampion = makePlace('place-spear-pillar-hall-floor', 'Top Cut (Spear Pillar Hall Champion)', 'The Spear Pillar map, with only the champion standing on the Hall of Origin’s glass floor tiles.', SPEAR, 'pl-spear', 'hoo')
+export const SpearPillarHallChampionGlass = makePlace('place-spear-pillar-hall-floor-glass', 'Top Cut (Spear Pillar Hall Champion Glass)', 'The Spear Pillar map with see-through panels; the champion stands on the Hall of Origin’s glass floor tiles.', SPEAR, 'pl-spear', 'hoo glass')
+// The climax of Diamond & Pearl: the sky over Spear Pillar torn open in red, blue and green streaks (recreated in CSS).
+export const SpearPillarSky = makePlace('place-spear-pillar-sky', 'Top Cut (Spear Pillar Sky Champion)', 'The Spear Pillar map; the champion’s panel is the torn red, blue and green sky from Diamond & Pearl’s climax.', SPEAR, 'pl-spear', 'sky')
+export const SpearPillarSkyGlass = makePlace('place-spear-pillar-sky-glass', 'Top Cut (Spear Pillar Sky Champion Glass)', 'Spear Pillar with see-through panels; the champion’s panel is the torn red, blue and green sky.', SPEAR, 'pl-spear', 'sky glass')
+export const SpearPillarCutscene = makePlace('place-spear-pillar-cutscene', 'Top Cut (Spear Pillar Cutscene Sky)', 'The Spear Pillar map; the champion’s panel is the streaked sky copied from Diamond & Pearl’s Spear Pillar cutscene.', SPEAR, 'pl-spear', 'sky dsky')
+export const SpearPillarCutsceneGlass = makePlace('place-spear-pillar-cutscene-glass', 'Top Cut (Spear Pillar Cutscene Sky Glass)', 'Spear Pillar with see-through panels; the champion’s panel is the streaked sky from the Diamond & Pearl cutscene.', SPEAR, 'pl-spear', 'sky dsky glass')
 export const SpearPillarArt = makePlace('place-spear-pillar-art', 'Top Cut (Spear Pillar Concept Art)', 'Official Brilliant Diamond / Shining Pearl concept art of Spear Pillar behind dark panels.', SPEAR_ART, 'pl-spear', 'glass art')
 export const ScarletBook = makePlace('art-scarlet-book', 'Top Cut (Scarlet Book)', 'The Scarlet Book’s cover (official art, laid flat) edge to edge: Koraidon’s silhouette and gold foil behind crimson panels.', SCARLET_BOOK_COVER, 'pl-scarlet', 'pl-art pl-book')
 export const VioletBook = makePlace('art-violet-book', 'Top Cut (Violet Book)', 'The Violet Book’s cover (official art, laid flat) edge to edge: Miraidon’s silhouette and gold foil behind indigo panels.', VIOLET_BOOK_COVER, 'pl-violet', 'pl-art pl-book')
-export const SnowpointOfficial = makePlace('place-snowpoint', 'Top Cut (Snowpoint Official)', 'Platinum’s Snowpoint City map (people painted out): the Gym, Pokémon Center and Mart under snow-capped pines.', SNOWPOINT, 'pl-snow', 'pl-art')
+export const SnowpointOfficial = makePlace('place-snowpoint', 'Top Cut (Snowpoint Official)', 'Platinum’s Snowpoint City map (people painted out): the Gym, Pokémon Center and Mart down to the docks and the icy sea.', SNOWPOINT, 'pl-snow', 'pl-art')
 export const Route217 = makePlace('place-route-217', 'Top Cut (Route 217)', 'Platinum’s Route 217 map (trainers painted out): deep snow, tall grass and the two cabins.', R217, 'pl-snow', 'pl-art')
-export const AcuityLakefront = makePlace('place-acuity-lakefront', 'Top Cut (Acuity Lakefront)', 'Platinum’s Acuity Lakefront map at 2x: the frozen pond, stepped ledges and snowy pines.', ACUITY, 'pl-snow', 'pl-art')
+export const AcuityLakefront = makePlace('place-acuity-lakefront', 'Top Cut (Lake Acuity)', 'Platinum’s Lake Acuity map: the lake and Uxie’s cavern island ringed by snowy pines.', ACUITY, 'pl-snow', 'pl-art')
 export const SnowpointOfficialGlass = makePlace('place-snowpoint-glass', 'Top Cut (Snowpoint Official Glass)', 'Snowpoint City’s map with see-through navy panels so more of the town shows.', SNOWPOINT, 'pl-snow', 'pl-art glass')
 export const Route217Glass = makePlace('place-route-217-glass', 'Top Cut (Route 217 Glass)', 'Route 217’s map with see-through navy panels so more of the snowfield shows.', R217, 'pl-snow', 'pl-art glass')
-export const AcuityLakefrontGlass = makePlace('place-acuity-lakefront-glass', 'Top Cut (Acuity Lakefront Glass)', 'Acuity Lakefront’s map with see-through navy panels so the pond and ledges show.', ACUITY, 'pl-snow', 'pl-art glass')
+export const AcuityLakefrontGlass = makePlace('place-acuity-lakefront-glass', 'Top Cut (Lake Acuity Glass)', 'Lake Acuity’s map with see-through navy panels so the lake and Uxie’s island show.', ACUITY, 'pl-snow', 'pl-art glass')
+export const SnowpointFull = makePlace('place-snowpoint-full', 'Top Cut (Snowpoint Full Map)', 'All of Platinum’s Snowpoint City, from the temple to the docks and the icy sea, with the forest carried out to the edges.', SNOWPOINT_FULL, 'pl-snow', 'pl-art')
+export const SnowpointFullGlass = makePlace('place-snowpoint-full-glass', 'Top Cut (Snowpoint Full Map Glass)', 'All of Snowpoint City from the temple to the docks, with see-through navy panels.', SNOWPOINT_FULL, 'pl-snow', 'pl-art glass')
+
+const makeCustom = (light: boolean): StandingsTemplate => ({
+  id: light ? 'custom-glass-light' : 'custom-glass',
+  name: light ? 'Top Cut (Custom Glass Light)' : 'Top Cut (Custom Glass)',
+  description: light
+    ? 'Your own photo behind white panels edged in your branding colours. Upload it above the preview and drag to frame it.'
+    : 'Your own photo behind see-through glass panels in your branding colours. Upload it above the preview and drag to frame it.',
+  kind: 'standings',
+  width: W,
+  height: H,
+  maxPlayers: 8,
+  Component: ({ data }) => (
+    <div className={`dmv pl pl-custom pl-art ${light ? 'light' : ''}`} style={{ width: W, height: H }}>
+      <BackdropImage width={W} height={H} />
+      <div className="pl-shade" />
+      <LocationHead data={data} cls="pl" kicker="" />
+      <LocationRows data={data} cls="pl" />
+    </div>
+  ),
+})
+export const CustomGlass = makeCustom(false)
+export const CustomLight = makeCustom(true)

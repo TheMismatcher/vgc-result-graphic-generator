@@ -455,21 +455,88 @@
    near-solid bracket boxes since the art is busy behind the lines. */
 .themed.theme-place.pl-glim .m8-row-place,
 .themed.theme-place.pl-tera .m8-row-place,
-.themed.theme-place.pl-dyna .m8-row-place {
+.themed.theme-place.pl-dyna .m8-row-place,
+.themed.theme-place.pl-custom:not(.light) .m8-row-place {
   color: var(--pl-accent);
 }
 .themed.theme-place.pl-glim .br-entry,
 .themed.theme-place.pl-tera .br-entry,
-.themed.theme-place.pl-dyna .br-entry {
+.themed.theme-place.pl-dyna .br-entry,
+.themed.theme-place.pl-custom:not(.light) .br-entry {
   background: color-mix(in srgb, var(--pl-dark) 88%, transparent);
 }
 .themed.theme-place.pl-glim .br-line,
 .themed.theme-place.pl-tera .br-line,
-.themed.theme-place.pl-dyna .br-line {
+.themed.theme-place.pl-dyna .br-line,
+.themed.theme-place.pl-custom:not(.light) .br-line {
   border-color: var(--pl-accent);
 }
 .themed.theme-place.pl-glim .br-line-h,
 .themed.theme-place.pl-tera .br-line-h,
-.themed.theme-place.pl-dyna .br-line-h {
+.themed.theme-place.pl-dyna .br-line-h,
+.themed.theme-place.pl-custom:not(.light) .br-line-h {
   background: var(--pl-accent);
+}
+
+/* Custom Glass: place numbers in whichever ink reads on the brand colours. */
+.themed.theme-place.pl-custom .p8-place,
+.themed.theme-place.pl-custom .p4-place,
+.themed.theme-place.pl-custom .m8-place {
+  color: var(--brand-red-ink);
+}
+.themed.theme-place.pl-custom .dmv-panel:nth-child(even) .p8-place,
+.themed.theme-place.pl-custom .dmv-panel:nth-child(even) .p4-place,
+.themed.theme-place.pl-custom .dmv-panel:nth-child(even) .m8-place {
+  color: var(--brand-blue-ink);
+}
+.themed.theme-place.pl-custom .first .p8-place,
+.themed.theme-place.pl-custom .first .p4-place,
+.themed.theme-place.pl-custom .first .m8-place {
+  color: var(--pl-first-ink);
+}
+
+/* ---------- Spear Pillar Sky Champion: the champion in the torn red / blue / green sky ---------- */
+.themed.theme-place.sky .dmv-panel.first,
+.themed.theme-place.sky .m8-card:first-child,
+.themed.theme-place.sky .ch-card,
+.themed.theme-place.sky .br-champ,
+.themed.theme-place.sky .first .p4-plate,
+.themed.theme-place.sky .us-card:first-child,
+.themed.theme-place.sky .vs-panel.won,
+.themed.theme-place.sky .tb-card.won {
+  background: var(--sky);
+  border-color: #fff;
+  box-shadow: var(--sky-glow);
+}
+.themed.theme-place.sky .first .p4-plate {
+  border-left-color: #fff;
+}
+.themed.theme-place.sky .m8-card:first-child .m8-name,
+.themed.theme-place.sky .first .p8-name,
+.themed.theme-place.sky .first .p4-name,
+.themed.theme-place.sky .first .m8-name,
+.themed.theme-place.sky .first .p8-sub,
+.themed.theme-place.sky .first .p4-sub,
+.themed.theme-place.sky .first .m8-sub,
+.themed.theme-place.sky .ch-mon-name,
+.themed.theme-place.sky .ch-item-name,
+.themed.theme-place.sky .br-champ-label {
+  color: #fff;
+  text-shadow: 2px 2px 0 rgba(8, 6, 20, 0.9);
+}
+.themed.theme-place.sky .m8-card:first-child .m8-place,
+.themed.theme-place.sky .first .p8-place,
+.themed.theme-place.sky .first .p4-place,
+.themed.theme-place.sky .first .m8-place,
+.themed.theme-place.sky .ch-banner,
+.themed.theme-place.sky .vs-banner,
+.themed.theme-place.sky .tb-banner,
+.themed.theme-place.sky .vs-panel.won .vs-score {
+  background: var(--sky-place);
+  border-color: #fff;
+  color: #fff;
+}
+.themed.theme-place.sky .first .dmv-photo-empty,
+.themed.theme-place.sky .m8-card:first-child .dmv-photo-empty {
+  background: rgba(8, 6, 20, 0.35);
 }

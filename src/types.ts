@@ -93,8 +93,20 @@ export interface TeamBattle {
   sets: TeamSet[]
 }
 
+/** Custom Glass background photo: x/y = position in the frame (0..1, 0.5 = centred), zoom >= 1. */
+export interface BackdropPhoto {
+  src: string // JPEG data URL
+  w: number
+  h: number
+  x: number
+  y: number
+  zoom: number
+}
+
 export interface AppState {
   brand: BrandSettings
+  backdrop?: BackdropPhoto | null // Custom Glass photo; belongs to the user like branding (not saved in tournament files)
+  customPanels?: { glass: number; solid: number } // Custom Glass panel opacity (0..1) for each Panels setting
   settings: { showMegas: boolean; showCP: boolean }
   tournament: Tournament
   players: Player[] // ordered by placing: index 0 = 1st place

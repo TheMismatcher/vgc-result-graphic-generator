@@ -47,7 +47,7 @@ export const initialState = (): AppState => ({
  */
 export function isUnchanged(state: AppState, baselines: AppState[]): boolean {
   const key = (s: AppState) =>
-    JSON.stringify({ ...s, brand: null, settings: null, templates: null, tournament: { ...s.tournament, date: null } }).replace(
+    JSON.stringify({ ...s, brand: null, backdrop: null, customPanels: null, settings: null, templates: null, tournament: { ...s.tournament, date: null } }).replace(
       /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g,
       'id',
     )

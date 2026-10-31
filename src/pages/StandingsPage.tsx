@@ -157,7 +157,7 @@ export function StandingsPage({
       </Card>
       
 
-      <div className="lg:sticky lg:top-4 lg:self-start lg:max-h-[calc(80vh-10rem)]">
+      <div className="lg:sticky lg:top-4 lg:self-start lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto lg:overscroll-contain">
         <Preview
           templates={STANDINGS_TEMPLATES}
           selectedId={state.templates.standings}

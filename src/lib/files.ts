@@ -1,5 +1,5 @@
 // Save a tournament to a file and open it again later (another computer, a co-organizer, a backup).
-// Branding is not included: it belongs to whoever is using the app.
+// Branding (and the Custom Glass photo) is not included: it belongs to whoever is using the app.
 
 import type { AppState } from '../types'
 import { initialState } from './state'
@@ -9,7 +9,7 @@ const APP = 'dmv-generator'
 const VERSION = 1
 
 export function saveTournamentFile(state: AppState) {
-  const { brand: _brand, ...data } = state
+  const { brand: _brand, backdrop: _backdrop, customPanels: _customPanels, ...data } = state
   const file = { app: APP, version: VERSION, savedAt: new Date().toISOString(), data }
   const blob = new Blob([JSON.stringify(file)], { type: 'application/json' })
   const a = document.createElement('a')
@@ -35,6 +35,8 @@ export async function openTournamentFile(file: File, current: AppState): Promise
     ...base,
     ...d,
     brand: current.brand,
+    backdrop: current.backdrop,
+    customPanels: current.customPanels,
     settings: { ...base.settings, ...d.settings },
     templates: { ...base.templates, ...d.templates },
   }
