@@ -1,0 +1,95 @@
+/* Terastal Prism / Dynamax Cloud: backgrounds, plus the colour variables that the shared place rules
+   (places/places.css for Top Cut, themes/places.css for the other layouts) read. */
+.tp-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(1200px 900px at 50% 30%, #1a1f4a 0%, #0b0d26 55%, #05060f 100%);
+}
+.ds-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #3a0618 0%, #1c0410 50%, #0b0208 100%);
+}
+.ds-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30%;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 40, 100, 0.4), transparent 70%);
+}
+
+.pl-tprism {
+  --pl-panel: rgba(10, 12, 34, 0.72);
+  --pl-line: rgba(220, 232, 255, 0.55);
+  --pl-inner: inset 0 0 16px rgba(170, 200, 255, 0.14);
+  --pl-ink: #fff;
+  --pl-sub: #cfdcff;
+  --pl-accent: #bfe4ff;
+  --pl-a: #34407e;
+  --pl-b: #4b2f78;
+  --pl-first: #ffffff;
+  --pl-first-ink: #141836;
+  --pl-radius: 10px;
+  --pl-drop: 0 0 18px rgba(140, 180, 255, 0.25);
+  --pl-text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  --pl-dark: #0a0c22;
+  --pl-photo: linear-gradient(160deg, rgba(58, 70, 160, 0.6), rgba(10, 12, 34, 0.9));
+  --pl-prism: conic-gradient(from 200deg, #ff6b9a, #ffb347, #fff36b, #7dff8a, #5fe3ff, #7d8bff, #d57dff, #ff6b9a);
+}
+.pl-dcloud {
+  --pl-panel: rgba(30, 4, 18, 0.74);
+  --pl-line: rgba(255, 70, 120, 0.7);
+  --pl-inner: inset 0 0 16px rgba(255, 40, 110, 0.18);
+  --pl-ink: #fff;
+  --pl-sub: #ffc2d6;
+  --pl-accent: #ff7aa6;
+  --pl-a: #8e0f37;
+  --pl-b: #5a0b33;
+  --pl-first: #ff2f5f;
+  --pl-first-ink: #fff;
+  --pl-radius: 8px;
+  --pl-drop: 0 0 18px rgba(255, 30, 90, 0.35);
+  --pl-text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+  --pl-dark: #1c0410;
+  --pl-photo: linear-gradient(160deg, rgba(160, 20, 70, 0.6), rgba(30, 4, 18, 0.9));
+}
+
+/* The winner's panel: Terastal gets a prism border (gradient border-box behind the solid panel), Dynamax a
+   hot red energy edge. Works for the Top Cut row and the first card on every other layout. */
+.pl-tprism .pl-row.first,
+.themed.pl-tprism .dmv-panel.first,
+.themed.pl-tprism .m8-card:first-child,
+.themed.pl-tprism .br-champ {
+  border: 4px solid transparent;
+  background: linear-gradient(rgba(16, 18, 46, 0.86), rgba(16, 18, 46, 0.86)) padding-box, var(--pl-prism) border-box;
+  box-shadow: 0 0 26px rgba(200, 220, 255, 0.55);
+}
+.pl-dcloud .pl-row.first,
+.themed.pl-dcloud .dmv-panel.first,
+.themed.pl-dcloud .m8-card:first-child,
+.themed.pl-dcloud .br-champ {
+  border-color: #ff2f5f;
+  box-shadow: 0 0 0 2px rgba(255, 150, 180, 0.6), 0 0 34px rgba(255, 30, 90, 0.75), inset 0 0 26px rgba(255, 30, 90, 0.35);
+}
+/* Prism first-place number: white gem on the prism. */
+.pl-tprism .pl-row.first .pl-place {
+  background: var(--pl-prism);
+  color: #141836;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+/* Bracket pictures aren't MonSprites, so they get the rim with a CSS glow instead. */
+.themed.pl-tprism .br-entry img {
+  filter: drop-shadow(1px 0 0 #ff8fb6) drop-shadow(-1px 0 0 #8fd8ff) drop-shadow(0 1px 0 #fff38f) drop-shadow(0 -1px 0 #b79bff);
+}
+.themed.pl-dcloud .br-entry img {
+  filter: drop-shadow(0 0 3px rgba(255, 40, 100, 0.9));
+}
+.themed.pl-tprism .m8-row-place,
+.themed.pl-dcloud .m8-row-place {
+  color: var(--pl-accent);
+}
+.themed.pl-tprism .br-entry,
+.themed.pl-dcloud .br-entry {
+  background: color-mix(in srgb, var(--pl-dark) 88%, transparent);
+}

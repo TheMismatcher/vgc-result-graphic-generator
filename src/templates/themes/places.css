@@ -447,3 +447,26 @@
   color: #2e2628;
   text-shadow: none;
 }
+
+/* Official-art styles (Glimwood / Terastal / Dynamax): light row numbers on the dark glass, and
+   near-solid bracket boxes since the art is busy behind the lines. */
+.themed.theme-place.pl-glim .m8-row-place,
+.themed.theme-place.pl-tera .m8-row-place,
+.themed.theme-place.pl-dyna .m8-row-place {
+  color: var(--pl-accent);
+}
+.themed.theme-place.pl-glim .br-entry,
+.themed.theme-place.pl-tera .br-entry,
+.themed.theme-place.pl-dyna .br-entry {
+  background: color-mix(in srgb, var(--pl-dark) 88%, transparent);
+}
+.themed.theme-place.pl-glim .br-line,
+.themed.theme-place.pl-tera .br-line,
+.themed.theme-place.pl-dyna .br-line {
+  border-color: var(--pl-accent);
+}
+.themed.theme-place.pl-glim .br-line-h,
+.themed.theme-place.pl-tera .br-line-h,
+.themed.theme-place.pl-dyna .br-line-h {
+  background: var(--pl-accent);
+}

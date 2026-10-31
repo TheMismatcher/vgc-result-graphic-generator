@@ -6,18 +6,20 @@ import { getItem, getPokemon, sprites } from '../../data/dex'
 import { teraType } from '../../data/options'
 import { useBrand } from '../../brand'
 import { displayPokemon, useDisplay } from '../../lib/display'
+import { useFxSrc } from './monEffect'
 import './brand.css'
 
 /** A Pokémon render with its held item (and Tera type when the format uses it). */
 export function MonSprite({ mon, size, showTera, style }: { mon: Mon; size: number; showTera?: boolean; style?: CSSProperties }) {
   const { showMegas } = useDisplay()
+  const pokemon = mon.pokemon ? displayPokemon(mon, showMegas) : ''
+  const src = useFxSrc(pokemon ? sprites.render(pokemon) : '', mon) // Terastal / Dynamax look when a layout asks
   if (!mon.pokemon) return <div className="dmv-mon" style={{ width: size, height: size, ...style }} />
-  const pokemon = displayPokemon(mon, showMegas)
   const item = mon.item ? sprites.item(mon.item) : ''
   const tera = showTera ? teraType(mon.tera) : undefined
   return (
     <div className="dmv-mon" style={{ width: size, height: size, ...style }}>
-      <img className="render" src={sprites.render(pokemon)} alt={getPokemon(pokemon)?.name ?? ''} />
+      <img className="render" src={src} alt={getPokemon(pokemon)?.name ?? ''} />
       {item && <img className={`item ${sprites.itemIsPixel(mon.item) ? 'pixel' : ''}`} src={item} alt={getItem(mon.item)?.name ?? ''} />}
       {tera && <div className="tera" style={{ background: tera.color }} title={tera.name} />}
     </div>

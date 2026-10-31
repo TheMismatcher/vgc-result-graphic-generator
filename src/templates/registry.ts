@@ -26,8 +26,9 @@ import { EditorialNightLayouts, EditorialPaperLayouts } from './themes/editorial
 import { BattleTower, Ghost, Hoenn, MtCoronet, Pokedex, PokedexChampion, TradingCard } from './eras/more'
 import { GhostPixel, GhostPixelDense, GhostPixelGlass, GhostPixelGlassTeam, GhostPixelGlassLine } from './eras/ghostpixel'
 import { Glimwood, KantoGameBoy, Paldea, Route201, Snowpoint, Unova } from './eras'
-import { Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillar, SpearPillarArt, SpearPillarGlass, SpearPillarHall, SpearPillarHallChampion } from './places'
+import { DynamaxOfficial, GlimwoodOfficial, ScarletBook, VioletBook, ScarletBookFull, VioletBookFull, ScarletBookZoomed, VioletBookZoomed, TerastalOfficial, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillar, SpearPillarArt, SpearPillarGlass, SpearPillarHall, SpearPillarHallChampion } from './places'
 import { PLACE_LAYOUTS } from './themes/places'
+import { DynamaxCloud, DynamaxCloudLayouts, FX_SIDE_THEMES, sideFx, TerastalPrism, TerastalPrismLayouts } from './power/recreated'
 import { MosaicGradient, MosaicMono, MosaicSquaresGradient, MosaicSquaresMono, MosaicTintGlass, MosaicTintGlassShadow, MosaicTintSemiShadow, MosaicTintSolid, MosaicTintSolidShadow } from './mosaic'
 import { DynamaxTopCut, MegaTopCut, TerastalTopCut } from './power'
 import { DynamaxLayouts, MegaLayouts, TerastalLayouts } from './power/themes'
@@ -72,7 +73,8 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Arena Sunset', [[ArenaSunset, 'topcut'], ...ArenaSunsetLayouts]),
   ...tag('Battle Tower', [[BattleTower, 'topcut']]),
   ...tag('Glimwood Tangle', [[Glimwood, 'topcut']]),
-  ...tag('Route 201', [[Route201, 'topcut']]),
+  ...tag('Glimwood Tangle Official', [[GlimwoodOfficial, 'topcut'], ...PLACE_LAYOUTS['Glimwood Tangle Official']]),
+  ...retire('Route 201', [[Route201, 'topcut']]),
   ...tag('Route 201 Official', [[Route201Tiles, 'topcut'], ...PLACE_LAYOUTS['Route 201 Official']]),
   ...tag('Route 201 Official Glass', [[Route201TilesGlass, 'topcut'], ...PLACE_LAYOUTS['Route 201 Official Glass']]),
   ...tag('Snowpoint', [[Snowpoint, 'topcut']]),
@@ -95,16 +97,26 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...retire('Ghost Pixel Glass Team Box', [[GhostPixelGlassTeam, 'topcut']]),
   ...tag('Ghost Pixels', [[GhostPixelGlassLine, 'topcut'], ...GhostPixelLayouts]),
   ...tag('Kanto Game Boy', [[KantoGameBoy, 'topcut']]),
-  ...tag('Hoenn Gen 3', [[Hoenn, 'topcut']]),
-  ...tag('Paldea', [[Paldea, 'topcut']]),
+  ...retire('Hoenn Gen 3', [[Hoenn, 'topcut']]),
+  ...retire('Paldea', [[Paldea, 'topcut']]),
   ...tag('Unova', [[Unova, 'topcut']]),
   ...tag('Pokédex', [[Pokedex, 'topcut'], [PokedexChampion, 'champion']]),
   ...tag('Trading Card', [[TradingCard, 'champion']]),
+  ...tag('Scarlet Book', [[ScarletBook, 'topcut'], ...PLACE_LAYOUTS['Scarlet Book']]),
+  ...tag('Violet Book', [[VioletBook, 'topcut'], ...PLACE_LAYOUTS['Violet Book']]),
+  ...tag('Scarlet Book Full Cover', [[ScarletBookFull, 'topcut'], ...PLACE_LAYOUTS['Scarlet Book Full Cover']]),
+  ...tag('Violet Book Full Cover', [[VioletBookFull, 'topcut'], ...PLACE_LAYOUTS['Violet Book Full Cover']]),
+  ...retire('Scarlet Book Zoomed', [[ScarletBookZoomed, 'topcut'], ...PLACE_LAYOUTS['Scarlet Book Zoomed']]),
+  ...retire('Violet Book Zoomed', [[VioletBookZoomed, 'topcut'], ...PLACE_LAYOUTS['Violet Book Zoomed']]),
   ...tag('Terastal', [[TerastalTopCut, 'topcut'], ...TerastalLayouts]),
+  ...tag('Terastal Prism', [[TerastalPrism, 'topcut'], ...TerastalPrismLayouts]),
+  ...retire('Terastal Official', [[TerastalOfficial, 'topcut'], ...PLACE_LAYOUTS['Terastal Official']]),
   ...tag('Mega Evolution', [[MegaTopCut, 'topcut'], ...MegaLayouts]),
   ...tag('Dynamax', [[DynamaxTopCut, 'topcut'], ...DynamaxLayouts]),
+  ...tag('Dynamax Cloud', [[DynamaxCloud, 'topcut'], ...DynamaxCloudLayouts]),
+  ...retire('Dynamax Official', [[DynamaxOfficial, 'topcut'], ...PLACE_LAYOUTS['Dynamax Official']]),
 ]
-export const USAGE_TEMPLATES: UsageTemplate[] = [Usage, ...SIDE_THEMES.map((t) => makeUsage(t))]
-export const MATCH_TEMPLATES: MatchTemplate[] = [VsResult, ...SIDE_THEMES.map((t) => makeVsResult(t))]
+export const USAGE_TEMPLATES: UsageTemplate[] = [Usage, ...SIDE_THEMES.map((t) => makeUsage(t)), ...FX_SIDE_THEMES.map((t) => sideFx(makeUsage(t), t.fx))]
+export const MATCH_TEMPLATES: MatchTemplate[] = [VsResult, ...SIDE_THEMES.map((t) => makeVsResult(t)), ...FX_SIDE_THEMES.map((t) => sideFx(makeVsResult(t), t.fx))]
 export const DAY2_TEMPLATES: Day2Template[] = [Day2Clean, RegionalMosaic, RegionalMosaicContrast, EventEditorialPaper, EventEditorialNight] // first = the default
-export const TEAM_BATTLE_TEMPLATES: TeamBattleTemplate[] = [TeamBattle, TeamBattleLoud, TeamBattleWin, TeamBattleLoss, ...SIDE_THEMES.map((t) => makeTeamBattle('neutral', false, t))]
+export const TEAM_BATTLE_TEMPLATES: TeamBattleTemplate[] = [TeamBattle, TeamBattleLoud, TeamBattleWin, TeamBattleLoss, ...SIDE_THEMES.map((t) => makeTeamBattle('neutral', false, t)), ...FX_SIDE_THEMES.map((t) => sideFx(makeTeamBattle('neutral', false, t), t.fx))]

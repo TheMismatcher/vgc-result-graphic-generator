@@ -284,3 +284,142 @@
   color: #2e2628;
   border-right-color: #fff;
 }
+
+/* ---------- Official-art styles (Glimwood Tangle, Terastal, Dynamax) ----------
+   Dark glass over the art, colours picked from each piece. The variables also drive the theme layouts. */
+.pl-glim {
+  --pl-panel: rgba(6, 26, 24, 0.68);
+  --pl-line: rgba(124, 255, 196, 0.85);
+  --pl-inner: inset 0 0 18px rgba(124, 255, 196, 0.18);
+  --pl-ink: #fff;
+  --pl-sub: #c4f5e0;
+  --pl-accent: #7cffc4;
+  --pl-a: #1e8a68;
+  --pl-b: #2f6db0;
+  --pl-first: #ffe46b;
+  --pl-first-ink: #10241e;
+  --pl-radius: 16px;
+  --pl-drop: 0 0 22px rgba(124, 255, 196, 0.35);
+  --pl-text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  --pl-dark: #06201a;
+  --pl-photo: linear-gradient(160deg, rgba(30, 138, 104, 0.7), rgba(6, 26, 24, 0.9));
+}
+.pl-tera {
+  --pl-panel: rgba(10, 12, 34, 0.66);
+  --pl-line: rgba(236, 244, 255, 0.9);
+  --pl-inner: inset 0 0 18px rgba(170, 200, 255, 0.2);
+  --pl-ink: #fff;
+  --pl-sub: #cfdcff;
+  --pl-accent: #aee2ff;
+  --pl-a: #3a62d8;
+  --pl-b: #a33fc0;
+  --pl-first: #ffffff;
+  --pl-first-ink: #141836;
+  --pl-radius: 10px;
+  --pl-drop: 0 0 24px rgba(160, 200, 255, 0.45);
+  --pl-text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  --pl-dark: #0a0c22;
+  --pl-photo: linear-gradient(160deg, rgba(58, 98, 216, 0.6), rgba(10, 12, 34, 0.9));
+}
+.pl-dyna {
+  --pl-panel: rgba(34, 6, 28, 0.7);
+  --pl-line: rgba(255, 80, 150, 0.9);
+  --pl-inner: inset 0 0 18px rgba(255, 60, 140, 0.22);
+  --pl-ink: #fff;
+  --pl-sub: #ffc6e0;
+  --pl-accent: #ff7ab6;
+  --pl-a: #d01c5a;
+  --pl-b: #6c22a8;
+  --pl-first: #ff2f5f;
+  --pl-first-ink: #fff;
+  --pl-radius: 8px;
+  --pl-drop: 0 0 26px rgba(255, 40, 120, 0.5);
+  --pl-text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+  --pl-dark: #22041a;
+  --pl-photo: linear-gradient(160deg, rgba(208, 28, 90, 0.6), rgba(34, 6, 28, 0.9));
+}
+/* Scarlet / Violet Book: the straightened official book covers. Panels in the cover's own cloth colour,
+   edged with its gold foil (a thick rule and a thin inner rule, like the frame printed on the cover). */
+.pl-scarlet {
+  --pl-panel: rgba(58, 6, 14, 0.74);
+  --pl-line: #e9c63a;
+  --pl-inner: inset 0 0 0 5px rgba(58, 6, 14, 0.9), inset 0 0 0 7px rgba(246, 222, 110, 0.85);
+  --pl-ink: #fff6dc;
+  --pl-sub: #f6d9a0;
+  --pl-accent: #f6dc6e;
+  --pl-a: #b5132c;
+  --pl-b: #7c0c1e;
+  --pl-first: #f3d649;
+  --pl-first-ink: #3a0610;
+  --pl-radius: 6px;
+  --pl-drop: 0 6px 18px rgba(20, 0, 4, 0.55);
+  --pl-text-shadow: 0 2px 4px rgba(20, 0, 4, 0.9);
+  --pl-dark: #3a0610;
+  --pl-photo: linear-gradient(160deg, rgba(181, 19, 44, 0.75), rgba(58, 6, 14, 0.92));
+}
+.pl-violet {
+  --pl-panel: rgba(30, 16, 64, 0.74);
+  --pl-line: #e9d23a;
+  --pl-inner: inset 0 0 0 5px rgba(30, 16, 64, 0.9), inset 0 0 0 7px rgba(246, 232, 110, 0.85);
+  --pl-ink: #fbf6e2;
+  --pl-sub: #ddd0ff;
+  --pl-accent: #f4e46a;
+  --pl-a: #6a45c0;
+  --pl-b: #45288e;
+  --pl-first: #f1dd4a;
+  --pl-first-ink: #1e1040;
+  --pl-radius: 6px;
+  --pl-drop: 0 6px 18px rgba(8, 2, 24, 0.55);
+  --pl-text-shadow: 0 2px 4px rgba(8, 2, 24, 0.9);
+  --pl-dark: #1e1040;
+  --pl-photo: linear-gradient(160deg, rgba(106, 69, 192, 0.75), rgba(30, 16, 64, 0.92));
+}
+.pl-book .pl-shade {
+  background: radial-gradient(ellipse at 50% 45%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.4) 100%);
+}
+/* Full cover: the backdrop is already darkened, so no extra vignette. */
+.pl-book.pl-whole .pl-shade {
+  background: none;
+}
+.pl-book .pl-row.first {
+  box-shadow: var(--pl-inner), 0 0 0 2px rgba(0, 0, 0, 0.35), 0 0 26px rgba(243, 214, 73, 0.55);
+}
+.pl-art {
+  color: var(--pl-ink);
+}
+.pl-art .pl-shade {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.35));
+}
+.pl-art .pl-head, .pl-art .pl-row {
+  background: var(--pl-panel);
+  border: 3px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  box-shadow: var(--pl-inner), var(--pl-drop);
+}
+.pl-art .pl-head .dmv-logo {
+  border-color: var(--pl-line);
+}
+.pl-art .pl-facts {
+  color: var(--pl-accent);
+}
+.pl-art .pl-title, .pl-art .pl-name, .pl-art .pl-facts, .pl-art .pl-sub {
+  text-shadow: var(--pl-text-shadow);
+}
+.pl-art .pl-place {
+  background: var(--pl-a);
+  color: #fff;
+  border-right: 3px solid var(--pl-line);
+}
+.pl-art .pl-row:nth-child(even) .pl-place {
+  background: var(--pl-b);
+}
+.pl-art .pl-row.first {
+  border-color: var(--pl-first);
+}
+.pl-art .pl-row.first .pl-place {
+  background: var(--pl-first);
+  color: var(--pl-first-ink);
+}
+.pl-art .pl-sub {
+  color: var(--pl-sub);
+}
