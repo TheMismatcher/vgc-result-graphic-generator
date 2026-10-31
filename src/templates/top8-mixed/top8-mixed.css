@@ -171,6 +171,10 @@
   padding: 4px 0 2px 4px;
 }
 .m8-row-sub {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
   font-size: 18px;
   font-weight: 700;
   white-space: nowrap;

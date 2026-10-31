@@ -9,7 +9,7 @@ Everything runs in the browser: graphics are drawn on the page and saved as PNGs
 - **Usage:** most-used Pokémon, from your standings or a whole Limitless tournament.
 - **Replay:** paste a Pokémon Showdown replay (the last game of a best-of-3 is enough) to get both teams with items, the set score, and the winner.
 - **Team Battle:** team-vs-team weeks (e.g. USPL): paste one replay per set for a graphic with every set, both teams, and the overall result. Neutral, Win, and Loss versions.
-- **Regional Results:** one graphic per player at a Regional (e.g. who made Day 2), with name, record, team, and photo pulled from RK9.
+- **Event Results:** one graphic per player at a big event, such as a Regional (e.g. who made Day 2), with name, record, team, and photo pulled from RK9.
 - **Imports:** Limitless (standings, teams, bracket, usage), RK9 (rosters, team lists, records), TOM `.tdf` files, **photos, screenshots, or PDFs of TOM standings pages** (for events that only post a picture; PDFs are read exactly), Pokepaste / Showdown exports, Showdown replays, and **Pokémon Champions team screenshots** (phone or Switch; read in the browser, even with nicknames).
 - **Branding:** DMV VGC built in, or your own name, logo, and colors (type or pick hex codes). Save as many brands as you like and switch between them; they stay in your browser and can be exported to a file to share or move to another device.
 - **Extras:** Mega forms, player photos, save/open tournament files, copy image to clipboard.
@@ -33,7 +33,7 @@ npm run build    # creates the dist/ folder
 
 Upload `dist/` to [Netlify](https://app.netlify.com/drop) (drag and drop), or connect this repository to Netlify with build command `npm run build` and publish directory `dist`.
 
-Use Netlify rather than GitHub Pages: the Regional Results tab reads RK9 through a pass-through route (`/rk9/*`, set up in `public/_redirects`), which GitHub Pages doesn't support.
+Use Netlify rather than GitHub Pages: the Event Results tab reads RK9 through a pass-through route (`/rk9/*`, set up in `public/_redirects`), which GitHub Pages doesn't support.
 
 ## Update Pokémon and items
 
@@ -54,7 +54,7 @@ Re-downloads the lists from [PokeAPI](https://pokeapi.co), rebuilds the screensh
 | `src/data/options.ts` | Formats, tournament types, Tera types |
 | `src/lib/cp.ts` | Official League Cup / Challenge Championship Points tables (update each season) |
 | `src/lib/limitless.ts` | Limitless import (standings, teams, bracket, usage) |
-| `src/lib/rk9.ts` | RK9 rosters, team lists, and records (Regional Results tab) |
+| `src/lib/rk9.ts` | RK9 rosters, team lists, and records (Event Results tab) |
 | `src/lib/replay.ts` | Showdown replay reader (teams, items, set score, best-of-3) |
 | `src/lib/teamBattle.ts` | Team battles: sets from replays, side detection, overall score |
 | `src/lib/pokepaste.ts` | Pokepaste / Showdown team import |

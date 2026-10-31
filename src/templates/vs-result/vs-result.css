@@ -34,7 +34,8 @@
   color: #fff;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  white-space: nowrap;
+  white-space: normal; /* a long round name wraps instead of running off the graphic */
+  max-width: 800px;
   text-shadow: 0 2px 0 var(--ink);
 }
 .vs-meta:empty {
@@ -49,7 +50,8 @@
   font-size: 19px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.9);
-  white-space: nowrap;
+  white-space: normal;
+  max-width: 800px;
   text-shadow: 0 2px 0 var(--ink);
 }
 

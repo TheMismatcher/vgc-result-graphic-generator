@@ -2,13 +2,18 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
 
-// "/rk9/..." is forwarded to rk9.gg, since RK9 doesn't let other sites read its pages
-// directly. Netlify does the same in production (public/_redirects).
+// "/rk9/..." is forwarded to rk9.gg and "/pokedata/..." to pokedata.ovh, since neither lets other
+// sites read its pages directly. Netlify does the same in production (public/_redirects).
 const rk9Proxy = {
   '/rk9': {
     target: 'https://www.rk9.gg',
     changeOrigin: true,
     rewrite: (path: string) => path.replace(/^\/rk9/, ''),
+  },
+  '/pokedata': {
+    target: 'https://pokedata.ovh',
+    changeOrigin: true,
+    rewrite: (path: string) => path.replace(/^\/pokedata/, ''),
   },
 }
 

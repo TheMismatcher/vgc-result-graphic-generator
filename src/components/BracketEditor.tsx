@@ -2,7 +2,7 @@ import type { AppState, Bracket } from '../types'
 import { BRACKET_SIZES, bracketFromStandings, bracketRounds, emptyBracket, setBracketWinner, type BracketSize } from '../lib/bracket'
 import { Button, Card, Select } from './ui'
 
-const ROUND_NAMES: Record<number, string> = { 8: 'Quarterfinals', 4: 'Semifinals', 2: 'Final' }
+const ROUND_NAMES: Record<number, string> = { 8: 'Quarterfinals', 4: 'Semifinals', 2: 'Finals' }
 
 /** Set up the top cut bracket (for the Bracket template): seed from standings, pick winners. */
 export function BracketEditor({ state, setState }: { state: AppState; setState: (fn: (s: AppState) => AppState) => void }) {

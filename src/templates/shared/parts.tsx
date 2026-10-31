@@ -106,9 +106,15 @@ export function FitText({
 }) {
   useFontsReady()
   const measured = textWidth(uppercase ? text.toUpperCase() : text, `${italic ? 'italic ' : ''}${weight} ${max}px ${family}`) * 1.08 // room for the outline
-  const size = measured > width ? Math.max(min, Math.floor((max * width) / measured)) : max
+  // Shrinks to fit; past `min` it keeps shrinking a little (to 80% of it, never below 12px), and beyond
+  // that the text is cut off with an ellipsis, so a very long name never spills out of its box or
+  // turns unreadably small.
+  const fit = Math.floor((max * width) / measured)
+  const floor = Math.max(Math.floor(min * 0.8), Math.min(min, 12))
+  const size = measured > width ? Math.max(floor, fit) : max
+  const tooLong = measured > width && fit < floor
   return (
-    <div className={className} style={{ fontSize: size, whiteSpace: 'nowrap', ...style }}>
+    <div className={className} style={{ fontSize: size, whiteSpace: 'nowrap', ...(tooLong ? { maxWidth: width, overflow: 'hidden', textOverflow: 'ellipsis' } : null), ...style }}>
       {text}
     </div>
   )

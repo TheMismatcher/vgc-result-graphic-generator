@@ -251,6 +251,7 @@
 }
 .edc-main {
   flex: 1;
+  min-width: 0; /* a long record/social line must not widen the whole column */
   padding: 58px 56px 0 54px;
 }
 .edc-event {
@@ -276,6 +277,12 @@
   font-weight: 700;
   color: var(--muted);
   white-space: pre;
+  min-width: 0;
+}
+.edc-sub > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .edc-team {
   display: grid;

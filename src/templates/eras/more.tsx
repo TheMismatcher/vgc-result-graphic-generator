@@ -150,6 +150,84 @@ export const Pokedex: StandingsTemplate = {
   ),
 }
 
+/** The Pokédex again, with the champion as a full entry: ace in the viewer, data rows, flavour text and the party. */
+export const PokedexChampion: StandingsTemplate = {
+  ...base,
+  id: 'era-pokedex-champion',
+  name: 'Champion (Pokédex)',
+  description: 'The winner as a Pokédex entry: ace Pokémon in the viewer, data rows, and their team as the party.',
+  maxPlayers: 1,
+  Component: ({ data }) => {
+    const { showMegas } = useDisplay()
+    const w = data.players[0]
+    const team = w?.team ?? []
+    const ace = team.find((m) => m.pokemon)
+    const rows: [string, string][] = [
+      ['REC', w?.record || '—'],
+      ['SOC', w?.social || '—'],
+      ['FLD', data.playerCount ? `${data.playerCount} players` : '—'],
+      ['FMT', data.formatLabel || '—'],
+    ]
+    return (
+      <div className="dmv dx dxc" style={{ width: 1080, height: 1350 }}>
+        <div className="dx-top">
+          <div className="dx-lens" />
+          <div className="dx-led r" />
+          <div className="dx-led y" />
+          <div className="dx-led g" />
+          <div className="dx-top-text">
+            <FitText className="dx-title" text={data.tournament.name || 'Tournament'} max={46} width={700} min={22} weight={900} italic={false} />
+            <FitText className="dx-facts" text={eventFacts(data).join('  •  ')} max={18} width={700} min={11} weight={700} italic={false} />
+          </div>
+        </div>
+        <div className="dx-screen dxc-screen">
+          <div className="dxc-head">
+            <span className="dx-no">No.001</span>
+            <span className="dxc-cat">Champion Trainer</span>
+            {data.cp && <CpBadge points={data.cp(1)} className="dx-cp" />}
+          </div>
+          <div className="dxc-main">
+            <div className="dxc-view">
+              {ace && <MonSprite mon={ace} size={370} showTera={data.format.tera} />}
+            </div>
+            <div className="dxc-data">
+              <FitText className="dxc-name" text={w?.name || 'Player'} max={54} width={420} min={22} weight={900} italic={false} />
+              <div className="dxc-rows">
+                {rows.map(([k, v]) => (
+                  <div key={k} className="dxc-row">
+                    <span className="dxc-key">{k}</span>
+                    <span className="dxc-val">{v}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="dxc-text">
+            {w?.name || 'This trainer'} took first place at {data.tournament.name || 'the tournament'}
+            {data.dateLabel ? ` on ${data.dateLabel}` : ''}, finishing {w?.record || 'undefeated'} with this party.
+          </div>
+          <div className="dxc-party">
+            {team.map((m, i) =>
+              m.pokemon ? (
+                <div key={i} className="dxc-mon">
+                  <MonSprite mon={m} size={108} showTera={data.format.tera} />
+                  <span className="dxc-mon-name">{getPokemon(displayPokemon(m, showMegas))?.name ?? ''}</span>
+                  <span className="dxc-mon-item">{getItem(m.item)?.name ?? ''}</span>
+                </div>
+              ) : null,
+            )}
+          </div>
+        </div>
+        <div className="dx-bottom">
+          <span className="dx-btn" />
+          <span className="dx-pad" />
+          <Logo size={70} style={{ border: '4px solid #6e1015' }} />
+        </div>
+      </div>
+    )
+  },
+}
+
 /** The champion as a holo trading card: their ace in the art window, their team as the "attacks". */
 export const TradingCard: StandingsTemplate = {
   kind: 'standings',

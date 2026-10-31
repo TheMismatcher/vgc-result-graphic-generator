@@ -1,0 +1,206 @@
+/* ---------- Places: shared layout (same grid as the other location styles) ---------- */
+.pl {
+  font-style: normal;
+}
+.pl-wall {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+.pl-shade {
+  position: absolute;
+  inset: 0;
+}
+.pl-head {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 46px;
+  height: 190px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 28px;
+}
+.pl-head-text {
+  min-width: 0;
+}
+.pl-kicker {
+  font-size: 18px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+.pl-title {
+  margin-top: 4px;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.pl-facts {
+  margin-top: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.pl-rows {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 268px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pl-row {
+  display: flex;
+  align-items: center;
+  height: 112px;
+  overflow: hidden;
+}
+.pl-place {
+  flex: none;
+  width: 120px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 900;
+}
+.pl-player {
+  width: 330px;
+  padding: 0 20px;
+}
+.pl-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.pl-sub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 19px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pl-cp {
+  font-size: 14px;
+}
+.pl-team {
+  display: flex;
+  margin-left: auto;
+  padding-right: 14px;
+}
+
+/* ---------- Hoenn routes (colours from Emerald's map palette) ---------- */
+.pl-hoenn {
+  color: #18301c;
+}
+.pl-hoenn .pl-shade {
+  background: linear-gradient(180deg, rgba(24, 48, 28, 0.25), rgba(24, 48, 28, 0) 30%);
+}
+.pl-hoenn .pl-head, .pl-hoenn .pl-row {
+  background: rgba(255, 255, 255, 0.93);
+  border: 5px solid #385000;
+  border-radius: 18px;
+  box-shadow: inset 0 0 0 3px #b0f880, 0 8px 0 rgba(24, 48, 28, 0.35);
+}
+.pl-hoenn .pl-head .dmv-logo {
+  border-color: #385000;
+}
+.pl-hoenn .pl-kicker, .pl-hoenn .pl-facts {
+  color: #388830;
+}
+.pl-hoenn .pl-place {
+  background: #5068d0;
+  color: #fff;
+  border-right: 5px solid #385000;
+}
+.pl-hoenn .pl-row:nth-child(even) .pl-place {
+  background: #388830;
+}
+.pl-hoenn .pl-row.first .pl-place {
+  background: #d8c880;
+  color: #18301c;
+}
+.pl-hoenn .pl-sub {
+  color: #4f6a52;
+}
+/* Glass: dark green see-through panels, white type. */
+.pl-hoenn.glass {
+  color: #fff;
+}
+.pl-hoenn.glass .pl-head, .pl-hoenn.glass .pl-row {
+  background: rgba(16, 36, 22, 0.62);
+  border-color: rgba(176, 248, 128, 0.85);
+  box-shadow: 0 8px 0 rgba(16, 36, 22, 0.45);
+}
+.pl-hoenn.glass .pl-head .dmv-logo {
+  border-color: #b0f880;
+}
+.pl-hoenn.glass .pl-kicker, .pl-hoenn.glass .pl-facts {
+  color: #b0f880;
+}
+.pl-hoenn.glass .pl-name, .pl-hoenn.glass .pl-title, .pl-hoenn.glass .pl-facts, .pl-hoenn.glass .pl-sub {
+  text-shadow: 2px 2px 0 rgba(16, 36, 22, 0.9);
+}
+.pl-hoenn.glass .pl-place {
+  border-right-color: rgba(176, 248, 128, 0.85);
+}
+.pl-hoenn.glass .pl-sub {
+  color: #d8f0d0;
+}
+
+/* ---------- Spear Pillar (stone and rock colours from the map; Dialga blue / Palkia pink) ---------- */
+.pl-spear {
+  color: #f4eedc;
+}
+.pl-spear .pl-shade {
+  background: linear-gradient(180deg, rgba(40, 30, 34, 0.35), rgba(40, 30, 34, 0) 28%);
+}
+.pl-spear .pl-head, .pl-spear .pl-row {
+  background: rgba(46, 38, 40, 0.9);
+  border: 4px solid #d8d0a8;
+  border-radius: 6px;
+  box-shadow: 0 0 0 3px #584840, 0 10px 18px rgba(30, 20, 24, 0.45);
+}
+.pl-spear .pl-head .dmv-logo {
+  border-color: #d8d0a8;
+}
+.pl-spear .pl-kicker, .pl-spear .pl-facts {
+  color: #d8d0a8;
+}
+.pl-spear .pl-place {
+  background: #3d5fa8;
+  color: #fff;
+  border-right: 4px solid #d8d0a8;
+}
+.pl-spear .pl-row:nth-child(even) .pl-place {
+  background: #b4507a;
+}
+.pl-spear .pl-row.first .pl-place {
+  background: #d8d0a8;
+  color: #2e2628;
+}
+.pl-spear .pl-sub {
+  color: #c0b890;
+}
+.pl-spear.glass .pl-head, .pl-spear.glass .pl-row {
+  background: rgba(46, 38, 40, 0.58);
+}
+.pl-spear.glass .pl-name, .pl-spear.glass .pl-title, .pl-spear.glass .pl-facts, .pl-spear.glass .pl-sub {
+  text-shadow: 2px 2px 0 rgba(30, 20, 24, 0.9);
+}
+/* Concept art is busier and lighter: a touch more panel, and the night sky darkened behind the header. */
+.pl-spear.art .pl-head, .pl-spear.art .pl-row {
+  background: rgba(40, 36, 52, 0.7);
+}
+.pl-spear.art .pl-shade {
+  background: linear-gradient(180deg, rgba(30, 28, 44, 0.45), rgba(30, 28, 44, 0) 30%);
+}

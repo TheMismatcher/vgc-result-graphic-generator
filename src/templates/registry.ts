@@ -7,8 +7,9 @@ import Usage from './usage'
 import Bracket, { BracketLoud } from './bracket'
 import { ArenaGrid, ArenaSpotlight, ArenaSunset } from './arena'
 import VsResult from './vs-result'
-import Day2Regionals from './day2'
-import Day2Clean, { Day2Match } from './day2/clean'
+import Day2Clean from './day2/clean'
+import { RegionalMosaic, RegionalMosaicContrast } from './day2/mosaic'
+import { EventEditorialNight, EventEditorialPaper } from './day2/editorial'
 import TeamBattle, { TeamBattleLoss, TeamBattleLoud, TeamBattleWin } from './team-battle'
 import Top8Photos, { Top8PhotosLoud, Top8PhotosWhite } from './top8-photos'
 import Top4Photos, { Top4PhotosLoud } from './top4-photos'
@@ -20,8 +21,13 @@ import { makeVsResult } from './vs-result'
 import { makeTeamBattle } from './team-battle'
 import { ArenaGridLayouts, ArenaSpotlightLayouts, ArenaSunsetLayouts } from './themes/arena'
 import { MosaicLayouts } from './themes/mosaic'
-import { BattleTower, Ghost, Hoenn, MtCoronet, Pokedex, TradingCard } from './eras/more'
+import { GhostPixelLayouts } from './themes/ghostpixel'
+import { EditorialNightLayouts, EditorialPaperLayouts } from './themes/editorial'
+import { BattleTower, Ghost, Hoenn, MtCoronet, Pokedex, PokedexChampion, TradingCard } from './eras/more'
+import { GhostPixel, GhostPixelDense, GhostPixelGlass, GhostPixelGlassTeam, GhostPixelGlassLine } from './eras/ghostpixel'
 import { Glimwood, KantoGameBoy, Paldea, Route201, Snowpoint, Unova } from './eras'
+import { Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillar, SpearPillarArt, SpearPillarGlass } from './places'
+import { PLACE_LAYOUTS } from './themes/places'
 import { MosaicGradient, MosaicMono, MosaicSquaresGradient, MosaicSquaresMono, MosaicTintGlass, MosaicTintGlassShadow, MosaicTintSemiShadow, MosaicTintSolid, MosaicTintSolidShadow } from './mosaic'
 import { DynamaxTopCut, MegaTopCut, TerastalTopCut } from './power'
 import { DynamaxLayouts, MegaLayouts, TerastalLayouts } from './power/themes'
@@ -56,8 +62,8 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Mosaic (Gradient)', [[MosaicGradient, 'topcut']]),
   ...tag('Mosaic (Mono)', [[MosaicMono, 'topcut']]),
   ...tag('Mosaic (Squares Mono)', [[MosaicSquaresMono, 'topcut']]),
-  ...tag('Editorial Paper', [[EditorialTopCutPaper, 'topcut'], [EditorialChampionPaper, 'champion']]),
-  ...tag('Editorial Night', [[EditorialTopCutNight, 'topcut'], [EditorialChampionNight, 'champion']]),
+  ...tag('Editorial Paper', [[EditorialTopCutPaper, 'topcut'], [EditorialChampionPaper, 'champion'], ...EditorialPaperLayouts]),
+  ...tag('Editorial Night', [[EditorialTopCutNight, 'topcut'], [EditorialChampionNight, 'champion'], ...EditorialNightLayouts]),
   ...tag('Sports Page', [[SportsPage, 'topcut']]),
   ...tag('Arena Spotlight', [[ArenaSpotlight, 'topcut'], ...ArenaSpotlightLayouts]),
   ...tag('Arena Grid', [[ArenaGrid, 'topcut'], ...ArenaGridLayouts]),
@@ -67,12 +73,26 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Route 201', [[Route201, 'topcut']]),
   ...tag('Snowpoint', [[Snowpoint, 'topcut']]),
   ...tag('Mt. Coronet', [[MtCoronet, 'topcut']]),
+  ...tag('Spear Pillar', [[SpearPillar, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar']]),
+  ...tag('Spear Pillar Glass', [[SpearPillarGlass, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Glass']]),
+  ...tag('Spear Pillar Concept Art', [[SpearPillarArt, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Concept Art']]),
+  ...tag('Route 119', [[Route119, 'topcut'], ...PLACE_LAYOUTS['Route 119']]),
+  ...tag('Route 119 Glass', [[Route119Glass, 'topcut'], ...PLACE_LAYOUTS['Route 119 Glass']]),
+  ...tag('Route 119 Bridge', [[Route119Bridge, 'topcut'], ...PLACE_LAYOUTS['Route 119 Bridge']]),
+  ...tag('Route 119 Bridge Glass', [[Route119BridgeGlass, 'topcut'], ...PLACE_LAYOUTS['Route 119 Bridge Glass']]),
+  ...tag('Route 120', [[Route120, 'topcut'], ...PLACE_LAYOUTS['Route 120']]),
+  ...tag('Route 120 Glass', [[Route120Glass, 'topcut'], ...PLACE_LAYOUTS['Route 120 Glass']]),
   ...tag('Ghost', [[Ghost, 'topcut']]),
+  ...tag('Ghost Pixel', [[GhostPixel, 'topcut']]),
+  ...tag('Ghost Pixel Dense', [[GhostPixelDense, 'topcut']]),
+  ...tag('Ghost Pixel Glass', [[GhostPixelGlass, 'topcut']]),
+  ...tag('Ghost Pixel Glass Team Box', [[GhostPixelGlassTeam, 'topcut']]),
+  ...tag('Ghost Pixel Glass Team Line', [[GhostPixelGlassLine, 'topcut'], ...GhostPixelLayouts]),
   ...tag('Kanto Game Boy', [[KantoGameBoy, 'topcut']]),
   ...tag('Hoenn Gen 3', [[Hoenn, 'topcut']]),
   ...tag('Paldea', [[Paldea, 'topcut']]),
   ...tag('Unova', [[Unova, 'topcut']]),
-  ...tag('Pokédex', [[Pokedex, 'topcut']]),
+  ...tag('Pokédex', [[Pokedex, 'topcut'], [PokedexChampion, 'champion']]),
   ...tag('Trading Card', [[TradingCard, 'champion']]),
   ...tag('Terastal', [[TerastalTopCut, 'topcut'], ...TerastalLayouts]),
   ...tag('Mega Evolution', [[MegaTopCut, 'topcut'], ...MegaLayouts]),
@@ -80,5 +100,5 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
 ]
 export const USAGE_TEMPLATES: UsageTemplate[] = [Usage, ...SIDE_THEMES.map((t) => makeUsage(t))]
 export const MATCH_TEMPLATES: MatchTemplate[] = [VsResult, ...SIDE_THEMES.map((t) => makeVsResult(t))]
-export const DAY2_TEMPLATES: Day2Template[] = [Day2Clean, Day2Match, Day2Regionals] // first = the default
+export const DAY2_TEMPLATES: Day2Template[] = [Day2Clean, RegionalMosaic, RegionalMosaicContrast, EventEditorialPaper, EventEditorialNight] // first = the default
 export const TEAM_BATTLE_TEMPLATES: TeamBattleTemplate[] = [TeamBattle, TeamBattleLoud, TeamBattleWin, TeamBattleLoss, ...SIDE_THEMES.map((t) => makeTeamBattle('neutral', false, t))]

@@ -110,6 +110,11 @@
   gap: 6px;
 }
 .p4-sub {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
   min-height: 22px;
   font-size: 18px;
   font-weight: 700;

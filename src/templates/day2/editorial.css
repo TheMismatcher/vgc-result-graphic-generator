@@ -1,0 +1,85 @@
+/* Event Results (Editorial): flat ground, thick rules, upright type; accent from --d2e-accent. */
+.d2e {
+  --fg: #15161a;
+  --muted: #6d6a63;
+  --ground: #f4f0e8;
+  --panel: #15161a;
+  --cell: #262830;
+  --photo: #e3ddd0;
+  background: var(--ground);
+  color: var(--fg);
+  font-style: normal;
+}
+.d2e-night {
+  --fg: #f3f1ec;
+  --muted: #8f98ad;
+  --ground: #0e1424;
+  --panel: #182038;
+  --cell: #22304f;
+  --photo: #17203a;
+  background:
+    radial-gradient(1200px 800px at 85% -10%, color-mix(in srgb, var(--d2e-accent) 30%, transparent), transparent 70%),
+    var(--ground);
+}
+.d2e-topbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 26px;
+  background: var(--d2e-accent);
+}
+.d2e-event,
+.d2e-namebox,
+.d2e-record,
+.d2e-caption {
+  display: flex;
+  align-items: center;
+}
+.d2e-eventtext {
+  color: var(--d2e-accent);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.d2e-rule {
+  background: var(--fg);
+}
+.d2e-name {
+  color: var(--fg);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.d2e-record {
+  justify-content: center;
+  background: var(--d2e-accent);
+  color: #fff;
+}
+.d2e-recordtext,
+.d2e-captiontext {
+  color: #fff;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.d2e-photo {
+  overflow: hidden;
+  background: var(--photo);
+  border-top: 12px solid var(--fg);
+}
+.d2e-caption {
+  justify-content: center;
+  background: var(--panel);
+}
+.d2e-night .d2e-caption {
+  background: var(--d2e-accent);
+}
+.d2e-panel {
+  background: var(--panel);
+  border-top: 12px solid var(--d2e-accent);
+}
+.d2e-cell {
+  background: var(--cell);
+}

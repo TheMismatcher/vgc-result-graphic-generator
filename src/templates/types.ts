@@ -54,7 +54,8 @@ export interface Day2Data {
   player: Player
   format: Format
   hue?: number // background colour for templates that support it (degrees on the colour wheel)
-  kind?: 'regionals' | 'internationals' | 'special' | 'worlds' // event type: badge + default colour
+  colors?: { main: string; second: string } // Mosaic Event Results: two gradient colours (#rrggbb), overrides hue
+  kind?: 'regionals' | 'play' | 'internationals' | 'special' | 'worlds' // event type: badge + default colour
 }
 
 export interface TeamBattleData {

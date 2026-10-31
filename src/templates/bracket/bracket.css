@@ -66,6 +66,7 @@
 }
 
 .br-entry {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -135,4 +136,14 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 4px 6px;
+}
+
+/* "+50 CP" chip in the corner of a player's box (Show CP earned) */
+.br-cp {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  padding: 0 8px;
+  border-width: 2px;
+  font-size: 16px;
 }

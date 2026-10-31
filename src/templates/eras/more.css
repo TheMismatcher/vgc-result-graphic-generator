@@ -1,12 +1,12 @@
 /* Shared layout for the location-style templates added here (same structure as eras.css). */
-.bt, .mc, .h3, .gh {
+.bt, .mc, .h3, .gh, .gp {
   font-style: normal;
 }
-.bt-scene, .mc-scene, .gh-scene {
+.bt-scene, .mc-scene, .gh-scene, .gp-scene {
   position: absolute;
   inset: 0;
 }
-.bt-head, .mc-head, .h3-head, .gh-head {
+.bt-head, .mc-head, .h3-head, .gh-head, .gp-head {
   position: absolute;
   left: 50px;
   right: 50px;
@@ -17,27 +17,27 @@
   gap: 24px;
   padding: 0 28px;
 }
-.bt-head-text, .mc-head-text, .h3-head-text, .gh-head-text {
+.bt-head-text, .mc-head-text, .h3-head-text, .gh-head-text, .gp-head-text {
   min-width: 0;
 }
-.bt-kicker, .mc-kicker, .h3-kicker, .gh-kicker {
+.bt-kicker, .mc-kicker, .h3-kicker, .gh-kicker, .gp-kicker {
   font-size: 18px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.18em;
 }
-.bt-title, .mc-title, .h3-title, .gh-title {
+.bt-title, .mc-title, .h3-title, .gh-title, .gp-title {
   margin-top: 4px;
   font-weight: 900;
   text-transform: uppercase;
   line-height: 1;
 }
-.bt-facts, .mc-facts, .h3-facts, .gh-facts {
+.bt-facts, .mc-facts, .h3-facts, .gh-facts, .gp-facts {
   margin-top: 10px;
   font-weight: 800;
   text-transform: uppercase;
 }
-.bt-rows, .mc-rows, .h3-rows, .gh-rows {
+.bt-rows, .mc-rows, .h3-rows, .gh-rows, .gp-rows {
   position: absolute;
   left: 50px;
   right: 50px;
@@ -50,13 +50,13 @@
   left: 120px;
   right: 120px;
 }
-.bt-row, .mc-row, .h3-row, .gh-row {
+.bt-row, .mc-row, .h3-row, .gh-row, .gp-row {
   display: flex;
   align-items: center;
   height: 112px;
   overflow: hidden;
 }
-.bt-place, .mc-place, .h3-place, .gh-place {
+.bt-place, .mc-place, .h3-place, .gh-place, .gp-place {
   flex: none;
   width: 120px;
   height: 100%;
@@ -70,19 +70,19 @@
   width: 100px;
   font-size: 34px;
 }
-.bt-player, .mc-player, .h3-player, .gh-player {
+.bt-player, .mc-player, .h3-player, .gh-player, .gp-player {
   width: 330px;
   padding: 0 20px;
 }
 .mc-player {
   width: 270px;
 }
-.bt-name, .mc-name, .h3-name, .gh-name {
+.bt-name, .mc-name, .h3-name, .gh-name, .gp-name {
   font-weight: 900;
   text-transform: uppercase;
   line-height: 1.05;
 }
-.bt-sub, .mc-sub, .h3-sub, .gh-sub {
+.bt-sub, .mc-sub, .h3-sub, .gh-sub, .gp-sub {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -91,10 +91,10 @@
   font-weight: 700;
   white-space: nowrap;
 }
-.bt-cp, .mc-cp, .h3-cp, .gh-cp {
-  font-size: 14px;
+.bt-cp, .mc-cp, .h3-cp, .gh-cp, .gp-cp {
+  font-size: 18px;
 }
-.bt-team, .mc-team, .h3-team, .gh-team {
+.bt-team, .mc-team, .h3-team, .gh-team, .gp-team {
   display: flex;
   margin-left: auto;
   padding-right: 14px;
@@ -360,6 +360,129 @@
   background: #2a2a2a;
   border: 4px solid #6e1015;
   margin-right: auto;
+}
+
+/* ---------- Pokédex champion entry ---------- */
+.dxc-screen {
+  justify-content: flex-start;
+  gap: 16px;
+  padding: 20px 26px;
+}
+.dxc-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 10px;
+  border-bottom: 3px dashed #7ea36a;
+}
+.dxc-head .dx-no {
+  width: auto;
+  font-size: 22px;
+}
+.dxc-cat {
+  margin-right: auto;
+  font-size: 22px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #3f6a2c;
+}
+.dxc-main {
+  display: flex;
+  gap: 24px;
+  height: 450px;
+}
+.dxc-view {
+  flex: none;
+  width: 390px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 40%, #eaf6dc, #a9cf94);
+  border: 6px solid #4f6b45;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.5);
+}
+.dxc-data {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+.dxc-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.dxc-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dxc-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 8px;
+}
+.dxc-key {
+  flex: none;
+  width: 68px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 15px;
+  color: #3f6a2c;
+}
+.dxc-val {
+  min-width: 0;
+  font-size: 22px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dxc-text {
+  padding: 14px 18px;
+  font-size: 22px;
+  line-height: 1.35;
+  font-weight: 700;
+  color: #2f4a27;
+  background: rgba(255, 255, 255, 0.35);
+  border: 3px solid #7ea36a;
+  border-radius: 8px;
+}
+.dxc-party {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px 12px;
+}
+.dxc-mon {
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  grid-template-rows: 1fr 1fr;
+  align-items: center;
+  column-gap: 8px;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 10px;
+}
+.dxc-mon .dmv-mon {
+  grid-row: 1 / 3;
+}
+.dxc-mon-name {
+  align-self: end;
+  font-size: 18px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+.dxc-mon-item {
+  align-self: start;
+  font-size: 15px;
+  font-weight: 700;
+  color: #4f6b45;
 }
 
 /* ---------- Trading card ---------- */

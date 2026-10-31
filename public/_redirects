@@ -1,3 +1,5 @@
 # Netlify: forward /rk9/* to www.rk9.gg (rk9.gg now redirects there) so the Day 2 tab can read RK9 rosters,
 # team lists, and pairings (RK9 blocks direct requests from other websites).
 /rk9/*  https://www.rk9.gg/:splat  200
+# Same for Pokédata (pokedata.ovh): the Event Results tab reads its per-event standings JSON through /pokedata/*.
+/pokedata/*  https://pokedata.ovh/:splat  200

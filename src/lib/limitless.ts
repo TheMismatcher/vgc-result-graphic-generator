@@ -9,8 +9,8 @@ import { emptyMon, newPlayer } from './state'
 
 const API = 'https://play.limitlesstcg.com/api/tournaments'
 
-interface LimitlessPokemon { id: string; name: string; item?: string | null; tera?: string | null }
-interface LimitlessStanding {
+export interface LimitlessPokemon { id: string; name: string; item?: string | null; tera?: string | null }
+export interface LimitlessStanding {
   name: string
   player: string
   placing: number | null
@@ -74,12 +74,12 @@ export async function importLimitless(id: string, top: number): Promise<Limitles
 }
 
 /** Players in final order (dropped players without a placing go last). */
-const rankedStandings = (standings: LimitlessStanding[]) =>
+export const rankedStandings = (standings: LimitlessStanding[]) =>
   standings.slice().sort((a, b) => (a.placing ?? Infinity) - (b.placing ?? Infinity))
 
-const formatRecord = ({ wins, losses, ties }: LimitlessStanding['record']) => `${wins}-${losses}${ties ? `-${ties}` : ''}`
+export const formatRecord = ({ wins, losses, ties }: LimitlessStanding['record']) => `${wins}-${losses}${ties ? `-${ties}` : ''}`
 
-function toTeam(decklist: LimitlessPokemon[] | null, unmatched: string[]): Mon[] {
+export function toTeam(decklist: LimitlessPokemon[] | null, unmatched: string[]): Mon[] {
   const team = (decklist ?? []).slice(0, 6).map((p) => {
     const pokemon = resolvePokemon(p.id) || resolvePokemon(p.name)
     const item = p.item ? resolveItem(p.item) : ''

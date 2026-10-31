@@ -21,7 +21,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'usage', label: 'Usage' },
   { id: 'replay', label: 'Replay' },
   { id: 'teamBattle', label: 'Team Battle' },
-  { id: 'day2', label: 'Regional Results' },
+  { id: 'day2', label: 'Event Results' },
   { id: 'branding', label: 'Branding' },
 ]
 

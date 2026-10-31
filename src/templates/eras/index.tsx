@@ -194,7 +194,7 @@ export function LocationHead({ data, cls, kicker }: { data: Data; cls: string; k
     <header className={`${cls}-head`}>
       <Logo size={130} />
       <div className={`${cls}-head-text`}>
-        <div className={`${cls}-kicker`}>{kicker}</div>
+        {kicker && <div className={`${cls}-kicker`}>{kicker}</div>}
         <FitText className={`${cls}-title`} text={data.tournament.name || 'Tournament'} max={58} width={700} min={26} weight={900} italic={false} />
         <FitText className={`${cls}-facts`} text={eventFacts(data).join('  •  ')} max={20} width={700} min={12} weight={800} italic={false} />
       </div>

@@ -1,0 +1,323 @@
+/* Place themes on the standard layouts. Each place sets the variables; the rules below are shared.
+   Hoenn routes: white panels with Emerald's dark-green border and light-green inner line (Glass: dark green
+   see-through). Spear Pillar: dark stone panels with sandstone borders, Dialga blue / Palkia pink places. */
+.themed.theme-place.pl-hoenn {
+  --pl-panel: rgba(255, 255, 255, 0.93);
+  --pl-line: #385000;
+  --pl-inner: inset 0 0 0 3px #b0f880;
+  --pl-ink: #18301c;
+  --pl-sub: #4f6a52;
+  --pl-accent: #b0f880;
+  --pl-a: #5068d0;
+  --pl-b: #388830;
+  --pl-first: #d8c880;
+  --pl-first-ink: #18301c;
+  --pl-radius: 18px;
+  --pl-drop: 0 8px 0 rgba(24, 48, 28, 0.35);
+  --pl-text-shadow: none;
+  --pl-dark: #18301c;
+  --pl-photo: linear-gradient(160deg, #80c060, #388830);
+}
+.themed.theme-place.pl-hoenn.glass {
+  --pl-panel: rgba(16, 36, 22, 0.62);
+  --pl-line: rgba(176, 248, 128, 0.85);
+  --pl-inner: inset 0 0 0 0 transparent;
+  --pl-ink: #fff;
+  --pl-sub: #d8f0d0;
+  --pl-drop: 0 8px 0 rgba(16, 36, 22, 0.45);
+  --pl-text-shadow: 2px 2px 0 rgba(16, 36, 22, 0.9);
+  --pl-photo: linear-gradient(160deg, rgba(56, 136, 48, 0.75), rgba(16, 36, 22, 0.85));
+}
+.themed.theme-place.pl-spear {
+  --pl-panel: rgba(46, 38, 40, 0.9);
+  --pl-line: #d8d0a8;
+  --pl-inner: 0 0 0 3px #584840;
+  --pl-ink: #f4eedc;
+  --pl-sub: #c0b890;
+  --pl-accent: #d8d0a8;
+  --pl-a: #3d5fa8;
+  --pl-b: #b4507a;
+  --pl-first: #d8d0a8;
+  --pl-first-ink: #2e2628;
+  --pl-radius: 6px;
+  --pl-drop: 0 10px 18px rgba(30, 20, 24, 0.45);
+  --pl-text-shadow: none;
+  --pl-dark: #2e2628;
+  --pl-photo: linear-gradient(160deg, #685050, #2e2628);
+}
+.themed.theme-place.pl-spear.glass {
+  --pl-panel: rgba(46, 38, 40, 0.58);
+  --pl-text-shadow: 2px 2px 0 rgba(30, 20, 24, 0.9);
+}
+.themed.theme-place.pl-spear.art {
+  --pl-panel: rgba(40, 36, 52, 0.7);
+  --pl-dark: #28243a;
+}
+
+.themed.theme-place {
+  color: var(--pl-ink);
+}
+/* Titles sit straight on the map: white with a hard dark shadow plus a soft glow so they read on any tile. */
+.themed.theme-place .dmv-title {
+  color: #fff;
+  -webkit-text-stroke: 0;
+  font-style: normal;
+  text-shadow: 4px 4px 0 var(--pl-dark), 0 0 22px rgba(0, 0, 0, 0.55);
+}
+.themed.theme-place .dmv-logo {
+  border: 5px solid var(--pl-line);
+  box-shadow: var(--pl-drop);
+}
+
+/* Header tag and facts. */
+.themed.theme-place .p8-tag,
+.themed.theme-place .p4-tag,
+.themed.theme-place .m8-tag,
+.themed.theme-place .br-tag {
+  background: var(--pl-dark);
+  border: 3px solid var(--pl-accent);
+  border-radius: 999px;
+  box-shadow: none;
+  transform: none;
+  color: var(--pl-accent);
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+.themed.theme-place .p8-facts,
+.themed.theme-place .p4-facts,
+.themed.theme-place .m8-facts,
+.themed.theme-place .br-facts {
+  color: #fff;
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: 2px 2px 0 var(--pl-dark), 0 0 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Cards. */
+.themed.theme-place .dmv-panel {
+  border: 5px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  background: var(--pl-panel);
+  box-shadow: var(--pl-inner), var(--pl-drop);
+  color: var(--pl-ink);
+}
+.themed.theme-place .p8-name,
+.themed.theme-place .p4-name,
+.themed.theme-place .m8-name,
+.themed.theme-place .br-name {
+  color: var(--pl-ink);
+  -webkit-text-stroke: 0;
+  font-style: normal;
+  text-shadow: var(--pl-text-shadow);
+}
+/* Top 8 + Top 4 list rows reuse .dmv-title for names, but they sit inside a panel, not on the map. */
+.themed.theme-place .m8-row-player .dmv-title {
+  color: var(--pl-ink);
+  text-shadow: var(--pl-text-shadow);
+}
+.themed.theme-place .p8-sub,
+.themed.theme-place .p4-sub,
+.themed.theme-place .m8-sub,
+.themed.theme-place .m8-row-sub,
+.themed.theme-place .ch-item-name {
+  color: var(--pl-sub);
+  text-shadow: var(--pl-text-shadow);
+}
+
+/* Place numbers. */
+.themed.theme-place .p8-place,
+.themed.theme-place .p4-place,
+.themed.theme-place .m8-place {
+  background: var(--pl-a);
+  border: 0;
+  color: #fff;
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+  box-shadow: none;
+  transform: none;
+}
+.themed.theme-place .dmv-panel:nth-child(even) .p8-place,
+.themed.theme-place .dmv-panel:nth-child(even) .p4-place,
+.themed.theme-place .dmv-panel:nth-child(even) .m8-place {
+  background: var(--pl-b);
+}
+.themed.theme-place .first .p8-place,
+.themed.theme-place .first .p4-place,
+.themed.theme-place .first .m8-place {
+  background: var(--pl-first);
+  color: var(--pl-first-ink);
+}
+.themed.theme-place .m8-row-place {
+  background: transparent;
+  border: 0;
+  color: var(--pl-a);
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: var(--pl-text-shadow);
+}
+.themed.theme-place.pl-spear .m8-row-place,
+.themed.theme-place.glass .m8-row-place {
+  color: var(--pl-accent);
+}
+.themed.theme-place .p4-plate {
+  background: var(--pl-panel);
+  border-left: 6px solid var(--pl-line);
+  box-shadow: none;
+}
+.themed.theme-place .dmv-photo-empty {
+  background: var(--pl-photo);
+}
+.themed.theme-place .dmv-photo-empty span {
+  -webkit-text-stroke: 0;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Champion */
+.themed.theme-place .ch-banner {
+  background: var(--pl-a);
+  border: 5px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  box-shadow: var(--pl-drop);
+  transform: none;
+}
+.themed.theme-place .ch-sub {
+  background: var(--pl-panel);
+  color: var(--pl-sub);
+  border: 4px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  box-shadow: none;
+  text-shadow: var(--pl-text-shadow);
+}
+.themed.theme-place .ch-mon-name {
+  color: var(--pl-ink);
+  -webkit-text-stroke: 0;
+  font-style: normal;
+  text-shadow: var(--pl-text-shadow);
+}
+.themed.theme-place .ch-footer {
+  background: var(--pl-panel);
+  border: 5px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  box-shadow: var(--pl-drop);
+  color: var(--pl-sub);
+}
+.themed.theme-place .ch-event {
+  color: var(--pl-ink);
+}
+
+/* Bracket: near-solid entries (the map is busy behind the lines), lines in the place's light accent. */
+.themed.theme-place .br-label {
+  background: var(--pl-dark);
+  color: var(--pl-accent);
+  border: 3px solid var(--pl-accent);
+  border-radius: 999px;
+  padding: 6px 0;
+  font-style: normal;
+  text-shadow: none;
+}
+.themed.theme-place .br-line {
+  border-color: #fff;
+}
+.themed.theme-place .br-line-h {
+  background: #fff;
+}
+.themed.theme-place .br-entry {
+  border-width: 4px;
+  background: var(--pl-panel);
+}
+.themed.theme-place.glass .br-entry {
+  background: rgba(20, 20, 24, 0.82);
+}
+.themed.theme-place.pl-hoenn.glass .br-entry {
+  background: rgba(16, 36, 22, 0.88);
+}
+.themed.theme-place .br-entry.won {
+  border-color: var(--pl-first);
+}
+/* Losers keep their solid box (fading the whole box let the light map wash it out); only the contents dim. */
+.themed.theme-place .br-entry.lost {
+  opacity: 1;
+}
+.themed.theme-place .br-entry.lost > * {
+  opacity: 0.5;
+}
+.themed.theme-place .br-champ {
+  border: 5px solid var(--pl-first);
+  border-radius: var(--pl-radius);
+  background: var(--pl-panel);
+  box-shadow: var(--pl-drop);
+  color: var(--pl-ink);
+}
+.themed.theme-place .br-champ-label {
+  color: var(--pl-ink);
+}
+
+/* ---------- Usage / Replay / Team Battle ---------- */
+.themed.theme-place .us-event,
+.themed.theme-place .vs-meta,
+.themed.theme-place .us-facts,
+.themed.theme-place .vs-format {
+  color: #fff;
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: 2px 2px 0 var(--pl-dark), 0 0 12px rgba(0, 0, 0, 0.6);
+}
+.themed.theme-place .us-rank,
+.themed.theme-place .us-name,
+.themed.theme-place .tb-player {
+  color: #fff;
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: 2px 2px 0 var(--pl-dark), 0 0 10px rgba(0, 0, 0, 0.6);
+}
+.themed.theme-place .us-bar {
+  border: 4px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  background: var(--pl-panel);
+}
+.themed.theme-place .us-fill {
+  border-radius: 0;
+  background: linear-gradient(90deg, var(--pl-a), var(--pl-b));
+}
+.themed.theme-place .us-bar span {
+  color: #fff;
+  text-shadow: 2px 2px 0 var(--pl-dark);
+}
+.themed.theme-place .vs-banner,
+.themed.theme-place .tb-banner {
+  border: 5px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  background: var(--pl-a);
+  transform: none;
+  box-shadow: var(--pl-drop);
+}
+.themed.theme-place .vs-banner .dmv-title,
+.themed.theme-place .tb-banner .dmv-title,
+.themed.theme-place .vs-word {
+  color: #fff;
+  text-shadow: 3px 3px 0 var(--pl-dark);
+}
+.themed.theme-place .vs-score,
+.themed.theme-place .tb-kicker,
+.themed.theme-place .tb-record,
+.themed.theme-place .tb-set-score {
+  color: var(--pl-ink);
+  background: var(--pl-panel);
+  border: 4px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+}
+.themed.theme-place .tb-set-score {
+  opacity: 1;
+}
+.themed.theme-place .tb-set-score .win {
+  color: var(--pl-ink);
+}
+.themed.theme-place .tb-logo {
+  border: 5px solid var(--pl-line);
+  box-shadow: var(--pl-drop);
+}
+.themed.theme-place.tb .dmv-panel {
+  background: var(--pl-panel);
+}

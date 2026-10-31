@@ -109,6 +109,10 @@
   line-height: 1.15;
 }
 .p8-sub {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
   min-height: 22px;
   margin-top: 2px;
   font-size: 17px;

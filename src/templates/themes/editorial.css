@@ -1,0 +1,267 @@
+/* Editorial on the standard layouts: no outlines or rounded cards. Thick top rules, flat tinted cards,
+   upright black type, big tight numerals, brand colour only as the accent (Paper: red, Night: yellow).
+   The variables match editorial.css (Paper by default, Night overrides). */
+.themed.theme-editorial {
+  --fg: #15161a;
+  --muted: #6d6a63;
+  --accent: var(--red);
+  --band: #15161a;
+  --band-fg: #fff;
+  --band-num: var(--yellow);
+  --card: rgba(255, 255, 255, 0.6);
+  --solid: #fffdf8;
+  --hair: rgba(21, 22, 26, 0.18);
+  color: var(--fg);
+}
+.themed.theme-editorial.ed-night {
+  --fg: #f3f1ec;
+  --muted: #8f98ad;
+  --accent: var(--yellow);
+  --band: var(--red);
+  --band-num: #fff;
+  --card: rgba(255, 255, 255, 0.06);
+  --solid: #141c31;
+  --hair: rgba(255, 255, 255, 0.16);
+}
+.themed.theme-editorial .dmv-title {
+  color: var(--fg);
+  -webkit-text-stroke: 0;
+  font-style: normal;
+  letter-spacing: -0.02em;
+  text-shadow: none;
+}
+.themed.theme-editorial .dmv-logo {
+  border: 0;
+  box-shadow: none;
+}
+
+/* Header tag and facts */
+.themed.theme-editorial .p8-tag,
+.themed.theme-editorial .p4-tag,
+.themed.theme-editorial .m8-tag,
+.themed.theme-editorial .br-tag {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  transform: none;
+  padding: 0;
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+}
+.themed.theme-editorial .p8-facts,
+.themed.theme-editorial .p4-facts,
+.themed.theme-editorial .m8-facts,
+.themed.theme-editorial .br-facts {
+  color: var(--fg);
+  -webkit-text-stroke: 0;
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-shadow: none;
+}
+
+/* Cards: flat, square, with a heavy rule on top. The winner's card is the colour band. */
+.themed.theme-editorial .dmv-panel {
+  border: 0;
+  border-top: 8px solid var(--fg);
+  border-radius: 0;
+  background: var(--card);
+  box-shadow: 0 1px 0 var(--hair);
+  color: var(--fg);
+}
+.themed.theme-editorial .dmv-panel.first {
+  border-top-color: var(--accent);
+  background: var(--band);
+  color: var(--band-fg);
+}
+.themed.theme-editorial .p8-name,
+.themed.theme-editorial .p4-name,
+.themed.theme-editorial .m8-name,
+.themed.theme-editorial .br-name {
+  color: inherit;
+  -webkit-text-stroke: 0;
+  font-style: normal;
+  text-shadow: none;
+}
+.themed.theme-editorial .p8-sub,
+.themed.theme-editorial .p4-sub,
+.themed.theme-editorial .m8-sub,
+.themed.theme-editorial .m8-row-sub {
+  color: var(--muted);
+  text-shadow: none;
+}
+.themed.theme-editorial .dmv-panel.first .p8-sub,
+.themed.theme-editorial .dmv-panel.first .p4-sub,
+.themed.theme-editorial .dmv-panel.first .m8-sub {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Place numbers: big, tight, in the accent colour (the band's number colour on the winner). */
+.themed.theme-editorial .p8-place,
+.themed.theme-editorial .p4-place,
+.themed.theme-editorial .m8-place,
+.themed.theme-editorial .m8-row-place {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+.themed.theme-editorial .first .p8-place,
+.themed.theme-editorial .first .p4-place,
+.themed.theme-editorial .first .m8-place {
+  color: var(--band-num);
+}
+.themed.theme-editorial .p4-plate {
+  background: var(--solid);
+  color: var(--fg);
+  border: 0;
+  border-left: 8px solid var(--accent);
+  border-radius: 0;
+  box-shadow: none;
+}
+.themed.theme-editorial .dmv-photo-empty {
+  background: color-mix(in srgb, var(--fg) 8%, transparent);
+}
+.themed.theme-editorial .dmv-photo-empty span {
+  -webkit-text-stroke: 0;
+  font-style: normal;
+  color: var(--muted);
+}
+
+/* Bracket */
+.themed.theme-editorial .br-label {
+  color: var(--accent);
+  font-style: normal;
+  letter-spacing: 0.24em;
+  text-shadow: none;
+}
+.themed.theme-editorial .br-line {
+  border-color: var(--fg);
+  border-radius: 0;
+}
+.themed.theme-editorial .br-line-h {
+  background: var(--fg);
+}
+.themed.theme-editorial .br-entry {
+  border-radius: 0;
+  border-width: 0;
+  border-top: 6px solid var(--fg);
+  background: var(--solid);
+  color: var(--fg);
+}
+.themed.theme-editorial .br-entry.won {
+  background: var(--band);
+  color: var(--band-fg);
+  border-top-color: var(--accent);
+}
+.themed.theme-editorial .br-champ {
+  border: 0;
+  border-top: 8px solid var(--accent);
+  border-radius: 0;
+  background: var(--band);
+  box-shadow: none;
+  color: var(--band-fg);
+}
+.themed.theme-editorial .br-champ-label {
+  color: var(--band-num);
+  font-style: normal;
+  letter-spacing: 0.2em;
+}
+.themed.theme-editorial .br-champ-name {
+  color: var(--band-fg);
+}
+
+/* ---------- Usage / Replay / Team Battle ---------- */
+.themed.theme-editorial .us-event,
+.themed.theme-editorial .vs-meta {
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+.themed.theme-editorial .us-facts,
+.themed.theme-editorial .vs-format {
+  color: var(--muted);
+  font-style: normal;
+  text-shadow: none;
+}
+.themed.theme-editorial .us-name,
+.themed.theme-editorial .tb-player {
+  color: var(--fg);
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+.themed.theme-editorial .us-rank {
+  color: var(--accent);
+  font-style: normal;
+  letter-spacing: -0.04em;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+.themed.theme-editorial .us-bar {
+  border: 0;
+  border-radius: 0;
+  background: color-mix(in srgb, var(--fg) 12%, transparent);
+}
+.themed.theme-editorial .us-fill {
+  border-radius: 0;
+  background: var(--accent);
+}
+.themed.theme-editorial .us-bar span {
+  color: var(--fg);
+  text-shadow: none;
+}
+.themed.theme-editorial .vs-banner,
+.themed.theme-editorial .tb-banner {
+  border: 0;
+  border-radius: 0;
+  background: var(--band);
+  transform: none;
+  box-shadow: none;
+}
+.themed.theme-editorial .vs-banner .dmv-title,
+.themed.theme-editorial .tb-banner .dmv-title,
+.themed.theme-editorial .vs-word {
+  color: var(--band-fg);
+  font-style: normal;
+  text-shadow: none;
+}
+.themed.theme-editorial .vs-score {
+  color: var(--fg);
+  background: var(--card);
+  border: 0;
+  border-top: 8px solid var(--fg);
+  border-radius: 0;
+}
+.themed.theme-editorial .tb-kicker,
+.themed.theme-editorial .tb-record {
+  border: 0;
+  border-radius: 0;
+  background: var(--card);
+  color: var(--fg);
+  font-style: normal;
+}
+.themed.theme-editorial .tb-logo {
+  border: 0;
+  box-shadow: none;
+}
+.themed.theme-editorial .tb-set-score {
+  border: 0;
+  border-top: 6px solid var(--fg);
+  border-radius: 0;
+  background: var(--solid);
+  color: var(--muted);
+}
+.themed.theme-editorial .tb-set-score .win {
+  color: var(--accent);
+}

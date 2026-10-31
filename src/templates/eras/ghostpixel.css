@@ -1,0 +1,92 @@
+/* ---------- Ghost Pixel ---------- */
+.gp {
+  background: #0c090d;
+  color: #f3ebff;
+}
+.gp-wall {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+/* Pulls the pattern back behind the panels so it reads as a wall, not noise. */
+.gp-dim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(900px 700px at 50% 45%, rgba(12, 9, 13, 0.25), rgba(12, 9, 13, 0));
+}
+.gp-head, .gp-row {
+  background: rgba(16, 10, 28, 0.8);
+  border: 4px solid #b69ce4;
+  border-radius: 0;
+  box-shadow: 0 0 0 4px #0c090d, 8px 8px 0 4px rgba(92, 62, 150, 0.9);
+}
+.gp-head .dmv-logo {
+  border-color: #b69ce4;
+}
+.gp-kicker {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 15px;
+  color: #b69ce4;
+  letter-spacing: 0.1em;
+}
+.gp-title {
+  color: #fff;
+  text-shadow: 4px 4px 0 #5c3e96;
+}
+.gp-facts {
+  color: #cdbbf0;
+}
+.gp-place {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 26px;
+  color: #b69ce4;
+  background: rgba(92, 62, 150, 0.35);
+  border-right: 4px solid #5c3e96;
+}
+.gp-row.first {
+  border-color: #fff;
+}
+.gp-row.first .gp-place {
+  color: #0c090d;
+  background: #fff;
+  border-right-color: #b69ce4;
+}
+.gp-sub {
+  color: #b69ce4;
+}
+
+/* Glass: panels let the wall show through; text gets a hard shadow to stay readable. */
+.gp.glass .gp-head, .gp.glass .gp-row {
+  background: rgba(16, 10, 28, 0.38);
+}
+.gp.glass .gp-place {
+  background: rgba(92, 62, 150, 0.55);
+}
+.gp.glass .gp-name, .gp.glass .gp-facts, .gp.glass .gp-sub {
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.gp.glass .gp-row.first .gp-place {
+  background: #fff;
+}
+
+/* Glass + team box: a darker translucent plate behind each player's team so the sprites read clearly. */
+.gp.teambox .gp-team {
+  align-items: center;
+  margin-right: 12px;
+  padding: 0 10px;
+  height: 86px;
+  background: rgba(12, 8, 22, 0.78);
+  border: 3px solid rgba(182, 156, 228, 0.7);
+  box-shadow: 4px 4px 0 rgba(92, 62, 150, 0.8);
+}
+
+/* Glass + team line: no extra box, just a pixel divider inside the row that sets the team apart. */
+.gp.teamline .gp-team {
+  align-self: stretch;
+  background: rgba(92, 62, 150, 0.55); /* same purple as the place boxes */
+  align-items: center;
+  padding-left: 14px;
+  border-left: 4px solid rgba(182, 156, 228, 0.85);
+}

@@ -28,7 +28,7 @@ export const makeVsResult = (theme?: SideTheme): MatchTemplate => ({
         <header className="vs-top">
           <Logo size={120} />
           <div className="vs-event">
-            <FitText className="dmv-title" text={data.tournament.name || brand.name} max={46} width={600} />
+            <FitText className="dmv-title" text={data.tournament.name || brand.name} max={46} width={800} />
             <div className="vs-rule" />
             {/* Round and set length on one line, the (long) format name under it. No bubbles. */}
             <div className="vs-meta">

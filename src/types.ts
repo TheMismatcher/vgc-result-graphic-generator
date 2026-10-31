@@ -67,8 +67,9 @@ export interface Day2 {
   caption: string // bar on the photo, e.g. "DMV TO DAY 2"
   players: Player[]
   selected: string // uid of the player shown in the preview
-  hue?: number // background colour for the Regional Results graphic (colour-wheel degrees)
-  kind?: 'regionals' | 'internationals' | 'special' | 'worlds' // which event: badge + default colour
+  hue?: number // background colour for the Event Results graphic (colour-wheel degrees)
+  colors?: { main: string; second: string } // Mosaic Event Results: the two gradient colours (#rrggbb); overrides hue
+  kind?: 'regionals' | 'play' | 'internationals' | 'special' | 'worlds' // which event: badge + default colour
 }
 
 export interface TeamSide {

@@ -1,0 +1,285 @@
+/* Ghost Pixel on the standard layouts: black sprite wall, square pixel-bordered translucent purple
+   panels with hard shadows, Press Start place numbers, white type with a hard dark shadow. */
+.themed.theme-ghostpixel {
+  --gp-line: #b69ce4;
+  --gp-purple: #5c3e96;
+  --gp-glass: rgba(92, 62, 150, 0.55);
+  --gp-ink: rgba(16, 10, 28, 0.62);
+  color: #f3ebff;
+}
+.themed.theme-ghostpixel .gp-wall {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+.themed.theme-ghostpixel .dmv-title {
+  color: #fff;
+  -webkit-text-stroke: 0;
+  font-style: normal;
+  text-shadow: 4px 4px 0 var(--gp-purple);
+}
+.themed.theme-ghostpixel .dmv-logo {
+  border: 4px solid var(--gp-line);
+  box-shadow: 4px 4px 0 var(--gp-purple);
+}
+
+/* Header tag and facts. */
+.themed.theme-ghostpixel .p8-tag,
+.themed.theme-ghostpixel .p4-tag,
+.themed.theme-ghostpixel .m8-tag,
+.themed.theme-ghostpixel .br-tag {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  transform: none;
+  padding: 0;
+  color: var(--gp-line);
+  font-family: 'Press Start 2P', monospace;
+  font-style: normal;
+  letter-spacing: 0.1em;
+}
+.themed.theme-ghostpixel .p8-facts,
+.themed.theme-ghostpixel .p4-facts,
+.themed.theme-ghostpixel .m8-facts,
+.themed.theme-ghostpixel .br-facts {
+  color: #cdbbf0;
+  -webkit-text-stroke: 0;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+
+/* Cards. */
+.themed.theme-ghostpixel .dmv-panel {
+  border: 4px solid var(--gp-line);
+  border-radius: 0;
+  background: var(--gp-ink);
+  box-shadow: 0 0 0 4px #0c090d, 8px 8px 0 4px rgba(92, 62, 150, 0.9);
+  color: #fff;
+}
+.themed.theme-ghostpixel .dmv-panel.first {
+  border-color: #fff;
+}
+.themed.theme-ghostpixel .p8-name,
+.themed.theme-ghostpixel .p4-name,
+.themed.theme-ghostpixel .m8-name,
+.themed.theme-ghostpixel .br-name {
+  color: #fff;
+  -webkit-text-stroke: 0;
+  font-style: normal;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.themed.theme-ghostpixel .p8-sub,
+.themed.theme-ghostpixel .p4-sub,
+.themed.theme-ghostpixel .m8-sub,
+.themed.theme-ghostpixel .m8-row-sub,
+.themed.theme-ghostpixel .ch-sub,
+.themed.theme-ghostpixel .ch-item-name {
+  color: #cdbbf0;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+
+/* Place numbers: purple box in the pixel font; first place is white. */
+.themed.theme-ghostpixel .p8-place,
+.themed.theme-ghostpixel .p4-place,
+.themed.theme-ghostpixel .m8-place,
+.themed.theme-ghostpixel .m8-row-place {
+  background: var(--gp-glass);
+  border: 0;
+  border-right: 4px solid var(--gp-purple);
+  color: var(--gp-line);
+  font-family: 'Press Start 2P', monospace;
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+.themed.theme-ghostpixel .first .p8-place,
+.themed.theme-ghostpixel .first .p4-place,
+.themed.theme-ghostpixel .first .m8-place {
+  background: #fff;
+  color: #0c090d;
+}
+.themed.theme-ghostpixel .m8-row-place {
+  background: transparent;
+  border-right: 0;
+}
+.themed.theme-ghostpixel .p4-plate {
+  background: rgba(16, 10, 28, 0.85);
+  border-left: 6px solid var(--gp-line);
+  box-shadow: none;
+}
+.themed.theme-ghostpixel .dmv-photo-empty {
+  background: linear-gradient(160deg, #3a2766, #140d22);
+}
+.themed.theme-ghostpixel .dmv-photo-empty span {
+  -webkit-text-stroke: 0;
+  color: rgba(205, 187, 240, 0.6);
+}
+
+/* Champion */
+.themed.theme-ghostpixel .ch-banner {
+  background: var(--gp-purple);
+  border: 4px solid var(--gp-line);
+  box-shadow: 6px 6px 0 rgba(12, 9, 13, 0.8);
+}
+.themed.theme-ghostpixel .ch-sub {
+  background: var(--gp-ink);
+  border: 3px solid var(--gp-line);
+  box-shadow: none;
+}
+.themed.theme-ghostpixel .ch-mon-name {
+  color: #fff;
+  -webkit-text-stroke: 0;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.themed.theme-ghostpixel .ch-footer {
+  background: rgba(16, 10, 28, 0.85);
+  border: 4px solid var(--gp-line);
+  box-shadow: none;
+  color: #cdbbf0;
+}
+.themed.theme-ghostpixel .ch-event {
+  color: var(--gp-line);
+}
+
+/* Bracket */
+.themed.theme-ghostpixel .br-label {
+  color: var(--gp-line);
+  font-family: 'Press Start 2P', monospace;
+  text-shadow: none;
+  letter-spacing: 0.08em;
+}
+.themed.theme-ghostpixel .br-line {
+  border-color: var(--gp-line);
+}
+.themed.theme-ghostpixel .br-line-h {
+  background: var(--gp-line);
+}
+.themed.theme-ghostpixel .br-entry.lost {
+  opacity: 0.55;
+}
+.themed.theme-ghostpixel .br-champ {
+  border: 4px solid #fff;
+  border-radius: 0;
+  background: var(--gp-ink);
+  box-shadow: 0 0 0 4px #0c090d, 8px 8px 0 4px rgba(92, 62, 150, 0.9);
+  color: #fff;
+}
+.themed.theme-ghostpixel .br-champ-label {
+  color: var(--gp-line);
+}
+.themed.theme-ghostpixel .m8-row-place {
+  font-size: 28px;
+  letter-spacing: -0.06em;
+}
+
+/* Bracket: solid-enough entries (the wall is busy behind the lines) and labels sized for the pixel font. */
+.themed.theme-ghostpixel .br-label {
+  font-size: 16px;
+  font-style: normal;
+  letter-spacing: 0;
+}
+.themed.theme-ghostpixel .br-entry {
+  border-radius: 0;
+  border-width: 4px;
+  border-color: var(--gp-line);
+  background: rgba(16, 10, 28, 0.94);
+  box-shadow: 4px 4px 0 rgba(92, 62, 150, 0.9);
+  color: #fff;
+}
+.themed.theme-ghostpixel .br-entry.won {
+  border-color: #fff;
+}
+.themed.theme-ghostpixel.br .gp-wall {
+  opacity: 0.6;
+}
+.themed.theme-ghostpixel .br-label {
+  background: rgba(16, 10, 28, 0.9);
+  border: 3px solid var(--gp-purple);
+  padding: 8px 0;
+}
+
+/* ---------- Usage / Replay / Team Battle ---------- */
+.themed.theme-ghostpixel .us-event,
+.themed.theme-ghostpixel .vs-meta {
+  color: var(--gp-line);
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: 3px 3px 0 #0c090d;
+}
+.themed.theme-ghostpixel .us-rank {
+  color: var(--gp-line);
+  -webkit-text-stroke: 0;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.themed.theme-ghostpixel .us-facts,
+.themed.theme-ghostpixel .vs-format {
+  color: #cdbbf0;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.themed.theme-ghostpixel .us-name,
+.themed.theme-ghostpixel .tb-player {
+  color: #fff;
+  -webkit-text-stroke: 0;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.themed.theme-ghostpixel .us-bar {
+  border: 3px solid var(--gp-line);
+  border-radius: 0;
+  background: rgba(16, 10, 28, 0.85);
+}
+.themed.theme-ghostpixel .us-fill {
+  border-radius: 0;
+  background: linear-gradient(90deg, var(--gp-purple), var(--gp-line));
+}
+.themed.theme-ghostpixel .us-bar span {
+  color: #fff;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.themed.theme-ghostpixel .vs-banner,
+.themed.theme-ghostpixel .tb-banner {
+  border: 4px solid var(--gp-line);
+  border-radius: 0;
+  background: var(--gp-purple);
+  transform: none;
+  box-shadow: 6px 6px 0 rgba(12, 9, 13, 0.8);
+}
+.themed.theme-ghostpixel .vs-banner .dmv-title,
+.themed.theme-ghostpixel .tb-banner .dmv-title,
+.themed.theme-ghostpixel .vs-word {
+  color: #fff;
+  text-shadow: 3px 3px 0 #0c090d;
+}
+.themed.theme-ghostpixel .vs-score {
+  color: #fff;
+  background: rgba(16, 10, 28, 0.85);
+  border: 3px solid var(--gp-line);
+  border-radius: 0;
+}
+.themed.theme-ghostpixel .tb-kicker,
+.themed.theme-ghostpixel .tb-record {
+  border: 3px solid var(--gp-line);
+  border-radius: 0;
+  background: rgba(16, 10, 28, 0.85);
+  color: #fff;
+}
+.themed.theme-ghostpixel .tb-logo {
+  border: 4px solid var(--gp-line);
+  box-shadow: 4px 4px 0 var(--gp-purple);
+}
+.themed.theme-ghostpixel .tb-set-score {
+  border: 3px solid var(--gp-line);
+  border-radius: 0;
+  background: rgba(16, 10, 28, 0.88);
+  color: rgba(205, 187, 240, 0.5);
+}
+.themed.theme-ghostpixel .tb-set-score .win {
+  color: #fff;
+}
+/* Team Battle rows sit over a busy wall: darker panels, upright names. */
+.themed.theme-ghostpixel.tb .dmv-panel {
+  background: rgba(16, 10, 28, 0.9);
+}
+.themed.theme-ghostpixel .tb-player {
+  font-style: normal;
+}

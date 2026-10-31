@@ -159,12 +159,15 @@ export function Preview<T extends Template>({
 /**
  * Standings picker: choose a layout, then a style (the look). Every layout can be picked: if the
  * current style doesn't have it yet, the first style that does is used. Style cards preview each
- * style in the chosen layout; styles without it are greyed out.
+ * style in the chosen layout. A style that doesn't have the chosen layout can still be picked: it opens
+ * in Top Cut (or its first layout). Only the template changes, never the entered data.
  */
 function StylePicker<T extends Template>({ templates, current, onSelect, render }: { templates: T[]; current: T; onSelect: (id: string) => void; render: (t: T) => ReactNode }) {
   const styles = [...new Set(templates.map((t) => t.style!))]
   const inStyle = (style: string) => templates.filter((t) => t.style === style)
   const find = (style: string, layout?: StandingsLayout) => inStyle(style).find((t) => t.layout === layout)
+  // What a style opens as when it doesn't have the chosen layout: Top Cut, then whatever it has.
+  const fallback = (style: string) => find(style, 'topcut') ?? inStyle(style)[0]
   return (
     <div className="space-y-4">
       <div>
@@ -195,24 +198,24 @@ function StylePicker<T extends Template>({ templates, current, onSelect, render 
         <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">2. Style</h3>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
           {styles.map((style) => {
-            // Show the style in the chosen layout; styles without that layout yet are greyed out.
+            // Show the style in the chosen layout; styles without it show (and open as) their fallback layout.
             const own = find(style, current.layout)
-            const t = own ?? inStyle(style)[0]
+            const target = own ?? fallback(style)
+            const t = target
             const count = inStyle(style).length
             return (
               <button
                 key={style}
                 type="button"
-                disabled={!own}
-                title={own ? undefined : `${style} isn't made for this layout yet`}
-                onClick={() => own && onSelect(own.id)}
-                className={`rounded-xl border-2 p-1.5 text-left transition ${style === current.style ? 'border-[#b3121b] bg-red-50' : own ? 'border-slate-200 hover:border-slate-400' : 'cursor-not-allowed border-dashed border-slate-200 opacity-40'}`}
+                title={own ? undefined : `${style} isn't made for this layout yet, so it opens as ${STANDINGS_LAYOUTS.find((l) => l.id === target.layout)?.label ?? 'its own layout'}`}
+                onClick={() => onSelect(target.id)}
+                className={`rounded-xl border-2 p-1.5 text-left transition ${style === current.style ? 'border-[#b3121b] bg-red-50' : own ? 'border-slate-200 hover:border-slate-400' : 'border-dashed border-slate-300 hover:border-slate-500'}`}
               >
                 <div className="pointer-events-none mb-1.5 overflow-hidden rounded-md" aria-hidden>
                   <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>
                 </div>
                 <div className="text-xs font-semibold leading-tight text-slate-900">{style}</div>
-                <div className="text-[11px] text-slate-500">{own ? (count === 1 ? '1 layout' : `${count} layouts`) : 'Not in this layout yet'}</div>
+                <div className="text-[11px] text-slate-500">{own ? (count === 1 ? '1 layout' : `${count} layouts`) : `Opens as ${STANDINGS_LAYOUTS.find((l) => l.id === target.layout)?.label ?? 'its own layout'}`}</div>
               </button>
             )
           })}

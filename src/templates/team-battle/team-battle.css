@@ -13,6 +13,11 @@
   height: 48px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  max-width: 940px; /* a long league name is cut off with an ellipsis instead of running off the graphic */
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tb-header {

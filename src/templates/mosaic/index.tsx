@@ -131,11 +131,31 @@ export function MosaicTiles({ data, gradient, squares, width = W, height = H }: 
 }
 
 /** The tile wall for any list of Pokémon ids (repeats removed); `seed` fixes the tile layout. */
-export function MosaicWall({ mons: list, seed, gradient, squares, width = W, height = H }: { mons: string[]; seed: string; gradient: boolean; squares: boolean; width?: number; height?: number }) {
+export function MosaicWall({ mons: list, seed, gradient, squares, width = W, height = H, colors, splitEdge = false, bigAt }: { mons: string[]; seed: string; gradient: boolean; squares: boolean; width?: number; height?: number; colors?: { main: string; second: string }; splitEdge?: boolean; bigAt?: [number, number][] }) {
   const brand = useBrand()
-  const { main, second } = brand.colors
+  const { main, second } = colors ?? brand.colors // `colors` (#rrggbb) overrides the brand, e.g. an event's colour
   const mons = [...new Set(list.filter(Boolean))]
-  const tiles = layout(seed, squares).filter((t) => t.y * CELL < height && t.x * CELL < width)
+  // splitEdge: a big tile that would run off the bottom edge becomes small tiles along the visible row,
+  // so every tile shows a whole Pokémon. Off by default (the other styles keep their original tiles).
+  const rowsShown = Math.floor(height / CELL)
+  const tiles: Tile[] = layout(seed, squares)
+    .filter((t) => t.y * CELL < height && t.x * CELL < width)
+    .flatMap((t): Tile[] =>
+      splitEdge && t.y + t.h > rowsShown ? Array.from({ length: t.w }, (_, k) => ({ x: t.x + k, y: t.y, w: 1, h: 1 })) : [t],
+    )
+  // bigAt: [column, row] cells that become one 2×2 tile (the tiles under it are cleared; any cells they
+  // covered outside it stay as 1×1 tiles so there are no holes).
+  for (const [bx, by] of bigAt ?? []) {
+    const inside = (x: number, y: number) => x >= bx && x < bx + 2 && y >= by && y < by + 2
+    for (let i = tiles.length - 1; i >= 0; i--) {
+      const t = tiles[i]
+      const cells = Array.from({ length: t.w * t.h }, (_, k) => [t.x + (k % t.w), t.y + Math.floor(k / t.w)])
+      if (!cells.some(([x, y]) => inside(x, y))) continue
+      tiles.splice(i, 1, ...cells.filter(([x, y]) => !inside(x, y)).map(([x, y]) => ({ x, y, w: 1, h: 1 })))
+    }
+    tiles.push({ x: bx, y: by, w: 2, h: 2 })
+  }
+  tiles.sort((a, b) => a.y - b.y || a.x - b.x)
   const lineColor = (t: Tile) => (gradient ? mix(main, second, (t.x + t.y) / (COLS + ROWS - 2)) : second)
   return (
     <div className="mz-wall" style={{ position: 'absolute', inset: 0, background: gradient ? `linear-gradient(135deg, ${main}, ${second})` : second }}>
