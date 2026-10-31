@@ -10,7 +10,7 @@ import { useDialog } from './Dialog'
 import { Button, Card } from './ui'
 
 /** Shows a fixed-size graphic scaled down to fit its container. */
-function Scaled({ width, height, maxWidth, children, nodeRef }: { width: number; height: number; maxWidth?: number; children: ReactNode; nodeRef?: React.Ref<HTMLDivElement> }) {
+export function Scaled({ width, height, maxWidth, children, nodeRef }: { width: number; height: number; maxWidth?: number; children: ReactNode; nodeRef?: React.Ref<HTMLDivElement> }) {
   const vars = brandVars(useBrand())
   const box = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(0.4)
@@ -39,6 +39,7 @@ export function Preview<T extends Template>({
   render,
   filenameBase,
   allowCP = false,
+  showTemplates=true
 }: {
   templates: T[]
   selectedId: string
@@ -46,6 +47,7 @@ export function Preview<T extends Template>({
   render: (t: T) => ReactNode
   filenameBase: string
   allowCP?: boolean // show the "Show CP earned" option (standings graphics only)
+  showTemplates?: boolean //show on all but standings by default
 }) {
   const template = templates.find((t) => t.id === selectedId) ?? templates[0]
   const node = useRef<HTMLDivElement>(null)
@@ -128,31 +130,35 @@ export function Preview<T extends Template>({
         </Scaled>
       </div>
 
-      {templates.length > 1 && templates.every((t) => t.style) ? (
-        <StylePicker templates={templates} current={template} onSelect={onSelect} render={render} />
-      ) : templates.length > 1 && (
+      {showTemplates &&
         <div>
-          <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Template</h3>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {templates.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => onSelect(t.id)}
-                className={`rounded-xl border-2 p-2 text-left transition ${t.id === template.id ? 'border-[#b3121b] bg-red-50' : 'border-slate-200 hover:border-slate-400'}`}
-              >
-                <div className="pointer-events-none mb-2 overflow-hidden rounded-md" aria-hidden>
-                  <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>
-                </div>
-                <div className="text-sm font-semibold text-slate-900">{t.name}</div>
-                <div className="text-xs text-slate-500">{t.description}</div>
-                <div className="mt-0.5 text-[11px] text-slate-400">{t.width}×{t.height}</div>
-              </button>
-            ))}
-          </div>
+          {templates.length > 1 && templates.every((t) => t.style) ? (
+            <StylePicker templates={templates} current={template} onSelect={onSelect} render={render} />
+          ) : templates.length > 1 && (
+            <div>
+              <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Template</h3>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {templates.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => onSelect(t.id)}
+                    className={`rounded-xl border-2 p-2 text-left transition ${t.id === template.id ? 'border-[#b3121b] bg-red-50' : 'border-slate-200 hover:border-slate-400'}`}
+                  >
+                    <div className="pointer-events-none mb-2 overflow-hidden rounded-md" aria-hidden>
+                      <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>
+                    </div>
+                    <div className="text-sm font-semibold text-slate-900">{t.name}</div>
+                    <div className="text-xs text-slate-500">{t.description}</div>
+                    <div className="mt-0.5 text-[11px] text-slate-400">{t.width}×{t.height}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </Card>
+      }
+      </Card>
   )
 }
 
@@ -162,7 +168,7 @@ export function Preview<T extends Template>({
  * style in the chosen layout. A style that doesn't have the chosen layout can still be picked: it opens
  * in Top Cut (or its first layout). Only the template changes, never the entered data.
  */
-function StylePicker<T extends Template>({ templates, current, onSelect, render }: { templates: T[]; current: T; onSelect: (id: string) => void; render: (t: T) => ReactNode }) {
+export function StylePicker<T extends Template>({ templates, current, onSelect, render }: { templates: T[]; current: T; onSelect: (id: string) => void; render: (t: T) => ReactNode }) {
   const styles = [...new Set(templates.map((t) => t.style!))]
   const inStyle = (style: string) => templates.filter((t) => t.style === style)
   const find = (style: string, layout?: StandingsLayout) => inStyle(style).find((t) => t.layout === layout)
