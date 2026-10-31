@@ -76,12 +76,40 @@ export function StandingsPage({
       <Card className="space-y-2">
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={inputTab} onChange={handleInputTabChange} aria-label="basic tabs example">
-              <Tab label="Data" {...a11yProps(0)} />
-              <Tab label="Templates" {...a11yProps(1)} />
+              <Tab label="Templates" {...a11yProps(0)} />
+              <Tab label="Data" {...a11yProps(1)} />
             </Tabs>
           </Box>
-          {/* data pannel */}
+          {/* template pannel */}
           <CustomTabPanel value={inputTab} index={0}>
+            {STANDINGS_TEMPLATES.length > 1 && STANDINGS_TEMPLATES.every((t) => t.style) ? (
+              <StylePicker templates={STANDINGS_TEMPLATES} current={template} onSelect={onSelect} render={render} />
+            ) : STANDINGS_TEMPLATES.length > 1 && (
+              <div>
+                <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Template</h3>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {STANDINGS_TEMPLATES.map((t) => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => onSelect(t.id)}
+                      className={`rounded-xl border-2 p-2 text-left transition ${t.id === template.id ? 'border-[#b3121b] bg-red-50' : 'border-slate-200 hover:border-slate-400'}`}
+                    >
+                      <div className="pointer-events-none mb-2 overflow-hidden rounded-md" aria-hidden>
+                        <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>
+                      </div>
+                      <div className="text-sm font-semibold text-slate-900">{t.name}</div>
+                      <div className="text-xs text-slate-500">{t.description}</div>
+                      <div className="mt-0.5 text-[11px] text-slate-400">{t.width}×{t.height}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </CustomTabPanel>
+
+           {/* data pannel */}
+          <CustomTabPanel value={inputTab} index={1}>
             <div className="space-y-4">
               <Card className="space-y-3">
                 <h2 className="text-lg font-bold text-slate-900">Data Source</h2>
@@ -125,34 +153,7 @@ export function StandingsPage({
               <BracketEditor state={state} setState={setState} />
             </div>  
           </CustomTabPanel>
-          
-          {/* template pannel */}
-          <CustomTabPanel value={inputTab} index={1}>
-            {STANDINGS_TEMPLATES.length > 1 && STANDINGS_TEMPLATES.every((t) => t.style) ? (
-              <StylePicker templates={STANDINGS_TEMPLATES} current={template} onSelect={onSelect} render={render} />
-            ) : STANDINGS_TEMPLATES.length > 1 && (
-              <div>
-                <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Template</h3>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                  {STANDINGS_TEMPLATES.map((t) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => onSelect(t.id)}
-                      className={`rounded-xl border-2 p-2 text-left transition ${t.id === template.id ? 'border-[#b3121b] bg-red-50' : 'border-slate-200 hover:border-slate-400'}`}
-                    >
-                      <div className="pointer-events-none mb-2 overflow-hidden rounded-md" aria-hidden>
-                        <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>
-                      </div>
-                      <div className="text-sm font-semibold text-slate-900">{t.name}</div>
-                      <div className="text-xs text-slate-500">{t.description}</div>
-                      <div className="mt-0.5 text-[11px] text-slate-400">{t.width}×{t.height}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </CustomTabPanel>
+         
       </Card>
       
 
