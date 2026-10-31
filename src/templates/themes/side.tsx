@@ -31,7 +31,7 @@ const editorialWall = (mood: 'paper' | 'night') => () => <div className={`ed ed-
 export const SIDE_THEMES: SideTheme[] = [
   {
     id: 'ghost-pixel',
-    style: 'Ghost Pixel Glass Team Line',
+    style: 'Ghost Pixels',
     className: 'theme-ghostpixel',
     Wall: ({ seed, width, height }) => (
       <div style={{ position: 'absolute', inset: 0, background: '#0c090d' }}>

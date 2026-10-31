@@ -3,7 +3,7 @@
 
 import { makeBracket } from '../bracket'
 import { makeChampion } from '../champion'
-import { MapWall, R119_BRIDGE, R119_TOP, R120, SPEAR, SPEAR_ART } from '../places'
+import { MapWall, R119_BRIDGE, R119_TOP, R120, R201, SPEAR, SPEAR_ART, HALL, GLIMWOOD, TERA, MAX_RAID, SCARLET_BOOK, VIOLET_BOOK, SCARLET_BOOK_FULL, VIOLET_BOOK_FULL, SCARLET_BOOK_COVER, VIOLET_BOOK_COVER, SCARLET_BOOK_SQUARE, VIOLET_BOOK_SQUARE } from '../places'
 import { makeTop4Photos } from '../top4-photos'
 import { makeTop8Mixed } from '../top8-mixed'
 import { makeTop8Photos } from '../top8-photos'
@@ -20,12 +20,27 @@ export interface Place {
   style: string
   className: string
   crop: Crop
+  /** Used instead of `crop` when the frame is square (Champion). */
+  square?: Crop
 }
 
 export const PLACES: Place[] = [
   { id: 'place-spear-pillar', style: 'Spear Pillar', className: 'theme-place pl-spear', crop: SPEAR },
   { id: 'place-spear-pillar-glass', style: 'Spear Pillar Glass', className: 'theme-place pl-spear glass', crop: SPEAR },
+  { id: 'place-spear-pillar-hall', style: 'Spear Pillar Hall of Origin', className: 'theme-place pl-spear hoo', crop: HALL },
+  { id: 'place-spear-pillar-hall-floor', style: 'Spear Pillar Hall Champion', className: 'theme-place pl-spear hoo', crop: SPEAR },
   { id: 'place-spear-pillar-art', style: 'Spear Pillar Concept Art', className: 'theme-place pl-spear glass art', crop: SPEAR_ART },
+  { id: 'art-glimwood', style: 'Glimwood Tangle Official', className: 'theme-place pl-glim', crop: GLIMWOOD },
+  { id: 'art-terastal', style: 'Terastal Official', className: 'theme-place pl-tera', crop: TERA },
+  { id: 'art-scarlet-book', style: 'Scarlet Book', className: 'theme-place pl-scarlet pl-book', crop: SCARLET_BOOK_COVER, square: SCARLET_BOOK_SQUARE },
+  { id: 'art-violet-book', style: 'Violet Book', className: 'theme-place pl-violet pl-book', crop: VIOLET_BOOK_COVER, square: VIOLET_BOOK_SQUARE },
+  { id: 'art-scarlet-book-zoomed', style: 'Scarlet Book Zoomed', className: 'theme-place pl-scarlet pl-book', crop: SCARLET_BOOK },
+  { id: 'art-violet-book-zoomed', style: 'Violet Book Zoomed', className: 'theme-place pl-violet pl-book', crop: VIOLET_BOOK },
+  { id: 'art-scarlet-book-full', style: 'Scarlet Book Full Cover', className: 'theme-place pl-scarlet pl-book pl-whole', crop: SCARLET_BOOK_FULL },
+  { id: 'art-violet-book-full', style: 'Violet Book Full Cover', className: 'theme-place pl-violet pl-book pl-whole', crop: VIOLET_BOOK_FULL },
+  { id: 'art-dynamax', style: 'Dynamax Official', className: 'theme-place pl-dyna', crop: MAX_RAID },
+  { id: 'place-route-201', style: 'Route 201 Official', className: 'theme-place pl-sinnoh', crop: R201 },
+  { id: 'place-route-201-glass', style: 'Route 201 Official Glass', className: 'theme-place pl-sinnoh glass', crop: R201 },
   { id: 'place-route-119', style: 'Route 119', className: 'theme-place pl-hoenn', crop: R119_TOP },
   { id: 'place-route-119-glass', style: 'Route 119 Glass', className: 'theme-place pl-hoenn glass', crop: R119_TOP },
   { id: 'place-route-119-bridge', style: 'Route 119 Bridge', className: 'theme-place pl-hoenn', crop: R119_BRIDGE },
@@ -41,11 +56,13 @@ const Wall = ({ crop, width, height }: { crop: Crop; width: number; height: numb
   </div>
 )
 
+const cropFor = (p: Place, width: number, height: number) => (width === height && p.square ? p.square : p.crop)
+
 const theme = (p: Place): Theme => ({
   id: p.id,
   style: p.style,
   className: p.className,
-  Background: ({ width, height }) => <Wall crop={p.crop} width={width} height={height} />,
+  Background: ({ width, height }) => <Wall crop={cropFor(p, width, height)} width={width} height={height} />,
 })
 
 /** The five non-Top-Cut layouts for each place, keyed by style name. */
@@ -70,5 +87,5 @@ export const PLACE_SIDE_THEMES: SideTheme[] = PLACES.map((p) => ({
   id: p.id,
   style: p.style,
   className: p.className,
-  Wall: ({ width, height }) => <Wall crop={p.crop} width={width} height={height} />,
+  Wall: ({ width, height }) => <Wall crop={cropFor(p, width, height)} width={width} height={height} />,
 }))

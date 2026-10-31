@@ -35,7 +35,7 @@ export const BattleTower: StandingsTemplate = {
           <line key={i} x1={540} y1={980} x2={-700 + i * 225} y2={1350} stroke="#e8b84a" strokeOpacity="0.18" strokeWidth="2" />
         ))}
       </svg>
-      <LocationHead data={data} cls="bt" kicker="Battle Tower" />
+      <LocationHead data={data} cls="bt" kicker="" />
       <LocationRows data={data} cls="bt" />
     </div>
   ),
@@ -79,7 +79,7 @@ export const MtCoronet: StandingsTemplate = {
           ))}
           <path d="M0 1300 L1080 1300 L1080 1350 L0 1350 Z" fill="#6d6880" />
         </svg>
-        <LocationHead data={data} cls="mc" kicker="Spear Pillar · Mt. Coronet" />
+        <LocationHead data={data} cls="mc" kicker="" />
         <LocationRows data={data} cls="mc" />
       </div>
     )
@@ -98,7 +98,7 @@ export const Hoenn: StandingsTemplate = {
 function HoennBody({ data }: { data: Parameters<StandingsTemplate['Component']>[0]['data'] }) {
   return (
     <div className="dmv h3" style={{ width: 1080, height: 1350 }}>
-      <LocationHead data={data} cls="h3" kicker="Hoenn League" />
+      <LocationHead data={data} cls="h3" kicker="" />
       <LocationRows data={data} cls="h3" />
     </div>
   )
@@ -321,7 +321,7 @@ export const Ghost: StandingsTemplate = {
             </g>
           ))}
         </svg>
-        <LocationHead data={data} cls="gh" kicker="Haunted Hour" />
+        <LocationHead data={data} cls="gh" kicker="" />
         <LocationRows data={data} cls="gh" />
       </div>
     )
