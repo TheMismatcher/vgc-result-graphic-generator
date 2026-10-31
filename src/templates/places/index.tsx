@@ -13,8 +13,8 @@
 //   removed, then widened the same way).
 // - Spear Pillar Hall of Origin: Platinum's Hall of Origin map (Arceus on the glass platform) behind the
 //   stone panels; the champion sits on the platform's own glass floor tile (hall-of-origin-floor.png).
-// - Spear Pillar: Platinum's Spear Pillar map (Bulbapedia rip) with the NPCs painted out using the
-//   floor's own repeating texture, and the Brilliant Diamond / Shining Pearl concept art.
+// - Spear Pillar (Hall Champion, Cutscene Sky): Platinum's Spear Pillar map (Bulbapedia rip) with the NPCs painted
+//   out using the floor's own repeating texture; and the Brilliant Diamond / Shining Pearl concept art.
 // - Snowpoint City, Route 217, Lake Acuity: Platinum's own maps (Bulbapedia rips); the walking NPCs and the
 //   half-buried trainers are painted out with tile-aligned copies of the snow around them (the Ice Rock stays).
 //   Snowpoint Full Map: the whole town (temple to docks) widened to 4:5 with the map's own tiles: the right edge
@@ -157,19 +157,15 @@ export const Route120 = makePlace('place-route-120', 'Top Cut (Route 120)', 'Eme
 export const Route120Glass = makePlace('place-route-120-glass', 'Top Cut (Route 120 Glass)', 'Route 120 map with see-through dark panels so more of the route shows.', R120, 'pl-hoenn', 'glass')
 export const Route201Tiles = makePlace('place-route-201', 'Top Cut (Route 201 Official)', 'Route 201 built from Platinum’s own tiles: the tree line and the tall grass.', R201, 'pl-sinnoh', '')
 export const Route201TilesGlass = makePlace('place-route-201-glass', 'Top Cut (Route 201 Official Glass)', 'Route 201 from Platinum’s own tiles with see-through dark panels.', R201, 'pl-sinnoh', 'glass')
-export const GlimwoodOfficial = makePlace('art-glimwood', 'Top Cut (Glimwood Tangle Official)', 'Glimwood Tangle from Sword & Shield: the glowing-mushroom forest behind dark green glass.', GLIMWOOD, 'pl-glim', 'pl-art')
+export const GlimwoodOfficial = makePlace('art-glimwood', 'Top Cut (Glimwood Tangle)', 'Glimwood Tangle from Sword & Shield: the glowing-mushroom forest behind dark green glass.', GLIMWOOD, 'pl-glim', 'pl-art')
 export const TerastalOfficial = makePlace('art-terastal', 'Top Cut (Terastal Official)', 'Scarlet & Violet’s Stellar Terastallization: the jewel crown over the battle starfield, behind dark glass.', TERA, 'pl-tera', 'pl-art')
 export const DynamaxOfficial = makePlace('art-dynamax', 'Top Cut (Dynamax Official)', 'The official Sword & Shield Max Raid Battle artwork behind dark magenta glass.', MAX_RAID, 'pl-dyna', 'pl-art')
-export const SpearPillar = makePlace('place-spear-pillar', 'Top Cut (Spear Pillar)', 'Platinum’s Spear Pillar map (NPCs removed) behind dark stone panels with Dialga blue and Palkia pink.', SPEAR, 'pl-spear', '')
-export const SpearPillarGlass = makePlace('place-spear-pillar-glass', 'Top Cut (Spear Pillar Glass)', 'Spear Pillar map with see-through panels so the pillars show.', SPEAR, 'pl-spear', 'glass')
 export const SpearPillarHall = makePlace('place-spear-pillar-hall', 'Top Cut (Spear Pillar Hall of Origin)', 'Platinum’s Hall of Origin map with Arceus; the champion stands on the Hall’s glass floor tiles.', HALL, 'pl-spear', 'hoo')
 export const SpearPillarHallChampion = makePlace('place-spear-pillar-hall-floor', 'Top Cut (Spear Pillar Hall Champion)', 'The Spear Pillar map, with only the champion standing on the Hall of Origin’s glass floor tiles.', SPEAR, 'pl-spear', 'hoo')
 export const SpearPillarHallChampionGlass = makePlace('place-spear-pillar-hall-floor-glass', 'Top Cut (Spear Pillar Hall Champion Glass)', 'The Spear Pillar map with see-through panels; the champion stands on the Hall of Origin’s glass floor tiles.', SPEAR, 'pl-spear', 'hoo glass')
-// The climax of Diamond & Pearl: the sky over Spear Pillar torn open in red, blue and green streaks (recreated in CSS).
-export const SpearPillarSky = makePlace('place-spear-pillar-sky', 'Top Cut (Spear Pillar Sky Champion)', 'The Spear Pillar map; the champion’s panel is the torn red, blue and green sky from Diamond & Pearl’s climax.', SPEAR, 'pl-spear', 'sky')
-export const SpearPillarSkyGlass = makePlace('place-spear-pillar-sky-glass', 'Top Cut (Spear Pillar Sky Champion Glass)', 'Spear Pillar with see-through panels; the champion’s panel is the torn red, blue and green sky.', SPEAR, 'pl-spear', 'sky glass')
-export const SpearPillarCutscene = makePlace('place-spear-pillar-cutscene', 'Top Cut (Spear Pillar Cutscene Sky)', 'The Spear Pillar map; the champion’s panel is the streaked sky copied from Diamond & Pearl’s Spear Pillar cutscene.', SPEAR, 'pl-spear', 'sky dsky')
-export const SpearPillarCutsceneGlass = makePlace('place-spear-pillar-cutscene-glass', 'Top Cut (Spear Pillar Cutscene Sky Glass)', 'Spear Pillar with see-through panels; the champion’s panel is the streaked sky from the Diamond & Pearl cutscene.', SPEAR, 'pl-spear', 'sky dsky glass')
+// The climax of Diamond & Pearl: the champion in the streaked sky from the Spear Pillar cutscene.
+export const SpearPillarCutscene = makePlace('place-spear-pillar-cutscene', 'Top Cut (Spear Pillar Cutscene Sky)', 'The Spear Pillar map; the champion’s panel is the streaked sky copied from Diamond & Pearl’s Spear Pillar cutscene.', SPEAR, 'pl-spear', 'sky')
+export const SpearPillarCutsceneGlass = makePlace('place-spear-pillar-cutscene-glass', 'Top Cut (Spear Pillar Cutscene Sky Glass)', 'Spear Pillar with see-through panels; the champion’s panel is the streaked sky from the Diamond & Pearl cutscene.', SPEAR, 'pl-spear', 'sky glass')
 export const SpearPillarArt = makePlace('place-spear-pillar-art', 'Top Cut (Spear Pillar Concept Art)', 'Official Brilliant Diamond / Shining Pearl concept art of Spear Pillar behind dark panels.', SPEAR_ART, 'pl-spear', 'glass art')
 export const ScarletBook = makePlace('art-scarlet-book', 'Top Cut (Scarlet Book)', 'The Scarlet Book’s cover (official art, laid flat) edge to edge: Koraidon’s silhouette and gold foil behind crimson panels.', SCARLET_BOOK_COVER, 'pl-scarlet', 'pl-art pl-book')
 export const VioletBook = makePlace('art-violet-book', 'Top Cut (Violet Book)', 'The Violet Book’s cover (official art, laid flat) edge to edge: Miraidon’s silhouette and gold foil behind indigo panels.', VIOLET_BOOK_COVER, 'pl-violet', 'pl-art pl-book')

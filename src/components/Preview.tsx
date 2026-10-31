@@ -1,7 +1,7 @@
 // Live preview of the selected template, the template picker, and the download button.
 
 import { useLayoutEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
-import type { StandingsLayout, Template } from '../templates/types'
+import type { LookGroup, StandingsLayout, Template } from '../templates/types'
 import { STANDINGS_LAYOUTS } from '../templates/registry'
 import { copyPng, downloadPng, slugify } from '../lib/exportImage'
 import { brandVars, useBrand } from '../brand'
@@ -55,17 +55,26 @@ export function Preview<T extends Template>({
   const node = useRef<HTMLDivElement>(null)
   const [busy, setBusy] = useState(false)
   const [copied, setCopied] = useState(false)
-  const { showMegas, setShowMegas, showCP, setShowCP, cpEvent, setCpEvent } = useDisplay()
+  const { showMegas, setShowMegas, showCP, setShowCP, cpEvent, setCpEvent, setLook } = useDisplay()
   const dialog = useDialog()
   // Custom Glass: the photo is dragged on the preview; the live position stays local until the drag ends.
   const backdropCtx = useBackdrop()
   const { backdrop, setBackdrop } = backdropCtx
   const [dragging, setDragging] = useState<BackdropPhoto | null>(null)
   const custom = isBackdropTemplate(template.id)
-  // Paired styles (Solid / Glass, Classic / Modern): the same style and layout, the other look.
+  // Styles with switches: the other versions of this style in this layout, and the switches that tell them apart.
   const family = (t: T) => t.variantOf ?? t.style
-  const twin = template.look && templates.find((t) => t.look && t.look !== template.look && family(t) === family(template) && t.layout === template.layout)
-  const looks = twin ? (['solid', 'glass', 'classic', 'modern'] as const).filter((k) => k === template.look || k === twin.look) : []
+  const kin = template.look ? templates.filter((t) => t.look && family(t) === family(template) && t.layout === template.layout) : []
+  const switches = (Object.keys(template.look ?? {}) as LookGroup[])
+    .map((g) => ({ g, options: Object.keys(OPTION_LABELS).filter((v) => kin.some((t) => t.look![g] === v)) }))
+    .filter((s) => s.options.length > 1)
+  // Flip one switch, keeping the others where they are.
+  const flip = (g: LookGroup, v: string) => {
+    setLook(g, v)
+    const same = (t: T) => (Object.keys(template.look!) as LookGroup[]).every((k) => k === g || t.look![k] === template.look![k])
+    const next = kin.find((t) => t.look![g] === v && same(t)) ?? kin.find((t) => t.look![g] === v)
+    if (next && next.id !== template.id) onSelect(next.id)
+  }
   const drag = (e: PointerEvent) => {
     if (!custom || !backdrop || !node.current) return
     startDrag(e, node.current, backdrop, template.width, template.height, setDragging, (b) => {
@@ -142,27 +151,27 @@ export function Preview<T extends Template>({
         <p className="-mt-2 text-xs text-slate-500">Official 2027 CP table. Placings below the attendance kicker earn 0 and show no CP; attendance uses the Masters count (or the total if Masters is blank).</p>
       )}
 
-      {twin && (
-        <div className="flex items-center gap-3 text-sm text-slate-700">
-          {looks.includes('glass') ? 'Panels' : 'Card'}
-          <div className="flex overflow-hidden rounded-lg border border-slate-300" role="radiogroup" aria-label="Look">
-            {looks.map((k) => (
+      {switches.map(({ g, options }) => (
+        <div key={g} className="flex items-center gap-3 text-sm text-slate-700">
+          <span className="w-24">{LOOK_LABELS[g]}</span>
+          <div className="flex overflow-hidden rounded-lg border border-slate-300" role="radiogroup" aria-label={LOOK_LABELS[g]}>
+            {options.map((v) => (
               <button
-                key={k}
+                key={v}
                 type="button"
                 role="radio"
-                aria-checked={template.look === k}
-                onClick={() => template.look !== k && onSelect(twin.id)}
-                className={`px-3 py-1 font-semibold ${template.look === k ? 'bg-[#b3121b] text-white' : 'bg-white text-slate-700 hover:bg-slate-50'}`}
+                aria-checked={template.look![g] === v}
+                onClick={() => flip(g, v)}
+                className={`px-3 py-1 font-semibold ${template.look![g] === v ? 'bg-[#b3121b] text-white' : 'bg-white text-slate-700 hover:bg-slate-50'}`}
               >
-                {k[0].toUpperCase() + k.slice(1)}
+                {OPTION_LABELS[v]}
               </button>
             ))}
           </div>
         </div>
-      )}
+      ))}
 
-      {custom && <BackdropControls glass={template.look !== 'solid'} />}
+      {custom && <BackdropControls glass={template.look?.panels !== 'solid'} />}
 
       <div
         className={`rounded-xl bg-slate-100 p-2 ${custom && backdrop ? 'cursor-grab touch-none select-none active:cursor-grabbing' : ''}`}
@@ -205,6 +214,17 @@ export function Preview<T extends Template>({
       }
       </Card>
   )
+}
+
+/** The Preview's switches for styles that come several ways. */
+const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on' }
+const OPTION_LABELS: Record<string, string> = {
+  hall: 'Hall of Origin',
+  sky: 'Cutscene Sky',
+  solid: 'Solid',
+  glass: 'Glass',
+  classic: 'Classic',
+  modern: 'Modern',
 }
 
 /** Custom Glass: upload, zoom, centre and remove the background photo. */
@@ -285,7 +305,15 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
   const [showRetired, setShowRetired] = useState(false)
   // The other half of a Light / Glass pair has no card: its card is the pair's (`variantOf`).
   const currentStyle = current.variantOf ?? current.style
-  const retiredCount = new Set(templates.filter((t) => t.retired).map((t) => t.style)).size
+  // Paired styles open (and preview) in the look last picked on the switch.
+  const { looks } = useDisplay()
+  const prefer = (t: T) => {
+    if (!t.look) return t
+    const score = (x: T) => (Object.keys(x.look!) as LookGroup[]).filter((g) => x.look![g] === looks[g]).length
+    const kin = templates.filter((x) => x.look && (x.variantOf ?? x.style) === (t.variantOf ?? t.style) && x.layout === t.layout)
+    return kin.reduce((best, x) => (score(x) > score(best) ? x : best), t)
+  }
+  const retiredCount = new Set(templates.filter((t) => t.retired && !t.variantOf).map((t) => t.style)).size
   const styles = [...new Set(templates.filter((t) => !t.variantOf && (showRetired || !t.retired || t.style === currentStyle)).map((t) => t.style!))]
   const inStyle = (style: string) => templates.filter((t) => t.style === style)
   const find = (style: string, layout?: StandingsLayout) => inStyle(style).find((t) => t.layout === layout)
@@ -331,7 +359,7 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
           {styles.map((style) => {
             // Show the style in the chosen layout; styles without it show (and open as) their fallback layout.
             const own = find(style, current.layout)
-            const target = own ?? fallback(style)
+            const target = prefer(own ?? fallback(style))
             const t = target
             const count = inStyle(style).length
             return (

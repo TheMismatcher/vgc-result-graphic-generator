@@ -107,7 +107,12 @@ export interface AppState {
   brand: BrandSettings
   backdrop?: BackdropPhoto | null // Custom Glass photo; belongs to the user like branding (not saved in tournament files)
   customPanels?: { glass: number; solid: number } // Custom Glass panel opacity (0..1) for each Panels setting
-  settings: { showMegas: boolean; showCP: boolean }
+  settings: {
+    showMegas: boolean
+    showCP: boolean
+    // Last pick on the Preview's switch for paired styles; every paired style opens this way
+    looks?: Partial<Record<'panels' | 'card' | 'champion', string>>
+  }
   tournament: Tournament
   players: Player[] // ordered by placing: index 0 = 1st place
   bracket: Bracket

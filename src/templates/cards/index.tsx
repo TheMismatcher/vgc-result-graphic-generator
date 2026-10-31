@@ -114,7 +114,7 @@ function Classic({ data, photo }: { data: StandingsData; photo?: boolean }) {
   const c = useCard(data, 'classic')
   const cp = data.cp?.(1)
   return (
-    <div className="dmv tc tc-classic" style={{ width: W, height: H }}>
+    <div className="dmv tcard tc-classic" style={{ width: W, height: H }}>
       <div className={`tc-card en-${c.energy}`}>
         <div className="tc-frame">
           <div className="tc-grain" />
@@ -189,7 +189,7 @@ function Modern({ data, photo }: { data: StandingsData; photo?: boolean }) {
   const cp = data.cp?.(1)
   const reg = /Regulation\s+([A-Z])/i.exec(data.formatLabel)?.[1]?.toUpperCase() ?? 'G'
   return (
-    <div className="dmv tc tc-modern" style={{ width: W, height: H }}>
+    <div className="dmv tcard tc-modern" style={{ width: W, height: H }}>
       <div className={`tc-card en-${c.energy}`}>
         <div className="tc-frame">
           <div className="tc-grain" />

@@ -28,17 +28,13 @@ export interface Place {
 }
 
 export const PLACES: Place[] = [
-  { id: 'place-spear-pillar', style: 'Spear Pillar', className: 'theme-place pl-spear', crop: SPEAR },
-  { id: 'place-spear-pillar-glass', style: 'Spear Pillar Glass', className: 'theme-place pl-spear glass', crop: SPEAR },
   { id: 'place-spear-pillar-hall', style: 'Spear Pillar Hall of Origin', className: 'theme-place pl-spear hoo', crop: HALL },
   { id: 'place-spear-pillar-hall-floor', style: 'Spear Pillar Hall Champion', className: 'theme-place pl-spear hoo', crop: SPEAR },
   { id: 'place-spear-pillar-hall-floor-glass', style: 'Spear Pillar Hall Champion Glass', className: 'theme-place pl-spear hoo glass', crop: SPEAR },
-  { id: 'place-spear-pillar-sky', style: 'Spear Pillar Sky Champion', className: 'theme-place pl-spear sky', crop: SPEAR },
-  { id: 'place-spear-pillar-sky-glass', style: 'Spear Pillar Sky Champion Glass', className: 'theme-place pl-spear sky glass', crop: SPEAR },
-  { id: 'place-spear-pillar-cutscene', style: 'Spear Pillar Cutscene Sky', className: 'theme-place pl-spear sky dsky', crop: SPEAR },
-  { id: 'place-spear-pillar-cutscene-glass', style: 'Spear Pillar Cutscene Sky Glass', className: 'theme-place pl-spear sky dsky glass', crop: SPEAR },
+  { id: 'place-spear-pillar-cutscene', style: 'Spear Pillar Cutscene Sky', className: 'theme-place pl-spear sky', crop: SPEAR },
+  { id: 'place-spear-pillar-cutscene-glass', style: 'Spear Pillar Cutscene Sky Glass', className: 'theme-place pl-spear sky glass', crop: SPEAR },
   { id: 'place-spear-pillar-art', style: 'Spear Pillar Concept Art', className: 'theme-place pl-spear glass art', crop: SPEAR_ART },
-  { id: 'art-glimwood', style: 'Glimwood Tangle Official', className: 'theme-place pl-glim', crop: GLIMWOOD },
+  { id: 'art-glimwood', style: 'Glimwood Tangle', className: 'theme-place pl-glim', crop: GLIMWOOD },
   { id: 'art-terastal', style: 'Terastal Official', className: 'theme-place pl-tera', crop: TERA },
   { id: 'art-scarlet-book', style: 'Scarlet Book', className: 'theme-place pl-scarlet pl-book', crop: SCARLET_BOOK_COVER, square: SCARLET_BOOK_SQUARE },
   { id: 'art-violet-book', style: 'Violet Book', className: 'theme-place pl-violet pl-book', crop: VIOLET_BOOK_COVER, square: VIOLET_BOOK_SQUARE },
@@ -90,6 +86,7 @@ export const PLACE_LAYOUTS: Record<string, [StandingsTemplate, StandingsLayout][
         [makeTop8Mixed(false, t), 'top8mixed'],
         [makeTop4Photos(false, t), 'top4photos'],
         [makeChampion(false, t), 'champion'],
+        [makeChampion(false, t, true), 'championphoto'],
         [makeBracket(false, t), 'bracket'],
       ],
     ]

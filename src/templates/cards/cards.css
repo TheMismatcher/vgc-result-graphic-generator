@@ -1,7 +1,7 @@
 /* Trading cards (see index.tsx). The card is 924 x 1290 (63 x 88 mm) centred on the 1080 x 1350 graphic;
    every position below is in card pixels, measured off the reference scans. */
 
-.tc {
+.tcard { /* not .tc: the Top Cut layouts already use that class */
   position: relative;
   overflow: hidden;
   font-family: 'Cabin', 'Gill Sans', sans-serif;

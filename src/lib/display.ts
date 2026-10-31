@@ -2,6 +2,7 @@
 
 import { createContext, useContext } from 'react'
 import type { Mon } from '../types'
+import type { LookGroup, Looks } from '../templates/types'
 import { megaForm } from '../data/dex'
 
 export interface Display {
@@ -11,7 +12,12 @@ export interface Display {
   setShowCP: (on: boolean) => void
   cpEvent: 'challenge' | 'cup'
   setCpEvent: (event: 'challenge' | 'cup') => void
+  /** Styles with switches open the way they were last set (Glass or Solid, Classic or Modern, ...). */
+  looks: Looks
+  setLook: (group: LookGroup, value: string) => void
 }
+
+export const DEFAULT_LOOKS: Looks = { panels: 'glass', card: 'classic', champion: 'hall' }
 
 export const DisplayContext = createContext<Display>({
   showMegas: false,
@@ -20,6 +26,8 @@ export const DisplayContext = createContext<Display>({
   setShowCP: () => {},
   cpEvent: 'cup',
   setCpEvent: () => {},
+  looks: DEFAULT_LOOKS,
+  setLook: () => {},
 })
 export const useDisplay = () => useContext(DisplayContext)
 

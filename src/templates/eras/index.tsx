@@ -174,7 +174,7 @@ export function LocationRows({ data, cls }: { data: Data; cls: string }) {
           <div className={`${cls}-player`}>
             <FitText className={`${cls}-name`} text={p.name || 'Player'} max={32} width={300} min={16} weight={900} italic={false} />
             <div className={`${cls}-sub`}>
-              {[p.record, p.social].filter(Boolean).join('  ·  ')}
+              <span className={`${cls}-subtext`}>{[p.record, p.social].filter(Boolean).join('  ·  ')}</span>
               {data.cp && <CpBadge points={data.cp(i + 1)} className={`${cls}-cp`} />}
             </div>
           </div>
@@ -205,7 +205,7 @@ export function LocationHead({ data, cls, kicker }: { data: Data; cls: string; k
 /** Glimwood Tangle (Sword & Shield): a dark forest lit by glowing mushrooms. */
 export const Glimwood: StandingsTemplate = {
   id: 'loc-glimwood',
-  name: 'Top Cut (Glimwood Tangle)',
+  name: 'Top Cut (Glimwood Tangle Old)',
   description: 'The glowing mushroom forest from Sword & Shield: deep night colours and bioluminescent mushrooms.',
   kind: 'standings',
   width: 1080,

@@ -2,7 +2,7 @@
 
 import type { Day2Template, MatchTemplate, StandingsTemplate, TeamBattleTemplate, UsageTemplate } from './types'
 import { TopCutBannerWhite, TopCutClean, TopCutLoud } from './top-cut'
-import Champion, { ChampionLoud } from './champion'
+import Champion, { ChampionLoud, ChampionLoudPhoto, ChampionPhoto } from './champion'
 import Usage from './usage'
 import Bracket, { BracketLoud } from './bracket'
 import { ArenaGrid, ArenaSpotlight, ArenaSunset } from './arena'
@@ -26,16 +26,16 @@ import { EditorialNightLayouts, EditorialPaperLayouts } from './themes/editorial
 import { BattleTower, Ghost, Hoenn, MtCoronet, Pokedex, PokedexChampion, TradingCard } from './eras/more'
 import { GhostPixel, GhostPixelDense, GhostPixelGlass, GhostPixelGlassTeam, GhostPixelGlassLine } from './eras/ghostpixel'
 import { Glimwood, KantoGameBoy, Paldea, Route201, Unova } from './eras'
-import { DynamaxOfficial, GlimwoodOfficial, SnowpointOfficial, SnowpointOfficialGlass, SnowpointFull, SnowpointFullGlass, Route217, Route217Glass, AcuityLakefront, AcuityLakefrontGlass, ScarletBook, VioletBook, TerastalOfficial, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillar, SpearPillarArt, SpearPillarGlass, SpearPillarHall, SpearPillarHallChampion, SpearPillarHallChampionGlass, SpearPillarSky, SpearPillarSkyGlass, SpearPillarCutscene, SpearPillarCutsceneGlass, CustomGlass, CustomLight } from './places'
+import { DynamaxOfficial, GlimwoodOfficial, SnowpointOfficial, SnowpointOfficialGlass, SnowpointFull, SnowpointFullGlass, Route217, Route217Glass, AcuityLakefront, AcuityLakefrontGlass, ScarletBook, VioletBook, TerastalOfficial, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillarArt, SpearPillarHall, SpearPillarHallChampion, SpearPillarHallChampionGlass, SpearPillarCutscene, SpearPillarCutsceneGlass, CustomGlass, CustomLight } from './places'
 import { PLACE_LAYOUTS } from './themes/places'
-import { DynamaxCloud, DynamaxCloudLayouts, FX_SIDE_THEMES, sideFx, TerastalPrism, TerastalPrismLayouts, TeraRaidDen, TeraRaidDenLayouts, TeraRaidDenPrism, TeraRaidDenPrismLayouts } from './power/recreated'
+import { DynamaxCloud, DynamaxCloudLayouts, FX_SIDE_THEMES, sideFx, TeraRaidDen, TeraRaidDenLayouts, TeraRaidDenPrism, TeraRaidDenPrismLayouts } from './power/recreated'
 import { MosaicGradient, MosaicMono, MosaicSquaresGradient, MosaicSquaresMono, MosaicTintGlass, MosaicTintGlassShadow, MosaicTintSemiShadow, MosaicTintSolid, MosaicTintSolidShadow } from './mosaic'
 import { DynamaxTopCut, MegaTopCut, TerastalTopCut } from './power'
 import { DynamaxLayouts, MegaLayouts, TerastalLayouts } from './power/themes'
 import { TradingCardClassic, TradingCardClassicPhoto, TradingCardModern, TradingCardModernPhoto } from './cards'
 import { EditorialChampionNight, EditorialChampionPaper, EditorialTopCutNight, EditorialTopCutPaper } from './editorial'
 
-import type { Look, StandingsLayout } from './types'
+import type { Looks, StandingsLayout } from './types'
 
 /** Layouts in picker order, with their labels. */
 export const STANDINGS_LAYOUTS: { id: StandingsLayout; label: string }[] = [
@@ -44,6 +44,7 @@ export const STANDINGS_LAYOUTS: { id: StandingsLayout; label: string }[] = [
   { id: 'top8mixed', label: 'Top 8 + Top 4 Photos' },
   { id: 'top4photos', label: 'Top 4 Photos' },
   { id: 'champion', label: 'Champion' },
+  { id: 'championphoto', label: 'Champion + Photo' },
   { id: 'bracket', label: 'Bracket' },
 ]
 
@@ -52,24 +53,25 @@ export const STANDINGS_LAYOUTS: { id: StandingsLayout; label: string }[] = [
 const tag = (style: string, entries: [StandingsTemplate, StandingsLayout][]) => entries.map(([t, layout]) => ({ ...t, style, layout }))
 // Retired: kept so saved selections still open, hidden from the picker unless 'Show retired styles' is ticked.
 const retire = (style: string, entries: [StandingsTemplate, StandingsLayout][]) => tag(style, entries).map((t) => ({ ...t, retired: true }))
-// Paired styles (Solid / Glass panels, Classic / Modern card): one picker card (`style`, opens as `look`);
-// the Preview's switch swaps to the other half.
-const pair = (
-  style: string,
-  look: Look,
-  entries: [StandingsTemplate, StandingsLayout][],
-  otherStyle: string,
-  otherLook: Look,
-  otherEntries: [StandingsTemplate, StandingsLayout][],
-) => [...tag(style, entries).map((t) => ({ ...t, look })), ...tag(otherStyle, otherEntries).map((t) => ({ ...t, look: otherLook, variantOf: style }))]
+// Styles that come several ways (Solid / Glass panels, Classic / Modern card, ...): one picker card (`style`);
+// the other versions (`variantOf` it) are reached with the Preview's switches. The first entry is named `style`.
+type Version = [name: string, look: Partial<Looks>, entries: [StandingsTemplate, StandingsLayout][]]
+const versions = (style: string, list: Version[]) =>
+  list.flatMap(([name, look, entries], i) => tag(name, entries).map((t) => ({ ...t, look, ...(i ? { variantOf: style } : {}) })))
 const glassPair = (style: string, solid: StandingsTemplate, glass: StandingsTemplate) =>
-  pair(style, 'solid', [[solid, 'topcut'], ...PLACE_LAYOUTS[style]], `${style} Glass`, 'glass', [[glass, 'topcut'], ...PLACE_LAYOUTS[`${style} Glass`]])
+  versions(style, [
+    [style, { panels: 'solid' }, [[solid, 'topcut'], ...PLACE_LAYOUTS[style]]],
+    [`${style} Glass`, { panels: 'glass' }, [[glass, 'topcut'], ...PLACE_LAYOUTS[`${style} Glass`]]],
+  ])
 
 export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
-  ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [Bracket, 'bracket']]),
-  ...tag('Comic Book', [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [BracketLoud, 'bracket']]),
+  ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [ChampionPhoto, 'championphoto'], [Bracket, 'bracket']]),
+  ...tag('Comic Book', [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [ChampionLoudPhoto, 'championphoto'], [BracketLoud, 'bracket']]),
   ...tag('White', [[TopCutBannerWhite, 'topcut'], [Top8PhotosWhite, 'top8photos'], [Top8MixedWhite, 'top8mixed']]),
-  ...pair('Custom Glass', 'glass', [[CustomGlass, 'topcut'], ...PLACE_LAYOUTS['Custom Glass']], 'Custom Glass Light', 'solid', [[CustomLight, 'topcut'], ...PLACE_LAYOUTS['Custom Glass Light']]),
+  ...versions('Custom Glass', [
+    ['Custom Glass', { panels: 'glass' }, [[CustomGlass, 'topcut'], ...PLACE_LAYOUTS['Custom Glass']]],
+    ['Custom Glass Light', { panels: 'solid' }, [[CustomLight, 'topcut'], ...PLACE_LAYOUTS['Custom Glass Light']]],
+  ]),
   ...tag('Mosaic', [[MosaicTintSemiShadow, 'topcut'], ...MosaicLayouts]),
   ...retire('Mosaic (Tinted Glass)', [[MosaicTintGlass, 'topcut']]),
   ...retire('Mosaic (Tinted Solid)', [[MosaicTintSolid, 'topcut']]),
@@ -85,22 +87,25 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Arena Spotlight', [[ArenaSpotlight, 'topcut'], ...ArenaSpotlightLayouts]),
   ...tag('Arena Grid', [[ArenaGrid, 'topcut'], ...ArenaGridLayouts]),
   ...tag('Arena Sunset', [[ArenaSunset, 'topcut'], ...ArenaSunsetLayouts]),
-  ...tag('Battle Tower', [[BattleTower, 'topcut']]),
-  ...tag('Glimwood Tangle', [[Glimwood, 'topcut']]),
-  ...tag('Glimwood Tangle Official', [[GlimwoodOfficial, 'topcut'], ...PLACE_LAYOUTS['Glimwood Tangle Official']]),
+  ...retire('Battle Tower', [[BattleTower, 'topcut']]),
+  ...retire('Glimwood Tangle (Old)', [[Glimwood, 'topcut']]),
+  ...tag('Glimwood Tangle', [[GlimwoodOfficial, 'topcut'], ...PLACE_LAYOUTS['Glimwood Tangle']]),
   ...retire('Route 201', [[Route201, 'topcut']]),
   ...glassPair('Route 201 Official', Route201Tiles, Route201TilesGlass),
-  ...glassPair('Snowpoint Official', SnowpointOfficial, SnowpointOfficialGlass),
+  ...glassPair('Snowpoint Official', SnowpointOfficial, SnowpointOfficialGlass).map((t) => ({ ...t, retired: true })),
   ...glassPair('Snowpoint Full Map', SnowpointFull, SnowpointFullGlass),
   ...glassPair('Route 217', Route217, Route217Glass),
   ...glassPair('Lake Acuity', AcuityLakefront, AcuityLakefrontGlass),
   ...retire('Mt. Coronet', [[MtCoronet, 'topcut']]),
-  ...glassPair('Spear Pillar', SpearPillar, SpearPillarGlass),
-  ...tag('Spear Pillar Hall of Origin', [[SpearPillarHall, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Hall of Origin']]),
-  ...glassPair('Spear Pillar Hall Champion', SpearPillarHallChampion, SpearPillarHallChampionGlass),
-  ...glassPair('Spear Pillar Sky Champion', SpearPillarSky, SpearPillarSkyGlass),
-  ...glassPair('Spear Pillar Cutscene Sky', SpearPillarCutscene, SpearPillarCutsceneGlass),
-  ...tag('Spear Pillar Concept Art', [[SpearPillarArt, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Concept Art']]),
+  ...retire('Spear Pillar Hall of Origin', [[SpearPillarHall, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Hall of Origin']]),
+  // Spear Pillar: the champion on the Hall of Origin's floor or in the cutscene sky, Solid or Glass panels.
+  ...versions('Spear Pillar', [
+    ['Spear Pillar', { champion: 'hall', panels: 'solid' }, [[SpearPillarHallChampion, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Hall Champion']]],
+    ['Spear Pillar Hall Champion Glass', { champion: 'hall', panels: 'glass' }, [[SpearPillarHallChampionGlass, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Hall Champion Glass']]],
+    ['Spear Pillar Cutscene Sky', { champion: 'sky', panels: 'solid' }, [[SpearPillarCutscene, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Cutscene Sky']]],
+    ['Spear Pillar Cutscene Sky Glass', { champion: 'sky', panels: 'glass' }, [[SpearPillarCutsceneGlass, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Cutscene Sky Glass']]],
+  ]),
+  ...retire('Spear Pillar Concept Art', [[SpearPillarArt, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Concept Art']]),
   ...glassPair('Route 119', Route119, Route119Glass),
   ...glassPair('Route 119 Bridge', Route119Bridge, Route119BridgeGlass),
   ...glassPair('Route 120', Route120, Route120Glass),
@@ -115,15 +120,20 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...retire('Paldea', [[Paldea, 'topcut']]),
   ...tag('Unova', [[Unova, 'topcut']]),
   ...tag('Pokédex', [[Pokedex, 'topcut'], [PokedexChampion, 'champion']]),
-  ...pair('Trading Card', 'classic', [[TradingCardClassic, 'champion']], 'Trading Card Modern', 'modern', [[TradingCardModern, 'champion']]),
-  ...pair('Trading Card Photo', 'classic', [[TradingCardClassicPhoto, 'champion']], 'Trading Card Photo Modern', 'modern', [[TradingCardModernPhoto, 'champion']]),
+  ...versions('Trading Card', [
+    ['Trading Card', { card: 'classic' }, [[TradingCardClassic, 'champion']]],
+    ['Trading Card Modern', { card: 'modern' }, [[TradingCardModern, 'champion']]],
+  ]),
+  ...versions('Trading Card Photo', [
+    ['Trading Card Photo', { card: 'classic' }, [[TradingCardClassicPhoto, 'champion']]],
+    ['Trading Card Photo Modern', { card: 'modern' }, [[TradingCardModernPhoto, 'champion']]],
+  ]),
   ...retire('Trading Card (Old)', [[TradingCard, 'champion']]),
   ...tag('Scarlet Book', [[ScarletBook, 'topcut'], ...PLACE_LAYOUTS['Scarlet Book']]),
   ...tag('Violet Book', [[VioletBook, 'topcut'], ...PLACE_LAYOUTS['Violet Book']]),
-  ...tag('Terastal', [[TerastalTopCut, 'topcut'], ...TerastalLayouts]),
-  ...tag('Terastal Prism', [[TerastalPrism, 'topcut'], ...TerastalPrismLayouts]),
-  ...tag('Tera Raid Den', [[TeraRaidDen, 'topcut'], ...TeraRaidDenLayouts]),
-  ...tag('Tera Raid Den Prism', [[TeraRaidDenPrism, 'topcut'], ...TeraRaidDenPrismLayouts]),
+  ...retire('Terastal', [[TerastalTopCut, 'topcut'], ...TerastalLayouts]),
+  ...tag('Tera Raid Den', [[TeraRaidDenPrism, 'topcut'], ...TeraRaidDenPrismLayouts]),
+  ...retire('Tera Raid Den (Old)', [[TeraRaidDen, 'topcut'], ...TeraRaidDenLayouts]),
   ...retire('Terastal Official', [[TerastalOfficial, 'topcut'], ...PLACE_LAYOUTS['Terastal Official']]),
   ...tag('Mega Evolution', [[MegaTopCut, 'topcut'], ...MegaLayouts]),
   ...tag('Dynamax', [[DynamaxTopCut, 'topcut'], ...DynamaxLayouts]),

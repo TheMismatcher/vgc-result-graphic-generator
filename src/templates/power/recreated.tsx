@@ -1,6 +1,6 @@
-// Terastal Prism and Dynamax Cloud: the power looks recreated from the games rather than from screenshots.
-// - Terastal Prism: Scarlet/Violet's Tera battle starfield (dark sky full of coloured sparks, stage beams);
-//   the winner's team is Terastallized into Stellar crystal, everyone else's Pokémon get a prism rim.
+// Tera Raid Den and Dynamax Cloud: the power looks recreated from the games rather than from screenshots.
+// - Tera Raid Den: Scarlet/Violet's Tera Raid crystal cave; the winner's team is Terastallized into Stellar
+//   crystal, everyone else's Pokémon get a prism rim. (The prism den is the one in the picker; the plain den is retired.)
 // - Dynamax Cloud: the red Dynamax storm cloud over a dark arena; the winner's team is Dynamaxed (red
 //   aura and tint), everyone else's Pokémon get a red energy rim.
 // The Pokémon looks come from shared/monEffect (canvas-drawn so they export).
@@ -23,39 +23,6 @@ import '../themes/places.css'
 import './recreated.css'
 
 type Bg = { seed: string; width: number; height: number; ghosts?: string[]; prism?: boolean }
-
-/** Tera battle starfield: deep navy, hundreds of coloured sparks, two pale stage beams from below. */
-export function TeraStarfield({ seed, width, height }: Bg) {
-  const rand = seededRand(`tera-field|${seed}`)
-  const cols = ['#ffffff', '#ffd27a', '#ff8fb6', '#8fd8ff', '#b79bff', '#9dffb0', '#fff38f']
-  const sparks = Array.from({ length: 420 }, () => ({ x: rand() * width, y: rand() * height, r: 0.8 + rand() * rand() * 4.5, c: cols[Math.floor(rand() * cols.length)], o: 0.35 + rand() * 0.65 }))
-  const glints = Array.from({ length: 14 }, () => ({ x: rand() * width, y: rand() * height * 0.8, s: 8 + rand() * 16 }))
-  return (
-    <div className="tp-bg">
-      <svg width={width} height={height} style={{ position: 'absolute', inset: 0 }} aria-hidden>
-        <defs>
-          <linearGradient id="tp-beam" x1="0" y1="1" x2="0" y2="0">
-            <stop offset="0" stopColor="#bfe4ff" stopOpacity="0.55" />
-            <stop offset="1" stopColor="#bfe4ff" stopOpacity="0" />
-          </linearGradient>
-          <filter id="tp-soft">
-            <feGaussianBlur stdDeviation="14" />
-          </filter>
-        </defs>
-        <g filter="url(#tp-soft)">
-          <polygon points={`${width * 0.02},${height} ${width * 0.3},${height} ${width * 0.62},${height * 0.25} ${width * 0.5},${height * 0.22}`} fill="url(#tp-beam)" />
-          <polygon points={`${width * 0.7},${height} ${width * 0.98},${height} ${width * 0.5},${height * 0.22} ${width * 0.38},${height * 0.25}`} fill="url(#tp-beam)" />
-        </g>
-        {sparks.map((s, i) => (
-          <circle key={i} cx={s.x} cy={s.y} r={s.r} fill={s.c} opacity={s.o} />
-        ))}
-        {glints.map((g, i) => (
-          <path key={i} d={`M0 ${-g.s} L${g.s * 0.18} ${-g.s * 0.18} L${g.s} 0 L${g.s * 0.18} ${g.s * 0.18} L0 ${g.s} L${-g.s * 0.18} ${g.s * 0.18} L${-g.s} 0 L${-g.s * 0.18} ${-g.s * 0.18} Z`} transform={`translate(${g.x} ${g.y})`} fill="#fff" opacity="0.85" />
-        ))}
-      </svg>
-    </div>
-  )
-}
 
 /** The Dynamax storm: a ceiling of churning red cloud (fractal noise tinted crimson/magenta), glowing from within. */
 export function DynaStorm({ seed, width, height }: Bg) {
@@ -283,10 +250,9 @@ const topCut = (id: string, name: string, description: string, cls: string, kind
   ),
 })
 
-export const TerastalPrism = topCut('fx-terastal-prism', 'Top Cut (Terastal Prism)', 'The Tera battle starfield; the winner’s team Terastallized into Stellar crystal, everyone else rimmed in prism light.', 'pl-tprism', 'tera', TeraStarfield)
-export const TeraRaidDen = topCut('fx-tera-raid-den', 'Top Cut (Tera Raid Den)', 'The crystal cave of a Tera Raid: faceted walls reflecting the winner’s Pokémon, rainbow light across the floor; the winner’s team Terastallized.', 'pl-tprism pl-tden', 'tera', TeraDen)
+export const TeraRaidDen = topCut('fx-tera-raid-den', 'Top Cut (Tera Raid Den Old)', 'The crystal cave of a Tera Raid: faceted walls reflecting the winner’s Pokémon, rainbow light across the floor; the winner’s team Terastallized.', 'pl-tprism pl-tden', 'tera', TeraDen)
 const TeraDenPrism = (b: Bg) => <TeraDen {...b} prism />
-export const TeraRaidDenPrism = topCut('fx-tera-raid-den-prism', 'Top Cut (Tera Raid Den Prism)', 'The Tera Raid den with the Stellar prism worked through it: rainbow-edged crystal, prism glints and a prism-ringed platform; every panel edged in prism.', 'pl-tprism pl-tden pl-tdenprism', 'tera', TeraDenPrism)
+export const TeraRaidDenPrism = topCut('fx-tera-raid-den-prism', 'Top Cut (Tera Raid Den)', 'The Tera Raid den with the Stellar prism worked through it: rainbow-edged crystal, prism glints and a prism-ringed platform; every panel edged in prism.', 'pl-tprism pl-tden pl-tdenprism', 'tera', TeraDenPrism)
 export const DynamaxCloud = topCut('fx-dynamax-cloud', 'Top Cut (Dynamax Cloud)', 'The red Dynamax storm cloud; the winner’s team Dynamaxed with red aura, everyone else rimmed in red energy.', 'pl-dcloud', 'dyna', DynaStorm)
 
 /** Wrap a layout so its MonSprites get the look (winner = first place). */
@@ -315,16 +281,14 @@ const layouts = (id: string, style: string, cls: string, kind: FxKind, Back: Com
   ]
 }
 
-export const TerastalPrismLayouts = layouts('fx-terastal-prism', 'Terastal Prism', 'pl-tprism', 'tera', TeraStarfield)
-export const TeraRaidDenLayouts = layouts('fx-tera-raid-den', 'Tera Raid Den', 'pl-tprism pl-tden', 'tera', TeraDen)
-export const TeraRaidDenPrismLayouts = layouts('fx-tera-raid-den-prism', 'Tera Raid Den Prism', 'pl-tprism pl-tden pl-tdenprism', 'tera', TeraDenPrism)
+export const TeraRaidDenLayouts = layouts('fx-tera-raid-den', 'Tera Raid Den (Old)', 'pl-tprism pl-tden', 'tera', TeraDen)
+export const TeraRaidDenPrismLayouts = layouts('fx-tera-raid-den-prism', 'Tera Raid Den', 'pl-tprism pl-tden pl-tdenprism', 'tera', TeraDenPrism)
 export const DynamaxCloudLayouts = layouts('fx-dynamax-cloud', 'Dynamax Cloud', 'pl-dcloud', 'dyna', DynaStorm)
 
 /** Usage / Replay / Team Battle backgrounds + class (the Pokémon look is added in the registry). */
 export const FX_SIDE_THEMES: (SideTheme & { fx: FxKind })[] = [
-  { id: 'fx-terastal-prism', style: 'Terastal Prism', className: 'theme-place pl-tprism', fx: 'tera', Wall: ({ seed, width, height }) => <TeraStarfield seed={seed} width={width} height={height} /> },
-  { id: 'fx-tera-raid-den', style: 'Tera Raid Den', className: 'theme-place pl-tprism pl-tden', fx: 'tera', Wall: ({ seed, width, height }) => <TeraDen seed={seed} width={width} height={height} /> },
-  { id: 'fx-tera-raid-den-prism', style: 'Tera Raid Den Prism', className: 'theme-place pl-tprism pl-tden pl-tdenprism', fx: 'tera', Wall: ({ seed, width, height }) => <TeraDen seed={seed} width={width} height={height} prism /> },
+  { id: 'fx-tera-raid-den', style: 'Tera Raid Den (Old)', className: 'theme-place pl-tprism pl-tden', fx: 'tera', Wall: ({ seed, width, height }) => <TeraDen seed={seed} width={width} height={height} /> },
+  { id: 'fx-tera-raid-den-prism', style: 'Tera Raid Den', className: 'theme-place pl-tprism pl-tden pl-tdenprism', fx: 'tera', Wall: ({ seed, width, height }) => <TeraDen seed={seed} width={width} height={height} prism /> },
   { id: 'fx-dynamax-cloud', style: 'Dynamax Cloud', className: 'theme-place pl-dcloud', fx: 'dyna', Wall: ({ seed, width, height }) => <DynaStorm seed={seed} width={width} height={height} /> },
 ]
 

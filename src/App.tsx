@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BrandContext, resolveBrand } from './brand'
 import { BackdropContext, DEFAULT_OPACITY } from './lib/backdrop'
-import { DisplayContext, type Display } from './lib/display'
+import { DEFAULT_LOOKS, DisplayContext, type Display } from './lib/display'
 import { cpEventFor } from './lib/cp'
 import { initialState, isUnchanged, usePersistentState } from './lib/state'
 import { sampleState } from './lib/sample'
@@ -39,6 +39,8 @@ export default function App() {
     setShowMegas: (on) => setState((s) => ({ ...s, settings: { ...s.settings, showMegas: on } })),
     showCP: state.settings.showCP,
     setShowCP: (on) => setState((s) => ({ ...s, settings: { ...s.settings, showCP: on } })),
+    looks: { ...DEFAULT_LOOKS, ...state.settings.looks },
+    setLook: (group, value) => setState((s) => ({ ...s, settings: { ...s.settings, looks: { ...s.settings.looks, [group]: value } } })),
     // CP depends on whether it's a Cup or a Challenge: that's the tournament type.
     cpEvent: cpEventFor(state.tournament.type),
     setCpEvent: (type) => setState((s) => ({ ...s, tournament: { ...s.tournament, type } })),

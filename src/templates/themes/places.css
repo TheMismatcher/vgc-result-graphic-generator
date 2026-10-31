@@ -495,7 +495,7 @@
   color: var(--pl-first-ink);
 }
 
-/* ---------- Spear Pillar Sky Champion: the champion in the torn red / blue / green sky ---------- */
+/* ---------- Spear Pillar Cutscene Sky: the champion in the streaked sky (variables in places/places.css) ---------- */
 .themed.theme-place.sky .dmv-panel.first,
 .themed.theme-place.sky .m8-card:first-child,
 .themed.theme-place.sky .ch-card,
@@ -539,4 +539,9 @@
 .themed.theme-place.sky .first .dmv-photo-empty,
 .themed.theme-place.sky .m8-card:first-child .dmv-photo-empty {
   background: rgba(8, 6, 20, 0.35);
+}
+
+/* CP chips: flat type (the panels' text shadow made them hard to read on the glass styles). */
+.themed.theme-place .dmv-cp {
+  text-shadow: none;
 }

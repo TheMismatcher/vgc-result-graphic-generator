@@ -68,19 +68,20 @@ export interface TeamBattleData {
   format: Format
 }
 
-/** The two halves of a paired style (see TemplateBase.look). */
-export type Look = 'solid' | 'glass' | 'classic' | 'modern'
+/** Switches a style can have in the Preview (Panels: solid / glass, Card: classic / modern, Champion: hall / sky). */
+export type LookGroup = 'panels' | 'card' | 'champion'
+export type Looks = Record<LookGroup, string>
 
 /** The standings layouts, chosen after the style in the picker. */
-export type StandingsLayout = 'topcut' | 'top8photos' | 'top8mixed' | 'top4photos' | 'champion' | 'bracket'
+export type StandingsLayout = 'topcut' | 'top8photos' | 'top8mixed' | 'top4photos' | 'champion' | 'championphoto' | 'bracket'
 
 interface TemplateBase {
   id: string
   style?: string // the look it belongs to (standings picker: Style, then Layout)
   layout?: StandingsLayout
   retired?: boolean // hidden from the picker unless 'Show retired styles' is on (saved selections still open)
-  look?: Look // styles that come two ways (Solid / Glass panels, Classic / Modern card): the Preview's switch swaps them
-  variantOf?: string // the other half of such a pair: no picker card of its own, it's reached with the switch
+  look?: Partial<Looks> // styles that come several ways: where this one sits on each of the Preview's switches
+  variantOf?: string // the other versions of such a style: no picker card of their own, they're reached with the switches
   name: string
   description: string
   width: number

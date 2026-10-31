@@ -91,7 +91,14 @@
   font-weight: 700;
   white-space: nowrap;
 }
+.bt-subtext, .mc-subtext, .h3-subtext, .gh-subtext, .gp-subtext {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .bt-cp, .mc-cp, .h3-cp, .gh-cp, .gp-cp {
+  flex: none;
+  text-shadow: none;
   font-size: 18px;
 }
 .bt-team, .mc-team, .h3-team, .gh-team, .gp-team {

@@ -118,3 +118,42 @@
   padding: 4px 18px;
   border-width: 4px;
 }
+
+/* Champion + Photo: portrait on the left (50-450), name and a 2 x 3 team on the right (480-1030). */
+.ch-photo {
+  position: absolute;
+  left: 50px;
+  top: 190px;
+  width: 400px;
+  height: 766px;
+  overflow: hidden;
+  padding: 0;
+  border: 7px solid var(--ink);
+}
+.ch-withphoto .ch-name {
+  top: 222px;
+  left: 480px;
+  right: 50px;
+}
+.ch-withphoto .ch-sub,
+.ch-withphoto .ch-cp {
+  font-size: 24px;
+}
+.ch-withphoto .ch-team {
+  top: 392px;
+  left: 480px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.ch-withphoto .ch-card {
+  height: 176px;
+  padding-top: 2px;
+  overflow: hidden;
+}
+.ch-withphoto .ch-mon-name {
+  font-size: 20px;
+}
+.ch-withphoto .ch-item-name {
+  font-size: 16px;
+  margin-top: 2px;
+}

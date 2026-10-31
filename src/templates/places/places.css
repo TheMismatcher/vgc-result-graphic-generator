@@ -89,7 +89,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.pl-subtext {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* The CP chip never shrinks (a long handle gives way instead) and keeps flat type on the glass styles. */
 .pl-cp {
+  flex: none;
+  text-shadow: none;
   font-size: 14px;
 }
 .pl-team {
@@ -285,20 +293,11 @@
   border-right-color: #fff;
 }
 
-/* Sky Champion: the champion's panel is the sky over Spear Pillar at Diamond & Pearl's climax, torn open in
-   red, blue and green streaks (recreated with gradients; the theme layouts use --sky too). */
+/* Cutscene Sky: the champion's panel is the sky over Spear Pillar at Diamond & Pearl's climax, copied from the game's
+   cutscene (Bulbapedia 'Spear Pillar cutscene DP.png'): black sky, tapered '/' streaks in the frame's own flat DS
+   red / indigo / olive, rebuilt as a 1080px texture at 3x (scripts/spear-pillar-sky.cjs). Flat like the game: no
+   glow, place box in the cutscene red. The theme layouts use the same variables. */
 .pl-spear.sky {
-  --sky: repeating-linear-gradient(118deg, transparent 0 26px, rgba(255, 70, 90, 0.75) 32px, transparent 40px 70px, rgba(70, 150, 255, 0.8) 76px, transparent 84px 112px, rgba(90, 240, 140, 0.7) 117px, transparent 124px 150px),
-    repeating-linear-gradient(104deg, transparent 0 60px, rgba(255, 255, 255, 0.16) 64px, transparent 68px 130px),
-    radial-gradient(ellipse at 25% 50%, rgba(150, 70, 220, 0.55), transparent 65%),
-    linear-gradient(118deg, #1a0b26, #0e0f2e 55%, #08161e);
-  --sky-glow: 0 0 0 3px #584840, -10px 0 28px rgba(255, 80, 110, 0.5), 10px 0 28px rgba(80, 230, 140, 0.4), 0 0 40px rgba(80, 150, 255, 0.5);
-  --sky-place: linear-gradient(160deg, #e8405a, #3f7ff0 55%, #3fcf7a);
-}
-/* Cutscene Sky: the same, with the sky copied from Diamond & Pearl's cutscene (Bulbapedia 'Spear Pillar cutscene DP.png'):
-   black sky, tapered '/' streaks in the frame's own flat DS colours, rebuilt as a 1080px texture at 3x
-   (scripts/spear-pillar-sky.cjs). Flat like the game: no glow, place box in the cutscene red. */
-.pl-spear.dsky {
   --sky: url('./spear-pillar-sky-dp.png') 0 0 / 1080px 1080px no-repeat, #000;
   --sky-glow: 0 0 0 3px #584840, 0 10px 18px rgba(30, 20, 24, 0.45);
   --sky-place: #a81010;
