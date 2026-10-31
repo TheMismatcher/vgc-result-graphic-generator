@@ -144,7 +144,7 @@ const makePlace = (id: string, name: string, description: string, crop: Crop, cl
       <MapWall crop={crop} />
       <div className="pl-shade" />
       <LocationHead data={data} cls="pl" kicker="" />
-      <LocationRows data={data} cls="pl" />
+      <LocationRows data={data} cls="pl" grow />
     </div>
   ),
 })
@@ -193,7 +193,7 @@ const makeCustom = (light: boolean): StandingsTemplate => ({
       <BackdropImage width={W} height={H} />
       <div className="pl-shade" />
       <LocationHead data={data} cls="pl" kicker="" />
-      <LocationRows data={data} cls="pl" />
+      <LocationRows data={data} cls="pl" grow />
     </div>
   ),
 })

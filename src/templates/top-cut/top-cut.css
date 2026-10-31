@@ -184,6 +184,23 @@
   border-width: 2px;
 }
 
+/* Four players or fewer: rows fill the page, team as a 3 x 2 grid of larger Pokémon. */
+.tc.few .tc-row {
+  height: 252px;
+}
+.tc.few .tc-place {
+  width: 140px;
+  font-size: 58px;
+}
+.tc.few .tc-sub {
+  font-size: 28px;
+}
+.tc.few .tc-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 8px;
+}
+
 /* ---------- Loud ---------- */
 .tc.loud .tc-rule {
   height: 10px;

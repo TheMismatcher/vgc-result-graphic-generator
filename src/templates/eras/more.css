@@ -671,3 +671,41 @@
 .gh-sub {
   color: #b9a8d6;
 }
+
+/* Four players or fewer (LocationRows `grow`, Ghost Pixels so far; Pokédex below): taller rows, team as a 3 x 2 grid. */
+.gp-rows.few .gp-row {
+  height: 236px;
+}
+.gp-rows.few .gp-place {
+  width: 150px;
+  font-size: 56px;
+}
+.gp-rows.few .gp-player {
+  width: 420px;
+}
+.gp-rows.few .gp-sub {
+  font-size: 24px;
+}
+.gp-rows.few .gp-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
+}
+.dx.few .dx-entry {
+  height: 218px;
+}
+.dx.few .dx-no {
+  width: 170px;
+  font-size: 26px;
+}
+.dx.few .dx-player {
+  width: 350px;
+}
+.dx.few .dx-sub {
+  font-size: 22px;
+}
+.dx.few .dx-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 4px;
+}

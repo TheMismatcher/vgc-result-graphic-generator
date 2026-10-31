@@ -190,9 +190,11 @@ const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'se
     const tiles = layout(`${data.tournament.name}|${data.dateLabel}`, squares)
     const tint = (t: Tile) => (gradient ? (t.x + t.y) / (COLS + ROWS - 2) : 0)
     const lineColor = (t: Tile) => (gradient ? mix(main, second, tint(t)) : second)
+    // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
+    const few = data.players.length <= 4
 
     return (
-      <div className={`dmv mz ${cardTint ? `mz-tint ${cardTint}` : ''} ${shadow ? 'shadow' : ''}`} style={{ width: W, height: H, background: gradient ? `linear-gradient(135deg, ${main}, ${second})` : second }}>
+      <div className={`dmv mz ${cardTint ? `mz-tint ${cardTint}` : ''} ${shadow ? 'shadow' : ''} ${few ? 'few' : ''}`} style={{ width: W, height: H, background: gradient ? `linear-gradient(135deg, ${main}, ${second})` : second }}>
         {tiles.map((t, i) => {
           const size = Math.min(t.w, t.h) * CELL - GAP - 14
           const id = mons.length ? mons[i % mons.length] : ''
@@ -224,12 +226,12 @@ const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'se
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="mz-cp" />}
               </div>
               <div className="mz-player">
-                <FitText className="mz-name" text={p.name || 'Player'} max={32} width={280} min={16} weight={900} italic={false} />
+                <FitText className="mz-name" text={p.name || 'Player'} max={few ? 48 : 32} width={few ? 360 : 280} min={16} weight={900} italic={false} />
                 <div className="mz-sub">{[p.record, p.social].filter(Boolean).join('  ·  ')}</div>
               </div>
               <div className="mz-team">
                 {p.team.map((m, j) => (
-                  <MonSprite key={j} mon={m} size={72} showTera={data.format.tera} />
+                  <MonSprite key={j} mon={m} size={few ? 100 : 72} showTera={data.format.tera} />
                 ))}
               </div>
             </div>

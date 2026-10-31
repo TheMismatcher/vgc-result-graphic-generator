@@ -32,9 +32,11 @@ const SportsPage: StandingsTemplate = {
     const winner = first?.name || 'Player Name'
     const headline = `${lastName(winner)} wins ${data.typeLabel || 'the event'}`.toUpperCase()
     const deck = `${winner}${first?.record ? ` goes ${first.record}` : ''} to take the ${data.tournament.name || 'tournament'}`
+    // Four players or fewer: box-score rows grow to fill the page, teams as a 3 x 2 grid.
+    const few = data.players.length <= 4
 
     return (
-      <div className="sp" style={{ width: 1080, height: 1350 }}>
+      <div className={`sp ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
         <svg className="sp-grain" width="1080" height="1350" aria-hidden>
           <filter id="sp-noise">
             <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" />
@@ -107,7 +109,7 @@ const SportsPage: StandingsTemplate = {
               <tr key={p.uid}>
                 <td className="sp-pl">{i + 2}</td>
                 <td className="sp-name">
-                  <FitText text={p.name || 'Player'} max={32} width={330} min={18} weight={700} italic={false} family="Oswald" />
+                  <FitText text={p.name || 'Player'} max={few ? 44 : 32} width={330} min={18} weight={700} italic={false} family="Oswald" />
                   {p.social && <span className="sp-handle">{p.social}</span>}
                 </td>
                 <td className="sp-rec">
@@ -116,7 +118,7 @@ const SportsPage: StandingsTemplate = {
                 </td>
                 <td className="sp-mons">
                   {p.team.map((m, j) => (
-                    <MonSprite key={j} mon={m} size={62} showTera={data.format.tera} />
+                    <MonSprite key={j} mon={m} size={few ? 76 : 62} showTera={data.format.tera} />
                   ))}
                 </td>
               </tr>

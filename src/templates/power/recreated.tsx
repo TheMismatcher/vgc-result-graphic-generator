@@ -244,7 +244,7 @@ const topCut = (id: string, name: string, description: string, cls: string, kind
         <Back seed={data.tournament.name} width={W} height={H} ghosts={ghosts(data)} />
         <div className="pl-shade" />
         <LocationHead data={data} cls="pl" kicker="" />
-        <LocationRows data={data} cls="pl" />
+        <LocationRows data={data} cls="pl" grow />
       </div>
     </MonFx>
   ),

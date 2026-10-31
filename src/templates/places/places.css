@@ -106,6 +106,29 @@
   padding-right: 14px;
 }
 
+/* Four players or fewer (LocationRows `grow`): taller rows, team as a 3 x 2 grid of larger Pokémon. */
+.pl-rows.few .pl-row {
+  height: 236px;
+}
+.pl-rows.few .pl-place {
+  width: 150px;
+  font-size: 56px;
+}
+.pl-rows.few .pl-player {
+  width: 420px;
+}
+.pl-rows.few .pl-sub {
+  font-size: 24px;
+}
+.pl-rows.few .pl-cp {
+  font-size: 18px;
+}
+.pl-rows.few .pl-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
+}
+
 /* ---------- Hoenn routes (colours from Emerald's map palette) ---------- */
 .pl-hoenn {
   color: #18301c;

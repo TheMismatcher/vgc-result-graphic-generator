@@ -14,6 +14,8 @@ export interface Player {
   team: Mon[] // always 6 slots
   photo?: string // resized JPEG data URL, for photo templates
   photoY?: number // vertical framing of the photo, 0 = top, 100 = bottom
+  photoX?: number // horizontal framing, 0 = left, 100 = right (default 50)
+  photoZoom?: number // 1 = just fills its box; larger zooms in
   wins?: number
   losses?: number
   ties?: number

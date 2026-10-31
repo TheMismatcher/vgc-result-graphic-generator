@@ -164,3 +164,20 @@
   border-radius: 6px;
   transform: skewX(-12deg);
 }
+
+/* Four players or fewer: taller rows, team as a 3 x 2 grid of larger Pokémon. */
+.ar.few .ar-row {
+  height: 244px;
+}
+.ar.few .ar-place {
+  width: 150px;
+  font-size: 140px;
+}
+.ar.few .ar-sub {
+  font-size: 26px;
+}
+.ar.few .ar-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
+}

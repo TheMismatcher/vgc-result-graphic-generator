@@ -129,7 +129,7 @@ const makeGhostPixel = (id: string, name: string, description: string, cell: num
         {url && <img className="gp-wall" src={url} alt="" />}
         <div className="gp-dim" />
         <LocationHead data={data} cls="gp" kicker="" />
-        <LocationRows data={data} cls="gp" />
+        <LocationRows data={data} cls="gp" grow />
       </div>
     )
   },

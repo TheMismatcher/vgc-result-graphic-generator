@@ -1,6 +1,6 @@
 // Small building blocks reused across templates.
 
-import { useEffect, useState, type CSSProperties } from 'react'
+import { createContext, useContext, useEffect, useState, type CSSProperties } from 'react'
 import type { Mon, Player } from '../../types'
 import { getItem, getPokemon, sprites } from '../../data/dex'
 import { teraType } from '../../data/options'
@@ -26,15 +26,40 @@ export function MonSprite({ mon, size, showTera, style }: { mon: Mon; size: numb
   )
 }
 
+/** A player's framing: where the photo sits in its box (x, y in %) and how far it's zoomed. */
+export const photoFrame = (p: Player) => ({ x: p.photoX ?? 50, y: p.photoY ?? 30, zoom: p.photoZoom ?? 1 })
+
+/** Live framing while a photo is being dragged on the Preview (saved to the player when the drag ends). */
+export const PhotoFrameContext = createContext<{ uid: string; x: number; y: number } | null>(null)
+
+/**
+ * Style for a photo <img> that fills its box: object-position does the framing; zoom scales about that
+ * same point (so the edges stay reachable) and clip-path trims the scaled image back to the box.
+ */
+export function photoStyle(x: number, y: number, zoom: number): CSSProperties {
+  if (zoom <= 1) return { objectPosition: `${x}% ${y}%` }
+  const k = 1 - 1 / zoom
+  return {
+    objectPosition: `${x}% ${y}%`,
+    transform: `scale(${zoom})`,
+    transformOrigin: `${x}% ${y}%`,
+    clipPath: `inset(${y * k}% ${(100 - x) * k}% ${(100 - y) * k}% ${x * k}%)`,
+  }
+}
+
 /** A player's photo cropped to fill its box, or their initials if no photo was uploaded. */
 export function PlayerPhoto({ player, className = '', style }: { player: Player; className?: string; style?: CSSProperties }) {
+  const live = useContext(PhotoFrameContext)
   if (player.photo) {
+    const f = photoFrame(player)
+    const { x, y } = live?.uid === player.uid ? live : f
     return (
       <img
         className={`dmv-photo ${className}`}
         src={player.photo}
         alt={player.name}
-        style={{ objectPosition: `50% ${player.photoY ?? 30}%`, ...style }}
+        data-photo={player.uid}
+        style={{ ...photoStyle(x, y, f.zoom), ...style }}
       />
     )
   }

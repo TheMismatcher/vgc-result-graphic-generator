@@ -7,7 +7,8 @@ import { copyPng, downloadPng, slugify } from '../lib/exportImage'
 import { brandVars, useBrand } from '../brand'
 import { useDisplay } from '../lib/display'
 import { BackdropContext, DEFAULT_OPACITY, isBackdropTemplate, opacityVars, readBackdrop, startDrag, useBackdrop } from '../lib/backdrop'
-import type { BackdropPhoto } from '../types'
+import type { BackdropPhoto, Player } from '../types'
+import { PhotoFrameContext, photoFrame } from '../templates/shared/parts'
 import { useDialog } from './Dialog'
 import { Button, Card } from './ui'
 
@@ -41,7 +42,8 @@ export function Preview<T extends Template>({
   render,
   filenameBase,
   allowCP = false,
-  showTemplates=true
+  showTemplates=true,
+  photos,
 }: {
   templates: T[]
   selectedId: string
@@ -50,6 +52,7 @@ export function Preview<T extends Template>({
   filenameBase: string
   allowCP?: boolean // show the "Show CP earned" option (standings graphics only)
   showTemplates?: boolean //show on all but standings by default
+  photos?: { players: Player[]; onChange: (uid: string, patch: Partial<Player>) => void } // drag / zoom player photos in the preview
 }) {
   const template = templates.find((t) => t.id === selectedId) ?? templates[0]
   const node = useRef<HTMLDivElement>(null)
@@ -75,7 +78,54 @@ export function Preview<T extends Template>({
     const next = kin.find((t) => t.look![g] === v && same(t)) ?? kin.find((t) => t.look![g] === v)
     if (next && next.id !== template.id) onSelect(next.id)
   }
+  // Player photos: drag one to move it in its frame (live, saved on release); the last one touched gets the Zoom slider.
+  const [photoUid, setPhotoUid] = useState('')
+  const [photoLive, setPhotoLive] = useState<{ uid: string; x: number; y: number } | null>(null)
+  const photoPlayer = photos?.players.find((p) => p.uid === photoUid && p.photo)
+  useLayoutEffect(() => {
+    // Default to the first photo in this graphic (the winner's on Champion + Photo).
+    const first = node.current?.querySelector<HTMLElement>('[data-photo]')?.dataset.photo ?? ''
+    setPhotoUid((uid) => (uid && node.current?.querySelector(`[data-photo="${uid}"]`) ? uid : first))
+  })
+  const dragPhoto = (e: PointerEvent, img: HTMLImageElement) => {
+    const player = photos?.players.find((p) => p.uid === img.dataset.photo)
+    if (!photos || !player || !node.current || e.button !== 0) return
+    e.preventDefault()
+    setPhotoUid(player.uid)
+    const f = photoFrame(player)
+    // The photo covers its box, then zooms: how far it overhangs on each axis (graphic px).
+    const bw = img.offsetWidth
+    const bh = img.offsetHeight
+    const s0 = Math.max(bw / img.naturalWidth, bh / img.naturalHeight) * f.zoom
+    const overX = img.naturalWidth * s0 - bw
+    const overY = img.naturalHeight * s0 - bh
+    const k = node.current.getBoundingClientRect().width / template.width
+    const clamp = (v: number) => Math.min(100, Math.max(0, v))
+    const startX = e.clientX
+    const startY = e.clientY
+    let last = { uid: player.uid, x: f.x, y: f.y }
+    const onMove = (ev: globalThis.PointerEvent) => {
+      last = {
+        uid: player.uid,
+        x: overX > 0.5 ? clamp(f.x - ((ev.clientX - startX) / k) * (100 / overX)) : f.x,
+        y: overY > 0.5 ? clamp(f.y - ((ev.clientY - startY) / k) * (100 / overY)) : f.y,
+      }
+      setPhotoLive(last)
+    }
+    const up = () => {
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', up)
+      window.removeEventListener('pointercancel', up)
+      photos.onChange(player.uid, { photoX: Math.round(last.x * 10) / 10, photoY: Math.round(last.y * 10) / 10 })
+      setPhotoLive(null)
+    }
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', up)
+    window.addEventListener('pointercancel', up)
+  }
   const drag = (e: PointerEvent) => {
+    const img = photos && (e.target as HTMLElement).closest<HTMLImageElement>('img[data-photo]')
+    if (img) return dragPhoto(e, img)
     if (!custom || !backdrop || !node.current) return
     startDrag(e, node.current, backdrop, template.width, template.height, setDragging, (b) => {
       setBackdrop(b)
@@ -173,14 +223,38 @@ export function Preview<T extends Template>({
 
       {custom && <BackdropControls glass={template.look?.panels !== 'solid'} />}
 
+      {photoPlayer && (
+        <div className="space-y-1 rounded-xl border border-slate-200 p-3">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-slate-700">
+            <span className="font-semibold text-slate-900">{photoPlayer.name || 'Player'}’s photo</span>
+            <label className="flex min-w-48 flex-1 items-center gap-2">
+              Zoom
+              <input
+                type="range"
+                min={1}
+                max={3}
+                step={0.01}
+                value={photoPlayer.photoZoom ?? 1}
+                onChange={(e) => photos!.onChange(photoPlayer.uid, { photoZoom: Number(e.target.value) })}
+                className="flex-1 accent-[#b3121b]"
+              />
+            </label>
+            <Button className="py-1" onClick={() => photos!.onChange(photoPlayer.uid, { photoX: undefined, photoY: 30, photoZoom: undefined })}>Reset</Button>
+          </div>
+          <p className="text-xs text-slate-500">Drag a photo in the preview to move it in its frame; click another photo to zoom that one.</p>
+        </div>
+      )}
+
       <div
-        className={`rounded-xl bg-slate-100 p-2 ${custom && backdrop ? 'cursor-grab touch-none select-none active:cursor-grabbing' : ''}`}
+        className={`rounded-xl bg-slate-100 p-2 ${custom && backdrop ? 'cursor-grab touch-none select-none active:cursor-grabbing' : ''} ${photos ? '[&_img[data-photo]]:cursor-grab [&_img[data-photo]]:touch-none' : ''}`}
         onPointerDown={drag}
       >
         <BackdropContext.Provider value={{ ...backdropCtx, backdrop: dragging ?? backdrop }}>
+        <PhotoFrameContext.Provider value={photoLive}>
           <Scaled width={template.width} height={template.height} nodeRef={node}>
             {render(template)}
           </Scaled>
+        </PhotoFrameContext.Provider>
         </BackdropContext.Provider>
       </div>
 

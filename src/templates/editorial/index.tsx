@@ -29,8 +29,10 @@ const makeTopCut = (mood: Mood): StandingsTemplate => ({
   Component: ({ data }) => {
     const brand = useBrand()
     const [first, ...rest] = data.players
+    // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
+    const few = data.players.length <= 4
     return (
-      <div className={`dmv ed ed-${mood}`} style={{ width: 1080, height: 1350 }}>
+      <div className={`dmv ed ed-${mood} ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
         <header className="ed-head">
           <div className="ed-kicker-row">
             <div className="ed-kicker">Final Standings</div>
@@ -62,7 +64,7 @@ const makeTopCut = (mood: Mood): StandingsTemplate => ({
             </div>
             <div className="ed-winner-team">
               {first.team.map((m, j) => (
-                <MonSprite key={j} mon={m} size={92} showTera={data.format.tera} />
+                <MonSprite key={j} mon={m} size={few ? 104 : 92} showTera={data.format.tera} />
               ))}
             </div>
           </section>
@@ -73,7 +75,7 @@ const makeTopCut = (mood: Mood): StandingsTemplate => ({
             <div key={p.uid} className="ed-row">
               <div className="ed-num">{two(i + 2)}</div>
               <div className="ed-player">
-                <FitText className="ed-name" text={p.name || 'Player'} max={36} width={330} min={20} weight={800} italic={false} />
+                <FitText className="ed-name" text={p.name || 'Player'} max={few ? 48 : 36} width={few ? 400 : 330} min={20} weight={800} italic={false} />
                 <div className="ed-sub">
                   {[p.record, p.social].filter(Boolean).join('   ·   ')}
                   {data.cp && <CpBadge points={data.cp(i + 2)} className="ed-cp small" />}
@@ -81,7 +83,7 @@ const makeTopCut = (mood: Mood): StandingsTemplate => ({
               </div>
               <div className="ed-team">
                 {p.team.map((m, j) => (
-                  <MonSprite key={j} mon={m} size={74} showTera={data.format.tera} />
+                  <MonSprite key={j} mon={m} size={few ? 96 : 74} showTera={data.format.tera} />
                 ))}
               </div>
             </div>

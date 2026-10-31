@@ -110,8 +110,11 @@ export const Pokedex: StandingsTemplate = {
   id: 'era-pokedex',
   name: 'Top Cut (Pokédex)',
   description: 'The classic red Pokédex, with each top-cut player listed as a numbered entry.',
-  Component: ({ data }) => (
-    <div className="dmv dx" style={{ width: 1080, height: 1350 }}>
+  Component: ({ data }) => {
+    // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
+    const few = data.players.length <= 4
+    return (
+    <div className={`dmv dx ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
       <div className="dx-top">
         <div className="dx-lens" />
         <div className="dx-led r" />
@@ -127,7 +130,7 @@ export const Pokedex: StandingsTemplate = {
           <div key={p.uid} className={`dx-entry ${i === 0 ? 'first' : ''}`}>
             <div className="dx-no">No.{String(i + 1).padStart(3, '0')}</div>
             <div className="dx-player">
-              <FitText className="dx-name" text={p.name || 'Player'} max={30} width={290} min={14} weight={900} italic={false} />
+              <FitText className="dx-name" text={p.name || 'Player'} max={few ? 42 : 30} width={few ? 360 : 290} min={14} weight={900} italic={false} />
               <div className="dx-sub">
                 {[p.record, p.social].filter(Boolean).join('  ·  ')}
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="dx-cp" />}
@@ -135,7 +138,7 @@ export const Pokedex: StandingsTemplate = {
             </div>
             <div className="dx-team">
               {p.team.map((m, j) => (
-                <MonSprite key={j} mon={m} size={70} showTera={data.format.tera} />
+                <MonSprite key={j} mon={m} size={few ? 94 : 70} showTera={data.format.tera} />
               ))}
             </div>
           </div>
@@ -147,7 +150,8 @@ export const Pokedex: StandingsTemplate = {
         <Logo size={70} style={{ border: '4px solid #6e1015' }} />
       </div>
     </div>
-  ),
+    )
+  },
 }
 
 /** The Pokédex again, with the champion as a full entry: ace in the viewer, data rows, flavour text and the party. */

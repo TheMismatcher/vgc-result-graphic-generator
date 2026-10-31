@@ -324,3 +324,26 @@
   text-transform: uppercase;
   color: var(--muted);
 }
+
+/* Four players or fewer: a taller winner block, then roomier rows with the team as a 3 x 2 grid. */
+.ed.few .ed-winner {
+  height: 260px;
+}
+.ed.few .ed-winner-team {
+  grid-template-columns: repeat(3, 104px);
+}
+.ed.few .ed-row {
+  height: 212px;
+}
+.ed.few .ed-player {
+  width: 430px;
+}
+.ed.few .ed-sub {
+  font-size: 24px;
+}
+.ed.few .ed-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
+  margin-left: auto;
+}

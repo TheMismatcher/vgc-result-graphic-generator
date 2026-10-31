@@ -233,3 +233,22 @@
   text-transform: uppercase;
   color: var(--grey);
 }
+
+/* Four players or fewer: box-score rows grow to fill the page, teams as a 3 x 2 grid. */
+.sp.few .sp-box td {
+  height: 160px;
+}
+.sp.few .sp-pl {
+  font-size: 64px;
+}
+.sp.few .sp-handle {
+  font-size: 20px;
+}
+.sp.few .sp-mons {
+  width: 252px; /* three 76px Pokémon per line, so the team wraps into 3 x 2 */
+  white-space: normal;
+  line-height: 0;
+}
+.sp.few .sp-mons .dmv-mon {
+  margin: 2px 4px 2px 0;
+}

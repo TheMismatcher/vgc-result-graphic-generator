@@ -4,6 +4,7 @@ import { ITEMS, POKEMON, getPokemon, sprites } from '../data/dex'
 import { TERA_TYPES } from '../data/options'
 import { importTeam } from '../lib/pokepaste'
 import { resizePhoto } from '../lib/photo'
+import { photoFrame, photoStyle } from '../templates/shared/parts'
 import { Combobox, type Option } from './Combobox'
 import { Button, Input, Select, Textarea } from './ui'
 import { useDialog } from './Dialog'
@@ -136,7 +137,7 @@ function PhotoField({ player, onChange }: { player: Player; onChange: (p: Player
     if (!file) return
     setBusy(true)
     try {
-      onChange({ ...player, photo: await resizePhoto(file), photoY: 30 })
+      onChange({ ...player, photo: await resizePhoto(file), photoY: 30, photoX: undefined, photoZoom: undefined })
     } catch (e) {
       dialog.notify(e instanceof Error ? e.message : "Couldn't read that image.")
     } finally {
@@ -148,7 +149,7 @@ function PhotoField({ player, onChange }: { player: Player; onChange: (p: Player
     <div className="flex items-center gap-3 rounded-xl bg-slate-50 p-2">
       <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-slate-200">
         {player.photo ? (
-          <img src={player.photo} alt="" className="h-full w-full object-cover" style={{ objectPosition: `50% ${y}%` }} />
+          <img src={player.photo} alt="" className="h-full w-full object-cover" style={photoStyle(photoFrame(player).x, y, photoFrame(player).zoom)} />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-2xl text-slate-400" aria-hidden>👤</div>
         )}
@@ -160,7 +161,7 @@ function PhotoField({ player, onChange }: { player: Player; onChange: (p: Player
             <input type="file" accept="image/*" className="sr-only" onChange={(e) => { upload(e.target.files?.[0]); e.target.value = '' }} />
           </label>
           {player.photo && (
-            <Button variant="danger" className="py-1.5" onClick={() => onChange({ ...player, photo: undefined, photoY: undefined })}>Remove</Button>
+            <Button variant="danger" className="py-1.5" onClick={() => onChange({ ...player, photo: undefined, photoY: undefined, photoX: undefined, photoZoom: undefined })}>Remove</Button>
           )}
           {!player.photo && <span className="text-xs text-slate-500">Used by the photo templates</span>}
         </div>

@@ -16,8 +16,11 @@ const makeArena = (bg: Background): StandingsTemplate => ({
   width: 1080,
   height: 1350,
   maxPlayers: 8,
-  Component: ({ data }) => (
-    <div className={`dmv ar ar-${bg}`} style={{ width: 1080, height: 1350 }}>
+  Component: ({ data }) => {
+    // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
+    const few = data.players.length <= 4
+    return (
+    <div className={`dmv ar ar-${bg} ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
       <div className="ar-bg" />
       <div className="ar-bg-extra" />
 
@@ -36,7 +39,7 @@ const makeArena = (bg: Background): StandingsTemplate => ({
           <div key={p.uid} className={`ar-row ${i === 0 ? 'first' : ''}`}>
             <div className="ar-place">{i + 1}</div>
             <div className="ar-player">
-              <FitText className="ar-name" text={p.name || 'Player'} max={36} width={300} min={18} />
+              <FitText className="ar-name" text={p.name || 'Player'} max={few ? 54 : 36} width={few ? 420 : 300} min={18} />
               <div className="ar-subrow">
                 <div className="ar-sub">{[p.record, p.social].filter(Boolean).join('  ·  ')}</div>
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="ar-cp" />}
@@ -44,14 +47,15 @@ const makeArena = (bg: Background): StandingsTemplate => ({
             </div>
             <div className="ar-team">
               {p.team.map((m, j) => (
-                <MonSprite key={j} mon={m} size={84} showTera={data.format.tera} />
+                <MonSprite key={j} mon={m} size={few ? 112 : 84} showTera={data.format.tera} />
               ))}
             </div>
           </div>
         ))}
       </main>
     </div>
-  ),
+    )
+  },
 })
 
 export const ArenaSpotlight = makeArena('spotlight')

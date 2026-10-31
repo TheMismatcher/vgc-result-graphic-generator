@@ -23,8 +23,10 @@ export const KantoGameBoy: StandingsTemplate = {
   maxPlayers: 8,
   Component: ({ data }) => {
     const { showMegas } = useDisplay()
+    // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
+    const few = data.players.length <= 4
     return (
-      <div className="dmv gb" style={{ width: 1080, height: 1350 }}>
+      <div className={`dmv gb ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
         <div className="gb-box gb-head">
           <FitText className="gb-title" text={data.tournament.name || 'Tournament'} max={44} width={940} min={20} weight={400} italic={false} family="'Press Start 2P'" />
           <div className="gb-facts">{facts(data).join(' / ').toUpperCase()}</div>
@@ -37,7 +39,7 @@ export const KantoGameBoy: StandingsTemplate = {
               <span className="gb-cursor">{i === 0 ? '▶' : ''}</span>
               <span className="gb-place">{ordinal(i + 1).toUpperCase()}</span>
               <div className="gb-player">
-                <FitText className="gb-name" text={p.name || 'Player'} max={24} width={360} min={12} weight={400} italic={false} family="'Press Start 2P'" />
+                <FitText className="gb-name" text={p.name || 'Player'} max={few ? 32 : 24} width={few ? 400 : 360} min={12} weight={400} italic={false} family="'Press Start 2P'" />
                 <div className="gb-rec">
                   {p.record && `W/L ${p.record}`}
                   {data.cp && <CpBadge points={data.cp(i + 1)} className="gb-cp" />}
@@ -115,8 +117,11 @@ export const Unova: StandingsTemplate = {
   width: 1080,
   height: 1350,
   maxPlayers: 8,
-  Component: ({ data }) => (
-    <div className="dmv uv" style={{ width: 1080, height: 1350 }}>
+  Component: ({ data }) => {
+    // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
+    const few = data.players.length <= 4
+    return (
+    <div className={`dmv uv ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
       <div className="uv-band a" />
       <div className="uv-band b" />
       <header className="uv-head">
@@ -130,7 +135,7 @@ export const Unova: StandingsTemplate = {
           <div key={p.uid} className={`uv-row ${i % 2 ? 'dark' : 'light'}`}>
             <div className="uv-place">{i + 1}</div>
             <div className="uv-player">
-              <FitText className="uv-name" text={p.name || 'Player'} max={34} width={320} min={16} weight={900} italic={false} />
+              <FitText className="uv-name" text={p.name || 'Player'} max={few ? 50 : 34} width={few ? 400 : 320} min={16} weight={900} italic={false} />
               <div className="uv-sub">
                 {[p.record, p.social].filter(Boolean).join('   ')}
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="uv-cp" />}
@@ -138,14 +143,15 @@ export const Unova: StandingsTemplate = {
             </div>
             <div className="uv-team">
               {p.team.map((m, j) => (
-                <MonSprite key={j} mon={m} size={82} showTera={data.format.tera} />
+                <MonSprite key={j} mon={m} size={few ? 108 : 82} showTera={data.format.tera} />
               ))}
             </div>
           </div>
         ))}
       </main>
     </div>
-  ),
+    )
+  },
 }
 
 // ---------- Locations ----------
@@ -164,15 +170,20 @@ export function seededRand(text: string) {
 
 type Data = Parameters<StandingsTemplate['Component']>[0]['data']
 
-/** The shared results list for the location templates; each location styles it with its own CSS. */
-export function LocationRows({ data, cls }: { data: Data; cls: string }) {
+/**
+ * The shared results list for the location templates; each location styles it with its own CSS.
+ * `grow`: with four players or fewer the rows get the class `few` and larger names and Pokémon
+ * (the family's CSS makes the rows taller and the team a 3 x 2 grid; only the places do so far).
+ */
+export function LocationRows({ data, cls, grow = false }: { data: Data; cls: string; grow?: boolean }) {
+  const few = grow && data.players.length <= 4
   return (
-    <main className={`${cls}-rows`}>
+    <main className={`${cls}-rows ${few ? 'few' : ''}`}>
       {data.players.map((p, i) => (
         <div key={p.uid} className={`${cls}-row ${i === 0 ? 'first' : ''}`}>
           <div className={`${cls}-place`}>{ordinal(i + 1)}</div>
           <div className={`${cls}-player`}>
-            <FitText className={`${cls}-name`} text={p.name || 'Player'} max={32} width={300} min={16} weight={900} italic={false} />
+            <FitText className={`${cls}-name`} text={p.name || 'Player'} max={few ? 50 : 32} width={few ? 400 : 300} min={16} weight={900} italic={false} />
             <div className={`${cls}-sub`}>
               <span className={`${cls}-subtext`}>{[p.record, p.social].filter(Boolean).join('  ·  ')}</span>
               {data.cp && <CpBadge points={data.cp(i + 1)} className={`${cls}-cp`} />}
@@ -180,7 +191,7 @@ export function LocationRows({ data, cls }: { data: Data; cls: string }) {
           </div>
           <div className={`${cls}-team`}>
             {p.team.map((m, j) => (
-              <MonSprite key={j} mon={m} size={78} showTera={data.format.tera} />
+              <MonSprite key={j} mon={m} size={few ? 104 : 78} showTera={data.format.tera} />
             ))}
           </div>
         </div>

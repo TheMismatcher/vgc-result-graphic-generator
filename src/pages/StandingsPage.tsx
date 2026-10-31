@@ -166,6 +166,7 @@ export function StandingsPage({
           render={render}
           allowCP
           showTemplates={false}
+          photos={{ players: state.players, onChange: (uid, patch) => setPlayers((ps) => ps.map((p) => (p.uid === uid ? { ...p, ...patch } : p))) }}
         />
       </div>
     </div>

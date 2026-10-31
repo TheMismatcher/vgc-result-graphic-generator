@@ -181,3 +181,23 @@
 .mz-tint.shadow .mz-row {
   box-shadow: 0 8px 0 rgba(20, 24, 40, 0.22), 0 16px 30px rgba(20, 24, 40, 0.28);
 }
+
+/* Four players or fewer: taller rows, team as a 3 x 2 grid of larger Pokémon. */
+.mz.few .mz-row {
+  height: 232px;
+}
+.mz.few .mz-place {
+  width: 140px;
+  font-size: 60px;
+}
+.mz.few .mz-player {
+  width: 400px;
+}
+.mz.few .mz-sub {
+  font-size: 24px;
+}
+.mz.few .mz-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 4px;
+}

@@ -576,3 +576,39 @@
 .rt-sub {
   color: #5f6b77;
 }
+
+/* Four players or fewer: taller rows, team as a 3 x 2 grid of larger Pokémon. */
+.gb.few .gb-row {
+  height: 220px;
+}
+.gb.few .gb-place {
+  width: 132px;
+  font-size: 30px;
+}
+.gb.few .gb-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 4px 10px;
+}
+.gb.few .gb-mon {
+  width: 96px;
+  height: 96px;
+}
+.uv.few .uv-row {
+  height: 248px;
+}
+.uv.few .uv-place {
+  width: 150px;
+  font-size: 72px;
+}
+.uv.few .uv-player {
+  width: 420px;
+}
+.uv.few .uv-sub {
+  font-size: 24px;
+}
+.uv.few .uv-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
+}
