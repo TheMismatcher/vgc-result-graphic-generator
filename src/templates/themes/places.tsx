@@ -3,7 +3,7 @@
 
 import { makeBracket } from '../bracket'
 import { makeChampion } from '../champion'
-import { MapWall, R119_BRIDGE, R119_TOP, R120, SPEAR, SPEAR_ART } from '../places'
+import { MapWall, R119_BRIDGE, R119_TOP, R120, R201, SPEAR, SPEAR_ART, HALL } from '../places'
 import { makeTop4Photos } from '../top4-photos'
 import { makeTop8Mixed } from '../top8-mixed'
 import { makeTop8Photos } from '../top8-photos'
@@ -25,7 +25,11 @@ export interface Place {
 export const PLACES: Place[] = [
   { id: 'place-spear-pillar', style: 'Spear Pillar', className: 'theme-place pl-spear', crop: SPEAR },
   { id: 'place-spear-pillar-glass', style: 'Spear Pillar Glass', className: 'theme-place pl-spear glass', crop: SPEAR },
+  { id: 'place-spear-pillar-hall', style: 'Spear Pillar Hall of Origin', className: 'theme-place pl-spear hoo', crop: HALL },
+  { id: 'place-spear-pillar-hall-floor', style: 'Spear Pillar Hall Champion', className: 'theme-place pl-spear hoo', crop: SPEAR },
   { id: 'place-spear-pillar-art', style: 'Spear Pillar Concept Art', className: 'theme-place pl-spear glass art', crop: SPEAR_ART },
+  { id: 'place-route-201', style: 'Route 201 Official', className: 'theme-place pl-sinnoh', crop: R201 },
+  { id: 'place-route-201-glass', style: 'Route 201 Official Glass', className: 'theme-place pl-sinnoh glass', crop: R201 },
   { id: 'place-route-119', style: 'Route 119', className: 'theme-place pl-hoenn', crop: R119_TOP },
   { id: 'place-route-119-glass', style: 'Route 119 Glass', className: 'theme-place pl-hoenn glass', crop: R119_TOP },
   { id: 'place-route-119-bridge', style: 'Route 119 Bridge', className: 'theme-place pl-hoenn', crop: R119_BRIDGE },

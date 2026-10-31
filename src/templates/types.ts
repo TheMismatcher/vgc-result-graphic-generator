@@ -75,6 +75,7 @@ interface TemplateBase {
   id: string
   style?: string // the look it belongs to (standings picker: Style, then Layout)
   layout?: StandingsLayout
+  retired?: boolean // hidden from the picker unless 'Show retired styles' is on (saved selections still open)
   name: string
   description: string
   width: number

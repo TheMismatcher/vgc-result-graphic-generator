@@ -14,7 +14,7 @@ import './ghostpixel.css'
 
 const ghostTheme: Theme = {
   id: 'ghost-pixel',
-  style: 'Ghost Pixel Glass Team Line',
+  style: 'Ghost Pixels',
   className: 'theme-ghostpixel',
   Background: ({ data, width, height }) => (
     <div style={{ position: 'absolute', inset: 0, background: '#0c090d' }}>

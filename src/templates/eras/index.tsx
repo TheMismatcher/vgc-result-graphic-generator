@@ -243,7 +243,7 @@ export const Glimwood: StandingsTemplate = {
             </g>
           ))}
         </svg>
-        <LocationHead data={data} cls="gw" kicker="Glimwood Tangle" />
+        <LocationHead data={data} cls="gw" kicker="" />
         <LocationRows data={data} cls="gw" />
       </div>
     )
@@ -281,7 +281,7 @@ export const Route201: StandingsTemplate = {
       </svg>
       <div className="rt-post l" />
       <div className="rt-post r" />
-      <LocationHead data={data} cls="rt" kicker="Route 201" />
+      <LocationHead data={data} cls="rt" kicker="" />
       <LocationRows data={data} cls="rt" />
     </div>
   ),
@@ -319,7 +319,7 @@ export const Snowpoint: StandingsTemplate = {
             <circle key={i} cx={f.x} cy={f.y} r={f.r} fill="#fff" opacity={f.o} />
           ))}
         </svg>
-        <LocationHead data={data} cls="sp2" kicker="Snowpoint City" />
+        <LocationHead data={data} cls="sp2" kicker="" />
         <LocationRows data={data} cls="sp2" />
       </div>
     )

@@ -157,6 +157,65 @@
   color: #d8f0d0;
 }
 
+/* ---------- Route 201 (colours from Platinum's map palette) ---------- */
+.pl-sinnoh {
+  color: #1c2818;
+}
+.pl-sinnoh .pl-shade {
+  background: linear-gradient(180deg, rgba(28, 40, 24, 0.25), rgba(28, 40, 24, 0) 30%);
+}
+.pl-sinnoh .pl-head, .pl-sinnoh .pl-row {
+  background: rgba(255, 255, 255, 0.93);
+  border: 5px solid #384830;
+  border-radius: 18px;
+  box-shadow: inset 0 0 0 3px #50f890, 0 8px 0 rgba(28, 40, 24, 0.35);
+}
+.pl-sinnoh .pl-head .dmv-logo {
+  border-color: #384830;
+}
+.pl-sinnoh .pl-kicker, .pl-sinnoh .pl-facts {
+  color: #3f8a28;
+}
+.pl-sinnoh .pl-place {
+  background: #2f7a9a;
+  color: #fff;
+  border-right: 5px solid #384830;
+}
+.pl-sinnoh .pl-row:nth-child(even) .pl-place {
+  background: #3f8a28;
+}
+.pl-sinnoh .pl-row.first .pl-place {
+  background: #f8e098;
+  color: #1c2818;
+}
+.pl-sinnoh .pl-sub {
+  color: #4c5c44;
+}
+/* Glass: dark green see-through panels, white type. */
+.pl-sinnoh.glass {
+  color: #fff;
+}
+.pl-sinnoh.glass .pl-head, .pl-sinnoh.glass .pl-row {
+  background: rgba(22, 34, 20, 0.62);
+  border-color: rgba(176, 248, 128, 0.85);
+  box-shadow: 0 8px 0 rgba(22, 34, 20, 0.45);
+}
+.pl-sinnoh.glass .pl-head .dmv-logo {
+  border-color: #50f890;
+}
+.pl-sinnoh.glass .pl-kicker, .pl-sinnoh.glass .pl-facts {
+  color: #50f890;
+}
+.pl-sinnoh.glass .pl-name, .pl-sinnoh.glass .pl-title, .pl-sinnoh.glass .pl-facts, .pl-sinnoh.glass .pl-sub {
+  text-shadow: 2px 2px 0 rgba(22, 34, 20, 0.9);
+}
+.pl-sinnoh.glass .pl-place {
+  border-right-color: rgba(176, 248, 128, 0.85);
+}
+.pl-sinnoh.glass .pl-sub {
+  color: #d6f8e2;
+}
+
 /* ---------- Spear Pillar (stone and rock colours from the map; Dialga blue / Palkia pink) ---------- */
 .pl-spear {
   color: #f4eedc;
@@ -203,4 +262,25 @@
 }
 .pl-spear.art .pl-shade {
   background: linear-gradient(180deg, rgba(30, 28, 44, 0.45), rgba(30, 28, 44, 0) 30%);
+}
+
+/* Hall of Origin: the champion's row is paved with the Hall's glass floor tile (64x36 map px, shown 3x),
+   lit white and gold (Arceus' ring). */
+.pl-spear.hoo .pl-row.first {
+  background: url('./hall-of-origin-floor.png') 0 0 / 192px 108px repeat;
+  image-rendering: pixelated;
+  border-color: #fff;
+  box-shadow: 0 0 0 3px #e8c040, 0 0 30px rgba(255, 236, 170, 0.85);
+  color: #2e2628;
+}
+.pl-spear.hoo .pl-row.first .pl-name {
+  color: #2e2628;
+}
+.pl-spear.hoo .pl-row.first .pl-sub {
+  color: #685050;
+}
+.pl-spear.hoo .pl-row.first .pl-place {
+  background: #e8c040;
+  color: #2e2628;
+  border-right-color: #fff;
 }

@@ -1,5 +1,9 @@
 // Real places, drawn with the games' own art (no redraws):
 // - Hoenn routes: Emerald's full Route 119 / Route 120 maps (Bulbapedia map rips), shown at a crisp 2x.
+// - Route 201: Platinum's own tree line (Route 201 map) over its tall-grass tile repeated (built offline
+//   into route-201-pt.png, 360px wide = 3x). Gen 4 overworld maps have no sky.
+// - Spear Pillar Hall of Origin: Platinum's Hall of Origin map (Arceus on the glass platform) behind the
+//   stone panels; the champion sits on the platform's own glass floor tile (hall-of-origin-floor.png).
 // - Spear Pillar: Platinum's Spear Pillar map (Bulbapedia rip) with the NPCs painted out using the
 //   floor's own repeating texture, and the Brilliant Diamond / Shining Pearl concept art.
 
@@ -8,7 +12,9 @@ import type { StandingsTemplate } from '../types'
 import { LocationHead, LocationRows } from '../eras'
 import route119 from './route-119.png'
 import route120 from './route-120.png'
+import route201 from './route-201-pt.png'
 import spearPillar from './spear-pillar-pt.png'
+import hallOfOrigin from './hall-of-origin-pt.png'
 import spearPillarArt from './spear-pillar-bdsp-art.jpg'
 import '../eras/eras.css'
 import './places.css'
@@ -72,12 +78,15 @@ export const R119_TOP: Crop = { src: route119, sx: 0, sy: 250, sw: 540 }
 export const R119_BRIDGE: Crop = { src: route119, sx: 50, sy: 1150, sw: 540 }
 // Route 120: the bridge over the pond and the Ancient Tomb.
 export const R120: Crop = { src: route120, sx: 50, sy: 130, sw: 540 }
+export const R201: Crop = { src: route201, sx: 0, sy: 0, sw: 360 }
 // Spear Pillar (351px wide map) filling the width, from the altar down to the stairs.
 export const SPEAR: Crop = { src: spearPillar, sx: 0, sy: 110, sw: 351 }
+// Hall of Origin map, same framing as Spear Pillar: the glass platform and Arceus under the header, stairs down the middle.
+export const HALL: Crop = { src: hallOfOrigin, sx: 0, sy: 110, sw: 351 }
 // Concept art is already cropped to 4:5.
 export const SPEAR_ART: Crop = { src: spearPillarArt, sx: 0, sy: 0, sw: 1067, smooth: true }
 
-const makePlace = (id: string, name: string, description: string, crop: Crop, cls: string, mod: string, kicker: string): StandingsTemplate => ({
+const makePlace = (id: string, name: string, description: string, crop: Crop, cls: string, mod: string): StandingsTemplate => ({
   id,
   name,
   description,
@@ -89,18 +98,22 @@ const makePlace = (id: string, name: string, description: string, crop: Crop, cl
     <div className={`dmv pl ${cls} ${mod}`} style={{ width: W, height: H }}>
       <MapWall crop={crop} />
       <div className="pl-shade" />
-      <LocationHead data={data} cls="pl" kicker={kicker} />
+      <LocationHead data={data} cls="pl" kicker="" />
       <LocationRows data={data} cls="pl" />
     </div>
   ),
 })
 
-export const Route119 = makePlace('place-route-119', 'Top Cut (Route 119)', 'Emerald’s Route 119 map (Weather Institute, waterfall and bridge) behind white panels.', R119_TOP, 'pl-hoenn', '', 'Route 119')
-export const Route119Glass = makePlace('place-route-119-glass', 'Top Cut (Route 119 Glass)', 'Route 119 map with see-through dark panels so more of the route shows.', R119_TOP, 'pl-hoenn', 'glass', 'Route 119')
-export const Route119Bridge = makePlace('place-route-119-bridge', 'Top Cut (Route 119 Bridge)', 'The long bridge and Feebas pool on Emerald’s Route 119.', R119_BRIDGE, 'pl-hoenn', '', 'Route 119')
-export const Route119BridgeGlass = makePlace('place-route-119-bridge-glass', 'Top Cut (Route 119 Bridge Glass)', 'Route 119’s long bridge and Feebas pool with see-through dark panels.', R119_BRIDGE, 'pl-hoenn', 'glass', 'Route 119')
-export const Route120 = makePlace('place-route-120', 'Top Cut (Route 120)', 'Emerald’s Route 120 map: the bridge over the pond and the Ancient Tomb.', R120, 'pl-hoenn', '', 'Route 120')
-export const Route120Glass = makePlace('place-route-120-glass', 'Top Cut (Route 120 Glass)', 'Route 120 map with see-through dark panels so more of the route shows.', R120, 'pl-hoenn', 'glass', 'Route 120')
-export const SpearPillar = makePlace('place-spear-pillar', 'Top Cut (Spear Pillar)', 'Platinum’s Spear Pillar map (NPCs removed) behind dark stone panels with Dialga blue and Palkia pink.', SPEAR, 'pl-spear', '', 'Spear Pillar')
-export const SpearPillarGlass = makePlace('place-spear-pillar-glass', 'Top Cut (Spear Pillar Glass)', 'Spear Pillar map with see-through panels so the pillars show.', SPEAR, 'pl-spear', 'glass', 'Spear Pillar')
-export const SpearPillarArt = makePlace('place-spear-pillar-art', 'Top Cut (Spear Pillar Concept Art)', 'Official Brilliant Diamond / Shining Pearl concept art of Spear Pillar behind dark panels.', SPEAR_ART, 'pl-spear', 'glass art', 'Spear Pillar')
+export const Route119 = makePlace('place-route-119', 'Top Cut (Route 119)', 'Emerald’s Route 119 map (Weather Institute, waterfall and bridge) behind white panels.', R119_TOP, 'pl-hoenn', '')
+export const Route119Glass = makePlace('place-route-119-glass', 'Top Cut (Route 119 Glass)', 'Route 119 map with see-through dark panels so more of the route shows.', R119_TOP, 'pl-hoenn', 'glass')
+export const Route119Bridge = makePlace('place-route-119-bridge', 'Top Cut (Route 119 Bridge)', 'The long bridge and Feebas pool on Emerald’s Route 119.', R119_BRIDGE, 'pl-hoenn', '')
+export const Route119BridgeGlass = makePlace('place-route-119-bridge-glass', 'Top Cut (Route 119 Bridge Glass)', 'Route 119’s long bridge and Feebas pool with see-through dark panels.', R119_BRIDGE, 'pl-hoenn', 'glass')
+export const Route120 = makePlace('place-route-120', 'Top Cut (Route 120)', 'Emerald’s Route 120 map: the bridge over the pond and the Ancient Tomb.', R120, 'pl-hoenn', '')
+export const Route120Glass = makePlace('place-route-120-glass', 'Top Cut (Route 120 Glass)', 'Route 120 map with see-through dark panels so more of the route shows.', R120, 'pl-hoenn', 'glass')
+export const Route201Tiles = makePlace('place-route-201', 'Top Cut (Route 201 Official)', 'Route 201 built from Platinum’s own tiles: the tree line and the tall grass.', R201, 'pl-sinnoh', '')
+export const Route201TilesGlass = makePlace('place-route-201-glass', 'Top Cut (Route 201 Official Glass)', 'Route 201 from Platinum’s own tiles with see-through dark panels.', R201, 'pl-sinnoh', 'glass')
+export const SpearPillar = makePlace('place-spear-pillar', 'Top Cut (Spear Pillar)', 'Platinum’s Spear Pillar map (NPCs removed) behind dark stone panels with Dialga blue and Palkia pink.', SPEAR, 'pl-spear', '')
+export const SpearPillarGlass = makePlace('place-spear-pillar-glass', 'Top Cut (Spear Pillar Glass)', 'Spear Pillar map with see-through panels so the pillars show.', SPEAR, 'pl-spear', 'glass')
+export const SpearPillarHall = makePlace('place-spear-pillar-hall', 'Top Cut (Spear Pillar Hall of Origin)', 'Platinum’s Hall of Origin map with Arceus; the champion stands on the Hall’s glass floor tiles.', HALL, 'pl-spear', 'hoo')
+export const SpearPillarHallChampion = makePlace('place-spear-pillar-hall-floor', 'Top Cut (Spear Pillar Hall Champion)', 'The Spear Pillar map, with only the champion standing on the Hall of Origin’s glass floor tiles.', SPEAR, 'pl-spear', 'hoo')
+export const SpearPillarArt = makePlace('place-spear-pillar-art', 'Top Cut (Spear Pillar Concept Art)', 'Official Brilliant Diamond / Shining Pearl concept art of Spear Pillar behind dark panels.', SPEAR_ART, 'pl-spear', 'glass art')

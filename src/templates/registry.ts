@@ -26,7 +26,7 @@ import { EditorialNightLayouts, EditorialPaperLayouts } from './themes/editorial
 import { BattleTower, Ghost, Hoenn, MtCoronet, Pokedex, PokedexChampion, TradingCard } from './eras/more'
 import { GhostPixel, GhostPixelDense, GhostPixelGlass, GhostPixelGlassTeam, GhostPixelGlassLine } from './eras/ghostpixel'
 import { Glimwood, KantoGameBoy, Paldea, Route201, Snowpoint, Unova } from './eras'
-import { Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillar, SpearPillarArt, SpearPillarGlass } from './places'
+import { Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillar, SpearPillarArt, SpearPillarGlass, SpearPillarHall, SpearPillarHallChampion } from './places'
 import { PLACE_LAYOUTS } from './themes/places'
 import { MosaicGradient, MosaicMono, MosaicSquaresGradient, MosaicSquaresMono, MosaicTintGlass, MosaicTintGlassShadow, MosaicTintSemiShadow, MosaicTintSolid, MosaicTintSolidShadow } from './mosaic'
 import { DynamaxTopCut, MegaTopCut, TerastalTopCut } from './power'
@@ -48,20 +48,22 @@ export const STANDINGS_LAYOUTS: { id: StandingsLayout; label: string }[] = [
 // Every standings template, grouped by style (the picker shows styles in this order, then the
 // layouts each style has). Styles missing a layout get it as they're converted to themes.
 const tag = (style: string, entries: [StandingsTemplate, StandingsLayout][]) => entries.map(([t, layout]) => ({ ...t, style, layout }))
+// Retired: kept so saved selections still open, hidden from the picker unless 'Show retired styles' is ticked.
+const retire = (style: string, entries: [StandingsTemplate, StandingsLayout][]) => tag(style, entries).map((t) => ({ ...t, retired: true }))
 
 export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [Bracket, 'bracket']]),
   ...tag('Comic Book', [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [BracketLoud, 'bracket']]),
   ...tag('White', [[TopCutBannerWhite, 'topcut'], [Top8PhotosWhite, 'top8photos'], [Top8MixedWhite, 'top8mixed']]),
   ...tag('Mosaic', [[MosaicTintSemiShadow, 'topcut'], ...MosaicLayouts]),
-  ...tag('Mosaic (Tinted Glass)', [[MosaicTintGlass, 'topcut']]),
-  ...tag('Mosaic (Tinted Solid)', [[MosaicTintSolid, 'topcut']]),
-  ...tag('Mosaic (Tinted Glass + Shadow)', [[MosaicTintGlassShadow, 'topcut']]),
-  ...tag('Mosaic (Tinted Solid + Shadow)', [[MosaicTintSolidShadow, 'topcut']]),
-  ...tag('Mosaic (Squares Gradient)', [[MosaicSquaresGradient, 'topcut']]),
-  ...tag('Mosaic (Gradient)', [[MosaicGradient, 'topcut']]),
-  ...tag('Mosaic (Mono)', [[MosaicMono, 'topcut']]),
-  ...tag('Mosaic (Squares Mono)', [[MosaicSquaresMono, 'topcut']]),
+  ...retire('Mosaic (Tinted Glass)', [[MosaicTintGlass, 'topcut']]),
+  ...retire('Mosaic (Tinted Solid)', [[MosaicTintSolid, 'topcut']]),
+  ...retire('Mosaic (Tinted Glass + Shadow)', [[MosaicTintGlassShadow, 'topcut']]),
+  ...retire('Mosaic (Tinted Solid + Shadow)', [[MosaicTintSolidShadow, 'topcut']]),
+  ...retire('Mosaic (Squares Gradient)', [[MosaicSquaresGradient, 'topcut']]),
+  ...retire('Mosaic (Gradient)', [[MosaicGradient, 'topcut']]),
+  ...retire('Mosaic (Mono)', [[MosaicMono, 'topcut']]),
+  ...retire('Mosaic (Squares Mono)', [[MosaicSquaresMono, 'topcut']]),
   ...tag('Editorial Paper', [[EditorialTopCutPaper, 'topcut'], [EditorialChampionPaper, 'champion'], ...EditorialPaperLayouts]),
   ...tag('Editorial Night', [[EditorialTopCutNight, 'topcut'], [EditorialChampionNight, 'champion'], ...EditorialNightLayouts]),
   ...tag('Sports Page', [[SportsPage, 'topcut']]),
@@ -71,10 +73,14 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Battle Tower', [[BattleTower, 'topcut']]),
   ...tag('Glimwood Tangle', [[Glimwood, 'topcut']]),
   ...tag('Route 201', [[Route201, 'topcut']]),
+  ...tag('Route 201 Official', [[Route201Tiles, 'topcut'], ...PLACE_LAYOUTS['Route 201 Official']]),
+  ...tag('Route 201 Official Glass', [[Route201TilesGlass, 'topcut'], ...PLACE_LAYOUTS['Route 201 Official Glass']]),
   ...tag('Snowpoint', [[Snowpoint, 'topcut']]),
-  ...tag('Mt. Coronet', [[MtCoronet, 'topcut']]),
+  ...retire('Mt. Coronet', [[MtCoronet, 'topcut']]),
   ...tag('Spear Pillar', [[SpearPillar, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar']]),
   ...tag('Spear Pillar Glass', [[SpearPillarGlass, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Glass']]),
+  ...tag('Spear Pillar Hall of Origin', [[SpearPillarHall, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Hall of Origin']]),
+  ...tag('Spear Pillar Hall Champion', [[SpearPillarHallChampion, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Hall Champion']]),
   ...tag('Spear Pillar Concept Art', [[SpearPillarArt, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Concept Art']]),
   ...tag('Route 119', [[Route119, 'topcut'], ...PLACE_LAYOUTS['Route 119']]),
   ...tag('Route 119 Glass', [[Route119Glass, 'topcut'], ...PLACE_LAYOUTS['Route 119 Glass']]),
@@ -82,12 +88,12 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Route 119 Bridge Glass', [[Route119BridgeGlass, 'topcut'], ...PLACE_LAYOUTS['Route 119 Bridge Glass']]),
   ...tag('Route 120', [[Route120, 'topcut'], ...PLACE_LAYOUTS['Route 120']]),
   ...tag('Route 120 Glass', [[Route120Glass, 'topcut'], ...PLACE_LAYOUTS['Route 120 Glass']]),
-  ...tag('Ghost', [[Ghost, 'topcut']]),
-  ...tag('Ghost Pixel', [[GhostPixel, 'topcut']]),
-  ...tag('Ghost Pixel Dense', [[GhostPixelDense, 'topcut']]),
-  ...tag('Ghost Pixel Glass', [[GhostPixelGlass, 'topcut']]),
-  ...tag('Ghost Pixel Glass Team Box', [[GhostPixelGlassTeam, 'topcut']]),
-  ...tag('Ghost Pixel Glass Team Line', [[GhostPixelGlassLine, 'topcut'], ...GhostPixelLayouts]),
+  ...retire('Ghost', [[Ghost, 'topcut']]),
+  ...retire('Ghost Pixel', [[GhostPixel, 'topcut']]),
+  ...retire('Ghost Pixel Dense', [[GhostPixelDense, 'topcut']]),
+  ...retire('Ghost Pixel Glass', [[GhostPixelGlass, 'topcut']]),
+  ...retire('Ghost Pixel Glass Team Box', [[GhostPixelGlassTeam, 'topcut']]),
+  ...tag('Ghost Pixels', [[GhostPixelGlassLine, 'topcut'], ...GhostPixelLayouts]),
   ...tag('Kanto Game Boy', [[KantoGameBoy, 'topcut']]),
   ...tag('Hoenn Gen 3', [[Hoenn, 'topcut']]),
   ...tag('Paldea', [[Paldea, 'topcut']]),

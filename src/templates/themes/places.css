@@ -28,6 +28,37 @@
   --pl-text-shadow: 2px 2px 0 rgba(16, 36, 22, 0.9);
   --pl-photo: linear-gradient(160deg, rgba(56, 136, 48, 0.75), rgba(16, 36, 22, 0.85));
 }
+.themed.theme-place.pl-sinnoh {
+  --pl-panel: rgba(255, 255, 255, 0.93);
+  --pl-line: #384830;
+  --pl-inner: inset 0 0 0 3px #50f890;
+  --pl-ink: #1c2818;
+  --pl-sub: #4c5c44;
+  --pl-accent: #50f890;
+  --pl-a: #2f7a9a;
+  --pl-b: #3f8a28;
+  --pl-first: #f8e098;
+  --pl-first-ink: #1c2818;
+  --pl-radius: 18px;
+  --pl-drop: 0 8px 0 rgba(28, 40, 24, 0.35);
+  --pl-text-shadow: none;
+  --pl-dark: #1c2818;
+  --pl-photo: linear-gradient(160deg, #78c840, #3f8a28);
+}
+.themed.theme-place.pl-sinnoh.glass {
+  --pl-panel: rgba(22, 34, 20, 0.62);
+  --pl-line: rgba(80, 248, 144, 0.85);
+  --pl-inner: inset 0 0 0 0 transparent;
+  --pl-ink: #fff;
+  --pl-sub: #d6f8e2;
+  --pl-drop: 0 8px 0 rgba(22, 34, 20, 0.45);
+  --pl-text-shadow: 2px 2px 0 rgba(22, 34, 20, 0.9);
+  --pl-photo: linear-gradient(160deg, rgba(63, 138, 40, 0.75), rgba(22, 34, 20, 0.85));
+}
+.themed.theme-place.pl-hoenn.glass .br-entry,
+.themed.theme-place.pl-sinnoh.glass .br-entry {
+  background: rgba(16, 36, 22, 0.88);
+}
 .themed.theme-place.pl-spear {
   --pl-panel: rgba(46, 38, 40, 0.9);
   --pl-line: #d8d0a8;
@@ -320,4 +351,99 @@
 }
 .themed.theme-place.tb .dmv-panel {
   background: var(--pl-panel);
+}
+
+/* ---------- Spear Pillar Hall of Origin: the champion on the Hall's glass floor ---------- */
+.themed.theme-place.hoo .dmv-panel.first,
+.themed.theme-place.hoo .m8-card:first-child,
+.themed.theme-place.hoo .ch-card,
+.themed.theme-place.hoo .br-champ {
+  background: url('../places/hall-of-origin-floor.png') 0 0 / 192px 108px repeat;
+  image-rendering: pixelated;
+  border-color: #fff;
+  box-shadow: 0 0 0 3px #e8c040, 0 0 30px rgba(255, 236, 170, 0.85);
+  color: #2e2628;
+}
+.themed.theme-place.hoo .m8-card:first-child .m8-name,
+.themed.theme-place.hoo .first .p8-name,
+.themed.theme-place.hoo .first .p4-name,
+.themed.theme-place.hoo .first .m8-name,
+.themed.theme-place.hoo .ch-mon-name,
+.themed.theme-place.hoo .br-champ .dmv-title,
+.themed.theme-place.hoo .br-champ-label {
+  color: #2e2628;
+  text-shadow: none;
+}
+.themed.theme-place.hoo .m8-card:first-child .m8-sub,
+.themed.theme-place.hoo .first .p8-sub,
+.themed.theme-place.hoo .first .p4-sub,
+.themed.theme-place.hoo .first .m8-sub,
+.themed.theme-place.hoo .ch-item-name {
+  color: #685050;
+  text-shadow: none;
+}
+.themed.theme-place.hoo .m8-card:first-child .m8-place,
+.themed.theme-place.hoo .first .p8-place,
+.themed.theme-place.hoo .first .p4-place,
+.themed.theme-place.hoo .first .m8-place {
+  background: #e8c040;
+  color: #2e2628;
+}
+.themed.theme-place.hoo .ch-banner {
+  background: #e8c040;
+  border-color: #fff;
+}
+.themed.theme-place.hoo .ch-banner .dmv-title {
+  color: #2e2628;
+  text-shadow: none;
+}
+/* Photo cards: let the floor show through an empty photo box, and pave the name plate too. */
+.themed.theme-place.hoo .first .dmv-photo-empty,
+.themed.theme-place.hoo .m8-card:first-child .dmv-photo-empty {
+  background: rgba(255, 255, 255, 0.25);
+}
+.themed.theme-place.hoo .first .dmv-photo-empty span,
+.themed.theme-place.hoo .m8-card:first-child .dmv-photo-empty span {
+  color: rgba(46, 38, 40, 0.35);
+}
+.themed.theme-place.hoo .first .p4-plate {
+  background: url('../places/hall-of-origin-floor.png') 0 0 / 192px 108px repeat;
+  border-left-color: #e8c040;
+}
+
+/* Hall of Origin on Usage / Replay / Team Battle: the victor gets the Hall's glass floor too —
+   the #1 Pokémon, the match winner's team panel, and each set winner in Team Battle. */
+.themed.theme-place.hoo .us-card:first-child,
+.themed.theme-place.hoo .vs-panel.won,
+.themed.theme-place.hoo .tb-card.won {
+  background: url('../places/hall-of-origin-floor.png') 0 0 / 192px 108px repeat;
+  image-rendering: pixelated;
+  border-color: #fff;
+  box-shadow: 0 0 0 3px #e8c040, 0 0 30px rgba(255, 236, 170, 0.85);
+  color: #2e2628;
+}
+.themed.theme-place.hoo .us-card:first-child .us-rank,
+.themed.theme-place.hoo .us-card:first-child .us-name,
+.themed.theme-place.hoo .vs-panel.won .vs-score,
+.themed.theme-place.hoo .tb-card.won .tb-player {
+  color: #2e2628;
+  text-shadow: none;
+}
+.themed.theme-place.hoo .us-card:first-child .us-bar span {
+  color: #fff;
+}
+.themed.theme-place.hoo .vs-panel.won .vs-score {
+  background: #e8c040;
+  border-color: #fff;
+}
+/* The winner banners turn Arceus gold, like the Champion banner. */
+.themed.theme-place.hoo .vs-banner,
+.themed.theme-place.hoo .tb-banner {
+  background: #e8c040;
+  border-color: #fff;
+}
+.themed.theme-place.hoo .vs-banner .dmv-title,
+.themed.theme-place.hoo .tb-banner .dmv-title {
+  color: #2e2628;
+  text-shadow: none;
 }

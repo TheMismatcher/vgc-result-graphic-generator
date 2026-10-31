@@ -360,7 +360,7 @@ const ANTON: Font = { family: 'Anton', weight: 400 }
 
 /** The Top Cut list shared by the three styles. `emblem` sits in the header's right end; `above`
  * sits on top of the header (outside it, so a clipped header doesn't cut it off). */
-function PowerTopCut({ data, cls, kicker, Background, emblem, above, font = MONTSERRAT, titleWidth = 760 }: { data: StandingsData; cls: string; kicker: string; Background: (p: BgProps) => ReactNode; emblem?: ReactNode; above?: ReactNode; font?: Font; titleWidth?: number }) {
+function PowerTopCut({ data, cls, Background, emblem, above, font = MONTSERRAT, titleWidth = 760 }: { data: StandingsData; cls: string; Background: (p: BgProps) => ReactNode; emblem?: ReactNode; above?: ReactNode; font?: Font; titleWidth?: number }) {
   const fit = { weight: font.weight, family: font.family, italic: false }
   return (
     <div className={`dmv pw ${cls}`} style={{ width: 1080, height: 1350 }}>
@@ -368,7 +368,6 @@ function PowerTopCut({ data, cls, kicker, Background, emblem, above, font = MONT
       <header className="pw-head">
         <Logo size={130} />
         <div className="pw-head-text">
-          <div className="pw-kicker">{kicker}</div>
           <FitText className="pw-title" text={data.tournament.name || 'Tournament'} max={60} width={titleWidth} min={26} {...fit} />
           <FitText className="pw-facts" text={eventFacts(data).join('  •  ')} max={20} width={titleWidth} min={12} weight={800} italic={false} />
         </div>
@@ -412,13 +411,13 @@ const topCut = (id: string, name: string, description: string, render: (data: St
 })
 
 export const TerastalTopCut = topCut('power-terastal', 'Top Cut (Terastal)', 'Terastal crystal look: faceted prismatic shards, glassy cut-corner cards and a jewel crown. Tints to the champion’s Tera type when the format uses Tera.', (data) => (
-  <PowerTopCut data={data} cls="pw-tera" kicker="Terastal" Background={TeraBackground} above={<TeraCrown />} />
+  <PowerTopCut data={data} cls="pw-tera" Background={TeraBackground} above={<TeraCrown />} />
 ))
 
 export const MegaTopCut = topCut('power-mega', 'Top Cut (Mega Evolution)', 'Mega Evolution energy: a helix-in-a-ring symbol, prismatic rays and purple-pink-orange glowing cards.', (data) => (
-  <PowerTopCut data={data} cls="pw-mega" kicker="Mega Evolution" Background={MegaBackground} emblem={<MegaSymbol size={140} className="mg-emblem" />} titleWidth={600} />
+  <PowerTopCut data={data} cls="pw-mega" Background={MegaBackground} emblem={<MegaSymbol size={140} className="mg-emblem" />} titleWidth={600} />
 ))
 
 export const DynamaxTopCut = topCut('power-dynamax', 'Top Cut (Dynamax)', 'Galar Dynamax: a red cloud vortex, hexagon energy, red pillars, stadium lights and a giant silhouette of the champion’s ace.', (data) => (
-  <PowerTopCut data={data} cls="pw-dyna" kicker="Dynamax" Background={DynamaxBackground} font={ANTON} />
+  <PowerTopCut data={data} cls="pw-dyna" Background={DynamaxBackground} font={ANTON} />
 ))

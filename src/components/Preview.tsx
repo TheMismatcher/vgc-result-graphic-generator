@@ -169,7 +169,10 @@ export function Preview<T extends Template>({
  * in Top Cut (or its first layout). Only the template changes, never the entered data.
  */
 export function StylePicker<T extends Template>({ templates, current, onSelect, render }: { templates: T[]; current: T; onSelect: (id: string) => void; render: (t: T) => ReactNode }) {
-  const styles = [...new Set(templates.map((t) => t.style!))]
+  // Retired styles stay hidden unless asked for (the current one always shows, so a saved pick isn't lost).
+  const [showRetired, setShowRetired] = useState(false)
+  const retiredCount = new Set(templates.filter((t) => t.retired).map((t) => t.style)).size
+  const styles = [...new Set(templates.filter((t) => showRetired || !t.retired || t.style === current.style).map((t) => t.style!))]
   const inStyle = (style: string) => templates.filter((t) => t.style === style)
   const find = (style: string, layout?: StandingsLayout) => inStyle(style).find((t) => t.layout === layout)
   // What a style opens as when it doesn't have the chosen layout: Top Cut, then whatever it has.
@@ -201,7 +204,15 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
         <p className="mt-1 text-xs text-slate-500">{current.description}</p>
       </div>
       <div>
-        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">2. Style</h3>
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">2. Style</h3>
+          {retiredCount > 0 && (
+            <label className="flex items-center gap-1.5 text-xs text-slate-600">
+              <input type="checkbox" checked={showRetired} onChange={(e) => setShowRetired(e.target.checked)} />
+              Show retired styles ({retiredCount})
+            </label>
+          )}
+        </div>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
           {styles.map((style) => {
             // Show the style in the chosen layout; styles without it show (and open as) their fallback layout.
