@@ -325,7 +325,28 @@ async function buildTeamScan() {
   console.log(`Team-scan data: ${species.length} species, ${moveNames.length} moves, ${abilityNames.length} abilities.`)
 }
 
+// Types for every Pokémon in pokemon.json (the trading-card styles use them for energy symbols), matched
+// to Showdown's dex by id, then without filler words (mask, breed, ...), then by trimming the id.
+async function buildTypes(pokemon) {
+  const dex = await (await fetch('https://play.pokemonshowdown.com/data/pokedex.json')).json()
+  const get = (k) => (dex[k]?.types ? dex[k] : undefined)
+  const sid = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
+  const NOISE = new Set(['mask', 'breed', 'form', 'mode', 'style', 'cloak', 'forme', 'size', 'pattern', 'flower', 'standard', 'striped', 'plumage', 'build', 'family', 'incarnate', 'altered', 'ordinary', 'aria', 'average', 'normal'])
+  const OVERRIDES = { 'necrozma-dusk': ['Psychic', 'Steel'], 'necrozma-dawn': ['Psychic', 'Ghost'] }
+  const types = {}
+  for (const m of pokemon) {
+    const t = m.id.split('-')
+    let e = get(sid(m.id)) || get(t.filter((x) => !NOISE.has(x)).join(''))
+    for (let n = t.length - 1; !e && n >= 1; n--) e = get(t.slice(0, n).filter((x) => !NOISE.has(x)).join(''))
+    e ??= get(sid(m.species))
+    if (e) types[m.id] = OVERRIDES[m.id] ?? e.types
+  }
+  await writeFile(path.join(ROOT, 'src/data/types.json'), JSON.stringify(types))
+  console.log(`Types: ${Object.keys(types).length} of ${pokemon.length} Pokémon.`)
+}
+
 const pokemon = await buildPokemon()
+await buildTypes(pokemon)
 await buildTeamScan()
 const items = await buildItems()
 await resizeHomeRenders()

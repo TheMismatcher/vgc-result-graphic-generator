@@ -386,14 +386,14 @@
 }
 
 /* ---------- Locations: shared layout ---------- */
-.gw, .rt, .sp2 {
+.gw, .rt {
   font-style: normal;
 }
-.gw-scene, .rt-scene, .sp2-scene {
+.gw-scene, .rt-scene {
   position: absolute;
   inset: 0;
 }
-.gw-head, .rt-head, .sp2-head {
+.gw-head, .rt-head {
   position: absolute;
   left: 50px;
   right: 50px;
@@ -404,27 +404,27 @@
   gap: 24px;
   padding: 0 28px;
 }
-.gw-head-text, .rt-head-text, .sp2-head-text {
+.gw-head-text, .rt-head-text {
   min-width: 0;
 }
-.gw-kicker, .rt-kicker, .sp2-kicker {
+.gw-kicker, .rt-kicker {
   font-size: 18px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.18em;
 }
-.gw-title, .rt-title, .sp2-title {
+.gw-title, .rt-title {
   margin-top: 4px;
   font-weight: 900;
   text-transform: uppercase;
   line-height: 1;
 }
-.gw-facts, .rt-facts, .sp2-facts {
+.gw-facts, .rt-facts {
   margin-top: 10px;
   font-weight: 800;
   text-transform: uppercase;
 }
-.gw-rows, .rt-rows, .sp2-rows {
+.gw-rows, .rt-rows {
   position: absolute;
   left: 50px;
   right: 50px;
@@ -433,13 +433,13 @@
   flex-direction: column;
   gap: 12px;
 }
-.gw-row, .rt-row, .sp2-row {
+.gw-row, .rt-row {
   display: flex;
   align-items: center;
   height: 112px;
   overflow: hidden;
 }
-.gw-place, .rt-place, .sp2-place {
+.gw-place, .rt-place {
   flex: none;
   width: 120px;
   height: 100%;
@@ -449,16 +449,16 @@
   font-size: 40px;
   font-weight: 900;
 }
-.gw-player, .rt-player, .sp2-player {
+.gw-player, .rt-player {
   width: 330px;
   padding: 0 20px;
 }
-.gw-name, .rt-name, .sp2-name {
+.gw-name, .rt-name {
   font-weight: 900;
   text-transform: uppercase;
   line-height: 1.05;
 }
-.gw-sub, .rt-sub, .sp2-sub {
+.gw-sub, .rt-sub {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -467,10 +467,10 @@
   font-weight: 700;
   white-space: nowrap;
 }
-.gw-cp, .rt-cp, .sp2-cp {
+.gw-cp, .rt-cp {
   font-size: 14px;
 }
-.gw-team, .rt-team, .sp2-team {
+.gw-team, .rt-team {
   display: flex;
   margin-left: auto;
   padding-right: 14px;
@@ -575,36 +575,4 @@
 }
 .rt-sub {
   color: #5f6b77;
-}
-
-/* ---------- Snowpoint ---------- */
-.sp2 {
-  color: #173a5c;
-}
-.sp2-head, .sp2-row {
-  background: rgba(255, 255, 255, 0.78);
-  border: 4px solid #ffffff;
-  border-radius: 22px;
-  box-shadow: 0 8px 24px rgba(40, 90, 140, 0.25), inset 0 0 0 2px rgba(127, 178, 220, 0.6);
-}
-.sp2-head .dmv-logo {
-  border-color: #fff;
-}
-.sp2-kicker {
-  color: #3f7fb8;
-}
-.sp2-facts {
-  color: #3f7fb8;
-}
-.sp2-place {
-  color: #fff;
-  background: linear-gradient(160deg, #7fb2dc, #2f6aa3);
-  border-radius: 18px 0 0 18px;
-}
-.sp2-row.first .sp2-place {
-  background: linear-gradient(160deg, #e8f6ff, #8cc8f0);
-  color: #173a5c;
-}
-.sp2-sub {
-  color: #557a9c;
 }

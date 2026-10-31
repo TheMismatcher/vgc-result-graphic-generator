@@ -7,7 +7,7 @@
 //   and Dynamax (the official Sword/Shield Max Raid Battle key art).
 // - Scarlet / Violet Book: the official book renders (Bulbagarden archives, 2047x2304) with the front cover
 //   perspective-straightened onto a flat rectangle (corner medallions as anchors), cropped to the front board.
-//   The main Book styles use that board widened to exactly 4:5 (1620x2025) by seam insertion: extra width goes
+//   The styles use that board widened to exactly 4:5 (1620x2025) by seam insertion: extra width goes
 //   only through plain cloth, so the silhouette, title, gold frame and corner medallions keep their shape, and
 //   the cover's edges are the graphic's edges. Square frames get their own 1620x1620 version (rows of cloth
 //   removed, then widened the same way).
@@ -15,6 +15,8 @@
 //   stone panels; the champion sits on the platform's own glass floor tile (hall-of-origin-floor.png).
 // - Spear Pillar: Platinum's Spear Pillar map (Bulbapedia rip) with the NPCs painted out using the
 //   floor's own repeating texture, and the Brilliant Diamond / Shining Pearl concept art.
+// - Snowpoint City, Route 217, Acuity Lakefront: Platinum's own maps (Bulbapedia rips); the walking NPCs and the
+//   half-buried trainers are painted out with tile-aligned copies of the snow around them (the Ice Rock stays).
 
 import { useEffect, useState } from 'react'
 import type { StandingsTemplate } from '../types'
@@ -25,13 +27,12 @@ import route201 from './route-201-pt.png'
 import spearPillar from './spear-pillar-pt.png'
 import hallOfOrigin from './hall-of-origin-pt.png'
 import spearPillarArt from './spear-pillar-bdsp-art.jpg'
+import snowpoint from './snowpoint-pt.png'
+import route217 from './route-217-pt.png'
+import acuity from './acuity-lakefront-pt.png'
 import glimwood from './glimwood-tangle-swsh.jpg'
 import teraStellar from './terastal-stellar-sv.jpg'
 import maxRaid from './max-raid-battle-art.jpg'
-import scarletBook from './scarlet-book-sv.jpg'
-import violetBook from './violet-book-sv.jpg'
-import scarletBookFull from './scarlet-book-full-sv.png'
-import violetBookFull from './violet-book-full-sv.png'
 import scarletBookCover from './scarlet-book-cover-sv.jpg'
 import violetBookCover from './violet-book-cover-sv.jpg'
 import scarletBookSquare from './scarlet-book-square-sv.jpg'
@@ -49,14 +50,12 @@ interface Crop {
   sy: number
   sw: number
   smooth?: boolean // painted art: smooth scaling; pixel maps: nearest-neighbour
-  /** Show the whole image (transparent edges kept) centred over a blurred, darkened copy of itself; sx/sy/sw unused. */
-  whole?: boolean
 }
 
 // Pre-scaled once on a canvas so the PNG export gets the exact pixels (CSS pixelated scaling isn't reliable there).
 const cache = new Map<string, Promise<string>>()
-function scaled({ src, sx, sy, sw, smooth, whole }: Crop, w: number, h: number) {
-  const key = `${src}|${sx}|${sy}|${sw}|${whole ? 'whole' : ''}|${w}x${h}`
+function scaled({ src, sx, sy, sw, smooth }: Crop, w: number, h: number) {
+  const key = `${src}|${sx}|${sy}|${sw}|${w}x${h}`
   if (!cache.has(key))
     cache.set(
       key,
@@ -69,11 +68,6 @@ function scaled({ src, sx, sy, sw, smooth, whole }: Crop, w: number, h: number) 
           const g = c.getContext('2d')!
           g.imageSmoothingEnabled = !!smooth
           if (smooth) g.imageSmoothingQuality = 'high'
-          if (whole) {
-            paintWhole(g, img, w, h)
-            resolve(c.toDataURL('image/jpeg', 0.92))
-            return
-          }
           // Height follows the frame's aspect; slide up if the crop would run off the bottom of the map.
           const sh = Math.min((sw * h) / w, img.naturalHeight)
           const top = Math.max(0, Math.min(sy, img.naturalHeight - sh))
@@ -85,24 +79,6 @@ function scaled({ src, sx, sy, sw, smooth, whole }: Crop, w: number, h: number) 
       }),
     )
   return cache.get(key)!
-}
-
-// Backdrop: the image scaled to fill the frame, blurred and darkened. On top: the whole image fitted
-// inside a 3% margin, centred, with a soft shadow so its edges (a book's rounded corners) read.
-function paintWhole(g: CanvasRenderingContext2D, img: HTMLImageElement, w: number, h: number) {
-  const iw = img.naturalWidth
-  const ih = img.naturalHeight
-  const fill = Math.max(w / iw, h / ih) * 1.15
-  g.fillStyle = '#000'
-  g.fillRect(0, 0, w, h)
-  g.filter = `blur(${Math.round(w / 40)}px) brightness(0.45)`
-  g.drawImage(img, (w - iw * fill) / 2, (h - ih * fill) / 2, iw * fill, ih * fill)
-  g.filter = 'none'
-  const fit = Math.min((w * 0.94) / iw, (h * 0.94) / ih)
-  g.shadowColor = 'rgba(0, 0, 0, 0.75)'
-  g.shadowBlur = w / 30
-  g.shadowOffsetY = w / 90
-  g.drawImage(img, (w - iw * fit) / 2, (h - ih * fit) / 2, iw * fit, ih * fit)
 }
 
 export function MapWall({ crop, width = W, height = H }: { crop: Crop; width?: number; height?: number }) {
@@ -128,6 +104,12 @@ export const R201: Crop = { src: route201, sx: 0, sy: 0, sw: 360 }
 export const SPEAR: Crop = { src: spearPillar, sx: 0, sy: 110, sw: 351 }
 // Hall of Origin map, same framing as Spear Pillar: the glass platform and Arceus under the header, stairs down the middle.
 export const HALL: Crop = { src: hallOfOrigin, sx: 0, sy: 110, sw: 351 }
+// Snowpoint City (512x864): full width from the houses down past the Gym, Pokémon Center and Mart to the harbour fence.
+export const SNOWPOINT: Crop = { src: snowpoint, sx: 0, sy: 112, sw: 512 }
+// Route 217 (north end of the 528x1589 map, trimmed to 528x700): the tall grass and the two cabins in the blizzard.
+export const R217: Crop = { src: route217, sx: 0, sy: 0, sw: 528 }
+// Acuity Lakefront (1008x797) at an exact 2x: the frozen pond, the stepped ledges and the tall grass.
+export const ACUITY: Crop = { src: acuity, sx: 240, sy: 60, sw: 540 }
 // Official art: each crop is the 4:5 window over the art's focal point (they're scaled up smoothly).
 // Frame from the official 24-hour 'Pokémon Live Camera' stream (Oct 2019); the window skips a Pokémon at the far right.
 export const GLIMWOOD: Crop = { src: glimwood, sx: 720, sy: 2, sw: 659, smooth: true }
@@ -138,12 +120,6 @@ export const SCARLET_BOOK_COVER: Crop = { src: scarletBookCover, sx: 0, sy: 202,
 export const VIOLET_BOOK_COVER: Crop = { src: violetBookCover, sx: 0, sy: 202, sw: 1620, smooth: true }
 export const SCARLET_BOOK_SQUARE: Crop = { src: scarletBookSquare, sx: 0, sy: 0, sw: 1620, smooth: true }
 export const VIOLET_BOOK_SQUARE: Crop = { src: violetBookSquare, sx: 0, sy: 0, sw: 1620, smooth: true }
-// Zoomed book covers (1170x1620 front boards): the window keeps the silhouette and Paldean title, trimming the corners evenly.
-export const SCARLET_BOOK: Crop = { src: scarletBook, sx: 0, sy: 79, sw: 1170, smooth: true }
-export const VIOLET_BOOK: Crop = { src: violetBook, sx: 0, sy: 79, sw: 1170, smooth: true }
-// The whole book (spine, rounded corners, ink outline; 1000x1280 PNG with transparent corners).
-export const SCARLET_BOOK_FULL: Crop = { src: scarletBookFull, sx: 0, sy: 0, sw: 0, smooth: true, whole: true }
-export const VIOLET_BOOK_FULL: Crop = { src: violetBookFull, sx: 0, sy: 0, sw: 0, smooth: true, whole: true }
 // Concept art is already cropped to 4:5.
 export const SPEAR_ART: Crop = { src: spearPillarArt, sx: 0, sy: 0, sw: 1067, smooth: true }
 
@@ -183,7 +159,9 @@ export const SpearPillarHallChampion = makePlace('place-spear-pillar-hall-floor'
 export const SpearPillarArt = makePlace('place-spear-pillar-art', 'Top Cut (Spear Pillar Concept Art)', 'Official Brilliant Diamond / Shining Pearl concept art of Spear Pillar behind dark panels.', SPEAR_ART, 'pl-spear', 'glass art')
 export const ScarletBook = makePlace('art-scarlet-book', 'Top Cut (Scarlet Book)', 'The Scarlet Book’s cover (official art, laid flat) edge to edge: Koraidon’s silhouette and gold foil behind crimson panels.', SCARLET_BOOK_COVER, 'pl-scarlet', 'pl-art pl-book')
 export const VioletBook = makePlace('art-violet-book', 'Top Cut (Violet Book)', 'The Violet Book’s cover (official art, laid flat) edge to edge: Miraidon’s silhouette and gold foil behind indigo panels.', VIOLET_BOOK_COVER, 'pl-violet', 'pl-art pl-book')
-export const ScarletBookFull = makePlace('art-scarlet-book-full', 'Top Cut (Scarlet Book Full Cover)', 'The whole Scarlet Book cover, edges and spine included, over a blurred copy of itself; crimson panels.', SCARLET_BOOK_FULL, 'pl-scarlet', 'pl-art pl-book pl-whole')
-export const VioletBookFull = makePlace('art-violet-book-full', 'Top Cut (Violet Book Full Cover)', 'The whole Violet Book cover, edges and spine included, over a blurred copy of itself; indigo panels.', VIOLET_BOOK_FULL, 'pl-violet', 'pl-art pl-book pl-whole')
-export const ScarletBookZoomed = makePlace('art-scarlet-book-zoomed', 'Top Cut (Scarlet Book Zoomed)', 'The Scarlet Book’s cover cropped in: corners trimmed, silhouette larger.', SCARLET_BOOK, 'pl-scarlet', 'pl-art pl-book')
-export const VioletBookZoomed = makePlace('art-violet-book-zoomed', 'Top Cut (Violet Book Zoomed)', 'The Violet Book’s cover cropped in: corners trimmed, silhouette larger.', VIOLET_BOOK, 'pl-violet', 'pl-art pl-book')
+export const SnowpointOfficial = makePlace('place-snowpoint', 'Top Cut (Snowpoint Official)', 'Platinum’s Snowpoint City map (people painted out): the Gym, Pokémon Center and Mart under snow-capped pines.', SNOWPOINT, 'pl-snow', 'pl-art')
+export const Route217 = makePlace('place-route-217', 'Top Cut (Route 217)', 'Platinum’s Route 217 map (trainers painted out): deep snow, tall grass and the two cabins.', R217, 'pl-snow', 'pl-art')
+export const AcuityLakefront = makePlace('place-acuity-lakefront', 'Top Cut (Acuity Lakefront)', 'Platinum’s Acuity Lakefront map at 2x: the frozen pond, stepped ledges and snowy pines.', ACUITY, 'pl-snow', 'pl-art')
+export const SnowpointOfficialGlass = makePlace('place-snowpoint-glass', 'Top Cut (Snowpoint Official Glass)', 'Snowpoint City’s map with see-through navy panels so more of the town shows.', SNOWPOINT, 'pl-snow', 'pl-art glass')
+export const Route217Glass = makePlace('place-route-217-glass', 'Top Cut (Route 217 Glass)', 'Route 217’s map with see-through navy panels so more of the snowfield shows.', R217, 'pl-snow', 'pl-art glass')
+export const AcuityLakefrontGlass = makePlace('place-acuity-lakefront-glass', 'Top Cut (Acuity Lakefront Glass)', 'Acuity Lakefront’s map with see-through navy panels so the pond and ledges show.', ACUITY, 'pl-snow', 'pl-art glass')

@@ -93,3 +93,39 @@
 .themed.pl-dcloud .br-entry {
   background: color-mix(in srgb, var(--pl-dark) 88%, transparent);
 }
+
+/* Tera Raid Den: same prism winner as Terastal Prism, panels tinted the den's crystal teal. */
+.td-bg {
+  position: absolute;
+  inset: 0;
+  background: #040507;
+}
+.pl-tden {
+  --pl-panel: rgba(6, 18, 24, 0.74);
+  --pl-line: rgba(170, 225, 235, 0.55);
+  --pl-inner: inset 0 0 16px rgba(120, 210, 230, 0.14);
+  --pl-sub: #c4e8ef;
+  --pl-accent: #9fe6ff;
+  --pl-a: #1f4a58;
+  --pl-b: #233a6e;
+  --pl-dark: #061218;
+  --pl-photo: linear-gradient(160deg, rgba(40, 90, 110, 0.6), rgba(6, 18, 24, 0.9));
+}
+.pl-tden .pl-row.first,
+.themed.pl-tden .dmv-panel.first,
+.themed.pl-tden .m8-card:first-child,
+.themed.pl-tden .br-champ {
+  background: linear-gradient(rgba(8, 22, 30, 0.88), rgba(8, 22, 30, 0.88)) padding-box, var(--pl-prism) border-box;
+}
+
+/* Tera Raid Den Prism: every panel gets a thin prism edge (the winner keeps its thick one). */
+.pl-tdenprism .pl-row:not(.first),
+.themed.pl-tdenprism .dmv-panel:not(.first),
+.themed.pl-tdenprism .m8-card:not(:first-child),
+.themed.pl-tdenprism .br-entry {
+  border: 2px solid transparent;
+  background: linear-gradient(rgba(6, 18, 24, 0.82), rgba(6, 18, 24, 0.82)) padding-box, var(--pl-prism) border-box;
+}
+.pl-tdenprism .pl-place {
+  text-shadow: 1px 0 0 rgba(255, 107, 154, 0.7), -1px 0 0 rgba(95, 227, 255, 0.7);
+}

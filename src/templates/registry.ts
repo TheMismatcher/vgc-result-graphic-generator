@@ -25,13 +25,14 @@ import { GhostPixelLayouts } from './themes/ghostpixel'
 import { EditorialNightLayouts, EditorialPaperLayouts } from './themes/editorial'
 import { BattleTower, Ghost, Hoenn, MtCoronet, Pokedex, PokedexChampion, TradingCard } from './eras/more'
 import { GhostPixel, GhostPixelDense, GhostPixelGlass, GhostPixelGlassTeam, GhostPixelGlassLine } from './eras/ghostpixel'
-import { Glimwood, KantoGameBoy, Paldea, Route201, Snowpoint, Unova } from './eras'
-import { DynamaxOfficial, GlimwoodOfficial, ScarletBook, VioletBook, ScarletBookFull, VioletBookFull, ScarletBookZoomed, VioletBookZoomed, TerastalOfficial, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillar, SpearPillarArt, SpearPillarGlass, SpearPillarHall, SpearPillarHallChampion } from './places'
+import { Glimwood, KantoGameBoy, Paldea, Route201, Unova } from './eras'
+import { DynamaxOfficial, GlimwoodOfficial, SnowpointOfficial, SnowpointOfficialGlass, Route217, Route217Glass, AcuityLakefront, AcuityLakefrontGlass, ScarletBook, VioletBook, TerastalOfficial, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillar, SpearPillarArt, SpearPillarGlass, SpearPillarHall, SpearPillarHallChampion } from './places'
 import { PLACE_LAYOUTS } from './themes/places'
-import { DynamaxCloud, DynamaxCloudLayouts, FX_SIDE_THEMES, sideFx, TerastalPrism, TerastalPrismLayouts } from './power/recreated'
+import { DynamaxCloud, DynamaxCloudLayouts, FX_SIDE_THEMES, sideFx, TerastalPrism, TerastalPrismLayouts, TeraRaidDen, TeraRaidDenLayouts, TeraRaidDenPrism, TeraRaidDenPrismLayouts } from './power/recreated'
 import { MosaicGradient, MosaicMono, MosaicSquaresGradient, MosaicSquaresMono, MosaicTintGlass, MosaicTintGlassShadow, MosaicTintSemiShadow, MosaicTintSolid, MosaicTintSolidShadow } from './mosaic'
 import { DynamaxTopCut, MegaTopCut, TerastalTopCut } from './power'
 import { DynamaxLayouts, MegaLayouts, TerastalLayouts } from './power/themes'
+import { TradingCardClassic, TradingCardClassicPhoto, TradingCardModern, TradingCardModernPhoto } from './cards'
 import { EditorialChampionNight, EditorialChampionPaper, EditorialTopCutNight, EditorialTopCutPaper } from './editorial'
 
 import type { StandingsLayout } from './types'
@@ -77,7 +78,12 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...retire('Route 201', [[Route201, 'topcut']]),
   ...tag('Route 201 Official', [[Route201Tiles, 'topcut'], ...PLACE_LAYOUTS['Route 201 Official']]),
   ...tag('Route 201 Official Glass', [[Route201TilesGlass, 'topcut'], ...PLACE_LAYOUTS['Route 201 Official Glass']]),
-  ...tag('Snowpoint', [[Snowpoint, 'topcut']]),
+  ...tag('Snowpoint Official', [[SnowpointOfficial, 'topcut'], ...PLACE_LAYOUTS['Snowpoint Official']]),
+  ...tag('Snowpoint Official Glass', [[SnowpointOfficialGlass, 'topcut'], ...PLACE_LAYOUTS['Snowpoint Official Glass']]),
+  ...tag('Route 217', [[Route217, 'topcut'], ...PLACE_LAYOUTS['Route 217']]),
+  ...tag('Route 217 Glass', [[Route217Glass, 'topcut'], ...PLACE_LAYOUTS['Route 217 Glass']]),
+  ...tag('Acuity Lakefront', [[AcuityLakefront, 'topcut'], ...PLACE_LAYOUTS['Acuity Lakefront']]),
+  ...tag('Acuity Lakefront Glass', [[AcuityLakefrontGlass, 'topcut'], ...PLACE_LAYOUTS['Acuity Lakefront Glass']]),
   ...retire('Mt. Coronet', [[MtCoronet, 'topcut']]),
   ...tag('Spear Pillar', [[SpearPillar, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar']]),
   ...tag('Spear Pillar Glass', [[SpearPillarGlass, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Glass']]),
@@ -101,15 +107,17 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...retire('Paldea', [[Paldea, 'topcut']]),
   ...tag('Unova', [[Unova, 'topcut']]),
   ...tag('Pokédex', [[Pokedex, 'topcut'], [PokedexChampion, 'champion']]),
-  ...tag('Trading Card', [[TradingCard, 'champion']]),
+  ...tag('Trading Card Classic', [[TradingCardClassic, 'champion']]),
+  ...tag('Trading Card Modern', [[TradingCardModern, 'champion']]),
+  ...tag('Trading Card Classic Photo', [[TradingCardClassicPhoto, 'champion']]),
+  ...tag('Trading Card Modern Photo', [[TradingCardModernPhoto, 'champion']]),
+  ...retire('Trading Card', [[TradingCard, 'champion']]),
   ...tag('Scarlet Book', [[ScarletBook, 'topcut'], ...PLACE_LAYOUTS['Scarlet Book']]),
   ...tag('Violet Book', [[VioletBook, 'topcut'], ...PLACE_LAYOUTS['Violet Book']]),
-  ...tag('Scarlet Book Full Cover', [[ScarletBookFull, 'topcut'], ...PLACE_LAYOUTS['Scarlet Book Full Cover']]),
-  ...tag('Violet Book Full Cover', [[VioletBookFull, 'topcut'], ...PLACE_LAYOUTS['Violet Book Full Cover']]),
-  ...retire('Scarlet Book Zoomed', [[ScarletBookZoomed, 'topcut'], ...PLACE_LAYOUTS['Scarlet Book Zoomed']]),
-  ...retire('Violet Book Zoomed', [[VioletBookZoomed, 'topcut'], ...PLACE_LAYOUTS['Violet Book Zoomed']]),
   ...tag('Terastal', [[TerastalTopCut, 'topcut'], ...TerastalLayouts]),
   ...tag('Terastal Prism', [[TerastalPrism, 'topcut'], ...TerastalPrismLayouts]),
+  ...tag('Tera Raid Den', [[TeraRaidDen, 'topcut'], ...TeraRaidDenLayouts]),
+  ...tag('Tera Raid Den Prism', [[TeraRaidDenPrism, 'topcut'], ...TeraRaidDenPrismLayouts]),
   ...retire('Terastal Official', [[TerastalOfficial, 'topcut'], ...PLACE_LAYOUTS['Terastal Official']]),
   ...tag('Mega Evolution', [[MegaTopCut, 'topcut'], ...MegaLayouts]),
   ...tag('Dynamax', [[DynamaxTopCut, 'topcut'], ...DynamaxLayouts]),

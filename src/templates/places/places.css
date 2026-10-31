@@ -338,6 +338,42 @@
   --pl-dark: #22041a;
   --pl-photo: linear-gradient(160deg, rgba(208, 28, 90, 0.6), rgba(34, 6, 28, 0.9));
 }
+/* Snowpoint City, Route 217, Acuity Lakefront: Platinum's snow. White DS text-box panels with a navy border
+   and an icy blue inner line; places in Snowpoint blue and the map's pine green. */
+.pl-snow {
+  --pl-panel: rgba(250, 251, 255, 0.94);
+  --pl-line: #384a68;
+  --pl-inner: inset 0 0 0 3px #a8c8f0;
+  --pl-ink: #1c2638;
+  --pl-sub: #4d5c74;
+  --pl-accent: #2f66b0;
+  --pl-a: #3a6fb8;
+  --pl-b: #4f7f38;
+  --pl-first: #f8e098;
+  --pl-first-ink: #1c2638;
+  --pl-radius: 18px;
+  --pl-drop: 0 8px 0 rgba(28, 38, 56, 0.3);
+  --pl-text-shadow: none;
+  --pl-dark: #1c2638;
+  --pl-photo: linear-gradient(160deg, #a8c8f0, #3a6fb8);
+}
+.pl-snow.glass {
+  --pl-panel: rgba(20, 30, 52, 0.6);
+  --pl-line: rgba(168, 208, 248, 0.9);
+  --pl-inner: inset 0 0 0 0 transparent;
+  --pl-ink: #fff;
+  --pl-sub: #d6e6fa;
+  --pl-accent: #a8d0f8;
+  --pl-drop: 0 8px 0 rgba(20, 30, 52, 0.45);
+  --pl-text-shadow: 2px 2px 0 rgba(20, 30, 52, 0.9);
+  --pl-photo: linear-gradient(160deg, rgba(58, 111, 184, 0.75), rgba(20, 30, 52, 0.85));
+}
+.pl-snow .pl-shade {
+  background: linear-gradient(180deg, rgba(28, 38, 56, 0.28), rgba(28, 38, 56, 0) 30%);
+}
+.pl-snow.pl-art .pl-row.first {
+  border-color: var(--pl-line);
+}
 /* Scarlet / Violet Book: the straightened official book covers. Panels in the cover's own cloth colour,
    edged with its gold foil (a thick rule and a thin inner rule, like the frame printed on the cover). */
 .pl-scarlet {
@@ -376,10 +412,6 @@
 }
 .pl-book .pl-shade {
   background: radial-gradient(ellipse at 50% 45%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.4) 100%);
-}
-/* Full cover: the backdrop is already darkened, so no extra vignette. */
-.pl-book.pl-whole .pl-shade {
-  background: none;
 }
 .pl-book .pl-row.first {
   box-shadow: var(--pl-inner), 0 0 0 2px rgba(0, 0, 0, 0.35), 0 0 26px rgba(243, 214, 73, 0.55);

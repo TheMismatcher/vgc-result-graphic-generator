@@ -261,6 +261,9 @@
 .themed.theme-place.glass .br-entry {
   background: rgba(20, 20, 24, 0.82);
 }
+.themed.theme-place.pl-snow.glass .br-entry {
+  background: rgba(20, 30, 52, 0.88);
+}
 .themed.theme-place.pl-hoenn.glass .br-entry {
   background: rgba(16, 36, 22, 0.88);
 }

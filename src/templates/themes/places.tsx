@@ -3,7 +3,7 @@
 
 import { makeBracket } from '../bracket'
 import { makeChampion } from '../champion'
-import { MapWall, R119_BRIDGE, R119_TOP, R120, R201, SPEAR, SPEAR_ART, HALL, GLIMWOOD, TERA, MAX_RAID, SCARLET_BOOK, VIOLET_BOOK, SCARLET_BOOK_FULL, VIOLET_BOOK_FULL, SCARLET_BOOK_COVER, VIOLET_BOOK_COVER, SCARLET_BOOK_SQUARE, VIOLET_BOOK_SQUARE } from '../places'
+import { MapWall, R119_BRIDGE, R119_TOP, R120, R201, SPEAR, SPEAR_ART, HALL, SNOWPOINT, R217, ACUITY, GLIMWOOD, TERA, MAX_RAID, SCARLET_BOOK_COVER, VIOLET_BOOK_COVER, SCARLET_BOOK_SQUARE, VIOLET_BOOK_SQUARE } from '../places'
 import { makeTop4Photos } from '../top4-photos'
 import { makeTop8Mixed } from '../top8-mixed'
 import { makeTop8Photos } from '../top8-photos'
@@ -34,13 +34,15 @@ export const PLACES: Place[] = [
   { id: 'art-terastal', style: 'Terastal Official', className: 'theme-place pl-tera', crop: TERA },
   { id: 'art-scarlet-book', style: 'Scarlet Book', className: 'theme-place pl-scarlet pl-book', crop: SCARLET_BOOK_COVER, square: SCARLET_BOOK_SQUARE },
   { id: 'art-violet-book', style: 'Violet Book', className: 'theme-place pl-violet pl-book', crop: VIOLET_BOOK_COVER, square: VIOLET_BOOK_SQUARE },
-  { id: 'art-scarlet-book-zoomed', style: 'Scarlet Book Zoomed', className: 'theme-place pl-scarlet pl-book', crop: SCARLET_BOOK },
-  { id: 'art-violet-book-zoomed', style: 'Violet Book Zoomed', className: 'theme-place pl-violet pl-book', crop: VIOLET_BOOK },
-  { id: 'art-scarlet-book-full', style: 'Scarlet Book Full Cover', className: 'theme-place pl-scarlet pl-book pl-whole', crop: SCARLET_BOOK_FULL },
-  { id: 'art-violet-book-full', style: 'Violet Book Full Cover', className: 'theme-place pl-violet pl-book pl-whole', crop: VIOLET_BOOK_FULL },
   { id: 'art-dynamax', style: 'Dynamax Official', className: 'theme-place pl-dyna', crop: MAX_RAID },
   { id: 'place-route-201', style: 'Route 201 Official', className: 'theme-place pl-sinnoh', crop: R201 },
   { id: 'place-route-201-glass', style: 'Route 201 Official Glass', className: 'theme-place pl-sinnoh glass', crop: R201 },
+  { id: 'place-snowpoint', style: 'Snowpoint Official', className: 'theme-place pl-snow', crop: SNOWPOINT },
+  { id: 'place-route-217', style: 'Route 217', className: 'theme-place pl-snow', crop: R217 },
+  { id: 'place-acuity-lakefront', style: 'Acuity Lakefront', className: 'theme-place pl-snow', crop: ACUITY },
+  { id: 'place-snowpoint-glass', style: 'Snowpoint Official Glass', className: 'theme-place pl-snow glass', crop: SNOWPOINT },
+  { id: 'place-route-217-glass', style: 'Route 217 Glass', className: 'theme-place pl-snow glass', crop: R217 },
+  { id: 'place-acuity-lakefront-glass', style: 'Acuity Lakefront Glass', className: 'theme-place pl-snow glass', crop: ACUITY },
   { id: 'place-route-119', style: 'Route 119', className: 'theme-place pl-hoenn', crop: R119_TOP },
   { id: 'place-route-119-glass', style: 'Route 119 Glass', className: 'theme-place pl-hoenn glass', crop: R119_TOP },
   { id: 'place-route-119-bridge', style: 'Route 119 Bridge', className: 'theme-place pl-hoenn', crop: R119_BRIDGE },
