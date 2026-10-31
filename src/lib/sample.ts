@@ -44,7 +44,7 @@ export const sampleState = (): AppState => {
       uid: crypto.randomUUID(),
       name: NAMES[i],
       record: RECORDS[i],
-      social: ['@nicholasrubingh', '@WolfeyGlick', '@HootieVGC', '', '.tovah', '@.adri_dcdm', 'pterrific'][i] ?? '',
+      social: ['@nicholasrubingh', '@WolfeyGlick', '@HootieVGC', '', '@ProfessorTovah', '@.adri_dcdm', 'pterrific'][i] ?? '',
       team,
     })),
   }
