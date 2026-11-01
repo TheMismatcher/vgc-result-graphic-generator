@@ -309,7 +309,7 @@ export function Preview<T extends Template>({
                     onClick={() => onSelect(t.id)}
                     className={`rounded-xl border-2 p-2 text-left transition ${t.id === template.id ? 'border-[#b3121b] bg-red-50' : 'border-slate-200 hover:border-slate-400'}`}
                   >
-                    <div className="pointer-events-none mb-2 overflow-hidden rounded-md" aria-hidden>
+                    <div className="picker-thumb pointer-events-none mb-2 overflow-hidden rounded-md" aria-hidden>
                       <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>
                     </div>
                     <div className="text-sm font-semibold text-slate-900">{t.name}</div>
@@ -327,7 +327,7 @@ export function Preview<T extends Template>({
 }
 
 /** The Preview's switches for styles that come several ways. */
-const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on' }
+const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on', map: 'Map' }
 const OPTION_LABELS: Record<string, string> = {
   hall: 'Hall of Origin',
   sky: 'Cutscene Sky',
@@ -335,6 +335,13 @@ const OPTION_LABELS: Record<string, string> = {
   glass: 'Glass',
   classic: 'Classic',
   modern: 'Modern',
+  // Route 119 (north to south), then Sinnoh Snow
+  waterfall: 'Waterfall',
+  bridge: 'Bridge',
+  route120: 'Route 120',
+  route217: 'Route 217',
+  acuity: 'Lake Acuity',
+  snowpoint: 'Snowpoint',
 }
 
 /** Custom Glass: upload, zoom, centre and remove the background photo. */
@@ -409,6 +416,7 @@ function BackdropControls({ glass }: { glass: boolean }) {
  * current style doesn't have it yet, the first style that does is used. Style cards preview each
  * style in the chosen layout. A style that doesn't have the chosen layout can still be picked: it opens
  * in Top Cut (or its first layout). Only the template changes, never the entered data.
+ * Usage / Replay / Team Battle have no layouts: just the style cards.
  */
 export function StylePicker<T extends Template>({ templates, current, onSelect, render }: { templates: T[]; current: T; onSelect: (id: string) => void; render: (t: T) => ReactNode }) {
   // Retired styles stay hidden unless asked for (the current one always shows, so a saved pick isn't lost).
@@ -429,9 +437,10 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
   const find = (style: string, layout?: StandingsLayout) => inStyle(style).find((t) => t.layout === layout)
   // What a style opens as when it doesn't have the chosen layout: Top Cut, then whatever it has.
   const fallback = (style: string) => find(style, 'topcut') ?? inStyle(style)[0]
+  const layouts = templates.some((t) => t.layout)
   return (
     <div className="space-y-4">
-      <div>
+      {layouts && <div>
         <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">1. Layout</h3>
         <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Layout">
           {STANDINGS_LAYOUTS.map(({ id, label }) => {
@@ -454,10 +463,10 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
           })}
         </div>
         <p className="mt-1 text-xs text-slate-500">{current.description}</p>
-      </div>
+      </div>}
       <div>
         <div className="mb-2 flex items-center justify-between gap-2">
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">2. Style</h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">{layouts ? '2. Style' : 'Style'}</h3>
           {retiredCount > 0 && (
             <label className="flex items-center gap-1.5 text-xs text-slate-600">
               <input type="checkbox" checked={showRetired} onChange={(e) => setShowRetired(e.target.checked)} />
@@ -480,11 +489,11 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
                 onClick={() => onSelect(target.id)}
                 className={`rounded-xl border-2 p-1.5 text-left transition ${style === currentStyle ? 'border-[#b3121b] bg-red-50' : own ? 'border-slate-200 hover:border-slate-400' : 'border-dashed border-slate-300 hover:border-slate-500'}`}
               >
-                <div className="pointer-events-none mb-1.5 overflow-hidden rounded-md" aria-hidden>
+                <div className="picker-thumb pointer-events-none mb-1.5 overflow-hidden rounded-md" aria-hidden>
                   <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>
                 </div>
                 <div className="text-xs font-semibold leading-tight text-slate-900">{style}</div>
-                <div className="text-[11px] text-slate-500">{own ? (count === 1 ? '1 layout' : `${count} layouts`) : `Opens as ${STANDINGS_LAYOUTS.find((l) => l.id === target.layout)?.label ?? 'its own layout'}`}</div>
+                {layouts && <div className="text-[11px] text-slate-500">{own ? (count === 1 ? '1 layout' : `${count} layouts`) : `Opens as ${STANDINGS_LAYOUTS.find((l) => l.id === target.layout)?.label ?? 'its own layout'}`}</div>}
               </button>
             )
           })}

@@ -1,6 +1,5 @@
 // Templates styled after specific Pokémon games/regions (inspired by their look, no game art used):
 // - Kanto Game Boy: Gen 1 Red/Blue on the original Game Boy's four greens, pixel font, text boxes.
-// - Paldea: Scarlet/Violet's orange/purple split with dark angled UI panels and yellow highlights.
 // - Unova: Black/White's stark black-and-white contrast with bold diagonal bands.
 
 import '@fontsource/press-start-2p/400.css'
@@ -61,52 +60,6 @@ export const KantoGameBoy: StandingsTemplate = {
       </div>
     )
   },
-}
-
-export const Paldea: StandingsTemplate = {
-  id: 'era-paldea',
-  name: 'Top Cut (Paldea)',
-  description: 'Scarlet & Violet look: orange/purple split, dark angled panels and yellow highlights.',
-  kind: 'standings',
-  width: 1080,
-  height: 1350,
-  maxPlayers: 8,
-  Component: ({ data }) => (
-    <div className="dmv pd" style={{ width: 1080, height: 1350 }}>
-      <div className="pd-bg" />
-      <div className="pd-grid" />
-      <header className="pd-head">
-        <Logo size={150} style={{ border: '6px solid #15151f' }} />
-        <div className="pd-head-text">
-          <div className="pd-kicker">Results</div>
-          <FitText className="pd-title" text={data.tournament.name || 'Tournament'} max={66} width={760} min={30} weight={900} italic />
-          <div className="pd-facts">{facts(data).join('  ·  ')}</div>
-        </div>
-      </header>
-      <main className="pd-rows">
-        {data.players.map((p, i) => (
-          <div key={p.uid} className={`pd-row ${i === 0 ? 'first' : ''}`}>
-            <div className="pd-place">
-              <span>{ordinal(i + 1)}</span>
-            </div>
-            <div className="pd-player">
-              <FitText className="pd-name" text={p.name || 'Player'} max={34} width={300} min={16} weight={900} italic />
-              <div className="pd-sub">
-                {[p.record, p.social].filter(Boolean).join('  ·  ')}
-                {data.cp && <CpBadge points={data.cp(i + 1)} className="pd-cp" />}
-              </div>
-            </div>
-            <div className="pd-team">
-              {p.team.map((m, j) => (
-                <MonSprite key={j} mon={m} size={80} showTera={data.format.tera} />
-              ))}
-            </div>
-          </div>
-        ))}
-      </main>
-      {data.formatLabel && <footer className="pd-foot">{data.formatLabel}</footer>}
-    </div>
-  ),
 }
 
 export const Unova: StandingsTemplate = {

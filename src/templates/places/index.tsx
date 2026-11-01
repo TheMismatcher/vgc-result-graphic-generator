@@ -31,7 +31,6 @@ import route201 from './route-201-pt.png'
 import spearPillar from './spear-pillar-pt.png'
 import hallOfOrigin from './hall-of-origin-pt.png'
 import spearPillarArt from './spear-pillar-bdsp-art.jpg'
-import snowpoint from './snowpoint-pt.png'
 import snowpointFull from './snowpoint-full-pt.png'
 import route217 from './route-217-pt.png'
 import lakeAcuity from './lake-acuity-pt.png'
@@ -110,8 +109,6 @@ export const R201: Crop = { src: route201, sx: 0, sy: 0, sw: 360 }
 export const SPEAR: Crop = { src: spearPillar, sx: 0, sy: 110, sw: 351 }
 // Hall of Origin map, same framing as Spear Pillar: the glass platform and Arceus under the header, stairs down the middle.
 export const HALL: Crop = { src: hallOfOrigin, sx: 0, sy: 110, sw: 351 }
-// Snowpoint City (512x864): full width from the Gym down past the Pokémon Center and Mart to the docks, the ship and the icy sea.
-export const SNOWPOINT: Crop = { src: snowpoint, sx: 0, sy: 224, sw: 512 }
 // The whole of Snowpoint (691x864 = 4:5), from the temple to the icy sea; square frames take the middle.
 export const SNOWPOINT_FULL: Crop = { src: snowpointFull, sx: 0, sy: 86, sw: 691 }
 // Route 217 (north end of the 528x1589 map, trimmed to 528x700): the tall grass and the two cabins in the blizzard.
@@ -169,10 +166,8 @@ export const SpearPillarCutsceneGlass = makePlace('place-spear-pillar-cutscene-g
 export const SpearPillarArt = makePlace('place-spear-pillar-art', 'Top Cut (Spear Pillar Concept Art)', 'Official Brilliant Diamond / Shining Pearl concept art of Spear Pillar behind dark panels.', SPEAR_ART, 'pl-spear', 'glass art')
 export const ScarletBook = makePlace('art-scarlet-book', 'Top Cut (Scarlet Book)', 'The Scarlet Book’s cover (official art, laid flat) edge to edge: Koraidon’s silhouette and gold foil behind crimson panels.', SCARLET_BOOK_COVER, 'pl-scarlet', 'pl-art pl-book')
 export const VioletBook = makePlace('art-violet-book', 'Top Cut (Violet Book)', 'The Violet Book’s cover (official art, laid flat) edge to edge: Miraidon’s silhouette and gold foil behind indigo panels.', VIOLET_BOOK_COVER, 'pl-violet', 'pl-art pl-book')
-export const SnowpointOfficial = makePlace('place-snowpoint', 'Top Cut (Snowpoint Official)', 'Platinum’s Snowpoint City map (people painted out): the Gym, Pokémon Center and Mart down to the docks and the icy sea.', SNOWPOINT, 'pl-snow', 'pl-art')
 export const Route217 = makePlace('place-route-217', 'Top Cut (Route 217)', 'Platinum’s Route 217 map (trainers painted out): deep snow, tall grass and the two cabins.', R217, 'pl-snow', 'pl-art')
 export const AcuityLakefront = makePlace('place-acuity-lakefront', 'Top Cut (Lake Acuity)', 'Platinum’s Lake Acuity map: the lake and Uxie’s cavern island ringed by snowy pines.', ACUITY, 'pl-snow', 'pl-art')
-export const SnowpointOfficialGlass = makePlace('place-snowpoint-glass', 'Top Cut (Snowpoint Official Glass)', 'Snowpoint City’s map with see-through navy panels so more of the town shows.', SNOWPOINT, 'pl-snow', 'pl-art glass')
 export const Route217Glass = makePlace('place-route-217-glass', 'Top Cut (Route 217 Glass)', 'Route 217’s map with see-through navy panels so more of the snowfield shows.', R217, 'pl-snow', 'pl-art glass')
 export const AcuityLakefrontGlass = makePlace('place-acuity-lakefront-glass', 'Top Cut (Lake Acuity Glass)', 'Lake Acuity’s map with see-through navy panels so the lake and Uxie’s island show.', ACUITY, 'pl-snow', 'pl-art glass')
 export const SnowpointFull = makePlace('place-snowpoint-full', 'Top Cut (Snowpoint Full Map)', 'All of Platinum’s Snowpoint City, from the temple to the docks and the icy sea, with the forest carried out to the edges.', SNOWPOINT_FULL, 'pl-snow', 'pl-art')

@@ -242,9 +242,7 @@ const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'se
   },
 })
 
-export const MosaicMono = makeMosaic(false)
 export const MosaicGradient = makeMosaic(true)
-export const MosaicSquaresMono = makeMosaic(false, true)
 export const MosaicSquaresGradient = makeMosaic(true, true)
 export const MosaicTintGlass = makeMosaic(true, true, 'glass')
 export const MosaicTintSolid = makeMosaic(true, true, 'solid')

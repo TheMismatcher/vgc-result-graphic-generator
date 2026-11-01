@@ -10,3 +10,10 @@
 body {
   font-family: 'Montserrat', system-ui, sans-serif;
 }
+
+/* Picker cards are whole graphics shrunk down: their CSS filters (sprite glows and drop shadows, about a
+   thousand in the Standings picker) are invisible at that size but made scrolling stutter in Chrome.
+   The preview and the downloaded PNG keep them. */
+.picker-thumb * {
+  filter: none !important;
+}

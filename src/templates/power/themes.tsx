@@ -7,7 +7,8 @@ import { makeChampion } from '../champion'
 import { makeTop4Photos } from '../top4-photos'
 import { makeTop8Mixed } from '../top8-mixed'
 import { makeTop8Photos } from '../top8-photos'
-import type { StandingsLayout, StandingsTemplate } from '../types'
+import type { StandingsData, StandingsLayout, StandingsTemplate } from '../types'
+import type { SideTheme } from '../themes/side'
 import type { Theme } from '../themes/theme'
 import { DynamaxBackground, MegaBackground, TeraBackground } from '.'
 
@@ -27,3 +28,15 @@ const layouts = (theme: Theme): [StandingsTemplate, StandingsLayout][] => [
 export const TerastalLayouts = layouts(TERASTAL_THEME)
 export const MegaLayouts = layouts(MEGA_THEME)
 export const DynamaxLayouts = layouts(DYNAMAX_THEME)
+
+/** Usage / Replay / Team Battle versions: the same backgrounds, seeded from the graphic and led by its first Pokémon. */
+const sideTheme = (theme: Theme): SideTheme => ({
+  id: theme.id,
+  style: theme.style,
+  className: theme.className,
+  Wall: ({ mons, seed, width, height }) => {
+    const data = { tournament: { name: seed }, players: [{ team: mons.filter(Boolean).map((pokemon) => ({ pokemon })) }], format: { tera: false } } as unknown as StandingsData
+    return <theme.Background data={data} width={width} height={height} />
+  },
+})
+export const POWER_SIDE_THEMES: SideTheme[] = [sideTheme(MEGA_THEME), sideTheme(DYNAMAX_THEME)]

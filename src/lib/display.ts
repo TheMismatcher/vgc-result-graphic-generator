@@ -17,7 +17,8 @@ export interface Display {
   setLook: (group: LookGroup, value: string) => void
 }
 
-export const DEFAULT_LOOKS: Looks = { panels: 'glass', card: 'classic', champion: 'hall' }
+// map: Route 119 opens on the bridge; styles without that map open on their first one (Sinnoh Snow: Lake Acuity).
+export const DEFAULT_LOOKS: Looks = { panels: 'glass', card: 'classic', champion: 'hall', map: 'bridge' }
 
 export const DisplayContext = createContext<Display>({
   showMegas: false,

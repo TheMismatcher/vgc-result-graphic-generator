@@ -1,13 +1,15 @@
 import type { MatchTemplate } from '../types'
 import { FitText, Logo, MonSprite } from '../shared/parts'
+import { LoudBackground } from '../shared/LoudBackground'
 import { useBrand } from '../../brand'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import type { SideTheme } from '../themes/side'
 import './vs-result.css'
 
-export const makeVsResult = (theme?: SideTheme): MatchTemplate => ({
-  id: theme ? `${theme.id}-vs-result` : 'dmv-vs-result',
-  name: theme ? `VS Result (${theme.style})` : 'VS Result',
+// `loud`: the Comic Book background (blue and red halves, one per player).
+export const makeVsResult = (theme?: SideTheme, loud = false): MatchTemplate => ({
+  id: theme ? `${theme.id}-vs-result` : loud ? 'dmv-vs-result-loud' : 'dmv-vs-result',
+  name: theme ? `VS Result (${theme.style})` : loud ? 'VS Result (Comic Book)' : 'VS Result',
   description: 'Both players, both teams, the score, and the winner.',
   kind: 'match',
   width: 1080,
@@ -18,9 +20,11 @@ export const makeVsResult = (theme?: SideTheme): MatchTemplate => ({
     const [p1, p2] = data.players
     const winnerName = data.winner === null ? '' : data.players[data.winner].name
     return (
-      <div className={`dmv vs ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1080 }}>
+      <div className={`dmv vs ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1080 }}>
         {theme ? (
           <theme.Wall mons={data.players.flatMap((p) => p.team.map((m) => (m.pokemon ? displayPokemon(m, showMegas) : '')))} seed={`vs|${p1.name}|${p2.name}`} width={1080} height={1080} />
+        ) : loud ? (
+          <LoudBackground top="blue" bottom="red" split={[54, 46]} burst={[540, 120]} vertical />
         ) : (
           <div className="vs-bg" />
         )}
@@ -76,3 +80,4 @@ export const makeVsResult = (theme?: SideTheme): MatchTemplate => ({
 
 const VsResult = makeVsResult()
 export default VsResult
+export const VsResultLoud = makeVsResult(undefined, true)

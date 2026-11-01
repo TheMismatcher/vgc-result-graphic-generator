@@ -68,8 +68,9 @@ export interface TeamBattleData {
   format: Format
 }
 
-/** Switches a style can have in the Preview (Panels: solid / glass, Card: classic / modern, Champion: hall / sky). */
-export type LookGroup = 'panels' | 'card' | 'champion'
+/** Switches a style can have in the Preview (Panels: solid / glass, Card: classic / modern, Champion: hall / sky,
+ * Map: which map of a merged style, e.g. Route 119's waterfall / bridge / Route 120). */
+export type LookGroup = 'panels' | 'card' | 'champion' | 'map'
 export type Looks = Record<LookGroup, string>
 
 /** The standings layouts, chosen after the style in the picker. */

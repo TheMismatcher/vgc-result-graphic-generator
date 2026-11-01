@@ -389,3 +389,99 @@
 .dmv.themed.theme-power .br-champ.open {
   background: var(--pw-card);
 }
+
+/* ---------- Usage / Replay / Team Battle ---------- */
+.dmv.themed.theme-power .us-event,
+.dmv.themed.theme-power .vs-meta {
+  color: var(--pw-accent);
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+.dmv.themed.theme-power .us-facts,
+.dmv.themed.theme-power .vs-format {
+  color: var(--pw-ink);
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+.dmv.themed.theme-power .us-rank,
+.dmv.themed.theme-power .us-name,
+.dmv.themed.theme-power .tb-player {
+  color: var(--pw-ink);
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
+}
+.dmv.themed.theme-power .us-rank {
+  color: var(--pw-accent);
+}
+.dmv.themed.theme-power .us-bar {
+  border: 2px solid var(--pw-line);
+  background: rgba(0, 0, 0, 0.45);
+}
+.dmv.themed.theme-power .us-fill {
+  background: var(--pw-place);
+}
+.dmv.themed.theme-power .us-bar span {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+.dmv.themed.theme-power .vs-banner,
+.dmv.themed.theme-power .tb-banner {
+  background: var(--pw-place);
+  border: 0;
+  border-radius: var(--pw-place-radius, 0);
+  clip-path: var(--pw-place-clip, none);
+  transform: none;
+  box-shadow: none;
+}
+.dmv.themed.theme-power .vs-banner .dmv-title,
+.dmv.themed.theme-power .tb-banner .dmv-title {
+  color: var(--pw-place-ink);
+  font-family: var(--pw-font);
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+}
+.dmv.themed.theme-power .vs-word,
+.dmv.themed.theme-power .tb-score {
+  color: var(--pw-ink);
+  font-family: var(--pw-font);
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: var(--pw-title-shadow);
+}
+.dmv.themed.theme-power .vs-score {
+  color: var(--pw-ink);
+  background: transparent;
+  font-family: var(--pw-font);
+  font-style: normal;
+  -webkit-text-stroke: 0;
+  text-shadow: var(--pw-title-shadow);
+}
+.dmv.themed.theme-power .vs-panel.won .vs-score {
+  color: var(--yellow);
+}
+.dmv.themed.theme-power .tb-kicker,
+.dmv.themed.theme-power .tb-record,
+.dmv.themed.theme-power .tb-set-score {
+  color: var(--pw-ink);
+  background: var(--pw-card);
+  border: var(--pw-border);
+  border-color: var(--pw-line);
+  border-radius: var(--pw-radius);
+  box-shadow: var(--pw-shadow);
+  opacity: 1;
+}
+.dmv.themed.theme-power .tb-set-score .win {
+  color: var(--yellow);
+}
+.dmv.themed.theme-power .tb-logo {
+  border: 3px solid var(--pw-line);
+  box-shadow: var(--pw-shadow);
+}
+.dmv.themed.theme-power .vs-plate,
+.dmv.themed.theme-power .vs-plate .dmv-title {
+  color: var(--pw-ink);
+}

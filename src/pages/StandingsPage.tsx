@@ -95,7 +95,7 @@ export function StandingsPage({
                       onClick={() => onSelect(t.id)}
                       className={`rounded-xl border-2 p-2 text-left transition ${t.id === template.id ? 'border-[#b3121b] bg-red-50' : 'border-slate-200 hover:border-slate-400'}`}
                     >
-                      <div className="pointer-events-none mb-2 overflow-hidden rounded-md" aria-hidden>
+                      <div className="picker-thumb pointer-events-none mb-2 overflow-hidden rounded-md" aria-hidden>
                         <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>
                       </div>
                       <div className="text-sm font-semibold text-slate-900">{t.name}</div>

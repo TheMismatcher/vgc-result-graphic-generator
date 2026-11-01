@@ -2,22 +2,26 @@ import { Fragment } from 'react'
 import type { UsageTemplate } from '../types'
 import { FitText, Logo } from '../shared/parts'
 import { eventFacts } from '../shared/format'
+import { LoudBackground } from '../shared/LoudBackground'
 import { getPokemon, sprites } from '../../data/dex'
 import type { SideTheme } from '../themes/side'
 import './usage.css'
 
-export const makeUsage = (theme?: SideTheme): UsageTemplate => ({
-  id: theme ? `${theme.id}-usage` : 'dmv-usage',
-  name: theme ? `Usage Stats (${theme.style})` : 'Usage Stats',
+// `loud`: the Comic Book background.
+export const makeUsage = (theme?: SideTheme, loud = false): UsageTemplate => ({
+  id: theme ? `${theme.id}-usage` : loud ? 'dmv-usage-loud' : 'dmv-usage',
+  name: theme ? `Usage Stats (${theme.style})` : loud ? 'Usage Stats (Comic Book)' : 'Usage Stats',
   description: 'Portrait grid of the 12 most-used Pokémon.',
   kind: 'usage',
   width: 1080,
   height: 1350,
   maxEntries: 12,
   Component: ({ data }) => (
-    <div className={`dmv us ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1350 }}>
+    <div className={`dmv us ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1350 }}>
       {theme ? (
         <theme.Wall mons={data.entries.map((e) => e.pokemon)} seed={`usage|${data.tournament.name}`} width={1080} height={1350} />
+      ) : loud ? (
+        <LoudBackground top="red" bottom="blue" split={[22, 12]} burst={[130, 120]} />
       ) : (
         <>
           <div className="us-bg" />
@@ -57,3 +61,4 @@ export const makeUsage = (theme?: SideTheme): UsageTemplate => ({
 
 const Usage = makeUsage()
 export default Usage
+export const UsageLoud = makeUsage(undefined, true)
