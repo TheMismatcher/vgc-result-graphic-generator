@@ -1,7 +1,9 @@
 // Editorial themes (Paper, Night): the magazine look (flat colour, hairline rules, upright type, brand
-// colours as accents) on the standard layouts. Top Cut and Champion keep their own Editorial designs.
+// colours as accents) on the standard layouts. Top Cut and Champion keep their own Editorial designs;
+// Champion + Photo uses the standard one.
 
 import { makeBracket } from '../bracket'
+import { makeChampion } from '../champion'
 import { makeTop4Photos } from '../top4-photos'
 import { makeTop8Mixed } from '../top8-mixed'
 import { makeTop8Photos } from '../top8-photos'
@@ -22,6 +24,7 @@ const layouts = (theme: Theme): [StandingsTemplate, StandingsLayout][] => [
   [makeTop8Photos(false, false, theme), 'top8photos'],
   [makeTop8Mixed(false, theme), 'top8mixed'],
   [makeTop4Photos(false, theme), 'top4photos'],
+  [makeChampion(false, theme, true), 'championphoto'],
   [makeBracket(false, theme), 'bracket'],
 ]
 

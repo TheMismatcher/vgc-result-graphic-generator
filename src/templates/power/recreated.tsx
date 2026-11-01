@@ -277,6 +277,7 @@ const layouts = (id: string, style: string, cls: string, kind: FxKind, Back: Com
     [withFx(makeTop8Mixed(false, theme), kind), 'top8mixed'],
     [withFx(makeTop4Photos(false, theme), kind), 'top4photos'],
     [withFx(makeChampion(false, theme), kind), 'champion'],
+    [withFx(makeChampion(false, theme, true), kind), 'championphoto'],
     [withFx(makeBracket(false, theme), kind), 'bracket'],
   ]
 }

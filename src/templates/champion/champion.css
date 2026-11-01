@@ -119,13 +119,14 @@
   border-width: 4px;
 }
 
-/* Champion + Photo: portrait on the left (50-450), name and a 2 x 3 team on the right (480-1030). */
+/* Champion + Photo: portrait on the left (50-450), name and a 2 x 3 team on the right (480-1030).
+   The portrait is centred on the right column (name top 222 to team bottom 952). */
 .ch-photo {
   position: absolute;
   left: 50px;
-  top: 190px;
+  top: 267px;
   width: 400px;
-  height: 766px;
+  height: 640px;
   overflow: hidden;
   padding: 0;
   border: 7px solid var(--ink);

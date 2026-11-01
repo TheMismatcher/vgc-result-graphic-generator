@@ -28,5 +28,6 @@ export const GhostPixelLayouts: [StandingsTemplate, StandingsLayout][] = [
   [makeTop8Mixed(false, ghostTheme), 'top8mixed'],
   [makeTop4Photos(false, ghostTheme), 'top4photos'],
   [makeChampion(false, ghostTheme), 'champion'],
+  [makeChampion(false, ghostTheme, true), 'championphoto'],
   [makeBracket(false, ghostTheme), 'bracket'],
 ]

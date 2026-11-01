@@ -23,5 +23,6 @@ export const MosaicLayouts: [StandingsTemplate, StandingsLayout][] = [
   [makeTop8Mixed(false, MOSAIC_THEME), 'top8mixed'],
   [makeTop4Photos(false, MOSAIC_THEME), 'top4photos'],
   [makeChampion(false, MOSAIC_THEME), 'champion'],
+  [makeChampion(false, MOSAIC_THEME, true), 'championphoto'],
   [makeBracket(false, MOSAIC_THEME), 'bracket'],
 ]

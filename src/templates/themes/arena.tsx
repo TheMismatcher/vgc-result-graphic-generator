@@ -30,6 +30,7 @@ const layouts = (theme: Theme): [StandingsTemplate, StandingsLayout][] => [
   [makeTop8Mixed(false, theme), 'top8mixed'],
   [makeTop4Photos(false, theme), 'top4photos'],
   [makeChampion(false, theme), 'champion'],
+  [makeChampion(false, theme, true), 'championphoto'],
   [makeBracket(false, theme), 'bracket'],
 ]
 

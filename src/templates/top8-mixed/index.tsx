@@ -2,12 +2,13 @@ import type { Theme } from '../themes/theme'
 import type { StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, PlayerPhoto, CpBadge } from '../shared/parts'
 import { cardColor, eventFacts, ordinal } from '../shared/format'
+import { LoudBackground } from '../shared/LoudBackground'
 import './top8-mixed.css'
 
-// Two looks: alternating blue/red cards, or white cards. 1st place is gold in both.
-export const makeTop8Mixed = (white: boolean, theme?: Theme): StandingsTemplate => ({
-  id: theme ? `${theme.id}-top8-mixed` : white ? 'dmv-top8-mixed-white' : 'dmv-top8-mixed',
-  name: theme ? `Top 8 + Top 4 Photos (${theme.style})` : white ? 'Top 8 Mixed (White)' : 'Top 8 Mixed',
+// Two looks: alternating blue/red cards, or white cards. 1st place is gold in both. `loud`: the Comic Book background.
+export const makeTop8Mixed = (white: boolean, theme?: Theme, loud = false): StandingsTemplate => ({
+  id: theme ? `${theme.id}-top8-mixed` : loud ? 'dmv-top8-mixed-loud' : white ? 'dmv-top8-mixed-white' : 'dmv-top8-mixed',
+  name: theme ? `Top 8 + Top 4 Photos (${theme.style})` : loud ? 'Top 8 + Top 4 Photos (Comic Book)' : white ? 'Top 8 Mixed (White)' : 'Top 8 Mixed',
   description: 'Photo cards for the top 4, compact rows for 5th–8th.',
   kind: 'standings',
   width: 1080,
@@ -17,8 +18,10 @@ export const makeTop8Mixed = (white: boolean, theme?: Theme): StandingsTemplate 
     const top4 = data.players.slice(0, 4)
     const rest = data.players.slice(4)
     return (
-      <div className={`dmv m8 ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1350 }}>
-        {theme ? <theme.Background data={data} width={1080} height={1350} /> : (
+      <div className={`dmv m8 ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1350 }}>
+        {theme ? <theme.Background data={data} width={1080} height={1350} /> : loud ? (
+          <LoudBackground top="red" bottom="blue" split={[30, 10]} burst={[130, 120]} />
+        ) : (
           <>
             <div className="m8-bg" />
             <div className="dmv-halftone" />
@@ -84,3 +87,4 @@ export const makeTop8Mixed = (white: boolean, theme?: Theme): StandingsTemplate 
 const Top8Mixed = makeTop8Mixed(false)
 export default Top8Mixed
 export const Top8MixedWhite = makeTop8Mixed(true)
+export const Top8MixedLoud = makeTop8Mixed(false, undefined, true)

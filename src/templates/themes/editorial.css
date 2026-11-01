@@ -135,6 +135,47 @@
   color: var(--muted);
 }
 
+/* Champion + Photo: the label is a flat colour band, names upright, the footer is the band. */
+.themed.theme-editorial .ch-banner {
+  background: var(--band);
+  border: 0;
+  border-top: 8px solid var(--accent);
+  box-shadow: none;
+  transform: none;
+  clip-path: none;
+}
+.themed.theme-editorial .ch-label {
+  color: var(--band-fg);
+  background: none;
+  letter-spacing: 0.04em;
+}
+.themed.theme-editorial .ch-sub {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding-left: 0;
+  color: var(--muted);
+  font-style: normal;
+}
+.themed.theme-editorial .ch-mon-name {
+  color: var(--fg);
+  -webkit-text-stroke: 0;
+  font-style: normal;
+  text-shadow: none;
+}
+.themed.theme-editorial .ch-item-name {
+  color: var(--muted);
+}
+.themed.theme-editorial .ch-footer {
+  background: var(--band);
+  border-top: 6px solid var(--accent);
+  color: var(--band-fg);
+}
+.themed.theme-editorial .ch-event {
+  color: var(--band-num);
+  font-style: normal;
+}
+
 /* Bracket */
 .themed.theme-editorial .br-label {
   color: var(--accent);
