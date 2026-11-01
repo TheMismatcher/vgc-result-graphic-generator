@@ -1,9 +1,10 @@
 // Live preview of the selected template, the template picker, and the download button.
 
+import { createPortal } from 'react-dom'
 import { useLayoutEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
 import type { LookGroup, StandingsLayout, Template } from '../templates/types'
 import { STANDINGS_LAYOUTS } from '../templates/registry'
-import { copyPng, downloadPng, slugify } from '../lib/exportImage'
+import { copyPng, downloadPng, renderPngFile, slugify, canUseShareSheet } from '../lib/exportImage'
 import { brandVars, useBrand } from '../brand'
 import { useDisplay } from '../lib/display'
 import { BackdropContext, DEFAULT_OPACITY, isBackdropTemplate, opacityVars, readBackdrop, startDrag, useBackdrop } from '../lib/backdrop'
@@ -58,6 +59,7 @@ export function Preview<T extends Template>({
   const node = useRef<HTMLDivElement>(null)
   const [busy, setBusy] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [saved, setSaved] = useState<{ file: File; url: string } | null>(null) // phone: rendered image waiting to be saved
   const { showMegas, setShowMegas, showCP, setShowCP, cpEvent, setCpEvent, setLook } = useDisplay()
   const dialog = useDialog()
   // Custom Glass: the photo is dragged on the preview; the live position stays local until the drag ends.
@@ -150,8 +152,16 @@ export function Preview<T extends Template>({
   const download = async () => {
     if (!node.current) return
     setBusy(true)
+    const filename = `${slugify(filenameBase)}-${template.id}.png`
     try {
-      await downloadPng(node.current, template.width, template.height, `${slugify(filenameBase)}-${template.id}.png`)
+      if (canUseShareSheet()) {
+        // Rendering outlasts the tap, and Safari only opens the share sheet straight from a tap,
+        // so the finished image waits in a sheet with its own Save button.
+        const file = await renderPngFile(node.current, template.width, template.height, filename)
+        setSaved({ file, url: URL.createObjectURL(file) })
+      } else {
+        await downloadPng(node.current, template.width, template.height, filename)
+      }
     } catch (e) {
       dialog.notify(`Couldn't create the image: ${e instanceof Error ? e.message : e}`)
     } finally {
@@ -159,8 +169,34 @@ export function Preview<T extends Template>({
     }
   }
 
+  const closeSaved = () => {
+    if (saved) URL.revokeObjectURL(saved.url)
+    setSaved(null)
+  }
+  const share = async () => {
+    if (!saved) return
+    try {
+      await navigator.share({ files: [saved.file] })
+      closeSaved()
+    } catch (e) {
+      if (e instanceof Error && e.name === 'AbortError') return // closed the share sheet
+      dialog.notify(`Couldn't open the share sheet: ${e instanceof Error ? e.message : e}\n\nPress and hold the image instead, then tap Save to Photos.`)
+    }
+  }
+
   return (
     <Card className="space-y-4">
+      {saved && createPortal(
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-black/80 p-4" onClick={closeSaved}>
+          <img src={saved.url} alt="Your graphic" className="max-h-[65vh] max-w-full rounded-lg object-contain shadow-lg" onClick={(e) => e.stopPropagation()} />
+          <p className="text-center text-sm text-white/80">Tap Save Image in the share menu, or press and hold the image and tap Save to Photos.</p>
+          <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+            <Button onClick={closeSaved}>Close</Button>
+            <Button variant="primary" onClick={share}>Save to Photos</Button>
+          </div>
+        </div>,
+        document.body,
+      )}
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-lg font-bold text-slate-900">Preview</h2>
         <div className="flex gap-2">

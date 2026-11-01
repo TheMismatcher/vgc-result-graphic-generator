@@ -18,6 +18,27 @@ export async function downloadPng(node: HTMLElement, width: number, height: numb
   a.click()
 }
 
+/** Render a template's DOM node to a PNG file (for the phone share sheet). */
+export async function renderPngFile(node: HTMLElement, width: number, height: number, filename: string) {
+  await document.fonts.ready
+  const blob = await toBlob(node, options(width, height))
+  if (!blob) throw new Error('Image was empty.')
+  return new File([blob], filename, { type: 'image/png' })
+}
+
+/**
+ * Phones (iPhone especially) save link downloads to Files, not Photos. There the image goes
+ * through the share sheet instead, whose "Save Image" puts it in Photos.
+ */
+export function canUseShareSheet() {
+  if (typeof navigator.canShare !== 'function' || !window.matchMedia('(pointer: coarse)').matches) return false
+  try {
+    return navigator.canShare({ files: [new File([''], 'test.png', { type: 'image/png' })] })
+  } catch {
+    return false
+  }
+}
+
 /** Render a template's DOM node to a PNG and put it on the clipboard (paste into Discord, X, etc.). */
 export async function copyPng(node: HTMLElement, width: number, height: number) {
   if (!navigator.clipboard || typeof ClipboardItem === 'undefined') {
