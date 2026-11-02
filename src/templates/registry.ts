@@ -64,6 +64,29 @@ const glassPair = (style: string, solid: StandingsTemplate, glass: StandingsTemp
     [`${style} Glass`, { panels: 'glass' }, [[glass, 'topcut'], ...PLACE_LAYOUTS[`${style} Glass`]]],
   ])
 
+// Which Branding colours each style takes (one dot per colour on its picker card); unlisted styles keep their own
+// palette. Found by swapping the colours on every layout and tab. Not counted: Trading Card's empty photo
+// placeholder, which uses the second colour until a photo is added.
+export type BrandColour = 'main' | 'second' | 'highlight'
+const ALL: BrandColour[] = ['main', 'second', 'highlight']
+export const BRAND_COLOURS: Record<string, BrandColour[]> = {
+  Classic: ALL,
+  'Comic Book': ALL,
+  White: ALL,
+  'Custom Glass': ALL,
+  Mosaic: ALL,
+  'Editorial Paper': ['main', 'highlight'],
+  'Editorial Night': ALL,
+  'Sports Page': ['main'],
+  'Arena Spotlight': ALL,
+  'Arena Grid': ALL,
+  'Arena Sunset': ALL,
+  'Mega Evolution': ['highlight'], // the winner's gold trim
+  Dynamax: ['highlight'],
+  'Classic · Win': ALL,
+  'Classic · Loss': ['second'],
+}
+
 export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [ChampionPhoto, 'championphoto'], [Bracket, 'bracket']]),
   ...tag('Comic Book', [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top8MixedLoud, 'top8mixed'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [ChampionLoudPhoto, 'championphoto'], [BracketLoud, 'bracket']]),
@@ -134,8 +157,11 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
     ['Trading Card Modern', { card: 'modern' }, [[TradingCardModern, 'champion'], [TradingCardModernPhoto, 'championphoto']]],
   ]),
   ...retire('Trading Card (Old)', [[TradingCard, 'champion']]),
-  ...tag('Scarlet Book', [[ScarletBook, 'topcut'], ...PLACE_LAYOUTS['Scarlet Book']]),
-  ...tag('Violet Book', [[VioletBook, 'topcut'], ...PLACE_LAYOUTS['Violet Book']]),
+  // Scarlet/Violet Book: either cover.
+  ...versions('Scarlet/Violet Book', [
+    ['Scarlet/Violet Book', { book: 'scarlet' }, [[ScarletBook, 'topcut'], ...PLACE_LAYOUTS['Scarlet Book']]],
+    ['Violet Book', { book: 'violet' }, [[VioletBook, 'topcut'], ...PLACE_LAYOUTS['Violet Book']]],
+  ]),
   ...retire('Terastal', [[TerastalTopCut, 'topcut'], ...TerastalLayouts]),
   ...tag('Tera Raid Den', [[TeraRaidDenPrism, 'topcut'], ...TeraRaidDenPrismLayouts]),
   ...retire('Tera Raid Den (Old)', [[TeraRaidDen, 'topcut'], ...TeraRaidDenLayouts]),

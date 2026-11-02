@@ -118,6 +118,28 @@
   background: linear-gradient(rgba(8, 22, 30, 0.88), rgba(8, 22, 30, 0.88)) padding-box, var(--pl-prism) border-box;
 }
 
+/* Tera Raid Den Prism's winner: the Tera crystal from the Pokémon effect (soft iridescent facets, white
+   edges and shine; scripts/tera-crystal.cjs) on its border and place badge instead of the plain rainbow. */
+.pl-tdenprism {
+  --pl-crystal: url('./tera-crystal.svg') center / cover;
+}
+.pl-tdenprism .pl-row.first,
+.themed.pl-tdenprism .dmv-panel.first,
+.themed.pl-tdenprism .m8-card:first-child,
+.themed.pl-tdenprism .br-champ {
+  border-width: 5px;
+  background: linear-gradient(rgba(8, 22, 30, 0.88), rgba(8, 22, 30, 0.88)) padding-box, var(--pl-crystal) border-box;
+  box-shadow: 0 0 22px rgba(210, 235, 255, 0.55), 0 0 4px rgba(255, 255, 255, 0.8);
+}
+.pl-tdenprism .pl-row.first .pl-place,
+.themed.pl-tdenprism .first .p8-place,
+.themed.pl-tdenprism .first .p4-place,
+.themed.pl-tdenprism .first .m8-place {
+  background: var(--pl-crystal);
+  color: #141836;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
 /* Tera Raid Den Prism: every panel gets a thin prism edge (the winner keeps its thick one). */
 .pl-tdenprism .pl-row:not(.first),
 .themed.pl-tdenprism .dmv-panel:not(.first),

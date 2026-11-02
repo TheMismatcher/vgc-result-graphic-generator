@@ -213,6 +213,13 @@
   text-shadow: 2px 2px 0 #0c090d;
 }
 .themed.theme-ghostpixel .us-facts,
+.themed.theme-ghostpixel .vs-rule {
+  background: var(--gp-line);
+  box-shadow: 3px 3px 0 #0c090d;
+}
+.themed.theme-ghostpixel .vs-dot {
+  color: var(--gp-line);
+}
 .themed.theme-ghostpixel .vs-format {
   color: #cdbbf0;
   text-shadow: 2px 2px 0 #0c090d;

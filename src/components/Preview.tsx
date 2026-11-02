@@ -3,7 +3,7 @@
 import { createPortal } from 'react-dom'
 import { useLayoutEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
 import type { LookGroup, StandingsLayout, Template } from '../templates/types'
-import { STANDINGS_LAYOUTS } from '../templates/registry'
+import { BRAND_COLOURS, STANDINGS_LAYOUTS, type BrandColour } from '../templates/registry'
 import { copyPng, downloadPng, renderPngFile, slugify, canUseShareSheet } from '../lib/exportImage'
 import { brandVars, useBrand } from '../brand'
 import { useDisplay } from '../lib/display'
@@ -327,7 +327,7 @@ export function Preview<T extends Template>({
 }
 
 /** The Preview's switches for styles that come several ways. */
-const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on', map: 'Map' }
+const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on', map: 'Map', book: 'Book' }
 const OPTION_LABELS: Record<string, string> = {
   hall: 'Hall of Origin',
   sky: 'Cutscene Sky',
@@ -342,6 +342,8 @@ const OPTION_LABELS: Record<string, string> = {
   route217: 'Route 217',
   acuity: 'Lake Acuity',
   snowpoint: 'Snowpoint',
+  scarlet: 'Scarlet',
+  violet: 'Violet',
 }
 
 /** Custom Glass: upload, zoom, centre and remove the background photo. */
@@ -438,6 +440,16 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
   // What a style opens as when it doesn't have the chosen layout: Top Cut, then whatever it has.
   const fallback = (style: string) => find(style, 'topcut') ?? inStyle(style)[0]
   const layouts = templates.some((t) => t.layout)
+  // Card marks: the style's other versions (reached with the Preview's switches) and branding colours.
+  const versionCount = (style: string, layout?: StandingsLayout) => templates.filter((x) => (x.variantOf ?? x.style) === style && x.layout === layout).length
+  const { colors } = useBrand()
+  const brandDots = (which: BrandColour[]) => (
+    <span className="flex">
+      {which.map((k) => (
+        <span key={k} className="-ml-0.5 h-2.5 w-2.5 rounded-full border border-white first:ml-0" style={{ background: colors[k] }} />
+      ))}
+    </span>
+  )
   return (
     <div className="space-y-4">
       {layouts && <div>
@@ -474,6 +486,10 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
             </label>
           )}
         </div>
+        <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-500">
+          <span className="flex items-center gap-1">{brandDots(['main', 'second', 'highlight'])} uses your Branding colours (one dot per colour)</span>
+          <span className="flex items-center gap-1"><span className="rounded bg-slate-900/80 px-1 font-semibold leading-4 text-white">2</span> versions: switch between them in the preview</span>
+        </div>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
           {styles.map((style) => {
             // Show the style in the chosen layout; styles without it show (and open as) their fallback layout.
@@ -481,6 +497,7 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
             const target = prefer(own ?? fallback(style))
             const t = target
             const count = inStyle(style).length
+            const versions = versionCount(style, target.layout)
             return (
               <button
                 key={style}
@@ -489,8 +506,12 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
                 onClick={() => onSelect(target.id)}
                 className={`rounded-xl border-2 p-1.5 text-left transition ${style === currentStyle ? 'border-[#b3121b] bg-red-50' : own ? 'border-slate-200 hover:border-slate-400' : 'border-dashed border-slate-300 hover:border-slate-500'}`}
               >
-                <div className="picker-thumb pointer-events-none mb-1.5 overflow-hidden rounded-md" aria-hidden>
+                <div className="picker-thumb pointer-events-none relative mb-1.5 overflow-hidden rounded-md" aria-hidden>
                   <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>
+                  <div className="absolute right-1 top-1 flex items-center gap-1">
+                    {BRAND_COLOURS[style] && <span className="rounded-full bg-white/90 p-0.5 shadow">{brandDots(BRAND_COLOURS[style])}</span>}
+                    {versions > 1 && <span className="rounded bg-slate-900/80 px-1 text-[10px] font-semibold leading-4 text-white shadow">{versions}</span>}
+                  </div>
                 </div>
                 <div className="text-xs font-semibold leading-tight text-slate-900">{style}</div>
                 {layouts && <div className="text-[11px] text-slate-500">{own ? (count === 1 ? '1 layout' : `${count} layouts`) : `Opens as ${STANDINGS_LAYOUTS.find((l) => l.id === target.layout)?.label ?? 'its own layout'}`}</div>}
