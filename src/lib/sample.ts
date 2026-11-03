@@ -18,7 +18,7 @@ const TEAMS: Mon[][] = [
   // Ash's Masters Eight-winning team (Pokémon Journeys); Lucario Mega Evolved, Gengar Gigantamaxed.
   t(['pikachu', 'light-ball'], ['lucario-mega', 'lucarionite'], ['dragonite', 'choice-band'], ['gengar-gmax', 'focus-sash'], ['sirfetchd', 'stick'], ['dracovish', 'choice-scarf']),
   // Tovah's team (Champions team screen, "Team 6"); Raichu Mega Evolves with Raichunite Y.
-  t(['mimikyu-disguised', 'life-orb'], ['incineroar', 'sitrus-berry'], ['raichu', 'raichunite-y'], ['sinistcha', 'kasib-berry'], ['milotic', 'leftovers'], ['ninetales-alola', 'focus-sash']),
+  t(['hatterene', 'life-orb'], ['incineroar', 'rocky-helmet'], ['calyrex-ice', 'clear-amulet'], ['ursaluna', 'flame-orb'], ['indeedee-female', 'psychic-seed'], ['araquanid', 'mystic-water']),
   // Adri's team (Charizard's item not confirmed yet).
   t(['sableye', 'roseli-berry'], ['charizard', 'charizardite-y'], ['venusaur', 'focus-sash'], ['primarina', 'leftovers'], ['gholdengo', 'life-orb'], ['raichu', 'raichunite-y']),
   // Marlee Warwick's team (Tyrantrum is shiny in her list; the maker has no shiny sprites).
