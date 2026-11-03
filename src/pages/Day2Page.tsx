@@ -230,7 +230,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
             <div className="mb-1 flex items-center justify-between">
               <label htmlFor="d2-hue" className="text-sm font-medium text-slate-700">Background color</label>
               <button type="button" className="text-xs font-semibold text-slate-500 hover:text-slate-800" onClick={() => setDay2({ hue: undefined })}>
-                Reset to {DAY2_EVENTS[kind].label} colour
+                Reset to {DAY2_EVENTS[kind].label} color
               </button>
             </div>
             <input
@@ -250,7 +250,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
               <div className="mb-1 flex items-center justify-between">
                 <span className="text-sm font-medium text-slate-700">Mosaic gradient colors</span>
                 <button type="button" className="text-xs font-semibold text-slate-500 hover:text-slate-800" onClick={() => setDay2({ colors: undefined })}>
-                  Use the background colour above
+                  Use the background color above
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-3">
