@@ -44,12 +44,18 @@ export async function renderPngFile(node: HTMLElement, width: number, height: nu
   return new File([await renderBlob(node, width, height)], filename, { type: 'image/png' })
 }
 
+/** iPhone / iPad (any browser there). iPads ask for the desktop site, so their user agent says
+ *  "Macintosh"; a touch screen gives them away. */
+export const isAppleMobile = () =>
+  /iPhone|iPad|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1)
+
 /**
- * Phones (iPhone especially) save link downloads to Files, not Photos. There the image goes
- * through the share sheet instead, whose "Save Image" puts it in Photos.
+ * iPhones save link downloads to Files, not Photos. There the image goes through the share sheet
+ * instead, whose "Save Image" puts it in Photos. Android saves a normal download to the gallery
+ * (Downloads), so it keeps the plain download.
  */
 export function canUseShareSheet() {
-  if (typeof navigator.canShare !== 'function' || !window.matchMedia('(pointer: coarse)').matches) return false
+  if (!isAppleMobile() || typeof navigator.canShare !== 'function') return false
   try {
     return navigator.canShare({ files: [new File([''], 'test.png', { type: 'image/png' })] })
   } catch {
