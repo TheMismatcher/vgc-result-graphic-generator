@@ -170,7 +170,7 @@ export function LocationHead({ data, cls, kicker }: { data: Data; cls: string; k
 export const Glimwood: StandingsTemplate = {
   id: 'loc-glimwood',
   name: 'Top Cut (Glimwood Tangle Old)',
-  description: 'The glowing mushroom forest from Sword & Shield: deep night colours and bioluminescent mushrooms.',
+  description: 'The glowing mushroom forest from Sword & Shield: deep night colors and bioluminescent mushrooms.',
   kind: 'standings',
   width: 1080,
   height: 1350,

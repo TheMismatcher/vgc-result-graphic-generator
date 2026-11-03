@@ -44,7 +44,7 @@ function Slant({ points, fill }: { points: number[][]; fill: string }) {
 const Day2Clean: Day2Template = {
   id: 'dmv-day2-regionals-clean', // id kept so saved selections still work
   name: 'Event Results',
-  description: 'One player at a big event: photo, record, and team. Background colour can be changed.',
+  description: 'One player at a big event: photo, record, and team. Background color can be changed.',
   kind: 'day2',
   width: SIZE,
   height: SIZE,

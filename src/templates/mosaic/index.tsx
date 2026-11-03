@@ -176,7 +176,7 @@ export function MosaicWall({ mons: list, seed, gradient, squares, width = W, hei
 const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'semi' | 'solid', shadow = false): StandingsTemplate => ({
   id: `mosaic${squares ? '-squares' : ''}-${gradient ? 'gradient' : 'mono'}${cardTint ? `-tint-${cardTint}` : ''}${shadow ? '-shadow' : ''}`,
   name: `Top Cut (Mosaic${squares ? ' Squares' : ''} ${gradient ? 'Gradient' : 'Mono'}${cardTint ? `, Tinted ${{ glass: 'Glass', semi: 'Semi', solid: 'Solid' }[cardTint]}` : ''}${shadow ? ', Drop Shadow' : ''})`,
-  description: 'The top 8 over a wall of tiles showing every Pokémon on their teams as one-colour silhouettes.',
+  description: 'The top 8 over a wall of tiles showing every Pokémon on their teams as one-color silhouettes.',
   kind: 'standings',
   width: W,
   height: H,

@@ -401,10 +401,10 @@ function BackdropControls({ glass }: { glass: boolean }) {
               className="flex-1 accent-[#b3121b]"
             />
           </label>
-          <p className="text-xs text-slate-500">Drag the preview to move the photo. Panel and number colours come from the Branding tab.</p>
+          <p className="text-xs text-slate-500">Drag the preview to move the photo. Panel and number colors come from the Branding tab.</p>
         </>
       ) : (
-        <p className="text-xs text-slate-500">Upload any photo for the background; you can drag it into place. Panel and number colours come from the Branding tab.</p>
+        <p className="text-xs text-slate-500">Upload any photo for the background; you can drag it into place. Panel and number colors come from the Branding tab.</p>
       )}
       <label className="flex items-center gap-3 text-sm text-slate-700">
         <span className="w-14">Opacity</span>
@@ -500,7 +500,7 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
           )}
         </div>
         <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-500">
-          <span className="flex items-center gap-1">{brandDots(['main', 'second', 'highlight'])} uses your Branding colours (one dot per colour)</span>
+          <span className="flex items-center gap-1">{brandDots(['main', 'second', 'highlight'])} uses your Branding colors (one dot per color)</span>
           <span className="flex items-center gap-1"><span className="rounded bg-slate-900/80 px-1 font-semibold leading-4 text-white">2</span> versions: switch between them in the preview</span>
         </div>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">

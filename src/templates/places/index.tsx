@@ -177,8 +177,8 @@ const makeCustom = (light: boolean): StandingsTemplate => ({
   id: light ? 'custom-glass-light' : 'custom-glass',
   name: light ? 'Top Cut (Custom Glass Light)' : 'Top Cut (Custom Glass)',
   description: light
-    ? 'Your own photo behind white panels edged in your branding colours. Upload it above the preview and drag to frame it.'
-    : 'Your own photo behind see-through glass panels in your branding colours. Upload it above the preview and drag to frame it.',
+    ? 'Your own photo behind white panels edged in your branding colors. Upload it above the preview and drag to frame it.'
+    : 'Your own photo behind see-through glass panels in your branding colors. Upload it above the preview and drag to frame it.',
   kind: 'standings',
   width: W,
   height: H,

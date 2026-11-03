@@ -218,7 +218,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
                 </button>
               ))}
             </div>
-            <p className="mt-1 text-xs text-slate-500">Sets the logo (Regionals, Play! Pokémon, Internationals, Special Events or Worlds) and the starting background colour.</p>
+            <p className="mt-1 text-xs text-slate-500">Sets the logo (Regionals, Play! Pokémon, Internationals, Special Events or Worlds) and the starting background color.</p>
           </div>
           <Field label="Event (top bar)">
             <Input placeholder={DAY2_EVENTS[kind].example} value={day2.event} onChange={(e) => setDay2({ event: e.target.value })} />
@@ -228,7 +228,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
           </Field>
           <div className="sm:col-span-2">
             <div className="mb-1 flex items-center justify-between">
-              <label htmlFor="d2-hue" className="text-sm font-medium text-slate-700">Background colour</label>
+              <label htmlFor="d2-hue" className="text-sm font-medium text-slate-700">Background color</label>
               <button type="button" className="text-xs font-semibold text-slate-500 hover:text-slate-800" onClick={() => setDay2({ hue: undefined })}>
                 Reset to {DAY2_EVENTS[kind].label} colour
               </button>
@@ -243,12 +243,12 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
               className="h-3 w-full cursor-pointer appearance-none rounded-full"
               style={{ background: 'linear-gradient(to right, hsl(0 50% 50%), hsl(60 50% 50%), hsl(120 50% 50%), hsl(180 50% 50%), hsl(240 50% 50%), hsl(300 50% 50%), hsl(359 50% 50%))' }}
             />
-            <p className="mt-1 text-xs text-slate-500">Sets the Event Results background; the Mosaic versions can use two colours below.</p>
+            <p className="mt-1 text-xs text-slate-500">Sets the Event Results background; the Mosaic versions can use two colors below.</p>
           </div>
           {state.templates.day2.includes('mosaic') && (
             <div className="sm:col-span-2">
               <div className="mb-1 flex items-center justify-between">
-                <span className="text-sm font-medium text-slate-700">Mosaic gradient colours</span>
+                <span className="text-sm font-medium text-slate-700">Mosaic gradient colors</span>
                 <button type="button" className="text-xs font-semibold text-slate-500 hover:text-slate-800" onClick={() => setDay2({ colors: undefined })}>
                   Use the background colour above
                 </button>
@@ -270,7 +270,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
                   )
                 })}
               </div>
-              <p className="mt-1 text-xs text-slate-500">The wall fades from the first colour to the second. Only the Mosaic versions use these.</p>
+              <p className="mt-1 text-xs text-slate-500">The wall fades from the first color to the second. Only the Mosaic versions use these.</p>
             </div>
           )}
         </Card>

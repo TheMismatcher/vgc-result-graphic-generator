@@ -102,7 +102,7 @@ const makeTopCut = (mood: Mood): StandingsTemplate => ({
 const makeChampion = (mood: Mood): StandingsTemplate => ({
   id: `editorial-champion-${mood}`,
   name: `Champion (Editorial ${MOOD_NAMES[mood]})`,
-  description: 'Square cover for the winner: a tall colour band, their name large, and the team as a spec sheet.',
+  description: 'Square cover for the winner: a tall color band, their name large, and the team as a spec sheet.',
   kind: 'standings',
   width: 1080,
   height: 1080,

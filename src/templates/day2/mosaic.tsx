@@ -48,8 +48,8 @@ const makeRegionalMosaic = (contrast: boolean): Day2Template => ({
   id: contrast ? 'dmv-day2-regionals-mosaic-contrast' : 'dmv-day2-regionals-mosaic',
   name: contrast ? 'Event Results (Mosaic Contrast)' : 'Event Results (Mosaic)',
   description: contrast
-    ? 'Mosaic Event Results with opaque white cards, heavier shadows and a dimmed wall. Pick the two gradient colours.'
-    : 'One player at a big event on a wall of silhouette tiles in the event colour, with soft white cards. Pick the two gradient colours.',
+    ? 'Mosaic Event Results with opaque white cards, heavier shadows and a dimmed wall. Pick the two gradient colors.'
+    : 'One player at a big event on a wall of silhouette tiles in the event color, with soft white cards. Pick the two gradient colors.',
   kind: 'day2',
   width: SIZE,
   height: SIZE,

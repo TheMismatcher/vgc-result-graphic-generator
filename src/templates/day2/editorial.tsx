@@ -26,7 +26,7 @@ const box = (left: number, top: number, width: number, height: number): CSSPrope
 const make = (mood: 'paper' | 'night'): Day2Template => ({
   id: `dmv-day2-editorial-${mood}`,
   name: `Event Results (Editorial ${mood === 'paper' ? 'Paper' : 'Night'})`,
-  description: `Magazine-style Event Results on a flat ${mood === 'paper' ? 'warm paper' : 'deep navy'} page with thick rules and upright type. The accent follows the event colour.`,
+  description: `Magazine-style Event Results on a flat ${mood === 'paper' ? 'warm paper' : 'deep navy'} page with thick rules and upright type. The accent follows the event color.`,
   kind: 'day2',
   width: SIZE,
   height: SIZE,
