@@ -46,7 +46,7 @@ export function UsagePage({ state, setState }: { state: AppState; setState: (fn:
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div className="space-y-4">
         <Card className="space-y-3">
           <h2 className="text-lg font-bold text-slate-900">From Limitless</h2>

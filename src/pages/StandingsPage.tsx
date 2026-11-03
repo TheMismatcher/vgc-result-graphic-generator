@@ -72,7 +72,7 @@ export function StandingsPage({
     })
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <Card className="space-y-2">
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={inputTab} onChange={handleInputTabChange} aria-label="basic tabs example">
@@ -110,7 +110,7 @@ export function StandingsPage({
 
            {/* data pannel */}
           <CustomTabPanel value={inputTab} index={1}>
-            <div className="space-y-4">
+            <div className="space-y-3">
               <Card className="space-y-3">
                 <h2 className="text-lg font-bold text-slate-900">Data Source</h2>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

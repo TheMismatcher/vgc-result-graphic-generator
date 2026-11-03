@@ -69,7 +69,7 @@ export default function App() {
     <BackdropContext.Provider value={backdrop}>
     <DisplayContext.Provider value={display}>
     <div className="min-h-screen bg-slate-100">
-      <header className="bg-[#111]">
+      <header id="app-header" className="bg-[#111]">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-4 py-3">
           {brand.banner ? (
             <img src={brand.banner} alt={brand.name} className="h-14 w-auto rounded-md sm:h-16" />
@@ -111,13 +111,13 @@ export default function App() {
             </Button>
           </div>
         </div>
-        <nav className="mx-auto flex max-w-7xl gap-1 px-4">
+        <nav className="mx-auto flex max-w-7xl flex-wrap gap-1 px-4">
           {TABS.map((t) => (
             <button
               key={t.id}
               type="button"
               onClick={() => setTab(t.id)}
-              className={`rounded-t-lg px-5 py-2 text-sm font-bold uppercase tracking-wide ${tab === t.id ? 'bg-slate-100 text-slate-900' : 'text-slate-400 hover:text-white'}`}
+              className={`shrink-0 whitespace-nowrap rounded-t-lg px-3 py-2 text-sm font-bold uppercase tracking-wide sm:px-5 ${tab === t.id ? 'bg-slate-100 text-slate-900' : 'text-slate-400 hover:text-white'}`}
             >
               {t.label}
             </button>

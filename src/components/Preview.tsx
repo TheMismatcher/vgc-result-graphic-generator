@@ -14,17 +14,30 @@ import { useDialog } from './Dialog'
 import { Button, Card } from './ui'
 
 /** Shows a fixed-size graphic scaled down to fit its container. */
-export function Scaled({ width, height, maxWidth, children, nodeRef }: { width: number; height: number; maxWidth?: number; children: ReactNode; nodeRef?: React.Ref<HTMLDivElement> }) {
+export function Scaled({ width, height, maxWidth, children, nodeRef, fitViewport = false,}: { width: number; height: number; maxWidth?: number; children: ReactNode; nodeRef?: React.Ref<HTMLDivElement>; fitViewport?: boolean; }) {
   const vars = { ...brandVars(useBrand()), ...opacityVars(useBackdrop().opacity) }
   const box = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(0.4)
   useLayoutEffect(() => {
     const el = box.current
     if (!el) return
-    const ro = new ResizeObserver(() => setScale(Math.min(el.clientWidth, maxWidth ?? Infinity) / width))
+    const header = document.getElementById('app-header')
+    const resize = () => {
+      const availableWidth = Math.min(el.clientWidth, maxWidth ?? Infinity)
+      const headerHeight = fitViewport ? header?.offsetHeight ?? 0 : 0
+      const availableHeight = fitViewport ? Math.max(0, window.innerHeight - headerHeight - 200) : Infinity
+      setScale(Math.min(availableWidth / width, availableHeight / height))
+    }
+    const ro = new ResizeObserver(resize)
     ro.observe(el)
-    return () => ro.disconnect()
-  }, [width, maxWidth])
+    if (header) ro.observe(header)
+    window.addEventListener('resize', resize)
+    resize()
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', resize)
+    }
+  }, [width, height, maxWidth, fitViewport])
   return (
     <div ref={box} className="w-full">
       <div style={{ width: width * scale, height: height * scale }} className="mx-auto overflow-hidden">
@@ -287,7 +300,7 @@ export function Preview<T extends Template>({
       >
         <BackdropContext.Provider value={{ ...backdropCtx, backdrop: dragging ?? backdrop }}>
         <PhotoFrameContext.Provider value={photoLive}>
-          <Scaled width={template.width} height={template.height} nodeRef={node}>
+          <Scaled width={template.width} height={template.height} nodeRef={node} fitViewport>
             {render(template)}
           </Scaled>
         </PhotoFrameContext.Provider>

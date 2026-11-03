@@ -70,7 +70,7 @@ export function TeamBattlePage({ state, setState }: { state: AppState; setState:
   const score = teamScore(battle)
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div className="space-y-4">
         <Card className="grid gap-3 sm:grid-cols-2">
           <Field label="League">
