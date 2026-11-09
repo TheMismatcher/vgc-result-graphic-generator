@@ -131,13 +131,6 @@
   border: 4px solid rgba(255, 255, 255, 0.9);
   box-shadow: 0 0 18px rgba(255, 255, 255, 0.25);
 }
-.dmv.themed.theme-power .dmv-cp,
-.pw .dmv-cp {
-  border: 0;
-  background: var(--yellow);
-  color: #1a1020;
-  font-style: normal;
-}
 
 /* ---------- Top Cut ---------- */
 .pw-head {
@@ -218,7 +211,11 @@
   white-space: nowrap;
 }
 .pw-cp {
-  font-size: 14px;
+  font-size: 16px;
+}
+.pw-dyna .pw-cp {
+  font-size: 18px;
+  letter-spacing: 0.03em;
 }
 .pw-team {
   display: flex;

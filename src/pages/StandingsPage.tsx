@@ -48,6 +48,8 @@ export function StandingsPage({
   setState: (fn: (s: AppState) => AppState) => void, 
 }) {
   const [inputTab, setInputTab] = React.useState(0);
+  // The Data panel's own source tabs (Limitless / TOM File / Photo / PDF); separate from Templates / Data.
+  const [sourceTab, setSourceTab] = React.useState(0);
   const template = STANDINGS_TEMPLATES.find((t) => t.id === state.templates.standings) ?? STANDINGS_TEMPLATES[0];
   const render = (t: StandingsTemplate): ReactNode => <t.Component data={standingsData(state, t.maxPlayers)}></t.Component>;
   const onSelect = (id: string) => setState((s) => ({ ...s, templates: { ...s.templates, standings: id } }));
@@ -55,10 +57,10 @@ export function StandingsPage({
     setInputTab(newValue);
   };
   
-  function a11yProps(index: number) {
+  function a11yProps(index: number, prefix = 'simple') {
     return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
+      id: `${prefix}-tab-${index}`,
+      'aria-controls': `${prefix}-tabpanel-${index}`,
     };
   }
 
@@ -114,19 +116,19 @@ export function StandingsPage({
               <Card className="space-y-3">
                 <h2 className="text-lg font-bold text-slate-900">Data Source</h2>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <Tabs value={inputTab} onChange={handleInputTabChange} aria-label="basic tabs example">
-                    <Tab label="Limitless" {...a11yProps(0)} />
-                    <Tab label="TOM File" {...a11yProps(1)} />
-                    <Tab label="Photo / PDF" {...a11yProps(2)} />
+                  <Tabs value={sourceTab} onChange={(_e, v: number) => setSourceTab(v)} aria-label="Data source">
+                    <Tab label="Limitless" {...a11yProps(0, 'source')} />
+                    <Tab label="TOM File" {...a11yProps(1, 'source')} />
+                    <Tab label="Photo / PDF" {...a11yProps(2, 'source')} />
                   </Tabs>
                 </Box>
-                <CustomTabPanel value={inputTab} index={0}>
+                <CustomTabPanel value={sourceTab} index={0}>
                   <LimitlessImport setState={setState} />
                 </CustomTabPanel>
-                <CustomTabPanel value={inputTab} index={1}>
+                <CustomTabPanel value={sourceTab} index={1}>
                   <TdfUpload setState={setState} />
                 </CustomTabPanel>
-                <CustomTabPanel value={inputTab} index={2}>
+                <CustomTabPanel value={sourceTab} index={2}>
                   <StandingsPhotoImport setState={setState} />
                 </CustomTabPanel>
               </Card>

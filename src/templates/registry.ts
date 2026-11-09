@@ -154,7 +154,7 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...retire('Ghost Pixel Glass', [[GhostPixelGlass, 'topcut']]),
   ...retire('Ghost Pixel Glass Team Box', [[GhostPixelGlassTeam, 'topcut']]),
   ...tag('Ghost Pixels', [[GhostPixelGlassLine, 'topcut'], ...GhostPixelLayouts]),
-  ...tag('Kanto Game Boy', [[KantoGameBoy, 'topcut']]),
+  ...retire('Kanto Game Boy', [[KantoGameBoy, 'topcut']]),
   ...retire('Hoenn Gen 3', [[Hoenn, 'topcut']]),
   ...tag('Unova', [[Unova, 'topcut']]),
   ...tag('Pokédex', [[Pokedex, 'topcut'], [PokedexChampion, 'champion']]),

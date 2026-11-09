@@ -208,14 +208,17 @@
   display: inline-block;
   vertical-align: middle;
 }
-.sp-cp {
-  margin-left: 8px;
-  border-width: 2px;
-  font-style: normal;
-  vertical-align: middle;
+/* Show CP earned: its own box-score column, set like Rec. */
+.sp-box .sp-cp-col {
+  width: 72px;
+  font-family: 'Oswald', sans-serif;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
-.sp-cp.small {
-  font-size: 14px;
+.sp-box td.sp-cp-col {
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--spot);
 }
 
 .sp-foot {

@@ -6,7 +6,7 @@ import '@fontsource/anton/400.css'
 import '@fontsource/oswald/500.css'
 import '@fontsource/oswald/700.css'
 import type { StandingsTemplate } from '../types'
-import { CpBadge, FitText, Logo, MonSprite } from '../shared/parts'
+import { FitText, Logo, MonSprite } from '../shared/parts'
 import { getPokemon } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { useBrand } from '../../brand'
@@ -86,9 +86,7 @@ const SportsPage: StandingsTemplate = {
               {data.cp && (
                 <>
                   <dt>Earned</dt>
-                  <dd>
-                    <CpBadge points={data.cp(1)} className="sp-cp" />
-                  </dd>
+                  <dd>+{data.cp(1)} CP</dd>
                 </>
               )}
             </dl>
@@ -101,6 +99,7 @@ const SportsPage: StandingsTemplate = {
               <th>Pl</th>
               <th>Player</th>
               <th>Rec</th>
+              {data.cp && <th className="sp-cp-col">CP</th>}
               <th>Team</th>
             </tr>
           </thead>
@@ -112,10 +111,8 @@ const SportsPage: StandingsTemplate = {
                   <FitText text={p.name || 'Player'} max={few ? 44 : 32} width={330} min={18} weight={700} italic={false} family="Oswald" />
                   {p.social && <span className="sp-handle">{p.social}</span>}
                 </td>
-                <td className="sp-rec">
-                  {p.record}
-                  {data.cp && <CpBadge points={data.cp(i + 2)} className="sp-cp small" />}
-                </td>
+                <td className="sp-rec">{p.record}</td>
+                {data.cp && <td className="sp-cp-col">{data.cp(i + 2) ? `+${data.cp(i + 2)}` : '–'}</td>}
                 <td className="sp-mons">
                   {p.team.map((m, j) => (
                     <MonSprite key={j} mon={m} size={few ? 76 : 62} showTera={data.format.tera} />

@@ -86,11 +86,6 @@
   color: var(--g1);
 }
 .gb-cp {
-  border-color: var(--g0);
-  background: var(--g2);
-  color: var(--g0);
-  font-family: 'Press Start 2P', monospace;
-  font-style: normal;
   font-size: 10px;
 }
 .gb-team {

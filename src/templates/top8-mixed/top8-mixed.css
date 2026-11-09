@@ -187,5 +187,5 @@
 .m8-row .tc-cp {
   font-size: 16px;
   padding: 0 7px;
-  border-width: 2px;
+  --cp-size-bw: 2px;
 }

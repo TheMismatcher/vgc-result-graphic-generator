@@ -8,6 +8,7 @@ import { useBrand } from '../../brand'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { useFxSrc } from './monEffect'
 import './brand.css'
+import './cp.css'
 
 /** Which Pokémon pictures a layout draws: HOME 3D renders (default) or the pixel sprites. */
 export type SpriteKind = 'render' | 'pixel'

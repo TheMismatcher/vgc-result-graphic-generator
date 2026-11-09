@@ -181,7 +181,7 @@
 .tc-cp {
   font-size: 18px;
   padding: 1px 8px;
-  border-width: 2px;
+  --cp-size-bw: 2px;
 }
 
 /* Four players or fewer: rows fill the page, team as a 3 x 2 grid of larger Pokémon. */

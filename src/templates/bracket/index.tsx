@@ -127,7 +127,7 @@ export const makeBracket = (loud = false, theme?: Theme, bigChampion = true): St
                       style={{ left: x, top: side === 0 ? c - inner / 2 : c + inner / 2, width: colW, transform: side === 0 ? 'translateY(-100%)' : undefined }}
                     >
                       <div className="br-champ-label">★ Champion ★</div>
-                      {data.cp && <CpBadge points={data.cp(1)} style={{ marginTop: 6, background: '#fff' }} />}
+                      {data.cp && <CpBadge points={data.cp(1)} style={{ marginTop: 6 }} />}
                       <FitText className="dmv-title br-champ-name" text={e.name || 'TBD'} max={38} width={colW - 30} min={16} />
                       <div className="br-champ-team">
                         {(e.player?.team ?? []).map((mon, k) => (
@@ -152,7 +152,7 @@ export const makeBracket = (loud = false, theme?: Theme, bigChampion = true): St
         {R > 0 && !bigChampion && (
           <div className={`br-champ dmv-panel ${champ ? '' : 'open'}`} style={{ left: colX(R), top: champCenter, width: colW, transform: 'translateY(-50%)' }}>
             <div className="br-champ-label">★ Champion ★</div>
-            {data.cp && champ && <CpBadge points={data.cp(1)} style={{ marginTop: 6, background: '#fff' }} />}
+            {data.cp && champ && <CpBadge points={data.cp(1)} style={{ marginTop: 6 }} />}
             <FitText className="dmv-title br-champ-name" text={champ?.name || 'TBD'} max={34} width={colW - 30} min={16} />
             <div className="br-champ-team">
               {(champ?.player?.team ?? []).map((m, i) => (

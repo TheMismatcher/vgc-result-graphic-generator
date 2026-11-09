@@ -429,8 +429,10 @@ function BackdropControls({ glass }: { glass: boolean }) {
 }
 
 /**
- * Standings picker: choose a layout, then a style (the look). Every layout can be picked: if the
- * current style doesn't have it yet, the first style that does is used. Style cards preview each
+ * Standings picker: choose a layout, then a style (the look). Layouts the current style doesn't have
+ * are grayed out and say which style they open as (the first style that has them), like the dashed
+ * style cards say which layout they open as.
+ * Style cards preview each
  * style in the chosen layout. A style that doesn't have the chosen layout can still be picked: it opens
  * in Top Cut (or its first layout). Only the template changes, never the entered data.
  * Usage / Replay / Team Battle have no layouts: just the style cards.
@@ -471,7 +473,12 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
         <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">1. Layout</h3>
         <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Layout">
           {STANDINGS_LAYOUTS.map(({ id, label }) => {
-            const t = find(current.style!, id) ?? templates.find((x) => x.layout === id)
+            // Same style, same version (Solid / Glass etc.): only the layout changes.
+            const own = find(current.style!, id)
+            // Otherwise it opens in the first style that has the layout (in the saved Solid / Glass look).
+            const other = own ? undefined : templates.find((x) => x.layout === id && !x.variantOf && !x.retired)
+            const t = own ?? (other && prefer(other))
+            const opensAs = other && (other.variantOf ?? other.style)
             return (
               <button
                 key={id}
@@ -479,17 +486,26 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
                 role="radio"
                 aria-checked={current.layout === id}
                 disabled={!t}
+                title={opensAs ? `${currentStyle} doesn't have ${label} yet, so it opens as ${opensAs}` : undefined}
                 onClick={() => t && onSelect(t.id)}
                 className={`rounded-lg border-2 px-3 py-1.5 text-sm font-semibold transition ${
-                  current.layout === id ? 'border-[#b3121b] bg-red-50 text-slate-900' : 'border-slate-200 text-slate-700 hover:border-slate-400'
+                  current.layout === id
+                    ? 'border-[#b3121b] bg-red-50 text-slate-900'
+                    : own
+                      ? 'border-slate-200 text-slate-700 hover:border-slate-400'
+                      : 'border-dashed border-slate-300 text-slate-400 hover:border-slate-500 hover:text-slate-600'
                 }`}
               >
                 {label}
+                {opensAs && <span className="block text-[10px] font-medium leading-tight">Opens as {opensAs}</span>}
               </button>
             )
           })}
         </div>
-        <p className="mt-1 text-xs text-slate-500">{current.description}</p>
+        <p className="mt-1 text-xs text-slate-500">
+          {current.description}
+          {STANDINGS_LAYOUTS.some(({ id }) => !find(current.style!, id)) && <> Dashed layouts aren't made for {currentStyle} yet and open in another style.</>}
+        </p>
       </div>}
       <div>
         <div className="mb-2 flex items-center justify-between gap-2">

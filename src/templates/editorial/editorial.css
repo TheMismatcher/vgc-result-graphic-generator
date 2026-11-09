@@ -185,9 +185,7 @@
 }
 
 .ed-cp {
-  border-width: 2px;
-  font-style: normal;
-  letter-spacing: 0;
+  margin-left: 18px;
 }
 .ed-cp.small {
   font-size: 15px;

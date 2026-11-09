@@ -134,12 +134,14 @@ export function LocationRows({ data, cls, grow = false }: { data: Data; cls: str
     <main className={`${cls}-rows ${few ? 'few' : ''}`}>
       {data.players.map((p, i) => (
         <div key={p.uid} className={`${cls}-row ${i === 0 ? 'first' : ''}`}>
-          <div className={`${cls}-place`}>{ordinal(i + 1)}</div>
+          <div className={`${cls}-place ${data.cp ? 'loc-place-cp' : ''}`}>
+            {ordinal(i + 1)}
+            {data.cp && <CpBadge points={data.cp(i + 1)} className={`${cls}-cp loc-cp`} />}
+          </div>
           <div className={`${cls}-player`}>
             <FitText className={`${cls}-name`} text={p.name || 'Player'} max={few ? 50 : 32} width={few ? 400 : 300} min={16} weight={900} italic={false} />
             <div className={`${cls}-sub`}>
               <span className={`${cls}-subtext`}>{[p.record, p.social].filter(Boolean).join('  ·  ')}</span>
-              {data.cp && <CpBadge points={data.cp(i + 1)} className={`${cls}-cp`} />}
             </div>
           </div>
           <div className={`${cls}-team`}>
