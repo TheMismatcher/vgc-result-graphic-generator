@@ -7,6 +7,7 @@ import { makeChampion } from '../champion'
 import { makeTop4Photos } from '../top4-photos'
 import { makeTop8Mixed } from '../top8-mixed'
 import { makeTop8Photos } from '../top8-photos'
+import { makeWide } from '../wide'
 import type { StandingsLayout, StandingsTemplate } from '../types'
 import type { Theme } from './theme'
 import './mosaic.css'
@@ -25,4 +26,5 @@ export const MosaicLayouts: [StandingsTemplate, StandingsLayout][] = [
   [makeChampion(false, MOSAIC_THEME), 'champion'],
   [makeChampion(false, MOSAIC_THEME, true), 'championphoto'],
   [makeBracket(false, MOSAIC_THEME), 'bracket'],
+  [makeWide('rows', MOSAIC_THEME), 'widerows'],
 ]

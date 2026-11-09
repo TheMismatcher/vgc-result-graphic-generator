@@ -176,54 +176,54 @@
 }
 
 /* Win: bright sunburst in your colors, gold everywhere you won. */
-.tb-win .tb-bg {
+.tb-win:not(.themed) .tb-bg {
   background:
     repeating-conic-gradient(from 0deg at 50% 16%, rgba(255, 255, 255, 0.2) 0 5deg, transparent 5deg 13deg),
     radial-gradient(ellipse at 50% 12%, var(--yellow) 0%, transparent 45%),
     linear-gradient(180deg, var(--blue) 0%, var(--blue-dark) 100%);
 }
-.tb-win .tb-result-tag {
+.tb-win:not(.themed) .tb-result-tag {
   background: var(--yellow);
   color: var(--ink);
 }
-.tb-win .tb-card.right {
+.tb-win:not(.themed) .tb-card.right {
   background: var(--red-dark);
 }
-.tb-win .tb-card.right.won {
+.tb-win:not(.themed) .tb-card.right.won {
   background: #fff;
   color: var(--ink);
   opacity: 0.85;
 }
 
 /* Loss: dark and muted; your players' set wins still get credit (in your color). */
-.tb-loss .tb-bg {
+.tb-loss:not(.themed) .tb-bg {
   background:
     radial-gradient(ellipse at 20% 0%, color-mix(in srgb, var(--blue) 35%, transparent) 0%, transparent 55%),
     linear-gradient(180deg, #2a2d3a 0%, #14151c 100%);
 }
-.tb-loss .dmv-halftone {
+.tb-loss:not(.themed) .dmv-halftone {
   opacity: 0.4;
 }
-.tb-loss .tb-result-tag {
+.tb-loss:not(.themed) .tb-result-tag {
   background: #2a2d3a;
   color: #fff;
   border-color: #fff;
 }
-.tb-loss .tb-card {
+.tb-loss:not(.themed) .tb-card {
   background: #343847;
 }
-.tb-loss .tb-card.left.won {
+.tb-loss:not(.themed) .tb-card.left.won {
   background: var(--blue);
   color: #fff;
 }
-.tb-loss .tb-card.right.won {
+.tb-loss:not(.themed) .tb-card.right.won {
   background: #4a4f62;
   color: #fff;
 }
-.tb-loss .tb-card.lost {
+.tb-loss:not(.themed) .tb-card.lost {
   opacity: 0.6;
 }
-.tb-loss .tb-banner {
+.tb-loss:not(.themed) .tb-banner {
   background: #14151c;
   border-color: #fff;
 }

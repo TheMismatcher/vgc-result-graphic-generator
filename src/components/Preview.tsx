@@ -89,7 +89,7 @@ export function Preview<T extends Template>({
   // Flip one switch, keeping the others where they are.
   const flip = (g: LookGroup, v: string) => {
     setLook(g, v)
-    const same = (t: T) => (Object.keys(template.look!) as LookGroup[]).every((k) => k === g || t.look![k] === template.look![k])
+    const same = (t: T) => (Object.keys(template.look!) as LookGroup[]).every((k) => k === g || !(k in t.look!) || t.look![k] === template.look![k])
     const next = kin.find((t) => t.look![g] === v && same(t)) ?? kin.find((t) => t.look![g] === v)
     if (next && next.id !== template.id) onSelect(next.id)
   }
@@ -340,8 +340,16 @@ export function Preview<T extends Template>({
 }
 
 /** The Preview's switches for styles that come several ways. */
-const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on', map: 'Map', book: 'Book', sprites: 'Sprites' }
+const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on', map: 'Map', book: 'Book', sprites: 'Sprites', result: 'Result', snowfall: 'Weather', scene: 'Loss scene' }
 const OPTION_LABELS: Record<string, string> = {
+  neutral: 'Neutral',
+  game: 'As in game',
+  strong: 'Stronger',
+  climax: 'Climax sky',
+  portal: 'Giratina in portal',
+  emerged: 'Giratina out',
+  win: 'Win',
+  loss: 'Loss',
   render: '3D',
   pixel: 'Pixel',
   hall: 'Hall of Origin',

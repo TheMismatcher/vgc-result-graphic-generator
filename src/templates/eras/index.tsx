@@ -1,3 +1,4 @@
+import { Facts } from '../shared/Facts'
 // Templates styled after specific Pokémon games/regions (inspired by their look, no game art used):
 // - Kanto Game Boy: Gen 1 Red/Blue on the original Game Boy's four greens, pixel font, text boxes.
 // - Unova: Black/White's stark black-and-white contrast with bold diagonal bands.
@@ -155,14 +156,14 @@ export function LocationRows({ data, cls, grow = false }: { data: Data; cls: str
   )
 }
 
-export function LocationHead({ data, cls, kicker }: { data: Data; cls: string; kicker: string }) {
+export function LocationHead({ data, cls, kicker, split }: { data: Data; cls: string; kicker: string; split?: boolean }) {
   return (
     <header className={`${cls}-head`}>
       <Logo size={130} />
       <div className={`${cls}-head-text`}>
         {kicker && <div className={`${cls}-kicker`}>{kicker}</div>}
         <FitText className={`${cls}-title`} text={data.tournament.name || 'Tournament'} max={58} width={700} min={26} weight={900} italic={false} />
-        <FitText className={`${cls}-facts`} text={eventFacts(data).join('  •  ')} max={20} width={700} min={12} weight={800} italic={false} />
+        <Facts data={data} className={`${cls}-facts`} sep="  •  " split={split} fit={{ max: split ? 22 : 20, min: 12, width: 700 }} />
       </div>
     </header>
   )

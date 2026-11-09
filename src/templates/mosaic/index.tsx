@@ -36,7 +36,9 @@ interface Tile { x: number; y: number; w: number; h: number }
  * Pack the page with tiles, left to right, top to bottom: 1×1, 2×1, 1×2 and 2×2 cells, or with
  * `squares` only 1×1 and 2×2 (so every Pokémon fills its tile).
  */
-function layout(seed: string, squares = false): Tile[] {
+function layout(seed: string, squares = false, COLS = W / CELL, ROWS = H / CELL): Tile[] {
+  // The grid fits the graphic (12 x 15 cells for 1080 x 1350; wider for the landscape layouts). Portrait sizes
+  // get exactly the grid, big-tile count and random sequence they always had, so their tiles don't move.
   const rand = seeded(seed)
   const used = Array.from({ length: ROWS }, () => Array<boolean>(COLS).fill(false))
   const free = (x: number, y: number, w: number, h: number) => {
@@ -49,7 +51,9 @@ function layout(seed: string, squares = false): Tile[] {
     // Big 2×2 tiles first, scattered so neighbours are staggered (never level with a nearby big
     // tile in the next columns, or stacked right above one), then 1×1 tiles fill every gap.
     const big: Tile[] = []
-    for (let tries = 0; tries < 600 && big.length < 18; tries++) {
+    const bigCount = Math.round((18 * COLS * ROWS) / ((W / CELL) * (H / CELL)))
+    for (let tries = 0; tries < 600 * Math.max(1, bigCount / 18); tries++) {
+      if (big.length >= bigCount) break
       const x = Math.floor(rand() * (COLS - 1))
       const y = Math.floor(rand() * (ROWS - 1))
       if (!free(x, y, 2, 2)) continue
@@ -137,9 +141,17 @@ export function MosaicWall({ mons: list, seed, gradient, squares, width = W, hei
   const mons = [...new Set(list.filter(Boolean))]
   // splitEdge: a big tile that would run off the bottom edge becomes small tiles along the visible row,
   // so every tile shows a whole Pokémon. Off by default (the other styles keep their original tiles).
-  const rowsShown = Math.floor(height / CELL)
-  const tiles: Tile[] = layout(seed, squares)
-    .filter((t) => t.y * CELL < height && t.x * CELL < width)
+  // Tile size: 90px where the graphic is a whole number of tiles (every portrait / square size). Otherwise the
+  // largest size that divides both sides, so no edge shows a part tile (1920 x 1080: 120px, a 16 x 9 grid).
+  const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a)
+  const fits = width % CELL === 0 && height % CELL === 0
+  const g = gcd(width, height)
+  const cell = fits || g < 60 || g > 160 ? CELL : g
+  const rowsShown = Math.floor(height / cell)
+  const cols = fits ? Math.max(COLS, width / CELL) : Math.ceil(width / cell)
+  const rows = fits ? Math.max(ROWS, height / CELL) : Math.ceil(height / cell)
+  const tiles: Tile[] = layout(seed, squares, cols, rows)
+    .filter((t) => t.y * cell < height && t.x * cell < width)
     .flatMap((t): Tile[] =>
       splitEdge && t.y + t.h > rowsShown ? Array.from({ length: t.w }, (_, k) => ({ x: t.x + k, y: t.y, w: 1, h: 1 })) : [t],
     )
@@ -156,14 +168,14 @@ export function MosaicWall({ mons: list, seed, gradient, squares, width = W, hei
     tiles.push({ x: bx, y: by, w: 2, h: 2 })
   }
   tiles.sort((a, b) => a.y - b.y || a.x - b.x)
-  const lineColor = (t: Tile) => (gradient ? mix(main, second, (t.x + t.y) / (COLS + ROWS - 2)) : second)
+  const lineColor = (t: Tile) => (gradient ? mix(main, second, (t.x + t.y) / (cols + rows - 2)) : second)
   return (
     <div className="mz-wall" style={{ position: 'absolute', inset: 0, background: gradient ? `linear-gradient(135deg, ${main}, ${second})` : second }}>
       {tiles.map((t, i) => {
-        const size = Math.min(t.w, t.h) * CELL - GAP - 14
+        const size = Math.min(t.w, t.h) * cell - GAP - 14
         const id = mons.length ? mons[i % mons.length] : ''
         return (
-          <div key={i} className="mz-tile" style={{ left: t.x * CELL + GAP / 2, top: t.y * CELL + GAP / 2, width: t.w * CELL - GAP, height: t.h * CELL - GAP }}>
+          <div key={i} className="mz-tile" style={{ left: t.x * cell + GAP / 2, top: t.y * cell + GAP / 2, width: t.w * cell - GAP, height: t.h * cell - GAP }}>
             {id && <Silhouette src={sprites.render(id)} color={lineColor(t)} style={{ width: size, height: size }} />}
           </div>
         )

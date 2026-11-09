@@ -1,3 +1,5 @@
+import { WideColumns, WideRows, WideSpotlight } from './wide'
+import { withPixelSprites } from './shared/parts'
 // Every template the generator can output. Add new designs here.
 
 import type { Day2Template, MatchTemplate, StandingsTemplate, TeamBattleTemplate, UsageTemplate } from './types'
@@ -27,8 +29,7 @@ import { BattleTower, Ghost, Hoenn, MtCoronet, Pokedex, PokedexChampion, Trading
 import { GhostPixel, GhostPixelDense, GhostPixelGlass, GhostPixelGlassTeam, GhostPixelGlassLine } from './eras/ghostpixel'
 import { Glimwood, KantoGameBoy, Route201, Unova } from './eras'
 import { DynamaxOfficial, GlimwoodOfficial, SnowpointFull, SnowpointFullGlass, Route217, Route217Glass, AcuityLakefront, AcuityLakefrontGlass, ScarletBook, VioletBook, TerastalOfficial, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillarArt, SpearPillarHall, SpearPillarHallChampion, SpearPillarHallChampionGlass, SpearPillarCutscene, SpearPillarCutsceneGlass, CustomGlass, CustomLight } from './places'
-import { PLACE_LAYOUTS } from './themes/places'
-import { withPixelSprites } from './shared/parts'
+import { PLACE_LAYOUTS, placeSideThemeInWeather, spearPillarResultTheme } from './themes/places'
 import { DynamaxCloud, DynamaxCloudLayouts, FX_SIDE_THEMES, sideFx, TeraRaidDen, TeraRaidDenLayouts, TeraRaidDenPrism, TeraRaidDenPrismLayouts } from './power/recreated'
 import { MosaicGradient, MosaicSquaresGradient, MosaicTintGlass, MosaicTintGlassShadow, MosaicTintSemiShadow, MosaicTintSolid, MosaicTintSolidShadow } from './mosaic'
 import { DynamaxTopCut, MegaTopCut, TerastalTopCut } from './power'
@@ -47,6 +48,10 @@ export const STANDINGS_LAYOUTS: { id: StandingsLayout; label: string }[] = [
   { id: 'champion', label: 'Champion' },
   { id: 'championphoto', label: 'Champion + Photo' },
   { id: 'bracket', label: 'Bracket' },
+  // Landscape trials (1920x1080).
+  { id: 'widerows', label: 'Wide Rows' },
+  { id: 'widespot', label: 'Wide Spotlight' },
+  { id: 'widecols', label: 'Wide Columns' },
 ]
 
 // Every standings template, grouped by style (the picker shows styles in this order, then the
@@ -91,7 +96,7 @@ export const BRAND_COLOURS: Record<string, BrandColour[]> = {
 const COMIC_BOOK: [StandingsTemplate, StandingsLayout][] = [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top8MixedLoud, 'top8mixed'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [ChampionLoudPhoto, 'championphoto'], [BracketLoud, 'bracket']]
 
 export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
-  ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [ChampionPhoto, 'championphoto'], [Bracket, 'bracket']]),
+  ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [ChampionPhoto, 'championphoto'], [Bracket, 'bracket'], [WideRows, 'widerows'], [WideSpotlight, 'widespot'], [WideColumns, 'widecols']]),
   // Comic Book with the HOME 3D renders (the card) or the pixel sprites.
   ...versions('Comic Book', [
     ['Comic Book', { sprites: 'render' }, COMIC_BOOK],
@@ -197,7 +202,55 @@ function sideTemplates<T extends Template>(own: [T, string][], themed: (theme: S
 }
 export const USAGE_TEMPLATES: UsageTemplate[] = sideTemplates([[Usage, 'Classic'], [UsageLoud, 'Comic Book']], (t) => makeUsage(t))
 export const MATCH_TEMPLATES: MatchTemplate[] = sideTemplates([[VsResult, 'Classic'], [VsResultLoud, 'Comic Book']], (t) => makeVsResult(t))
+// Team Battle Win / Loss (from the posting team's side, on the left) as a Result switch on the style's card.
+// Trial styles: Mosaic, Editorial Night, Route 119, Sinnoh Snow, Spear Pillar.
+const RESULT_THEMES = new Set([
+  'mosaic', 'editorial-night',
+  'place-route-119', 'place-route-119-glass', 'place-route-119-bridge', 'place-route-119-bridge-glass', 'place-route-120', 'place-route-120-glass',
+  'place-route-217', 'place-route-217-glass', 'place-acuity-lakefront', 'place-acuity-lakefront-glass', 'place-snowpoint-full', 'place-snowpoint-full-glass',
+  'place-spear-pillar-hall-floor', 'place-spear-pillar-hall-floor-glass', 'place-spear-pillar-cutscene', 'place-spear-pillar-cutscene-glass',
+])
 export const TEAM_BATTLE_TEMPLATES: TeamBattleTemplate[] = sideTemplates(
   [[TeamBattle, 'Classic'], [TeamBattleLoud, 'Comic Book'], [TeamBattleWin, 'Classic · Win'], [TeamBattleLoss, 'Classic · Loss']],
   (t) => makeTeamBattle('neutral', false, t),
-)
+).flatMap((t) => {
+  const theme = SIDE_THEMES.find((x) => RESULT_THEMES.has(x.id) && t.id === `${x.id}-dmv-team-battle`)
+  if (!theme) return [t]
+  // The map itself in the game's weather: Hoenn routes under Emerald's harsh sunlight (Win) or rain (Loss); Sinnoh Snow
+  // in Platinum's diamond dust (Win) or heavy snow (Loss), as in the game or stronger (Weather switch). Spear Pillar:
+  // the Hall of Origin (Win); Loss under the climax sky, or Giratina in the portal / out of it (Loss scene switch).
+  type ResultVersion = { suffix: string; look: Partial<Looks>; theme?: SideTheme }
+  const versionsOf = (r: 'win' | 'loss'): ResultVersion[] => {
+    const cls = theme.className
+    if (cls.includes('pl-hoenn')) return [{ suffix: '', look: {}, theme: placeSideThemeInWeather(theme.id, r === 'win' ? 'drought' : 'rain') }]
+    if (cls.includes('pl-snow')) {
+      const w = r === 'win' ? 'diamond-dust' : 'snow'
+      return [
+        { suffix: '', look: { snowfall: 'game' }, theme: placeSideThemeInWeather(theme.id, w) },
+        { suffix: '-strong', look: { snowfall: 'strong' }, theme: placeSideThemeInWeather(theme.id, `${w}-strong`) },
+      ]
+    }
+    if (cls.includes('pl-spear')) {
+      if (r === 'win') return [{ suffix: '', look: {}, theme: spearPillarResultTheme(theme.id, 'win') }]
+      return (['climax', 'portal', 'emerged'] as const).map((scene) => ({
+        suffix: scene === 'climax' ? '' : `-${scene}`,
+        look: { scene },
+        theme: spearPillarResultTheme(theme.id, 'loss', scene),
+      }))
+    }
+    return [{ suffix: '', look: {} }]
+  }
+  const result = (r: 'win' | 'loss') =>
+    versionsOf(r).map((v): TeamBattleTemplate => {
+      const made = makeTeamBattle(r, false, v.theme ?? theme)
+      return {
+        ...made,
+        id: made.id + v.suffix,
+        style: `${t.style} · ${r === 'win' ? 'Win' : 'Loss'}${v.suffix}`,
+        variantOf: t.variantOf ?? t.style,
+        retired: t.retired,
+        look: { ...t.look, result: r, ...v.look },
+      }
+    })
+  return [{ ...t, look: { ...t.look, result: 'neutral' } }, ...result('win'), ...result('loss')]
+})

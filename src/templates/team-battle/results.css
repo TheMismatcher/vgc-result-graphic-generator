@@ -1,0 +1,227 @@
+/*
+ * Team Battle Win / Loss on the themed styles (from the posting team's side, on the left).
+ * .tb-mood sits over the style's background; the Victory / Final tag, banner and your team's cards
+ * take the result's colours. Trial styles: Mosaic, Editorial Night, Route 119 (all maps).
+ */
+.themed .tb-mood {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.themed.tb-win .tb-result-tag,
+.themed.tb-loss .tb-result-tag {
+  transform: translateX(-50%);
+  font-style: normal;
+}
+
+/* ---------------- Mosaic ---------------- */
+
+/* Room for the Victory / Final tag and the league line above the header plate. */
+.themed.theme-mosaic.tb-win .tb-header,
+.themed.theme-mosaic.tb-loss .tb-header {
+  top: 100px;
+  padding: 10px 0;
+}
+.themed.theme-mosaic .tb-kicker.with-tag {
+  top: 58px;
+  height: 34px;
+  font-size: 18px;
+}
+
+/* Win: your team's Pokémon in a golden glow. */
+.themed.theme-mosaic.tb-win .tb-mood {
+  background:
+    radial-gradient(ellipse 70% 38% at 50% 0%, color-mix(in srgb, var(--yellow) 70%, transparent) 0%, transparent 100%),
+    repeating-conic-gradient(from 0deg at 50% 0%, rgba(255, 255, 255, 0.22) 0 4deg, transparent 4deg 11deg);
+}
+.themed.theme-mosaic.tb-win .tb-result-tag {
+  border: 0;
+  border-radius: 999px;
+  background: var(--yellow);
+  color: var(--mz-ink);
+  box-shadow: var(--mz-shadow);
+}
+.themed.theme-mosaic.tb-win .tb-card.left.won {
+  background: color-mix(in srgb, var(--yellow) 32%, #fff);
+  box-shadow: inset 12px 0 0 var(--yellow), var(--mz-shadow);
+}
+.themed.theme-mosaic.tb-win .tb-banner {
+  background: var(--yellow);
+}
+.themed.theme-mosaic.tb-win .tb-banner .dmv-title {
+  color: var(--mz-ink);
+}
+
+/* Loss: the wall drained of colour and dimmed; your players' set wins still get your colour. */
+.themed.theme-mosaic.tb-loss .tb-mood {
+  background: rgba(24, 27, 38, 0.42);
+}
+.themed.theme-mosaic.tb-loss .tb-mood::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #808080;
+  mix-blend-mode: saturation;
+}
+.themed.theme-mosaic.tb-loss .tb-result-tag {
+  border: 0;
+  border-radius: 999px;
+  background: #2b2f3c;
+  color: #fff;
+  box-shadow: var(--mz-shadow);
+}
+.themed.theme-mosaic.tb-loss .tb-card.left.won {
+  box-shadow: inset 12px 0 0 var(--blue), var(--mz-shadow);
+}
+.themed.theme-mosaic.tb-loss .tb-card.lost {
+  opacity: 0.72;
+}
+.themed.theme-mosaic.tb-loss .tb-banner {
+  background: #2b2f3c;
+}
+
+/* ---------------- Editorial Night ---------------- */
+
+/* Win: the page goes gold: a full-bleed gold rule up top, gold band, gold marks on your sets. */
+.themed.theme-editorial.tb-win .tb-mood {
+  background:
+    linear-gradient(180deg, var(--yellow) 0 12px, transparent 12px),
+    radial-gradient(ellipse 80% 30% at 50% 0%, color-mix(in srgb, var(--yellow) 18%, transparent), transparent);
+}
+.themed.theme-editorial.tb-win .tb-result-tag {
+  top: 26px;
+  border: 0;
+  padding: 4px 30px;
+  background: var(--yellow);
+  color: #111;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+}
+.themed.theme-editorial.tb-win .tb-card.left.won {
+  box-shadow: inset 8px 0 0 var(--yellow);
+  background: color-mix(in srgb, var(--yellow) 10%, transparent);
+}
+.themed.theme-editorial.tb-win .tb-banner {
+  background: var(--yellow);
+}
+.themed.theme-editorial.tb-win .tb-banner .dmv-title {
+  color: #111;
+}
+
+/* Loss: no accent colour left on the page; a hairline "Final" and a quiet band. */
+.themed.theme-editorial.ed-night.tb-loss {
+  --accent: #c9ccd6;
+}
+.themed.theme-editorial.tb-loss .tb-mood {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1) 40%, rgba(0, 0, 0, 0.45));
+}
+.themed.theme-editorial.tb-loss .tb-result-tag {
+  top: 26px;
+  border: 2px solid var(--hair);
+  padding: 4px 30px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+}
+.themed.theme-editorial.tb-loss .tb-card.left.won {
+  box-shadow: inset 8px 0 0 var(--blue);
+}
+.themed.theme-editorial.tb-loss .tb-card.lost {
+  opacity: 0.6;
+}
+.themed.theme-editorial.tb-loss .tb-banner {
+  background: #1d2438;
+  box-shadow: inset 0 0 0 2px var(--hair);
+}
+.themed.theme-editorial.tb-loss .tb-banner .dmv-title {
+  color: var(--fg);
+}
+
+/* ---------------- Map styles: Route 119, Sinnoh Snow, Spear Pillar ---------------- */
+
+/* Win: the map itself is under Emerald's harsh sunlight (drought colour table, places/weather.ts). */
+.themed.theme-place.tb-win .tb-result-tag {
+  border: 5px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  background: var(--pl-first);
+  color: var(--pl-first-ink);
+  box-shadow: var(--pl-inner), var(--pl-drop);
+}
+.themed.theme-place.tb-win:not(.hoo) .tb-card.left.won {
+  background: var(--pl-first);
+}
+.themed.theme-place.tb-win:not(.hoo) .tb-card.left.won .tb-player {
+  color: var(--pl-first-ink);
+  text-shadow: none;
+}
+.themed.theme-place.tb-win:not(.hoo) .tb-banner {
+  background: var(--pl-first);
+}
+.themed.theme-place.tb-win:not(.hoo) .tb-banner .dmv-title {
+  color: var(--pl-first-ink);
+  text-shadow: none;
+}
+
+/* Loss: the map itself is in Emerald's rain (darkened palette + the game's rain sprites, places/weather.ts). */
+.themed.theme-place.tb-loss .tb-result-tag {
+  border: 5px solid #fff;
+  border-radius: var(--pl-radius);
+  background: var(--pl-dark);
+  color: #fff;
+  box-shadow: var(--pl-drop);
+}
+.themed.theme-place.tb-loss .tb-card.left.won {
+  background: var(--pl-a);
+}
+.themed.theme-place.tb-loss .tb-banner {
+  background: var(--pl-dark);
+}
+
+/* Hoenn / Sinnoh Snow solid (white) panels: dark player names (the shared place rule writes them white for the glass panels). */
+.themed.theme-place.pl-hoenn.tb:not(.glass) .tb-player,
+.themed.theme-place.pl-snow.tb:not(.glass) .tb-player {
+  color: var(--pl-ink);
+  text-shadow: none;
+}
+.themed.theme-place.pl-hoenn.tb-loss:not(.glass) .tb-card.left.won .tb-player,
+.themed.theme-place.pl-snow.tb-loss:not(.glass) .tb-card.left.won .tb-player {
+  color: #fff;
+  text-shadow: 2px 2px 0 var(--pl-dark);
+}
+
+/* Spear Pillar. Win (Hall of Origin): only your set wins stand on the Hall's glass floor. Loss (climax sky): the
+   banner is cut from the sky; the opponent's set wins stay plain panels. */
+.themed.theme-place.hoo.tb-win .tb-card.right.won,
+.themed.theme-place.sky.tb-loss .tb-card.right.won {
+  background: var(--pl-panel);
+  border-color: var(--pl-line);
+  box-shadow: var(--pl-drop);
+  color: var(--pl-ink);
+}
+.themed.theme-place.hoo.tb-win .tb-card.right.won .tb-player {
+  color: #fff;
+  text-shadow: 2px 2px 0 var(--pl-dark), 0 0 10px rgba(0, 0, 0, 0.6);
+}
+.themed.theme-place.sky.tb-loss .tb-banner {
+  background: var(--sky);
+  border-color: #fff;
+}
+/* Spear Pillar Loss with Giratina (portal / out): black tag and banner edged in Giratina's red. */
+.themed.theme-place.giratina.tb-loss .tb-result-tag,
+.themed.theme-place.giratina.tb-loss .tb-banner {
+  background: #000;
+  border-color: #c01818;
+}
+/* See-through panels so Giratina reads behind the first sets (on the map at the style's own size he spans rows 1-3). */
+.themed.theme-place.giratina.tb .dmv-panel {
+  background: rgba(16, 10, 12, 0.5);
+}
+.themed.theme-place.giratina.tb-loss .tb-card.left.won {
+  background: color-mix(in srgb, var(--pl-a) 72%, transparent);
+}
+.themed.theme-place.giratina.tb .tb-set-score {
+  background: rgba(16, 10, 12, 0.35); /* Giratina's eyes sit right behind the score column */
+}

@@ -1,7 +1,7 @@
+import { Facts } from '../shared/Facts'
 import type { Theme } from '../themes/theme'
 import type { BracketEntry, StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, CpBadge, usePokemonSrc } from '../shared/parts'
-import { eventFacts } from '../shared/format'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { LoudBackground } from '../shared/LoudBackground'
 import './bracket.css'
@@ -94,7 +94,7 @@ export const makeBracket = (loud = false, theme?: Theme, bigChampion = true): St
           <div className="br-heading">
             <div className="br-tag">Top Cut</div>
             <FitText className="dmv-title" text={data.tournament.name || 'Tournament'} max={60} width={800} />
-            <div className="br-facts">{eventFacts(data).join('  ·  ')}</div>
+            <Facts data={data} className="br-facts" split={theme?.splitFacts} />
           </div>
         </header>
 

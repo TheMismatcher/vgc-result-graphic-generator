@@ -8,6 +8,7 @@ export interface Theme {
   id: string // used in template ids, e.g. 'mosaic'
   style: string // style name in the picker, e.g. 'Mosaic'
   className: string // root class the theme's CSS hangs off, e.g. 'theme-mosaic'
+  splitFacts?: boolean // the header facts on two lines (event / date / players, then the format): map / Glass styles
   /** Everything behind the content, filling width × height. */
   Background: (props: { data: StandingsData; width: number; height: number }) => ReactNode
 }

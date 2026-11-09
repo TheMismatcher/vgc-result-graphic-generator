@@ -1,7 +1,8 @@
+import { Facts } from '../shared/Facts'
 import type { Theme } from '../themes/theme'
 import type { StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, PlayerPhoto, CpBadge } from '../shared/parts'
-import { cardColor, eventFacts, ordinal } from '../shared/format'
+import { cardColor, ordinal } from '../shared/format'
 import { LoudBackground } from '../shared/LoudBackground'
 import './top8-photos.css'
 
@@ -30,7 +31,7 @@ export const makeTop8Photos = (white: boolean, loud = false, theme?: Theme): Sta
         <div className="p8-heading">
           <div className="p8-tag">Top {Math.max(data.players.length, 1)}</div>
           <FitText className="dmv-title" text={data.tournament.name || 'Tournament'} max={64} width={790} />
-          <div className="p8-facts">{eventFacts(data).join('  ·  ')}</div>
+          <Facts data={data} className="p8-facts" split={theme?.splitFacts} />
         </div>
       </header>
 

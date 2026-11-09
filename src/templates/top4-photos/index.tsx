@@ -1,7 +1,8 @@
+import { Facts } from '../shared/Facts'
 import type { Theme } from '../themes/theme'
 import type { StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, PlayerPhoto, CpBadge } from '../shared/parts'
-import { eventFacts, ordinal } from '../shared/format'
+import { ordinal } from '../shared/format'
 import { LoudBackground } from '../shared/LoudBackground'
 import './top4-photos.css'
 
@@ -29,7 +30,7 @@ export const makeTop4Photos = (loud = false, theme?: Theme): StandingsTemplate =
         <div className="p4-heading">
           <div className="p4-tag">Top {Math.max(data.players.length, 1)}</div>
           <FitText className="dmv-title" text={data.tournament.name || 'Tournament'} max={58} width={810} />
-          <div className="p4-facts">{eventFacts(data).join('  ·  ')}</div>
+          <Facts data={data} className="p4-facts" split={theme?.splitFacts} />
         </div>
       </header>
 

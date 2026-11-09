@@ -1,7 +1,8 @@
+import { Facts } from '../shared/Facts'
 import type { Theme } from '../themes/theme'
 import type { StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, PlayerPhoto, CpBadge } from '../shared/parts'
-import { cardColor, eventFacts, ordinal } from '../shared/format'
+import { cardColor, ordinal } from '../shared/format'
 import { LoudBackground } from '../shared/LoudBackground'
 import './top8-mixed.css'
 
@@ -33,7 +34,7 @@ export const makeTop8Mixed = (white: boolean, theme?: Theme, loud = false): Stan
           <div className="m8-heading">
             <div className="m8-tag">Top {Math.max(data.players.length, 1)}</div>
             <FitText className="dmv-title" text={data.tournament.name || 'Tournament'} max={62} width={800} />
-            <div className="m8-facts">{eventFacts(data).join('  ·  ')}</div>
+            <Facts data={data} className="m8-facts" split={theme?.splitFacts} />
           </div>
         </header>
 

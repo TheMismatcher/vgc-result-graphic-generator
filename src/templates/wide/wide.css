@@ -1,0 +1,465 @@
+/* Landscape standings (1920x1080). Classic look: red / blue split, white comic panels, gold first place. */
+.wd-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, var(--red) 0 24%, var(--ink) 24% 24.6%, var(--blue) 24.6% 100%);
+}
+
+/* ---- Header: logo, tag + title, facts on the right ---- */
+.wd-header {
+  position: absolute;
+  top: 24px;
+  left: 48px;
+  right: 48px;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.wd-heading {
+  flex: 1;
+  min-width: 0;
+}
+.wd-tag {
+  display: inline-block;
+  margin: 0 0 8px 6px;
+  padding: 4px 22px;
+  background: var(--yellow);
+  border: 5px solid var(--ink);
+  color: var(--ink);
+  font-size: 26px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  transform: skewX(-12deg);
+}
+.wd-heading .dmv-title {
+  padding: 4px 0 4px 6px;
+}
+.wd-facts-box {
+  flex: none;
+  max-width: 760px;
+  text-align: right;
+}
+.wd-facts {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wd-facts.facts-second {
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+/* ---- Shared bits ---- */
+.wd .dmv-panel {
+  background: #fff;
+  color: var(--ink);
+}
+.wd .dmv-panel.first {
+  background: var(--yellow);
+}
+.wd-name {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.wd-sub {
+  margin-top: 4px;
+  font-size: 19px;
+  font-weight: 700;
+  opacity: 0.75;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wd-who {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2px;
+}
+.wd-team {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+/* The slanted place block: gold / blue / red like the portrait cards. */
+.wd-place {
+  flex: none;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  margin: -7px 0 -7px -7px;
+  clip-path: polygon(0 0, 100% 0, 78% 100%, 0 100%);
+  background: var(--blue-dark);
+}
+.wd-place.red {
+  background: var(--red);
+}
+.wd-place.first {
+  background: var(--ink);
+}
+.wd-place span {
+  margin-right: 18px;
+  color: #fff;
+  font-size: 46px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -0.02em;
+}
+.wd-place.first span {
+  color: var(--yellow);
+}
+.wd-place.small {
+  width: 104px;
+}
+.wd-place.small span {
+  font-size: 36px;
+}
+
+/* ---- Rows: 2 columns x 4 ---- */
+.wd-rows {
+  position: absolute;
+  top: 214px;
+  left: 48px;
+  right: 48px;
+  bottom: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(4, 1fr);
+  grid-auto-flow: row; /* reads left to right: 1st | 2nd, 3rd | 4th ... */
+  gap: 22px 24px;
+}
+.wd-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-right: 18px;
+  border-radius: 18px;
+  overflow: hidden;
+}
+.wd-row-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 0;
+}
+/* Name with the CP beside it on one line; record and handle get the whole width underneath. */
+.wd-row-who {
+  min-width: 0;
+}
+.wd-name-line {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+.wd-name-line .wd-name {
+  min-width: 0;
+}
+.wd-name-line .dmv-cp {
+  flex: none;
+}
+.wd-row-who .wd-sub {
+  margin: 0;
+}
+.wd-row .wd-team {
+  gap: 18px;
+  margin-top: -6px; /* the sprites' empty headroom tucks under the record line */
+}
+
+/* ---- Spotlight: champion left, list right ---- */
+.wd-spot {
+  position: absolute;
+  top: 214px;
+  left: 48px;
+  right: 48px;
+  bottom: 40px;
+  display: flex;
+  gap: 24px;
+}
+.wd-champ {
+  flex: none;
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 22px;
+  overflow: hidden;
+}
+.wd-champ-photo {
+  position: relative;
+  height: 300px;
+  flex: none;
+  border-bottom: 7px solid var(--ink);
+}
+.wd-champ-photo .dmv-photo {
+  width: 100%;
+  height: 100%;
+}
+.wd-champ-tag {
+  position: absolute;
+  left: 20px;
+  bottom: 16px;
+  padding: 4px 22px;
+  background: var(--ink);
+  color: var(--yellow);
+  font-size: 30px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  transform: skewX(-12deg);
+}
+.wd-champ-info {
+  flex: 1;
+  padding: 18px 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.wd-champ-name {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.wd-champ-team {
+  margin-top: auto;
+  align-self: center;
+  display: grid;
+  grid-template-columns: repeat(3, 150px);
+  gap: 6px 40px;
+}
+.wd-list {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wd-line {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-right: 16px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.wd-line .wd-who {
+  width: 300px;
+}
+.wd-line .wd-team {
+  margin-left: auto;
+}
+
+/* ---- Columns: 8 side by side ---- */
+.wd-cols {
+  position: absolute;
+  top: 214px;
+  left: 48px;
+  right: 48px;
+  bottom: 40px;
+  display: flex;
+  gap: 16px;
+}
+.wd-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 8px 14px;
+  border-radius: 18px;
+  overflow: hidden;
+  text-align: center;
+}
+.wd-col.first {
+  flex: none;
+  width: 300px;
+}
+.wd-col-place {
+  align-self: stretch;
+  margin: -7px -15px 10px;
+  padding: 10px 0 8px;
+  background: var(--blue-dark);
+  color: #fff;
+  font-size: 40px;
+  font-weight: 900;
+  font-style: italic;
+}
+.wd-col-place.red {
+  background: var(--red);
+}
+.wd-col-place.first {
+  background: var(--ink);
+  color: var(--yellow);
+  font-size: 48px;
+}
+.wd-col .wd-sub {
+  margin-top: 2px;
+}
+.wd-col-team {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---- Map / Glass styles: the place's panel and accent colours ---- */
+.themed.theme-place .wd-tag,
+.themed.theme-place .wd-champ-tag {
+  background: var(--pl-dark);
+  border: 3px solid var(--pl-accent);
+  border-radius: 999px;
+  transform: none;
+  color: var(--pl-accent);
+  font-style: normal;
+}
+.themed.theme-place .wd-facts {
+  color: #fff;
+  text-shadow: 2px 2px 0 var(--pl-dark), 0 0 12px rgba(0, 0, 0, 0.6);
+}
+.themed.theme-place.wd .dmv-panel {
+  background: var(--pl-panel);
+  color: var(--pl-ink);
+}
+.themed.theme-place.wd .dmv-panel.first {
+  background: var(--pl-first);
+  color: var(--pl-first-ink);
+}
+.themed.theme-place .wd-place,
+.themed.theme-place .wd-col-place {
+  background: var(--pl-a);
+}
+.themed.theme-place .wd-place.red,
+.themed.theme-place .wd-col-place.red {
+  background: var(--pl-b);
+}
+.themed.theme-place .wd-place.first,
+.themed.theme-place .wd-col-place.first {
+  background: var(--pl-dark);
+}
+.themed.theme-place .wd-place.first span,
+.themed.theme-place .wd-col-place.first {
+  color: var(--pl-first);
+}
+.themed.theme-place .wd-place {
+  margin: -5px 0 -5px -5px;
+}
+.themed.theme-place .wd-col-place {
+  margin: -5px -13px 10px;
+}
+.themed.theme-place .wd-champ-photo {
+  border-bottom: 5px solid var(--pl-line);
+}
+
+/* ---- 4 or fewer players ---- */
+.wd.few .wd-rows {
+  grid-template-rows: repeat(2, 1fr);
+}
+/* The record/handle line sits under the name, so the 3 x 2 team starts close under it (rows touch:
+   the sprites have their own padding) to keep the bottom row and its items inside the card. */
+.wd.few .wd-row .wd-team {
+  display: grid;
+  grid-template-columns: repeat(3, 138px);
+  gap: 0 56px;
+  margin: 2px 0 0 20px;
+}
+.wd.few .wd-row .wd-place,
+.wd.few .wd-line .wd-place {
+  width: 150px;
+}
+.wd.few .wd-row .wd-place span,
+.wd.few .wd-line .wd-place span {
+  font-size: 56px;
+}
+.wd.few .wd-line .wd-team {
+  gap: 18px;
+  margin-top: 6px;
+}
+.wd.few .wd-col.first {
+  flex: 1;
+  width: auto;
+}
+.wd.few .wd-col-place {
+  font-size: 54px;
+}
+.wd.few .wd-col-team {
+  display: grid;
+  grid-template-columns: repeat(2, 150px);
+  gap: 14px 40px;
+  margin-bottom: 24px;
+}
+
+/* ---- Mosaic: the header on a soft white plate (dark title on the tile wall), translucent cards, softer places ---- */
+.themed.theme-mosaic .wd-header {
+  left: 40px;
+  right: 40px;
+  padding: 0 34px;
+  background: var(--mz-card);
+  border-radius: 28px;
+  box-shadow: var(--mz-shadow);
+}
+.themed.theme-mosaic .wd-tag {
+  background: color-mix(in srgb, var(--red) 80%, #fff);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  transform: none;
+  font-style: normal;
+}
+.themed.theme-mosaic .wd-facts {
+  color: var(--mz-muted);
+  text-shadow: none;
+}
+.themed.theme-mosaic .wd-sub {
+  color: var(--mz-muted);
+  opacity: 1;
+}
+.themed.theme-mosaic .wd-name {
+  color: var(--mz-ink);
+  font-style: normal;
+}
+.themed.theme-mosaic .wd-place {
+  margin: 0;
+  background: color-mix(in srgb, var(--blue-dark) 70%, #fff);
+}
+.themed.theme-mosaic .wd-place.red {
+  background: color-mix(in srgb, var(--red) 75%, #fff);
+}
+.themed.theme-mosaic .wd-place.first {
+  background: color-mix(in srgb, var(--yellow) 85%, #fff);
+}
+.themed.theme-mosaic .wd-place span {
+  font-style: normal;
+}
+.themed.theme-mosaic .wd-place.first span {
+  color: var(--mz-ink);
+}
+.themed.theme-mosaic .wd-rows {
+  /* Smaller cards with more room round them, so more of the tile wall shows. */
+  top: 240px;
+  left: 100px;
+  right: 100px;
+  bottom: 44px;
+  gap: 20px 56px;
+}
+.themed.theme-mosaic .wd-row .wd-team {
+  gap: 8px;
+}
+.themed.theme-mosaic.few .wd-row .wd-team {
+  gap: 0 48px;
+}
