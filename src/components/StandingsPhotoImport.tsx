@@ -16,6 +16,7 @@ export function StandingsPhotoImport({ setState }: { setState: (fn: (s: AppState
   const [error, setError] = useState('')
   const [rows, setRows] = useState<ScannedStanding[] | null>(null)
   const [tournament, setTournament] = useState('')
+  const [warnings, setWarnings] = useState<string[]>([])
   const [top, setTop] = useState(8)
   const [topFrom, setTopFrom] = useState<'records' | 'attendance' | ''>('')
   const [counts, setCounts] = useState<StandingsDoc['counts']>({})
@@ -24,6 +25,7 @@ export function StandingsPhotoImport({ setState }: { setState: (fn: (s: AppState
     if (!file) return
     setError('')
     setRows(null)
+    setWarnings([])
     try {
       const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name)
       const isHtml = file.type === 'text/html' || /\.html?$/i.test(file.name)
@@ -36,6 +38,7 @@ export function StandingsPhotoImport({ setState }: { setState: (fn: (s: AppState
       setTop(Math.min(cut.top, result.rows.length))
       setTopFrom(cut.from)
       setTournament(result.tournament)
+      setWarnings(('warnings' in result && result.warnings) || [])
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
     } finally {
@@ -95,6 +98,12 @@ export function StandingsPhotoImport({ setState }: { setState: (fn: (s: AppState
             Read {rows.length} players{tournament && ` from “${tournament}”`}
             {(counts.seniors || counts.juniors) && ` (plus ${counts.seniors ?? 0} Senior, ${counts.juniors ?? 0} Junior)`}. {flagged ? `${flagged} marked “?” may be misread.` : 'Check the names; anything the photo blurred may be misspelled.'}
           </p>
+          {warnings.length > 0 && (
+            <ul className="list-disc space-y-0.5 rounded-lg border border-amber-300 bg-amber-50 py-2 pl-7 pr-3 text-sm text-amber-900">
+              {warnings.map((w) => <li key={w}>{w}</li>)}
+              <li>Compare against the photo before using these.</li>
+            </ul>
+          )}
           <div className="max-h-96 overflow-auto rounded-lg border border-slate-200">
             <table className="w-full text-sm">
               <thead className="sticky top-0 bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
