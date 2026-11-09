@@ -145,3 +145,8 @@
   right: 8px;
   font-size: 20px;
 }
+
+/* Pixel sprites are pre-scaled to their box; keep the squares crisp when the preview shrinks them. */
+.dmv-mon.pixel img.render {
+  image-rendering: pixelated;
+}

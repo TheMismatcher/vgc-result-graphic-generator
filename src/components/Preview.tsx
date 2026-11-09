@@ -340,8 +340,10 @@ export function Preview<T extends Template>({
 }
 
 /** The Preview's switches for styles that come several ways. */
-const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on', map: 'Map', book: 'Book' }
+const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on', map: 'Map', book: 'Book', sprites: 'Sprites' }
 const OPTION_LABELS: Record<string, string> = {
+  render: '3D',
+  pixel: 'Pixel',
   hall: 'Hall of Origin',
   sky: 'Cutscene Sky',
   solid: 'Solid',

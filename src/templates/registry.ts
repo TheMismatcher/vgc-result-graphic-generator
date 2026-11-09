@@ -28,6 +28,7 @@ import { GhostPixel, GhostPixelDense, GhostPixelGlass, GhostPixelGlassTeam, Ghos
 import { Glimwood, KantoGameBoy, Route201, Unova } from './eras'
 import { DynamaxOfficial, GlimwoodOfficial, SnowpointFull, SnowpointFullGlass, Route217, Route217Glass, AcuityLakefront, AcuityLakefrontGlass, ScarletBook, VioletBook, TerastalOfficial, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillarArt, SpearPillarHall, SpearPillarHallChampion, SpearPillarHallChampionGlass, SpearPillarCutscene, SpearPillarCutsceneGlass, CustomGlass, CustomLight } from './places'
 import { PLACE_LAYOUTS } from './themes/places'
+import { withPixelSprites } from './shared/parts'
 import { DynamaxCloud, DynamaxCloudLayouts, FX_SIDE_THEMES, sideFx, TeraRaidDen, TeraRaidDenLayouts, TeraRaidDenPrism, TeraRaidDenPrismLayouts } from './power/recreated'
 import { MosaicGradient, MosaicSquaresGradient, MosaicTintGlass, MosaicTintGlassShadow, MosaicTintSemiShadow, MosaicTintSolid, MosaicTintSolidShadow } from './mosaic'
 import { DynamaxTopCut, MegaTopCut, TerastalTopCut } from './power'
@@ -87,9 +88,15 @@ export const BRAND_COLOURS: Record<string, BrandColour[]> = {
   'Classic · Loss': ['second'],
 }
 
+const COMIC_BOOK: [StandingsTemplate, StandingsLayout][] = [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top8MixedLoud, 'top8mixed'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [ChampionLoudPhoto, 'championphoto'], [BracketLoud, 'bracket']]
+
 export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [ChampionPhoto, 'championphoto'], [Bracket, 'bracket']]),
-  ...tag('Comic Book', [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top8MixedLoud, 'top8mixed'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [ChampionLoudPhoto, 'championphoto'], [BracketLoud, 'bracket']]),
+  // Comic Book with the HOME 3D renders (the card) or the pixel sprites.
+  ...versions('Comic Book', [
+    ['Comic Book', { sprites: 'render' }, COMIC_BOOK],
+    ['Comic Book Pixel', { sprites: 'pixel' }, COMIC_BOOK.map(([t, l]) => [withPixelSprites(t), l] as [StandingsTemplate, StandingsLayout])],
+  ]),
   ...tag('White', [[TopCutBannerWhite, 'topcut'], [Top8PhotosWhite, 'top8photos'], [Top8MixedWhite, 'top8mixed']]),
   ...versions('Custom Glass', [
     ['Custom Glass', { panels: 'glass' }, [[CustomGlass, 'topcut'], ...PLACE_LAYOUTS['Custom Glass']]],

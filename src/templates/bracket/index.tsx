@@ -1,8 +1,7 @@
 import type { Theme } from '../themes/theme'
 import type { BracketEntry, StandingsTemplate } from '../types'
-import { FitText, Logo, MonSprite, CpBadge } from '../shared/parts'
+import { FitText, Logo, MonSprite, CpBadge, usePokemonSrc } from '../shared/parts'
 import { eventFacts } from '../shared/format'
-import { sprites } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { LoudBackground } from '../shared/LoudBackground'
 import './bracket.css'
@@ -17,6 +16,11 @@ const LINE = 6
 
 const ROUND_NAMES: Record<number, string> = { 8: 'Quarterfinals', 4: 'Semifinals', 2: 'Finals' }
 
+function BracketMon({ id, size }: { id: string; size: number }) {
+  const src = usePokemonSrc(id, size)
+  return src ? <img src={src} alt="" style={{ width: size, height: size }} /> : <span style={{ display: 'inline-block', width: size, height: size }} />
+}
+
 function Entry({ entry, width, height, state, cp }: { entry: BracketEntry; width: number; height: number; state: 'won' | 'lost' | 'open'; cp?: number }) {
   const { showMegas } = useDisplay()
   const team = entry.player?.team.filter((m) => m.pokemon) ?? []
@@ -28,7 +32,7 @@ function Entry({ entry, width, height, state, cp }: { entry: BracketEntry; width
       {team.length > 0 && (
         <div className="br-team">
           {team.map((m, i) => (
-            <img key={i} src={sprites.render(displayPokemon(m, showMegas))} alt="" style={{ width: icon, height: icon }} />
+            <BracketMon key={i} id={displayPokemon(m, showMegas)} size={icon} />
           ))}
         </div>
       )}

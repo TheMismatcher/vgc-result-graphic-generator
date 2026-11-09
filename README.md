@@ -68,6 +68,6 @@ Re-downloads the lists from [PokeAPI](https://pokeapi.co), rebuilds the screensh
 
 ## Credits
 
-Pokémon data and sprites from [PokeAPI](https://pokeapi.co), item icons from the [Bulbagarden Archives](https://archives.bulbagarden.net) and [Pokémon Showdown](https://pokemonshowdown.com). Tournament data from [Limitless](https://play.limitlesstcg.com), [RK9](https://rk9.gg), and Showdown replays.
+Pokémon data and sprites from [PokeAPI](https://pokeapi.co) ([sprites](https://github.com/PokeAPI/sprites)); the Gen 5-style pixel sprites for Pokémon from Gen 6 on are fan-made by the spriters of the [Smogon Sprite Project](https://www.smogon.com/forums/threads/sword-shield-sprite-project.3647722/). Item icons from the [Bulbagarden Archives](https://archives.bulbagarden.net) and [Pokémon Showdown](https://pokemonshowdown.com). Tournament data from [Limitless](https://play.limitlesstcg.com), [RK9](https://rk9.gg), and Showdown replays.
 
 Pokémon and all related names and artwork © Nintendo / Creatures Inc. / GAME FREAK inc. / The Pokémon Company. This is a non-commercial fan tool, not affiliated with or endorsed by them.

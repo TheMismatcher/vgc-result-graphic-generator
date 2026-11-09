@@ -42,6 +42,8 @@ export const sprites = {
   },
   /** True when only the pixel icon exists (draw it with crisp, blocky scaling). */
   itemIsPixel: (id: string) => !itemById.get(id)?.hd,
+  /** The small pixel bag icon (for pixel-sprite styles), or '' when there is none. */
+  itemPixel: (id: string) => (itemById.get(id)?.hasSprite ? asset(`sprites/items/${id}.png`) : ''),
 }
 
 /** "Choice Scarf" -> "choice-scarf", "Flabébé" -> "flabebe" */
