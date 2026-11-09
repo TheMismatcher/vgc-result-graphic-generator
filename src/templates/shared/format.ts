@@ -13,3 +13,7 @@ export const ordinal = (n: number) => {
 
 /** Card color for a 2-column grid: 1st is gold, the rest alternate blue/red in a checkerboard. */
 export const cardColor = (i: number) => (i === 0 ? 'first' : (Math.floor(i / 2) + (i % 2)) % 2 ? 'red' : 'blue')
+
+/** Card color for a single column or row: 1st is gold, then red, blue, red, blue... (cardColor's checkerboard
+ *  gives red, red, blue, blue in a line). */
+export const lineColor = (i: number) => (i === 0 ? 'first' : i % 2 ? 'red' : 'blue')

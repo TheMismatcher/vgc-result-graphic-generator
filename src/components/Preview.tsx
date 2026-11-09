@@ -111,7 +111,8 @@ export function Preview<T extends Template>({
     // The photo covers its box, then zooms: how far it overhangs on each axis (graphic px).
     const bw = img.offsetWidth
     const bh = img.offsetHeight
-    const s0 = Math.max(bw / img.naturalWidth, bh / img.naturalHeight) * f.zoom
+    const fit = player.photoFit ? Math.min : Math.max // contain (whole photo) or cover
+    const s0 = fit(bw / img.naturalWidth, bh / img.naturalHeight) * f.zoom
     const overX = img.naturalWidth * s0 - bw
     const overY = img.naturalHeight * s0 - bh
     const k = node.current.getBoundingClientRect().width / template.width
@@ -122,8 +123,9 @@ export function Preview<T extends Template>({
     const onMove = (ev: globalThis.PointerEvent) => {
       last = {
         uid: player.uid,
-        x: overX > 0.5 ? clamp(f.x - ((ev.clientX - startX) / k) * (100 / overX)) : f.x,
-        y: overY > 0.5 ? clamp(f.y - ((ev.clientY - startY) / k) * (100 / overY)) : f.y,
+        // overX/overY < 0: the whole photo is narrower/shorter than its box and slides within it (same formula).
+        x: Math.abs(overX) > 0.5 ? clamp(f.x - ((ev.clientX - startX) / k) * (100 / overX)) : f.x,
+        y: Math.abs(overY) > 0.5 ? clamp(f.y - ((ev.clientY - startY) / k) * (100 / overY)) : f.y,
       }
       setPhotoLive(last)
     }
@@ -288,9 +290,18 @@ export function Preview<T extends Template>({
                 className="flex-1 accent-[#b3121b]"
               />
             </label>
-            <Button className="py-1" onClick={() => photos!.onChange(photoPlayer.uid, { photoX: undefined, photoY: 30, photoZoom: undefined })}>Reset</Button>
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={!!photoPlayer.photoFit}
+                onChange={(e) => photos!.onChange(photoPlayer.uid, { photoFit: e.target.checked || undefined, photoX: undefined, photoY: e.target.checked ? 50 : 30, photoZoom: undefined })}
+                className="accent-[#b3121b]"
+              />
+              Fit whole photo
+            </label>
+            <Button className="py-1" onClick={() => photos!.onChange(photoPlayer.uid, { photoX: undefined, photoY: photoPlayer.photoFit ? 50 : 30, photoZoom: undefined })}>Reset</Button>
           </div>
-          <p className="text-xs text-slate-500">Drag a photo in the preview to move it in its frame; click another photo to zoom that one.</p>
+          <p className="text-xs text-slate-500">Drag a photo in the preview to move it in its frame; click another photo to zoom that one. Fit whole photo shows the entire photo with a blurred copy around it, for photos the wrong shape for their frame.</p>
         </div>
       )}
 

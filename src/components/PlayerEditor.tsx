@@ -161,7 +161,7 @@ function PhotoField({ player, onChange }: { player: Player; onChange: (p: Player
             <input type="file" accept="image/*" className="sr-only" onChange={(e) => { upload(e.target.files?.[0]); e.target.value = '' }} />
           </label>
           {player.photo && (
-            <Button variant="danger" className="py-1.5" onClick={() => onChange({ ...player, photo: undefined, photoY: undefined, photoX: undefined, photoZoom: undefined })}>Remove</Button>
+            <Button variant="danger" className="py-1.5" onClick={() => onChange({ ...player, photo: undefined, photoY: undefined, photoX: undefined, photoZoom: undefined, photoFit: undefined })}>Remove</Button>
           )}
           {!player.photo && <span className="text-xs text-slate-500">Used by the photo templates</span>}
         </div>

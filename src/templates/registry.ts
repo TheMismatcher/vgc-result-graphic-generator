@@ -1,4 +1,4 @@
-import { WideColumns, WideRows, WideSpotlight } from './wide'
+import { WideColumns, WideColumnsWhite, WideRows, WideRowsWhite, WideSpotlight, WideSpotlightWhite } from './wide'
 import { withPixelSprites } from './shared/parts'
 // Every template the generator can output. Add new designs here.
 
@@ -51,7 +51,7 @@ export const STANDINGS_LAYOUTS: { id: StandingsLayout; label: string }[] = [
   // Landscape trials (1920x1080).
   { id: 'widerows', label: 'Wide Rows' },
   { id: 'widespot', label: 'Wide Spotlight' },
-  { id: 'widecols', label: 'Wide Columns' },
+  { id: 'widecols', label: 'Wide Top 4 Columns' },
 ]
 
 // Every standings template, grouped by style (the picker shows styles in this order, then the
@@ -102,7 +102,7 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
     ['Comic Book', { sprites: 'render' }, COMIC_BOOK],
     ['Comic Book Pixel', { sprites: 'pixel' }, COMIC_BOOK.map(([t, l]) => [withPixelSprites(t), l] as [StandingsTemplate, StandingsLayout])],
   ]),
-  ...tag('White', [[TopCutBannerWhite, 'topcut'], [Top8PhotosWhite, 'top8photos'], [Top8MixedWhite, 'top8mixed']]),
+  ...tag('White', [[TopCutBannerWhite, 'topcut'], [Top8PhotosWhite, 'top8photos'], [Top8MixedWhite, 'top8mixed'], [WideRowsWhite, 'widerows'], [WideSpotlightWhite, 'widespot'], [WideColumnsWhite, 'widecols']]),
   ...versions('Custom Glass', [
     ['Custom Glass', { panels: 'glass' }, [[CustomGlass, 'topcut'], ...PLACE_LAYOUTS['Custom Glass']]],
     ['Custom Glass Light', { panels: 'solid' }, [[CustomLight, 'topcut'], ...PLACE_LAYOUTS['Custom Glass Light']]],

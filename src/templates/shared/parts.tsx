@@ -135,12 +135,20 @@ export function photoStyle(x: number, y: number, zoom: number): CSSProperties {
   }
 }
 
-/** A player's photo cropped to fill its box, or their initials if no photo was uploaded. */
+/** A player's photo cropped to fill its box (or, with photoFit, shown whole on a blurred copy of itself),
+ *  or their initials if no photo was uploaded. */
 export function PlayerPhoto({ player, className = '', style }: { player: Player; className?: string; style?: CSSProperties }) {
   const live = useContext(PhotoFrameContext)
   if (player.photo) {
     const f = photoFrame(player)
     const { x, y } = live?.uid === player.uid ? live : f
+    if (player.photoFit)
+      return (
+        <div className={`dmv-photo dmv-photo-fit ${className}`} style={style}>
+          <img className="dmv-photo-blur" src={player.photo} alt="" aria-hidden />
+          <img className="dmv-photo-img" src={player.photo} alt={player.name} data-photo={player.uid} style={photoStyle(x, y, f.zoom)} />
+        </div>
+      )
     return (
       <img
         className={`dmv-photo ${className}`}
