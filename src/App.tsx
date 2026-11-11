@@ -122,6 +122,22 @@ export default function App() {
               {t.label}
             </button>
           ))}
+          <a
+            href="/dmv-invitational"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 whitespace-nowrap rounded-t-lg px-3 py-2 text-sm font-bold uppercase tracking-wide text-slate-400 hover:text-white sm:px-5"
+          >
+            DMV Invitational
+          </a>
+          <a
+            href="/bot-control"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 whitespace-nowrap rounded-t-lg px-3 py-2 text-sm font-bold uppercase tracking-wide text-slate-400 hover:text-white sm:px-5"
+          >
+            Bot Configuration
+          </a>
         </nav>
       </header>
 
