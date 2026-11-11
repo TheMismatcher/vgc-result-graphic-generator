@@ -128,3 +128,24 @@
   gap: 6px 10px;
   margin-top: 10px;
 }
+
+/* 5-6 players: three rows share the height four rows use (4 x 255 + 3 x 20 = 1080), the team grows to match. */
+.p8-grid.fill3 {
+  grid-auto-rows: 346px;
+}
+.p8-grid.fill3 .p8-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.p8-grid.fill3 .p8-team {
+  grid-template-columns: repeat(3, 76px);
+  gap: 14px 8px;
+  margin-top: 16px;
+}
+/* An odd count (5, 7): the last card sits centred on its own row instead of leaving a hole on the right. */
+.p8-grid.odd .p8-card:last-child {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: calc(50% - 10px);
+}

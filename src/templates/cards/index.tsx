@@ -110,7 +110,8 @@ function useCard(data: StandingsData, era: Era): CardInfo {
 const W = 1080
 const H = 1350
 
-function Classic({ data, photo }: { data: StandingsData; photo?: boolean }) {
+/** `role`: what the card calls its player (Champion on the standings; Event Results uses Competitor). */
+function Classic({ data, photo, role = 'Champion' }: { data: StandingsData; photo?: boolean; role?: string }) {
   const c = useCard(data, 'classic')
   const cp = data.cp?.(1)
   return (
@@ -118,7 +119,7 @@ function Classic({ data, photo }: { data: StandingsData; photo?: boolean }) {
       <div className={`tc-card en-${c.energy}`}>
         <div className="tc-frame">
           <div className="tc-grain" />
-          <div className="cc-stage">Champion</div>
+          <div className="cc-stage">{role}</div>
           <FitText className="cc-name" text={c.name} max={56} width={560} min={30} weight={700} italic={false} uppercase={false} family="Cabin" />
           <div className="cc-hp">
             {c.record || '—'}
@@ -132,7 +133,7 @@ function Classic({ data, photo }: { data: StandingsData; photo?: boolean }) {
             </div>
           </div>
           <div className="cc-strip">
-            Champion Pokémon. {data.typeLabel || 'Tournament'}
+            {role} Pokémon. {data.typeLabel || 'Tournament'}
             {c.players ? `, Players: ${c.players}` : ''}
           </div>
           <div className="cc-moves">
@@ -184,7 +185,7 @@ function Classic({ data, photo }: { data: StandingsData; photo?: boolean }) {
   )
 }
 
-function Modern({ data, photo }: { data: StandingsData; photo?: boolean }) {
+function Modern({ data, photo, role = 'Champion' }: { data: StandingsData; photo?: boolean; role?: string }) {
   const c = useCard(data, 'modern')
   const cp = data.cp?.(1)
   const reg = /Regulation\s+([A-Z])/i.exec(data.formatLabel)?.[1]?.toUpperCase() ?? 'G'
@@ -208,7 +209,7 @@ function Modern({ data, photo }: { data: StandingsData; photo?: boolean }) {
           </div>
           <div className="sv-strip">
             <span>NO. 0001</span>
-            <span>Champion of the {data.typeLabel || 'Tournament'}</span>
+            <span>{role === 'Champion' ? 'Champion of the' : `${role} at the`} {data.typeLabel || 'Tournament'}</span>
             {c.players > 0 && <span>Players: {c.players}</span>}
           </div>
           <div className="sv-moves">
@@ -304,3 +305,7 @@ export const TradingCardModernPhoto: StandingsTemplate = {
   description: 'The Scarlet & Violet card with the champion’s photo in the art window; the team are the attacks.',
   Component: ({ data }) => <Modern data={data} photo />,
 }
+
+/** The photo versions for other graphics (Event Results): same cards, the player called `role`. */
+export const TradingCardClassicRole = ({ data, role }: { data: StandingsData; role: string }) => <Classic data={data} photo role={role} />
+export const TradingCardModernRole = ({ data, role }: { data: StandingsData; role: string }) => <Modern data={data} photo role={role} />

@@ -4,7 +4,7 @@
 
 import type { StandingsTemplate } from '../types'
 import { CpBadge, FitText, Logo, MonSprite } from '../shared/parts'
-import { eventFacts } from '../shared/format'
+import { eventFacts, fillClass } from '../shared/format'
 import { getItem, getPokemon } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { LocationHead, LocationRows, seededRand } from './index'
@@ -114,7 +114,7 @@ export const Pokedex: StandingsTemplate = {
     // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
     const few = data.players.length <= 4
     return (
-    <div className={`dmv dx ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
+    <div className={`dmv dx ${fillClass(data.players.length)}`} style={{ width: 1080, height: 1350 }}>
       <div className="dx-top">
         <div className="dx-lens" />
         <div className="dx-led r" />

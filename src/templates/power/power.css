@@ -131,13 +131,6 @@
   border: 4px solid rgba(255, 255, 255, 0.9);
   box-shadow: 0 0 18px rgba(255, 255, 255, 0.25);
 }
-.dmv.themed.theme-power .dmv-cp,
-.pw .dmv-cp {
-  border: 0;
-  background: var(--yellow);
-  color: #1a1020;
-  font-style: normal;
-}
 
 /* ---------- Top Cut ---------- */
 .pw-head {
@@ -218,7 +211,11 @@
   white-space: nowrap;
 }
 .pw-cp {
-  font-size: 14px;
+  font-size: 16px;
+}
+.pw-dyna .pw-cp {
+  font-size: 18px;
+  letter-spacing: 0.03em;
 }
 .pw-team {
   display: flex;
@@ -484,4 +481,18 @@
 .dmv.themed.theme-power .vs-plate,
 .dmv.themed.theme-power .vs-plate .dmv-title {
   color: var(--pw-ink);
+}
+
+/* Top Cut with 4 or fewer players: rows fill the page, team 3 x 2. 5-7: rows share the height 8 rows use (8 x 112 + 7 x 12 gaps); 5 get the 3 x 2 grid. */
+.pw.few .pw-row { height: 236px; }
+.pw.few .pw-place { width: 150px; }
+.pw.few .pw-player { width: 420px; }
+.pw.few .pw-sub { font-size: 24px; }
+.pw.mid .pw-row { height: calc((980px - (var(--n) - 1) * 12px) / var(--n)); }
+.pw.mid .pw-sub { font-size: 22px; }
+.pw.few .pw-team,
+.pw.mid.n5 .pw-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
 }

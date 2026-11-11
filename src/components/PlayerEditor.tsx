@@ -9,6 +9,7 @@ import { Combobox, type Option } from './Combobox'
 import { Button, Input, Select, Textarea } from './ui'
 import { useDialog } from './Dialog'
 import { ScreenshotImport } from './ScreenshotImport'
+import { TeamSheetImport } from './TeamSheetImport'
 
 const POKEMON_OPTIONS: Option[] = POKEMON.map((p) => ({ id: p.id, label: p.name, icon: sprites.icon(p.id) }))
 const ITEM_OPTIONS: Option[] = ITEMS.map((i) => ({ id: i.id, label: i.name, icon: sprites.item(i.id) || undefined }))
@@ -36,7 +37,7 @@ export function PlayerEditor({
 }) {
   const [open, setOpen] = useState(defaultOpen)
   const dialog = useDialog()
-  const [showImport, setShowImport] = useState<'' | 'paste' | 'screenshot'>('')
+  const [showImport, setShowImport] = useState<'' | 'paste' | 'screenshot' | 'sheet'>('')
   const set = <K extends keyof Player>(key: K, v: Player[K]) => onChange({ ...player, [key]: v })
   const setMon = (i: number, mon: Partial<Mon>) => set('team', player.team.map((m, j) => (j === i ? { ...m, ...mon } : m)))
 
@@ -91,10 +92,17 @@ export function PlayerEditor({
           {showImport === 'screenshot' && (
             <ScreenshotImport onDone={(team) => { set('team', team); setShowImport('') }} onCancel={() => setShowImport('')} />
           )}
+          {showImport === 'sheet' && (
+            <TeamSheetImport
+              onDone={(team, name) => { onChange({ ...player, team, name: player.name || name }); setShowImport('') }}
+              onCancel={() => setShowImport('')}
+            />
+          )}
           {!showImport && (
             <div className="flex flex-wrap gap-2">
               <Button onClick={() => setShowImport('paste')}>Import from Pokepaste</Button>
               <Button onClick={() => setShowImport('screenshot')}>Import from screenshot</Button>
+              <Button onClick={() => setShowImport('sheet')}>Import from team list</Button>
             </div>
           )}
 
@@ -161,7 +169,7 @@ function PhotoField({ player, onChange }: { player: Player; onChange: (p: Player
             <input type="file" accept="image/*" className="sr-only" onChange={(e) => { upload(e.target.files?.[0]); e.target.value = '' }} />
           </label>
           {player.photo && (
-            <Button variant="danger" className="py-1.5" onClick={() => onChange({ ...player, photo: undefined, photoY: undefined, photoX: undefined, photoZoom: undefined })}>Remove</Button>
+            <Button variant="danger" className="py-1.5" onClick={() => onChange({ ...player, photo: undefined, photoY: undefined, photoX: undefined, photoZoom: undefined, photoFit: undefined })}>Remove</Button>
           )}
           {!player.photo && <span className="text-xs text-slate-500">Used by the photo templates</span>}
         </div>

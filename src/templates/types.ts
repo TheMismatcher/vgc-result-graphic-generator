@@ -70,11 +70,11 @@ export interface TeamBattleData {
 
 /** Switches a style can have in the Preview (Panels: solid / glass, Card: classic / modern, Champion: hall / sky,
  * Map: which map of a merged style, e.g. Route 119's waterfall / bridge / Route 120, Book: Scarlet / Violet). */
-export type LookGroup = 'panels' | 'card' | 'champion' | 'map' | 'book'
+export type LookGroup = 'panels' | 'card' | 'champion' | 'map' | 'book' | 'sprites' | 'result' | 'snowfall' | 'scene'
 export type Looks = Record<LookGroup, string>
 
 /** The standings layouts, chosen after the style in the picker. */
-export type StandingsLayout = 'topcut' | 'top8photos' | 'top8mixed' | 'top4photos' | 'champion' | 'championphoto' | 'bracket'
+export type StandingsLayout = 'topcut' | 'top8photos' | 'top8mixed' | 'top4photos' | 'champion' | 'championphoto' | 'bracket' | 'widerows' | 'widespot' | 'widecols' | 'widecolsplain'
 
 interface TemplateBase {
   id: string

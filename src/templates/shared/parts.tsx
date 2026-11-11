@@ -1,6 +1,6 @@
 // Small building blocks reused across templates.
 
-import { createContext, useContext, useEffect, useState, type CSSProperties } from 'react'
+import { createContext, useContext, useEffect, useState, type CSSProperties, type JSX } from 'react'
 import type { Mon, Player } from '../../types'
 import { getItem, getPokemon, sprites } from '../../data/dex'
 import { teraType } from '../../data/options'
@@ -8,19 +8,107 @@ import { useBrand } from '../../brand'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { useFxSrc } from './monEffect'
 import './brand.css'
+import './cp.css'
+
+/** Which Pokémon pictures a layout draws: HOME 3D renders (default) or the pixel sprites. */
+export type SpriteKind = 'render' | 'pixel'
+const SpriteKindContext = createContext<SpriteKind>('render')
+export const useSpriteKind = () => useContext(SpriteKindContext)
+
+/** The same template drawn with pixel sprites (a "Sprites: Pixel" version of a style). */
+export function withPixelSprites<T extends { id: string; name: string; Component: (props: { data: never }) => JSX.Element }>(t: T): T {
+  const Inner = t.Component as (props: object) => JSX.Element
+  const Component = (props: object) => (
+    <SpriteKindContext.Provider value="pixel">
+      <Inner {...props} />
+    </SpriteKindContext.Provider>
+  )
+  return { ...t, id: `${t.id}-pixel`, name: `${t.name} · Pixel Sprites`, Component }
+}
+
+// Pixel sprites: trimmed to the Pokémon (the 96px sheets have wide empty margins) and scaled up on a canvas
+// with nearest-neighbour, at the size they're shown, so the preview and the PNG both get crisp square pixels.
+const pixelCache = new Map<string, Promise<string>>()
+function pixelSrc(src: string, size: number) {
+  const key = `${src}@${size}`
+  let p = pixelCache.get(key)
+  if (!p) {
+    p = new Promise<string>((resolve) => {
+      const img = new Image()
+      img.onerror = () => resolve(src)
+      img.onload = () => {
+        const w = img.naturalWidth
+        const h = img.naturalHeight
+        const read = document.createElement('canvas')
+        read.width = w
+        read.height = h
+        const rg = read.getContext('2d')!
+        rg.drawImage(img, 0, 0)
+        const a = rg.getImageData(0, 0, w, h).data
+        let x0 = w, y0 = h, x1 = -1, y1 = -1
+        for (let y = 0; y < h; y++)
+          for (let x = 0; x < w; x++)
+            if (a[(y * w + x) * 4 + 3] > 16) {
+              if (x < x0) x0 = x
+              if (x > x1) x1 = x
+              if (y < y0) y0 = y
+              if (y > y1) y1 = y
+            }
+        if (x1 < 0) return resolve(src)
+        const bw = x1 - x0 + 1
+        const bh = y1 - y0 + 1
+        const fit = size / Math.max(bw, bh)
+        const k = fit >= 2 && Math.floor(fit) / fit > 0.85 ? Math.floor(fit) : fit // whole-number scale when it costs little
+        const out = document.createElement('canvas')
+        out.width = size
+        out.height = size
+        const g = out.getContext('2d')!
+        g.imageSmoothingEnabled = false
+        const dw = Math.round(bw * k)
+        const dh = Math.round(bh * k)
+        g.drawImage(read, x0, y0, bw, bh, Math.round((size - dw) / 2), size - dh, dw, dh) // feet on the floor
+        resolve(out.toDataURL())
+      }
+      img.src = src
+    })
+    pixelCache.set(key, p)
+  }
+  return p
+}
+
+/** The picture for a Pokémon id at `size` px in the current sprite kind ('' while a pixel sprite is being prepared). */
+export function usePokemonSrc(id: string, size: number) {
+  const kind = useSpriteKind()
+  const icon = id && kind === 'pixel' ? sprites.icon(id) : ''
+  const key = icon ? `${icon}@${size}` : ''
+  const [px, setPx] = useState<{ key: string; url: string } | null>(null)
+  useEffect(() => {
+    if (!key) return
+    let live = true
+    pixelSrc(icon, Math.round(size)).then((url) => live && setPx({ key, url }))
+    return () => {
+      live = false
+    }
+  }, [key]) // eslint-disable-line react-hooks/exhaustive-deps
+  if (!id) return ''
+  if (kind === 'render') return sprites.render(id)
+  return px?.key === key ? px.url : ''
+}
 
 /** A Pokémon render with its held item (and Tera type when the format uses it). */
 export function MonSprite({ mon, size, showTera, style }: { mon: Mon; size: number; showTera?: boolean; style?: CSSProperties }) {
   const { showMegas } = useDisplay()
+  const pixel = useSpriteKind() === 'pixel'
   const pokemon = mon.pokemon ? displayPokemon(mon, showMegas) : ''
-  const src = useFxSrc(pokemon ? sprites.render(pokemon) : '', mon) // Terastal / Dynamax look when a layout asks
+  const src = useFxSrc(usePokemonSrc(pokemon, size), mon) // Terastal / Dynamax look when a layout asks
   if (!mon.pokemon) return <div className="dmv-mon" style={{ width: size, height: size, ...style }} />
-  const item = mon.item ? sprites.item(mon.item) : ''
+  const item = mon.item ? (pixel && sprites.itemPixel(mon.item)) || sprites.item(mon.item) : ''
+  const pixelItem = pixel ? !!sprites.itemPixel(mon.item) : sprites.itemIsPixel(mon.item)
   const tera = showTera ? teraType(mon.tera) : undefined
   return (
-    <div className="dmv-mon" style={{ width: size, height: size, ...style }}>
-      <img className="render" src={src} alt={getPokemon(pokemon)?.name ?? ''} />
-      {item && <img className={`item ${sprites.itemIsPixel(mon.item) ? 'pixel' : ''}`} src={item} alt={getItem(mon.item)?.name ?? ''} />}
+    <div className={`dmv-mon${pixel ? ' pixel' : ''}`} style={{ width: size, height: size, ...style }}>
+      {src ? <img className="render" src={src} alt={getPokemon(pokemon)?.name ?? ''} /> : <span className="render" />}
+      {item && <img className={`item ${pixelItem ? 'pixel' : ''}`} src={item} alt={getItem(mon.item)?.name ?? ''} />}
       {tera && <div className="tera" style={{ background: tera.color }} title={tera.name} />}
     </div>
   )
@@ -47,12 +135,19 @@ export function photoStyle(x: number, y: number, zoom: number): CSSProperties {
   }
 }
 
-/** A player's photo cropped to fill its box, or their initials if no photo was uploaded. */
+/** A player's photo cropped to fill its box (or, with photoFit, shown whole over the style's empty-photo background),
+ *  or their initials if no photo was uploaded. */
 export function PlayerPhoto({ player, className = '', style }: { player: Player; className?: string; style?: CSSProperties }) {
   const live = useContext(PhotoFrameContext)
   if (player.photo) {
     const f = photoFrame(player)
     const { x, y } = live?.uid === player.uid ? live : f
+    if (player.photoFit)
+      return (
+        <div className={`dmv-photo dmv-photo-empty dmv-photo-fit ${className}`} style={style}>
+          <img className="dmv-photo-img" src={player.photo} alt={player.name} data-photo={player.uid} style={photoStyle(x, y, f.zoom)} />
+        </div>
+      )
     return (
       <img
         className={`dmv-photo ${className}`}
@@ -89,7 +184,7 @@ export function Logo({ size, style }: { size: number; style?: CSSProperties }) {
 
 let measureCtx: CanvasRenderingContext2D | null | undefined
 
-function textWidth(text: string, font: string) {
+export function textWidth(text: string, font: string) {
   if (measureCtx === undefined) measureCtx = document.createElement('canvas').getContext('2d')
   if (!measureCtx) return 0
   measureCtx.font = font
@@ -97,7 +192,7 @@ function textWidth(text: string, font: string) {
 }
 
 /** Re-render once web fonts finish loading, so text measurements use the real font. */
-function useFontsReady() {
+export function useFontsReady() {
   const [, setReady] = useState(document.fonts.status === 'loaded')
   useEffect(() => {
     document.fonts.ready.then(() => setReady(true))

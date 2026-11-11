@@ -159,10 +159,7 @@
   margin-top: 0;
 }
 .ar-cp {
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  transform: skewX(-12deg);
+  font-size: 18px;
 }
 
 /* Four players or fewer: taller rows, team as a 3 x 2 grid of larger Pokémon. */
@@ -177,6 +174,15 @@
   font-size: 26px;
 }
 .ar.few .ar-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
+}
+
+/* 5-7 players: rows share the height 8 rows use (8 x 117 + 7 x 12 gaps); 5 get the 3 x 2 team grid. */
+.ar.mid .ar-row { height: calc((1020px - (var(--n) - 1) * 12px) / var(--n)); }
+.ar.mid .ar-sub { font-size: 22px; }
+.ar.mid.n5 .ar-team {
   display: grid;
   grid-template-columns: repeat(3, auto);
   gap: 0 6px;

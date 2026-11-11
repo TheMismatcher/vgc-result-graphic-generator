@@ -1,8 +1,7 @@
+import { Facts } from '../shared/Facts'
 import type { Theme } from '../themes/theme'
 import type { BracketEntry, StandingsTemplate } from '../types'
-import { FitText, Logo, MonSprite, CpBadge } from '../shared/parts'
-import { eventFacts } from '../shared/format'
-import { sprites } from '../../data/dex'
+import { FitText, Logo, MonSprite, CpBadge, usePokemonSrc } from '../shared/parts'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { LoudBackground } from '../shared/LoudBackground'
 import './bracket.css'
@@ -17,6 +16,11 @@ const LINE = 6
 
 const ROUND_NAMES: Record<number, string> = { 8: 'Quarterfinals', 4: 'Semifinals', 2: 'Finals' }
 
+function BracketMon({ id, size }: { id: string; size: number }) {
+  const src = usePokemonSrc(id, size)
+  return src ? <img src={src} alt="" style={{ width: size, height: size }} /> : <span style={{ display: 'inline-block', width: size, height: size }} />
+}
+
 function Entry({ entry, width, height, state, cp }: { entry: BracketEntry; width: number; height: number; state: 'won' | 'lost' | 'open'; cp?: number }) {
   const { showMegas } = useDisplay()
   const team = entry.player?.team.filter((m) => m.pokemon) ?? []
@@ -28,7 +32,7 @@ function Entry({ entry, width, height, state, cp }: { entry: BracketEntry; width
       {team.length > 0 && (
         <div className="br-team">
           {team.map((m, i) => (
-            <img key={i} src={sprites.render(displayPokemon(m, showMegas))} alt="" style={{ width: icon, height: icon }} />
+            <BracketMon key={i} id={displayPokemon(m, showMegas)} size={icon} />
           ))}
         </div>
       )}
@@ -90,7 +94,7 @@ export const makeBracket = (loud = false, theme?: Theme, bigChampion = true): St
           <div className="br-heading">
             <div className="br-tag">Top Cut</div>
             <FitText className="dmv-title" text={data.tournament.name || 'Tournament'} max={60} width={800} />
-            <div className="br-facts">{eventFacts(data).join('  ·  ')}</div>
+            <Facts data={data} className="br-facts" split={theme?.splitFacts} />
           </div>
         </header>
 
@@ -123,7 +127,7 @@ export const makeBracket = (loud = false, theme?: Theme, bigChampion = true): St
                       style={{ left: x, top: side === 0 ? c - inner / 2 : c + inner / 2, width: colW, transform: side === 0 ? 'translateY(-100%)' : undefined }}
                     >
                       <div className="br-champ-label">★ Champion ★</div>
-                      {data.cp && <CpBadge points={data.cp(1)} style={{ marginTop: 6, background: '#fff' }} />}
+                      {data.cp && <CpBadge points={data.cp(1)} style={{ marginTop: 6 }} />}
                       <FitText className="dmv-title br-champ-name" text={e.name || 'TBD'} max={38} width={colW - 30} min={16} />
                       <div className="br-champ-team">
                         {(e.player?.team ?? []).map((mon, k) => (
@@ -148,7 +152,7 @@ export const makeBracket = (loud = false, theme?: Theme, bigChampion = true): St
         {R > 0 && !bigChampion && (
           <div className={`br-champ dmv-panel ${champ ? '' : 'open'}`} style={{ left: colX(R), top: champCenter, width: colW, transform: 'translateY(-50%)' }}>
             <div className="br-champ-label">★ Champion ★</div>
-            {data.cp && champ && <CpBadge points={data.cp(1)} style={{ marginTop: 6, background: '#fff' }} />}
+            {data.cp && champ && <CpBadge points={data.cp(1)} style={{ marginTop: 6 }} />}
             <FitText className="dmv-title br-champ-name" text={champ?.name || 'TBD'} max={34} width={colW - 30} min={16} />
             <div className="br-champ-team">
               {(champ?.player?.team ?? []).map((m, i) => (

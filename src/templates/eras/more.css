@@ -337,7 +337,7 @@
   white-space: nowrap;
 }
 .dx-cp {
-  font-size: 13px;
+  margin-left: 14px;
 }
 .dx-team {
   display: flex;
@@ -709,3 +709,15 @@
   grid-template-columns: repeat(3, auto);
   gap: 0 4px;
 }
+
+/* Ghost Pixels (LocationRows `grow`) and Pokédex, 5-7 players: rows share the height 8 rows use. */
+.gp-rows.mid .gp-row { height: calc((980px - (var(--n) - 1) * 12px) / var(--n)); }
+.gp-rows.mid .gp-sub { font-size: 22px; }
+.gp-rows.mid.n5 .gp-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
+}
+
+.dx.mid .dx-entry { height: calc(800px / var(--n)); }
+.dx.mid .dx-sub { font-size: 20px; }

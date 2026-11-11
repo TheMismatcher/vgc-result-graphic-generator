@@ -7,6 +7,7 @@ import { makeChampion } from '../champion'
 import { makeTop4Photos } from '../top4-photos'
 import { makeTop8Mixed } from '../top8-mixed'
 import { makeTop8Photos } from '../top8-photos'
+import { makeWide } from '../wide'
 import type { StandingsData, StandingsLayout, StandingsTemplate } from '../types'
 import type { SideTheme } from '../themes/side'
 import type { Theme } from '../themes/theme'
@@ -23,6 +24,10 @@ const layouts = (theme: Theme): [StandingsTemplate, StandingsLayout][] => [
   [makeChampion(false, theme), 'champion'],
   [makeChampion(false, theme, true), 'championphoto'],
   [makeBracket(false, theme), 'bracket'],
+  [makeWide('rows', theme), 'widerows'],
+  [makeWide('spotlight', theme), 'widespot'],
+  [makeWide('columns', theme), 'widecols'],
+  [makeWide('plain', theme), 'widecolsplain'],
 ]
 
 export const TerastalLayouts = layouts(TERASTAL_THEME)

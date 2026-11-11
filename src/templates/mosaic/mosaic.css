@@ -201,3 +201,13 @@
   grid-template-columns: repeat(3, auto);
   gap: 0 4px;
 }
+
+/* 5-7 players: rows share the height 8 rows use (8 x 104 + 7 x 16 gaps); 5 get the 3 x 2 team grid. */
+.mz.mid .mz-row { height: calc((944px - (var(--n) - 1) * 16px) / var(--n)); }
+.mz.mid .mz-place { font-size: 46px; }
+.mz.mid .mz-sub { font-size: 22px; }
+.mz.mid.n5 .mz-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
+}

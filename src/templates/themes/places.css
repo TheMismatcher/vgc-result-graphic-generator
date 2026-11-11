@@ -362,6 +362,21 @@
 .themed.theme-place.tb .dmv-panel {
   background: var(--pl-panel);
 }
+/* Who won each set: a faint white glow round the winner (gold is the Win version's look); the loser's contents are
+   dimmed (the box stays solid so the map can't wash it out) and the losing number in the score muted. */
+.themed.theme-place.tb-neutral:not(.hoo):not(.sky) .tb-card.won {
+  border-color: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5), 0 0 22px rgba(255, 255, 255, 0.75), var(--pl-drop);
+}
+.themed.theme-place.tb .tb-card.lost {
+  opacity: 1;
+}
+.themed.theme-place.tb .tb-card.lost > * {
+  opacity: 0.4;
+}
+.themed.theme-place .tb-set-score span:not(.win) {
+  opacity: 0.4;
+}
 
 /* ---------- Spear Pillar Hall of Origin: the champion on the Hall's glass floor ---------- */
 .themed.theme-place.hoo .dmv-panel.first,
@@ -380,7 +395,9 @@
 .themed.theme-place.hoo .first .m8-name,
 .themed.theme-place.hoo .ch-mon-name,
 .themed.theme-place.hoo .br-champ .dmv-title,
-.themed.theme-place.hoo .br-champ-label {
+.themed.theme-place.hoo .br-champ-label,
+.themed.theme-place.hoo .first .wd-name,
+.themed.theme-place.hoo .first .wd-champ-name {
   color: #2e2628;
   text-shadow: none;
 }
@@ -388,14 +405,18 @@
 .themed.theme-place.hoo .first .p8-sub,
 .themed.theme-place.hoo .first .p4-sub,
 .themed.theme-place.hoo .first .m8-sub,
-.themed.theme-place.hoo .ch-item-name {
+.themed.theme-place.hoo .ch-item-name,
+.themed.theme-place.hoo .first .wd-sub {
   color: #685050;
+  opacity: 1;
   text-shadow: none;
 }
 .themed.theme-place.hoo .m8-card:first-child .m8-place,
 .themed.theme-place.hoo .first .p8-place,
 .themed.theme-place.hoo .first .p4-place,
-.themed.theme-place.hoo .first .m8-place {
+.themed.theme-place.hoo .first .m8-place,
+.themed.theme-place.hoo .wd-place.first,
+.themed.theme-place.hoo .wd-col-place.first {
   background: #e8c040;
   color: #2e2628;
 }
@@ -527,14 +548,20 @@
 .themed.theme-place.sky .first .m8-sub,
 .themed.theme-place.sky .ch-mon-name,
 .themed.theme-place.sky .ch-item-name,
-.themed.theme-place.sky .br-champ-label {
+.themed.theme-place.sky .br-champ-label,
+.themed.theme-place.sky .first .wd-name,
+.themed.theme-place.sky .first .wd-champ-name,
+.themed.theme-place.sky .first .wd-sub {
   color: #fff;
+  opacity: 1;
   text-shadow: 2px 2px 0 rgba(8, 6, 20, 0.9);
 }
 .themed.theme-place.sky .m8-card:first-child .m8-place,
 .themed.theme-place.sky .first .p8-place,
 .themed.theme-place.sky .first .p4-place,
 .themed.theme-place.sky .first .m8-place,
+.themed.theme-place.sky .wd-place.first,
+.themed.theme-place.sky .wd-col-place.first,
 .themed.theme-place.sky .ch-banner,
 .themed.theme-place.sky .vs-banner,
 .themed.theme-place.sky .tb-banner,
@@ -551,4 +578,14 @@
 /* CP chips: flat type (the panels' text shadow made them hard to read on the glass styles). */
 .themed.theme-place .dmv-cp {
   text-shadow: none;
+}
+
+/* Wide layouts: the 1st-place number on the gold (Hall of Origin) or sky-red (Cutscene Sky) block. */
+.themed.theme-place.hoo .wd-place.first span,
+.themed.theme-place.hoo .wd-col-place.first {
+  color: #2e2628;
+}
+.themed.theme-place.sky .wd-place.first span,
+.themed.theme-place.sky .wd-col-place.first {
+  color: #fff;
 }

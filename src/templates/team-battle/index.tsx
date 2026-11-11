@@ -4,6 +4,7 @@ import { LoudBackground } from '../shared/LoudBackground'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import type { SideTheme } from '../themes/side'
 import './team-battle.css'
+import './results.css'
 
 const W = 1080
 const H = 1350
@@ -48,6 +49,8 @@ export const makeTeamBattle = (variant: Variant, loud = false, theme?: SideTheme
     const winnerName = data.winner === null ? '' : data.teams[data.winner].name || `Team ${data.winner ? 'B' : 'A'}`
     const logoSize = variant === 'neutral' ? 140 : 112 // smaller when the Victory/Final tag takes room up top
     const us = a.name || 'Your team'
+    // Themed Win / Loss: the background is built from your team's Pokémon only.
+    const wallMons = data.sets.flatMap((st) => (variant === 'neutral' ? st.players : [st.players[0]]).flatMap((p) => p.team.map((m) => (m.pokemon ? displayPokemon(m, showMegas) : ''))))
     const banner =
       variant === 'win'
         ? `${us} win ${data.score[0]}–${data.score[1]}`
@@ -60,9 +63,19 @@ export const makeTeamBattle = (variant: Variant, loud = false, theme?: SideTheme
     return (
       <div className={`dmv tb tb-${variant} ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : ''}`} style={{ width: W, height: H }}>
         {theme ? (
-          <theme.Wall mons={data.sets.flatMap((st) => st.players.flatMap((p) => p.team.map((m) => (m.pokemon ? displayPokemon(m, showMegas) : ''))))} seed={`tb|${a.name}|${b.name}|${data.week}`} width={W} height={H} />
+          <>
+            <theme.Wall mons={wallMons} seed={`tb|${a.name}|${b.name}|${data.week}`} width={W} height={H} />
+            {/* The result's mood over the style's background (sunshine, rain, a spotlight...): each theme's CSS. */}
+            {variant !== 'neutral' && <div className="tb-mood" />}
+          </>
         ) : loud ? (
-          <LoudBackground top="blue" bottom="red" split={[54, 46]} burst={[540, 110]} vertical />
+          <>
+            <div className="tb-loud-bg">
+              <LoudBackground top="blue" bottom="red" split={[54, 46]} burst={[540, 110]} vertical />
+            </div>
+            {/* Comic Book Win / Loss: the result's mood over the comic background. */}
+            {variant !== 'neutral' && <div className="tb-mood" />}
+          </>
         ) : (
           <>
             <div className="tb-bg" />
@@ -126,3 +139,5 @@ export default TeamBattle
 export const TeamBattleWin = makeTeamBattle('win')
 export const TeamBattleLoss = makeTeamBattle('loss')
 export const TeamBattleLoud = makeTeamBattle('neutral', true)
+export const TeamBattleLoudWin = makeTeamBattle('win', true)
+export const TeamBattleLossLoud = makeTeamBattle('loss', true)

@@ -2,6 +2,7 @@
 // big numerals, thin rules and lots of space; the brand colours are used as accents only.
 // Two moods: Paper (warm off-white) and Night (deep navy).
 
+import { fillClass } from '../shared/format'
 import type { StandingsTemplate } from '../types'
 import { CpBadge, FitText, Logo, MonSprite } from '../shared/parts'
 import { getItem, getPokemon } from '../../data/dex'
@@ -32,7 +33,7 @@ const makeTopCut = (mood: Mood): StandingsTemplate => ({
     // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
     const few = data.players.length <= 4
     return (
-      <div className={`dmv ed ed-${mood} ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
+      <div className={`dmv ed ed-${mood} ${fillClass(data.players.length)}`} style={{ width: 1080, height: 1350 }}>
         <header className="ed-head">
           <div className="ed-kicker-row">
             <div className="ed-kicker">Final Standings</div>

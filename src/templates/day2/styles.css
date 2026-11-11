@@ -1,0 +1,127 @@
+/* Event Results in the standings styles (styles.tsx). Positions come from the shared layout; this is the paint. */
+.d2s-event,
+.d2s-name,
+.d2s-record,
+.d2s-caption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.d2s-name-text,
+.d2s-event-text,
+.d2s-record-text,
+.d2s-caption-text {
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.d2s-photo {
+  overflow: hidden;
+}
+.d2s-photo > .dmv-photo {
+  border-radius: 0;
+}
+.d2s-cell {
+  border-radius: 16px;
+}
+
+/* ---------------- Classic ---------------- */
+.d2s-classic {
+  background: var(--blue);
+}
+.d2s-classic-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(150deg, var(--blue) 0 42%, var(--ink) 42% 42.6%, var(--red) 42.6% 100%);
+}
+.d2s-classic .d2s-event {
+  background: var(--yellow);
+  border: 7px solid var(--ink);
+  transform: skewX(-10deg);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.d2s-classic .d2s-event-text {
+  color: var(--ink);
+  font-style: italic;
+  transform: skewX(10deg);
+}
+.d2s-classic .d2s-name {
+  background: #fff;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.d2s-classic .d2s-name-text {
+  color: var(--ink);
+  font-style: italic;
+}
+.d2s-classic .d2s-record {
+  background: var(--red-dark);
+  border: 6px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.d2s-classic .d2s-record-text {
+  color: #fff;
+}
+.d2s-classic .d2s-photo {
+  background: var(--blue-dark);
+  box-shadow: 10px 10px 0 var(--ink);
+}
+.d2s-classic .d2s-caption {
+  background: var(--yellow);
+  border: 6px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.d2s-classic .d2s-caption-text {
+  color: var(--ink);
+}
+.d2s-classic .d2s-panel {
+  background: var(--blue-dark);
+  box-shadow: 10px 10px 0 var(--ink);
+}
+.d2s-classic .d2s-cell {
+  background: #fff;
+  border: 6px solid var(--ink);
+  box-sizing: border-box;
+}
+.d2s-classic .d2s-cell.ace {
+  background: var(--yellow);
+}
+.d2s-classic .d2s-logo {
+  filter: drop-shadow(8px 8px 0 var(--ink));
+}
+
+/* ---------------- Trading Card ---------------- */
+.d2s-card {
+  background: radial-gradient(ellipse at 62% 40%, #3a3f4b 0%, #1a1c22 60%, #0d0e12 100%);
+  font-family: 'Cabin', 'Gill Sans', sans-serif;
+}
+/* The card's own table colour would show as a lighter rectangle behind it. */
+.d2s-card .tcard {
+  background: none;
+}
+.d2s-card-event {
+  display: flex;
+  align-items: flex-start;
+}
+.d2s-card-event-text {
+  color: #fff;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+}
+.d2s-card-caption {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow: hidden;
+}
+.d2s-card .d2s-logo {
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.6));
+}

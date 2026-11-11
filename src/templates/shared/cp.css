@@ -1,0 +1,194 @@
+/* "+50 CP" (Show CP earned), styled per style. The tag itself is .dmv-cp in brand.css; each style sets
+   the --cp-* variables on its root so the same tag picks up its colours and type on every layout
+   (Top Cut, Top 8, Top 4, Champion, Bracket, Wide). Classic / Comic Book / White keep the default
+   comic bubble (yellow, ink outline). */
+
+/* Map / art / Glass styles: a tag in the 1st-place block's colours with a thin outline in the style's dark
+   colour (like Classic's ink outline), so it stands off light panels and the see-through glass. On the gold
+   1st-place card it flips to a dark tag with gold letters, so it doesn't melt into the gold. */
+.themed.theme-place {
+  --cp-bg: var(--pl-first);
+  --cp-ink: var(--pl-first-ink);
+  --cp-line: var(--pl-dark);
+  --cp-border-w: 2px;
+  --cp-radius: 8px;
+  --cp-italic: normal;
+  --cp-weight: 800;
+  --cp-pad: 2px 9px;
+  --cp-glow: 0 2px 0 color-mix(in srgb, var(--pl-dark) 55%, transparent);
+}
+.themed.theme-place .first,
+.themed.theme-place .dmv-panel.first {
+  --cp-bg: var(--pl-dark);
+  --cp-ink: var(--pl-first);
+  --cp-line: var(--pl-first);
+}
+
+/* Location rows (the map styles' Top Cut, Ghost Pixels, eras): the CP sits under the place number,
+   in the place block's own colour, font and glow, so the handle keeps the full line. */
+.dmv-cp.loc-cp {
+  --cp-bg: transparent;
+  --cp-ink: currentColor;
+  --cp-border-w: 0px;
+  --cp-pad: 0;
+  --cp-italic: inherit;
+  --cp-weight: 800;
+  --cp-shadow: inherit;
+  --cp-font: inherit;
+  --cp-glow: none;
+}
+.loc-place-cp .dmv-cp.loc-cp {
+  margin: 4px 0 0;
+  font-size: 15px;
+  text-shadow: inherit;
+  opacity: 0.9;
+}
+.few > * > .loc-place-cp .dmv-cp.loc-cp {
+  font-size: 19px;
+}
+.loc-place-cp {
+  flex-direction: column;
+  line-height: 1;
+}
+
+/* Mosaic: the same soft coloured tab as its place tags ("1st" gold, then the card's red or blue). */
+.themed.theme-mosaic {
+  --cp-bg: color-mix(in srgb, var(--blue-dark) 70%, #fff);
+  --cp-ink: #fff;
+  --cp-border-w: 0px;
+  --cp-radius: 10px;
+  --cp-italic: normal;
+  --cp-weight: 900;
+  --cp-pad: 3px 10px;
+}
+.themed.theme-mosaic .red {
+  --cp-bg: color-mix(in srgb, var(--red) 75%, #fff);
+}
+.themed.theme-mosaic .first,
+.themed.theme-mosaic.ch {
+  --cp-bg: color-mix(in srgb, var(--yellow) 85%, #fff);
+  --cp-ink: #1f2330;
+}
+/* Mosaic Top Cut: a small white tab inside the coloured place block, lettered in that block's colour. */
+.mz {
+  --cp-bg: rgba(255, 255, 255, 0.92);
+  --cp-ink: var(--red);
+  --cp-border-w: 0px;
+  --cp-radius: 8px;
+  --cp-italic: normal;
+  --cp-weight: 900;
+  --cp-pad: 2px 8px;
+}
+.mz .mz-row:nth-child(even) {
+  --cp-ink: var(--blue-dark);
+}
+.mz .mz-row.first {
+  --cp-bg: rgba(255, 255, 255, 0.8);
+  --cp-ink: #1f2330;
+}
+
+/* Editorial: no box, set like its kickers (tracked caps in the accent colour). */
+.ed,
+.themed.theme-editorial {
+  --cp-bg: transparent;
+  --cp-ink: var(--accent);
+  --cp-border-w: 0px;
+  --cp-pad: 0;
+  --cp-italic: normal;
+  --cp-weight: 800;
+  --cp-tracking: 0.18em;
+  --cp-case: uppercase;
+}
+
+/* Sports Page: plain newspaper type, like the rest of the table. */
+.sp {
+  --cp-bg: transparent;
+  --cp-ink: inherit;
+  --cp-border-w: 0px;
+  --cp-pad: 0;
+  --cp-italic: normal;
+  --cp-weight: 700;
+  --cp-font: 'Oswald', sans-serif;
+  --cp-case: uppercase;
+  --cp-tracking: 0.04em;
+}
+
+/* Arena: gold italic text, like its place numbers. */
+.ar,
+.themed.theme-arena {
+  --cp-bg: transparent;
+  --cp-ink: var(--yellow);
+  --cp-border-w: 0px;
+  --cp-pad: 0;
+  --cp-weight: 900;
+}
+
+/* Ghost Pixels: square pixel tag in its purple and lilac line. */
+.gp,
+.themed.theme-ghostpixel {
+  --cp-bg: #5c3e96;
+  --cp-ink: #f3ebff;
+  --cp-line: #b69ce4;
+  --cp-border-w: 2px;
+  --cp-radius: 0;
+  --cp-italic: normal;
+  --cp-weight: 400;
+  --cp-font: 'Press Start 2P', monospace;
+  --cp-pad: 5px 7px 4px;
+}
+.gp .dmv-cp,
+.themed.theme-ghostpixel .dmv-cp {
+  font-size: 12px;
+}
+
+/* Kanto Game Boy: square outline in the darkest green, pixel font. */
+.gb {
+  --cp-bg: transparent;
+  --cp-ink: var(--g0);
+  --cp-line: var(--g0);
+  --cp-border-w: 2px;
+  --cp-radius: 0;
+  --cp-italic: normal;
+  --cp-weight: 400;
+  --cp-font: 'Press Start 2P', monospace;
+  --cp-pad: 4px 6px 3px;
+}
+
+/* Unova: a black box, like the black bands. */
+.uv {
+  --cp-bg: #0b0b0b;
+  --cp-ink: #f4f4f2;
+  --cp-border-w: 0px;
+  --cp-radius: 0;
+  --cp-italic: normal;
+  --cp-weight: 800;
+  --cp-pad: 3px 8px;
+}
+
+/* Pokédex: dex-number green in the pixel font, no box. */
+.dx {
+  --cp-bg: transparent;
+  --cp-ink: #3f6a2c;
+  --cp-line: #3f6a2c;
+  --cp-border-w: 0px;
+  --cp-pad: 0;
+  --cp-italic: normal;
+  --cp-weight: 400;
+  --cp-font: 'Press Start 2P', monospace;
+}
+.dx .dmv-cp {
+  font-size: 12px;
+}
+
+/* Mega / Dynamax / Terastal: the 1st-place badge's gradient, in the style's own font. */
+.pw,
+.dmv.themed.theme-power {
+  --cp-bg: var(--pw-place-first);
+  --cp-ink: var(--pw-place-first-ink);
+  --cp-border-w: 0px;
+  --cp-radius: 6px;
+  --cp-italic: normal;
+  --cp-weight: 800;
+  --cp-font: var(--pw-font);
+  --cp-pad: 3px 10px;
+}

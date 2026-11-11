@@ -1,6 +1,6 @@
 import type { StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, CpBadge } from '../shared/parts'
-import { eventFacts } from '../shared/format'
+import { eventFacts, fillClass } from '../shared/format'
 import './arena.css'
 
 // A sleek esports-style design: dark base, glass rows, outlined place numbers.
@@ -20,7 +20,7 @@ const makeArena = (bg: Background): StandingsTemplate => ({
     // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
     const few = data.players.length <= 4
     return (
-    <div className={`dmv ar ar-${bg} ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
+    <div className={`dmv ar ar-${bg} ${fillClass(data.players.length)}`} style={{ width: 1080, height: 1350 }}>
       <div className="ar-bg" />
       <div className="ar-bg-extra" />
 
@@ -47,7 +47,7 @@ const makeArena = (bg: Background): StandingsTemplate => ({
             </div>
             <div className="ar-team">
               {p.team.map((m, j) => (
-                <MonSprite key={j} mon={m} size={few ? 112 : 84} showTera={data.format.tera} />
+                <MonSprite key={j} mon={m} size={few ? 112 : data.players.length === 5 ? 92 : 84} showTera={data.format.tera} />
               ))}
             </div>
           </div>

@@ -553,3 +553,12 @@
 .pl-art .pl-sub {
   color: var(--pl-sub);
 }
+
+/* 5-7 players (LocationRows `grow`): rows share the height 8 rows use (8 x 112 + 7 x 12 gaps); 5 get the 3 x 2 team grid. */
+.pl-rows.mid .pl-row { height: calc((980px - (var(--n) - 1) * 12px) / var(--n)); }
+.pl-rows.mid .pl-sub { font-size: 22px; }
+.pl-rows.mid.n5 .pl-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
+}

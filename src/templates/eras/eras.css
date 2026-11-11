@@ -86,11 +86,6 @@
   color: var(--g1);
 }
 .gb-cp {
-  border-color: var(--g0);
-  background: var(--g2);
-  color: var(--g0);
-  font-family: 'Press Start 2P', monospace;
-  font-style: normal;
   font-size: 10px;
 }
 .gb-team {
@@ -462,6 +457,15 @@
   font-size: 24px;
 }
 .uv.few .uv-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
+}
+
+/* Unova, 5-7 players: rows share the height 8 rows use (8 x 118 + 7 x 10 gaps); 5 get the 3 x 2 team grid. */
+.uv.mid .uv-row { height: calc((1014px - (var(--n) - 1) * 10px) / var(--n)); }
+.uv.mid .uv-sub { font-size: 22px; }
+.uv.mid.n5 .uv-team {
   display: grid;
   grid-template-columns: repeat(3, auto);
   gap: 0 6px;

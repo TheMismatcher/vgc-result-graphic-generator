@@ -21,14 +21,14 @@ export interface ScannedMon {
   confident: boolean
 }
 
-interface ScanData {
+export interface ScanData {
   moves: string[]
   abilities: string[]
   species: [name: string, abilities: number[], types: string[], moves: number[], fullyEvolved: 0 | 1, bst: number][]
 }
 
 let scanData: Promise<ScanData> | null = null
-const loadScanData = () => (scanData ??= fetch(asset('data/team-scan.json')).then((r) => r.json()))
+export const loadScanData = () => (scanData ??= fetch(asset('data/team-scan.json')).then((r) => r.json()))
 
 // ---------- 1. Find the cards ----------
 
@@ -150,7 +150,7 @@ function lineImage(source: HTMLCanvasElement, card: Box, [x0, y0, x1, y1]: reado
 
 // ---------- 3. Match and identify ----------
 
-function distance(a: string, b: string) {
+export function distance(a: string, b: string) {
   const m = a.length, n = b.length
   const row = Array.from({ length: n + 1 }, (_, j) => j)
   for (let i = 1; i <= m; i++) {
@@ -165,10 +165,10 @@ function distance(a: string, b: string) {
   return row[n]
 }
 
-const key = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
+export const key = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
 
 /** Closest name in `list` to the OCR text, or "" when nothing is close enough. */
-function closest(text: string, list: string[]): string {
+export function closest(text: string, list: string[]): string {
   const k = key(text)
   if (k.length < 3) return ''
   let best = '', bestScore = Infinity
@@ -276,7 +276,7 @@ function iconHistogram(source: HTMLCanvasElement, card: Box) {
   return histogram(ctx.getImageData(x, Math.max(0, y), Math.round(card.w * 0.11), Math.round(card.h * 0.44)).data)
 }
 
-const GENDERED: Record<string, [male: string, female: string]> = {
+export const GENDERED: Record<string, [male: string, female: string]> = {
   basculegion: ['basculegion-male', 'basculegion-female'],
   indeedee: ['indeedee-male', 'indeedee-female'],
   meowstic: ['meowstic-male', 'meowstic-female'],

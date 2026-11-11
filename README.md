@@ -31,9 +31,7 @@ Your work is saved in the browser automatically. **Load sample** fills every tab
 npm run build    # creates the dist/ folder
 ```
 
-Upload `dist/` to [Netlify](https://app.netlify.com/drop) (drag and drop), or connect this repository to Netlify with build command `npm run build` and publish directory `dist`.
-
-Use Netlify rather than GitHub Pages: the Event Results tab reads RK9 through a pass-through route (`/rk9/*`, set up in `public/_redirects`), which GitHub Pages doesn't support.
+The site is hosted on DigitalOcean App Platform: a static site (build command `npm run build`, output `dist`) plus a small function in `functions/` that the Event Results tab uses to read RK9 and Pokédata, since neither site lets other websites read its pages. Setup steps are in [functions/README.md](functions/README.md). `dist/` alone works on any static host, but RK9 and Pokédata imports need that function.
 
 ## Update Pokémon and items
 
@@ -55,6 +53,7 @@ Re-downloads the lists from [PokeAPI](https://pokeapi.co), rebuilds the screensh
 | `src/lib/cp.ts` | Official League Cup / Challenge Championship Points tables (update each season) |
 | `src/lib/limitless.ts` | Limitless import (standings, teams, bracket, usage) |
 | `src/lib/rk9.ts` | RK9 rosters, team lists, and records (Event Results tab) |
+| `src/lib/proxy.ts` | Reads RK9 / Pokédata through the pass-through function in `functions/` |
 | `src/lib/replay.ts` | Showdown replay reader (teams, items, set score, best-of-3) |
 | `src/lib/teamBattle.ts` | Team battles: sets from replays, side detection, overall score |
 | `src/lib/pokepaste.ts` | Pokepaste / Showdown team import |
@@ -68,6 +67,6 @@ Re-downloads the lists from [PokeAPI](https://pokeapi.co), rebuilds the screensh
 
 ## Credits
 
-Pokémon data and sprites from [PokeAPI](https://pokeapi.co), item icons from the [Bulbagarden Archives](https://archives.bulbagarden.net) and [Pokémon Showdown](https://pokemonshowdown.com). Tournament data from [Limitless](https://play.limitlesstcg.com), [RK9](https://rk9.gg), and Showdown replays.
+Pokémon data and sprites from [PokeAPI](https://pokeapi.co) ([sprites](https://github.com/PokeAPI/sprites)); the Gen 5-style pixel sprites for Pokémon from Gen 6 on are fan-made by the spriters of the [Smogon Sprite Project](https://www.smogon.com/forums/threads/sword-shield-sprite-project.3647722/). Item icons from the [Bulbagarden Archives](https://archives.bulbagarden.net) and [Pokémon Showdown](https://pokemonshowdown.com). Tournament data from [Limitless](https://play.limitlesstcg.com), [RK9](https://rk9.gg), and Showdown replays.
 
 Pokémon and all related names and artwork © Nintendo / Creatures Inc. / GAME FREAK inc. / The Pokémon Company. This is a non-commercial fan tool, not affiliated with or endorsed by them.

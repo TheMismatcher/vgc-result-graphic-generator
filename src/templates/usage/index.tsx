@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import type { UsageTemplate } from '../types'
 import { FitText, Logo } from '../shared/parts'
 import { eventFacts } from '../shared/format'
@@ -34,10 +33,17 @@ export const makeUsage = (theme?: SideTheme, loud = false): UsageTemplate => ({
         <div className="us-heading">
           <div className="dmv-title" style={{ fontSize: 84 }}>Top Usage</div>
           <FitText className="us-event" text={data.tournament.name} max={34} width={790} />
+          {/* Every fact has a dot in front; the dot that starts each line is clipped off (see CSS),
+              so a wrapped line never starts or ends with a stray dot. */}
           <div className="us-facts">
-            {[...eventFacts(data), data.totalTeams ? `${data.totalTeams} teams counted` : ''].filter(Boolean).map((f, i) => (
-              <Fragment key={f}>{i > 0 && ' · '}<span style={{ whiteSpace: 'nowrap' }}>{f}</span></Fragment>
-            ))}
+            <div className="us-facts-wrap">
+              {[...eventFacts(data), data.totalTeams ? `${data.totalTeams} teams counted` : ''].filter(Boolean).map((f) => (
+                <span key={f} className="us-facts-item">
+                  <span className="us-dot">·</span>
+                  {f}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </header>

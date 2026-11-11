@@ -4,6 +4,11 @@
 import { makeBracket } from '../bracket'
 import { makeChampion } from '../champion'
 import { BackdropImage } from '../../lib/backdrop'
+import type { Weather } from '../places/weather'
+import { makeWide } from '../wide'
+import spearSkyTall from '../places/spear-pillar-sky-dp-tall.png'
+import giratinaPortal from '../places/spear-pillar-giratina-portal-pt.png'
+import giratinaOut from '../places/spear-pillar-giratina-pt.png'
 import { MapWall, R119_BRIDGE, R119_TOP, R120, R201, SPEAR, SPEAR_ART, HALL, SNOWPOINT_FULL, R217, ACUITY, GLIMWOOD, TERA, MAX_RAID, SCARLET_BOOK_COVER, VIOLET_BOOK_COVER, SCARLET_BOOK_SQUARE, VIOLET_BOOK_SQUARE } from '../places'
 import { makeTop4Photos } from '../top4-photos'
 import { makeTop8Mixed } from '../top8-mixed'
@@ -70,6 +75,7 @@ const theme = (p: Place): Theme => ({
   id: p.id,
   style: p.style,
   className: p.className,
+  splitFacts: true,
   Background: ({ width, height }) => <Wall place={p} width={width} height={height} />,
 })
 
@@ -86,6 +92,10 @@ export const PLACE_LAYOUTS: Record<string, [StandingsTemplate, StandingsLayout][
         [makeChampion(false, t), 'champion'],
         [makeChampion(false, t, true), 'championphoto'],
         [makeBracket(false, t), 'bracket'],
+        [makeWide('rows', t), 'widerows'],
+        [makeWide('spotlight', t), 'widespot'],
+        [makeWide('columns', t), 'widecols'],
+        [makeWide('plain', t), 'widecolsplain'],
       ],
     ]
   }),
@@ -98,3 +108,43 @@ export const PLACE_SIDE_THEMES: SideTheme[] = PLACES.map((p) => ({
   className: p.className,
   Wall: ({ width, height }) => <Wall place={p} width={width} height={height} />,
 }))
+
+/** A Usage / Replay / Team Battle version of a pixel-map place under Emerald's rain or harsh sunlight
+ * (Team Battle Loss / Win on the Hoenn routes). Undefined for places that aren't pixel maps. */
+export function placeSideThemeInWeather(id: string, weather: Weather): SideTheme | undefined {
+  const p = PLACES.find((x) => x.id === id)
+  if (!p || p.custom || p.crop.smooth) return undefined
+  const place = { ...p, crop: { ...p.crop, weather }, square: p.square && { ...p.square, weather } }
+  return { id: p.id, style: p.style, className: p.className, Wall: ({ width, height }) => <Wall place={place} width={width} height={height} /> }
+}
+
+/** Team Battle Win / Loss on Spear Pillar: Win in the Hall of Origin (the Hall's map, the winners on its glass floor).
+ * Loss scenes: the climax sky (the cutscene texture over the whole graphic, 4:5 version from scripts/spear-pillar-sky.cjs),
+ * or Giratina on the Spear Pillar map itself (same crop and size as the style): his shadow cut out of Platinum's cutscene
+ * and laid on the map rip 1:1 (both are DS pixels; the floor emblem is ~42px wide in the cutscene vs 48 on the map),
+ * the portal's centre on the platform below the emblem. Neutral-dark pixels make the shadow (soft edges as alpha from
+ * how dark they are), the red eyes and wing spikes keep their colours; Dialga, Palkia, the player and the void are left
+ * out, and the wings, which run off the top of the DS screen, fade out there.
+ * - portal: Giratina's eyes in the portal (rebuilt at native 256x192 from a 720p capture of the cutscene, each DS pixel
+ *   sampled at its centre, channels snapped to 5-bit; the eyes swapped for the lossless capture's), moved up over the
+ *   emblem so the eyes sit in the gap between the score header and the first set;
+ * - emerged: his shadow fully out, with the splatters (Bulbagarden Archives File:Spear Pillar Giratina Pt.png). */
+export function spearPillarResultTheme(id: string, result: 'win' | 'loss', scene: 'climax' | 'portal' | 'emerged' = 'climax'): SideTheme | undefined {
+  const p = PLACES.find((x) => x.id === id)
+  if (!p || !p.className.includes('pl-spear')) return undefined
+  const glass = p.className.includes('glass') ? ' glass' : ''
+  if (result === 'win') {
+    const hall = { ...p, crop: HALL, square: undefined }
+    return { id: p.id, style: p.style, className: `theme-place pl-spear hoo${glass}`, Wall: ({ width, height }) => <Wall place={hall} width={width} height={height} /> }
+  }
+  if (scene !== 'climax') {
+    const place = { ...p, crop: { ...SPEAR, src: scene === 'portal' ? giratinaPortal : giratinaOut }, square: undefined }
+    return { id: p.id, style: p.style, className: `theme-place pl-spear giratina giratina-${scene}${glass}`, Wall: ({ width, height }) => <Wall place={place} width={width} height={height} /> }
+  }
+  return {
+    id: p.id,
+    style: p.style,
+    className: `theme-place pl-spear sky${glass}`,
+    Wall: () => <div style={{ position: 'absolute', inset: 0, background: `#000 url(${spearSkyTall}) 0 0 / 100% auto no-repeat` }} />,
+  }
+}

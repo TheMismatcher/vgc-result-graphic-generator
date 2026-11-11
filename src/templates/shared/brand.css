@@ -105,6 +105,20 @@
   height: 100%;
   object-fit: cover;
 }
+/* Fit whole photo: the photo uncropped, over the same background the style shows when there is no photo. */
+.dmv-photo-fit {
+  position: relative;
+  overflow: hidden;
+}
+.dmv-photo-fit > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.dmv-photo-img {
+  object-fit: contain;
+}
 .dmv-photo-empty {
   display: flex;
   align-items: center;
@@ -122,19 +136,26 @@
   paint-order: stroke fill;
 }
 
-/* "+50 CP" chip (Show CP earned) */
+/* "+50 CP" tag (Show CP earned). Its look comes from --cp-* variables that each style sets in
+   shared/cp.css, so one tag matches every style; the default is the DMV comic bubble. */
 .dmv-cp {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 2px 10px;
-  border: 3px solid var(--ink);
-  border-radius: 999px;
-  background: var(--yellow);
-  color: var(--ink);
+  padding: var(--cp-pad, 2px 10px);
+  border: var(--cp-border-w, var(--cp-size-bw, 3px)) solid var(--cp-line, var(--ink));
+  border-radius: var(--cp-radius, 999px);
+  background: var(--cp-bg, var(--yellow));
+  color: var(--cp-ink, var(--ink));
+  font-family: var(--cp-font, inherit);
   font-size: 18px;
-  font-weight: 900;
-  font-style: italic;
+  font-weight: var(--cp-weight, 900);
+  font-style: var(--cp-italic, italic);
+  letter-spacing: var(--cp-tracking, normal);
+  text-transform: var(--cp-case, none);
+  text-shadow: var(--cp-shadow, none);
+  box-shadow: var(--cp-glow, none);
+  transform: var(--cp-transform, none);
   line-height: 1.1;
   white-space: nowrap;
 }
@@ -145,3 +166,13 @@
   right: 8px;
   font-size: 20px;
 }
+
+/* Pixel sprites are pre-scaled to their box; keep the squares crisp when the preview shrinks them. */
+.dmv-mon.pixel img.render {
+  image-rendering: pixelated;
+}
+
+/* Top Cut with 5-7 players (fillClass): --n is the player count. */
+.n5 { --n: 5; }
+.n6 { --n: 6; }
+.n7 { --n: 7; }

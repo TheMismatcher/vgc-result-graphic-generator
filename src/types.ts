@@ -16,6 +16,7 @@ export interface Player {
   photoY?: number // vertical framing of the photo, 0 = top, 100 = bottom
   photoX?: number // horizontal framing, 0 = left, 100 = right (default 50)
   photoZoom?: number // 1 = just fills its box; larger zooms in
+  photoFit?: boolean // show the whole photo (no crop); the style's empty-photo background shows around it
   wins?: number
   losses?: number
   ties?: number
@@ -112,6 +113,7 @@ export interface AppState {
   settings: {
     showMegas: boolean
     showCP: boolean
+    tileShuffle?: number // Mosaic tile wall: 0 / missing = the layout from the event's name and date; "Shuffle tiles" bumps it
     // Last pick on the Preview's switch for paired styles; every paired style opens this way
     looks?: Partial<Record<'panels' | 'card' | 'champion', string>>
   }

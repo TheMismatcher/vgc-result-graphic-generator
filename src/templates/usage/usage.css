@@ -27,8 +27,25 @@
 }
 .us-facts {
   margin-top: 6px;
+  padding-bottom: 3px; /* room for text shadows inside the clipped box */
   font-size: 22px;
   font-weight: 700;
+  overflow: hidden;
+}
+/* Shifted left by one dot's width, so the dot in front of whichever fact starts a line sits
+   outside .us-facts and is hidden. 0.8em ≈ the old " · " gap. */
+.us-facts-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -0.8em;
+}
+.us-facts-item {
+  white-space: nowrap;
+}
+.us-dot {
+  display: inline-block;
+  width: 0.8em;
+  text-align: center;
 }
 
 .us-grid {

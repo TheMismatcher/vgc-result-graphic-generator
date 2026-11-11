@@ -144,6 +144,6 @@
   top: 6px;
   right: 8px;
   padding: 0 8px;
-  border-width: 2px;
+  --cp-size-bw: 2px;
   font-size: 16px;
 }

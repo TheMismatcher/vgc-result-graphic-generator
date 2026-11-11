@@ -12,6 +12,7 @@ import { makeChampion } from '../champion'
 import { makeTop4Photos } from '../top4-photos'
 import { makeTop8Mixed } from '../top8-mixed'
 import { makeTop8Photos } from '../top8-photos'
+import { makeWide } from '../wide'
 import type { Theme } from '../themes/theme'
 import type { SideTheme } from '../themes/side'
 import { LocationHead, LocationRows, seededRand } from '../eras'
@@ -76,6 +77,9 @@ export function TeraDen({ seed, width, height, ghosts = [], prism = false }: Bg)
   const rand = seededRand(`tera-den|${seed}`)
   const k = width / 1080
   const hz = height * 0.46 // horizon: where the wall meets the floor
+  // The reflected Pokémon are half the width, but no taller than the wall allows on landscape graphics.
+  const wide = width > height
+  const ghostSize = wide ? height * 0.62 : width * 0.5
   const id = `td${Math.floor(rand() * 1e6)}`
   // Wall: a jittered triangle mesh, each facet shaded by its tilt (light from the upper right) plus noise.
   const cell = 150 * k
@@ -163,7 +167,7 @@ export function TeraDen({ seed, width, height, ghosts = [], prism = false }: Bg)
             })}
           {/* The raid Pokémon reflected in the crystal, big and faint, like the den's walls do. */}
           {ghosts.slice(0, 2).map((g, i) => (
-            <image key={g} href={g} x={i ? width * 0.58 : -width * 0.06} y={-hz * 0.12} width={width * 0.5} height={width * 0.5} filter={`url(#${id}-ghost)`} />
+            <image key={g} href={g} x={wide ? (i ? width - ghostSize * 0.95 : -ghostSize * 0.1) : i ? width * 0.58 : -width * 0.06} y={-hz * 0.12} width={ghostSize} height={ghostSize} filter={`url(#${id}-ghost)`} />
           ))}
           <rect width={width} height={hz} fill={`url(#${id}-spot)`} />
           <rect width={width} height={hz} fill={`url(#${id}-wallfade)`} />
@@ -279,6 +283,10 @@ const layouts = (id: string, style: string, cls: string, kind: FxKind, Back: Com
     [withFx(makeChampion(false, theme), kind), 'champion'],
     [withFx(makeChampion(false, theme, true), kind), 'championphoto'],
     [withFx(makeBracket(false, theme), kind), 'bracket'],
+    [withFx(makeWide('rows', theme), kind), 'widerows'],
+    [withFx(makeWide('spotlight', theme), kind), 'widespot'],
+    [withFx(makeWide('columns', theme), kind), 'widecols'],
+    [withFx(makeWide('plain', theme), kind), 'widecolsplain'],
   ]
 }
 

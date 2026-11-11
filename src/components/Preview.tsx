@@ -73,7 +73,7 @@ export function Preview<T extends Template>({
   const [busy, setBusy] = useState(false)
   const [copied, setCopied] = useState(false)
   const [saved, setSaved] = useState<{ file: File; url: string } | null>(null) // phone: rendered image waiting to be saved
-  const { showMegas, setShowMegas, showCP, setShowCP, cpEvent, setCpEvent, setLook } = useDisplay()
+  const { showMegas, setShowMegas, showCP, setShowCP, cpEvent, setCpEvent, setLook, shuffleTiles } = useDisplay()
   const dialog = useDialog()
   // Custom Glass: the photo is dragged on the preview; the live position stays local until the drag ends.
   const backdropCtx = useBackdrop()
@@ -89,7 +89,7 @@ export function Preview<T extends Template>({
   // Flip one switch, keeping the others where they are.
   const flip = (g: LookGroup, v: string) => {
     setLook(g, v)
-    const same = (t: T) => (Object.keys(template.look!) as LookGroup[]).every((k) => k === g || t.look![k] === template.look![k])
+    const same = (t: T) => (Object.keys(template.look!) as LookGroup[]).every((k) => k === g || !(k in t.look!) || t.look![k] === template.look![k])
     const next = kin.find((t) => t.look![g] === v && same(t)) ?? kin.find((t) => t.look![g] === v)
     if (next && next.id !== template.id) onSelect(next.id)
   }
@@ -111,7 +111,8 @@ export function Preview<T extends Template>({
     // The photo covers its box, then zooms: how far it overhangs on each axis (graphic px).
     const bw = img.offsetWidth
     const bh = img.offsetHeight
-    const s0 = Math.max(bw / img.naturalWidth, bh / img.naturalHeight) * f.zoom
+    const fit = player.photoFit ? Math.min : Math.max // contain (whole photo) or cover
+    const s0 = fit(bw / img.naturalWidth, bh / img.naturalHeight) * f.zoom
     const overX = img.naturalWidth * s0 - bw
     const overY = img.naturalHeight * s0 - bh
     const k = node.current.getBoundingClientRect().width / template.width
@@ -122,8 +123,9 @@ export function Preview<T extends Template>({
     const onMove = (ev: globalThis.PointerEvent) => {
       last = {
         uid: player.uid,
-        x: overX > 0.5 ? clamp(f.x - ((ev.clientX - startX) / k) * (100 / overX)) : f.x,
-        y: overY > 0.5 ? clamp(f.y - ((ev.clientY - startY) / k) * (100 / overY)) : f.y,
+        // overX/overY < 0: the whole photo is narrower/shorter than its box and slides within it (same formula).
+        x: Math.abs(overX) > 0.5 ? clamp(f.x - ((ev.clientX - startX) / k) * (100 / overX)) : f.x,
+        y: Math.abs(overY) > 0.5 ? clamp(f.y - ((ev.clientY - startY) / k) * (100 / overY)) : f.y,
       }
       setPhotoLive(last)
     }
@@ -246,6 +248,12 @@ export function Preview<T extends Template>({
           </div>
         )}
       </div>
+      {template.style?.startsWith('Mosaic') && (
+        <div className="-mt-1 flex items-center gap-3 text-sm text-slate-700">
+          <Button onClick={shuffleTiles}>Shuffle tiles</Button>
+          <span className="text-xs text-slate-500">New tile pattern for the wall; editing the event name or date also gives a new one.</span>
+        </div>
+      )}
       {allowCP && showCP && (
         <p className="-mt-2 text-xs text-slate-500">Official 2027 CP table. Placings below the attendance kicker earn 0 and show no CP; attendance uses the Masters count (or the total if Masters is blank).</p>
       )}
@@ -288,9 +296,18 @@ export function Preview<T extends Template>({
                 className="flex-1 accent-[#b3121b]"
               />
             </label>
-            <Button className="py-1" onClick={() => photos!.onChange(photoPlayer.uid, { photoX: undefined, photoY: 30, photoZoom: undefined })}>Reset</Button>
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={!!photoPlayer.photoFit}
+                onChange={(e) => photos!.onChange(photoPlayer.uid, { photoFit: e.target.checked || undefined, photoX: undefined, photoY: e.target.checked ? 50 : 30, photoZoom: undefined })}
+                className="accent-[#b3121b]"
+              />
+              Fit whole photo
+            </label>
+            <Button className="py-1" onClick={() => photos!.onChange(photoPlayer.uid, { photoX: undefined, photoY: photoPlayer.photoFit ? 50 : 30, photoZoom: undefined })}>Reset</Button>
           </div>
-          <p className="text-xs text-slate-500">Drag a photo in the preview to move it in its frame; click another photo to zoom that one.</p>
+          <p className="text-xs text-slate-500">Drag a photo in the preview to move it in its frame; click another photo to zoom that one. Fit whole photo shows the entire photo over the style’s empty-photo background, for photos the wrong shape for their frame.</p>
         </div>
       )}
 
@@ -340,8 +357,18 @@ export function Preview<T extends Template>({
 }
 
 /** The Preview's switches for styles that come several ways. */
-const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on', map: 'Map', book: 'Book' }
+const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on', map: 'Map', book: 'Book', sprites: 'Sprites', result: 'Result', snowfall: 'Weather', scene: 'Loss scene' }
 const OPTION_LABELS: Record<string, string> = {
+  neutral: 'Neutral',
+  game: 'As in game',
+  strong: 'Stronger',
+  climax: 'Climax sky',
+  portal: 'Giratina in portal',
+  emerged: 'Giratina out',
+  win: 'Win',
+  loss: 'Loss',
+  render: '3D',
+  pixel: 'Pixel',
   hall: 'Hall of Origin',
   sky: 'Cutscene Sky',
   solid: 'Solid',
@@ -427,8 +454,10 @@ function BackdropControls({ glass }: { glass: boolean }) {
 }
 
 /**
- * Standings picker: choose a layout, then a style (the look). Every layout can be picked: if the
- * current style doesn't have it yet, the first style that does is used. Style cards preview each
+ * Standings picker: choose a layout, then a style (the look). Layouts the current style doesn't have
+ * are grayed out and say which style they open as (the first style that has them), like the dashed
+ * style cards say which layout they open as.
+ * Style cards preview each
  * style in the chosen layout. A style that doesn't have the chosen layout can still be picked: it opens
  * in Top Cut (or its first layout). Only the template changes, never the entered data.
  * Usage / Replay / Team Battle have no layouts: just the style cards.
@@ -469,7 +498,12 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
         <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">1. Layout</h3>
         <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Layout">
           {STANDINGS_LAYOUTS.map(({ id, label }) => {
-            const t = find(current.style!, id) ?? templates.find((x) => x.layout === id)
+            // Same style, same version (Solid / Glass etc.): only the layout changes.
+            const own = find(current.style!, id)
+            // Otherwise it opens in the first style that has the layout (in the saved Solid / Glass look).
+            const other = own ? undefined : templates.find((x) => x.layout === id && !x.variantOf && !x.retired)
+            const t = own ?? (other && prefer(other))
+            const opensAs = other && (other.variantOf ?? other.style)
             return (
               <button
                 key={id}
@@ -477,17 +511,26 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
                 role="radio"
                 aria-checked={current.layout === id}
                 disabled={!t}
+                title={opensAs ? `${currentStyle} doesn't have ${label} yet, so it opens as ${opensAs}` : undefined}
                 onClick={() => t && onSelect(t.id)}
                 className={`rounded-lg border-2 px-3 py-1.5 text-sm font-semibold transition ${
-                  current.layout === id ? 'border-[#b3121b] bg-red-50 text-slate-900' : 'border-slate-200 text-slate-700 hover:border-slate-400'
+                  current.layout === id
+                    ? 'border-[#b3121b] bg-red-50 text-slate-900'
+                    : own
+                      ? 'border-slate-200 text-slate-700 hover:border-slate-400'
+                      : 'border-dashed border-slate-300 text-slate-400 hover:border-slate-500 hover:text-slate-600'
                 }`}
               >
                 {label}
+                {opensAs && <span className="block text-[10px] font-medium leading-tight">Opens as {opensAs}</span>}
               </button>
             )
           })}
         </div>
-        <p className="mt-1 text-xs text-slate-500">{current.description}</p>
+        <p className="mt-1 text-xs text-slate-500">
+          {current.description}
+          {STANDINGS_LAYOUTS.some(({ id }) => !find(current.style!, id)) && <> Dashed layouts aren't made for {currentStyle} yet and open in another style.</>}
+        </p>
       </div>}
       <div>
         <div className="mb-2 flex items-center justify-between gap-2">

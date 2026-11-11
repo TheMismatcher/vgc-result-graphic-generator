@@ -5,6 +5,7 @@
 //
 // Outputs:
 //   src/data/pokemon.json, src/data/items.json
+//   public/data/names/<lang>.json      (names in 9 languages; see build-names.mjs)
 //   public/sprites/pokemon/<id>.png  (small 96px sprite, used in the pickers)
 //   public/sprites/home/<id>.png     (HOME 3D render, used on graphics)
 //   public/sprites/items/<id>.png     (small pixel icon, fallback)
@@ -17,6 +18,7 @@ import { execFileSync } from 'node:child_process'
 import path from 'node:path'
 import os from 'node:os'
 import { fileURLToPath } from 'node:url'
+import { buildNames } from './build-names.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const CSV = 'https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv'
@@ -354,3 +356,4 @@ await mkdir(path.join(ROOT, 'src/data'), { recursive: true })
 await writeFile(path.join(ROOT, 'src/data/pokemon.json'), JSON.stringify(pokemon))
 await writeFile(path.join(ROOT, 'src/data/items.json'), JSON.stringify(items))
 console.log(`Done: ${pokemon.length} Pokémon, ${items.length} items.`)
+await buildNames()

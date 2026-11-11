@@ -15,11 +15,13 @@ export interface ScannedStanding {
 export interface StandingsScan {
   tournament: string // from "Tournament: …", or ''
   rows: ScannedStanding[]
+  warnings?: string[] // things worth a look that aren't one row's fault (rows that seem to be missing, …)
+  spare?: { place: number; name: string }[] // names read below the last row (the other read of the same photo may know their records)
 }
 
-type Worker = Awaited<ReturnType<(typeof import('tesseract.js'))['createWorker']>>
-interface Line { text: string; y: number; x0: number; words: Word[] }
-interface Word { text: string; x0: number; x1: number; y0: number; y1: number }
+export type Worker = Awaited<ReturnType<(typeof import('tesseract.js'))['createWorker']>>
+export interface Line { text: string; y: number; x0: number; words: Word[] }
+export interface Word { text: string; x0: number; x1: number; y0: number; y1: number }
 
 // ---------- Image prep ----------
 
@@ -68,7 +70,7 @@ function skewAngle(src: HTMLCanvasElement) {
   return best
 }
 
-function straighten(src: HTMLCanvasElement) {
+export function straighten(src: HTMLCanvasElement) {
   const angle = skewAngle(src)
   if (Math.abs(angle) < 0.25) return src
   const c = document.createElement('canvas')
@@ -92,7 +94,7 @@ function resize(src: HTMLCanvasElement, factor: number) {
   return c
 }
 
-function crop(src: HTMLCanvasElement, x0: number, y0: number, x1: number, y1: number) {
+export function crop(src: HTMLCanvasElement, x0: number, y0: number, x1: number, y1: number) {
   x0 = Math.max(0, Math.round(x0))
   y0 = Math.max(0, Math.round(y0))
   x1 = Math.min(src.width, Math.round(x1))
@@ -108,7 +110,7 @@ function crop(src: HTMLCanvasElement, x0: number, y0: number, x1: number, y1: nu
  * Erase table borders: dark runs much longer than a letter, across or down. Screenshots have
  * solid black grid lines round every cell, which stop OCR reading the text inside them.
  */
-function removeRules(src: HTMLCanvasElement, textHeight: number) {
+export function removeRules(src: HTMLCanvasElement, textHeight: number) {
   const { width: w, height: h } = src
   const ctx = src.getContext('2d')!
   const img = ctx.getImageData(0, 0, w, h)
@@ -143,7 +145,7 @@ function removeRules(src: HTMLCanvasElement, textHeight: number) {
 
 // ---------- OCR helpers ----------
 
-async function ocr(worker: Worker, image: HTMLCanvasElement, yOffset = 0, xOffset = 0) {
+export async function ocr(worker: Worker, image: HTMLCanvasElement, yOffset = 0, xOffset = 0) {
   const { data } = await worker.recognize(image, {}, { blocks: true })
   const lines: Line[] = []
   const words: Word[] = []
@@ -201,7 +203,8 @@ function readRecord(raw: string, maxGames: number): { record: string; check: boo
     // L and T are single digits; anything extra is noise (e.g. the points glued on: "3/3/09").
     const l = parts[1][0], t = parts[2][0]
     // A table border ("16/2/0") or the Drop Round number ("41/3/0") glued onto the wins.
-    while (w.length > 1 && Number(w) > maxGames) {
+    // (Or the Drop Round column: "1 | 0/1/0" read as "10/1/0", more games than there were rounds.)
+    while (w.length > 1 && Number(w) + Number(l) + Number(t) > maxGames) {
       w = w.slice(1)
       check = true
     }
@@ -296,6 +299,7 @@ interface Grid {
   at: (k: number) => number // y of row k
   rows: (Line | undefined)[] // OCR line for each row, or undefined where it was skipped
   firstPlace: number // placing of row 0
+  lastAnchored: number // last row pinned by a readable placing number (-1 if none)
 }
 
 const median = (xs: number[]) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)] ?? 0
@@ -405,15 +409,157 @@ function rowGrid(lines: Line[], placeOf?: (l: Line) => number | null, known?: { 
   // Rows run to the last line that belongs to the table.
   let end = rows.length - 1
   while (end > 0 && !rows[end]) end--
-  return { gap, at: (k) => first + k * gap, rows: Array.from({ length: end + 1 }, (_, k) => rows[k]), firstPlace }
+  const lastAnchored = anchored.size ? Math.max(...anchored.values()) : -1
+  return { gap, at: (k) => first + k * gap, rows: Array.from({ length: Math.max(end, lastAnchored) + 1 }, (_, k) => rows[k]), firstPlace, lastAnchored }
+}
+
+// ---------- Header fallbacks ----------
+
+const lettersOnly = (t: string) => t.replace(/[^A-Za-z]/g, '').toLowerCase()
+
+/** "Record", allowing one misread letter ("Recorc", "Rccord"): photos blur this header a lot. */
+function isRecordWord(text: string) {
+  const t = lettersOnly(text)
+  if (t === 'record') return true
+  if (t.length < 5 || t.length > 7) return false
+  // Levenshtein distance <= 1 against 'record'
+  const a = t, b = 'record'
+  let i = 0, j = 0, edits = 0
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) { i++; j++; continue }
+    if (++edits > 1) return false
+    if (a.length > b.length) i++
+    else if (a.length < b.length) j++
+    else { i++; j++ }
+  }
+  return edits + (a.length - i) + (b.length - j) <= 1
+}
+
+/**
+ * No readable "Record" header (blurred, glare): the records themselves ("5/1/0") still show
+ * where that column is, and the header sits about a row and a third above the first one.
+ */
+function guessRecordHeader(words: Word[]): Word | undefined {
+  const hits = words.filter((w) => /^\W*\d\s*\/\s*\d\s*\/\s*\d\W*$/.test(w.text)).sort((a, b) => a.y0 - b.y0)
+  if (hits.length < 3) return
+  const refX = median(hits.slice(0, 3).map((w) => w.x0))
+  const col = hits.filter((w) => Math.abs(w.x0 - refX) < (w.x1 - w.x0) * 1.2)
+  if (col.length < 3) return
+  const h = median(col.map((w) => w.y1 - w.y0))
+  const gap = median(col.slice(1).map((w, i) => w.y0 - col[i].y0).filter((d) => d > h * 0.5)) || h * 1.6
+  const cy = col[0].y0 + h / 2 - gap * 1.3
+  return { text: 'record', x0: median(col.map((w) => w.x0)), x1: median(col.map((w) => w.x1)), y0: cy - h / 2, y1: cy + h / 2 }
+}
+
+/**
+ * Photos with glare or uneven light: divide out the slowly changing background (shade
+ * correction) so the text has the same contrast everywhere, then stretch the contrast.
+ */
+export function enhance(src: HTMLCanvasElement) {
+  const { width: w, height: h } = src
+  const small = document.createElement('canvas')
+  small.width = Math.max(1, Math.round(w / 24))
+  small.height = Math.max(1, Math.round(h / 24))
+  small.getContext('2d')!.drawImage(src, 0, 0, small.width, small.height)
+  const bgC = document.createElement('canvas')
+  bgC.width = w
+  bgC.height = h
+  const bctx = bgC.getContext('2d', { willReadFrequently: true })!
+  bctx.imageSmoothingQuality = 'high'
+  bctx.drawImage(small, 0, 0, w, h)
+  const bg = bctx.getImageData(0, 0, w, h).data
+  const out = document.createElement('canvas')
+  out.width = w
+  out.height = h
+  const octx = out.getContext('2d')!
+  const sctx = src.getContext('2d', { willReadFrequently: true })!
+  const img = sctx.getImageData(0, 0, w, h)
+  const px = img.data
+  for (let i = 0; i < px.length; i += 4) {
+    const lum = px[i] * 0.3 + px[i + 1] * 0.59 + px[i + 2] * 0.11
+    const back = Math.max(40, bg[i] * 0.3 + bg[i + 1] * 0.59 + bg[i + 2] * 0.11)
+    let v = (lum / back) * 235 // paper → ~235, ink well below
+    v = v > 235 ? 255 : Math.max(0, (v / 235) ** 1.6 * 255) // darken the in-between greys
+    px[i] = px[i + 1] = px[i + 2] = v
+  }
+  octx.putImageData(img, 0, 0)
+  return out
 }
 
 // ---------- Main ----------
 
+/**
+ * Read a photo once; if that fails or looks incomplete (rows missing, unreadable records), read it
+ * again with the lighting evened out and keep whichever read is more complete.
+ */
 export async function scanStandingsImage(file: File, onProgress?: (msg: string) => void): Promise<StandingsScan> {
   if (!file.type.startsWith('image/')) throw new Error('That file isn’t an image.')
+  let first: StandingsScan | undefined
+  let firstError: unknown
+  try {
+    first = await scanOnce(file, onProgress, false)
+  } catch (e) {
+    firstError = e
+  }
+  // Good enough? (No warnings, every row has a name and a record, and few rows are doubtful.)
+  if (first && !first.warnings?.length && first.rows.every((r) => r.name && r.record) && first.rows.filter((r) => r.check).length <= first.rows.length * 0.25) return first
+  onProgress?.('Trying again with the lighting evened out…')
+  try {
+    const second = await scanOnce(file, onProgress, true)
+    if (!first) return second
+    // The two reads often fail in different places (one reads the names, the other the records),
+    // so combine them row by row, then keep whichever of the three looks most complete.
+    const merged = mergeScans(first, second)
+    const score = (r: StandingsScan) => r.rows.filter((x) => !x.check).length * 2 + r.rows.length - (r.warnings?.length ?? 0) * 2
+    return [first, second, merged].reduce((best, r) => (score(r) > score(best) ? r : best))
+  } catch (e) {
+    if (first) return first
+    throw firstError ?? e
+  }
+}
+
+/** Row-by-row union of two reads of the same standings (matched by placing). */
+function mergeScans(a: StandingsScan, b: StandingsScan): StandingsScan {
+  const byPlace = (r: StandingsScan) => new Map(r.rows.map((x) => [x.place, x]))
+  const A = byPlace(a), B = byPlace(b)
+  const spare = new Map([...(a.spare ?? []), ...(b.spare ?? [])].map((x) => [x.place, x.name]))
+  const rows: ScannedStanding[] = []
+  const max = Math.max(...A.keys(), ...B.keys(), 0)
+  for (let p = 1; p <= max; p++) {
+    const x = A.get(p), y = B.get(p)
+    if (!x || !y) {
+      const only = x ?? y
+      if (only) rows.push({ ...only })
+      continue
+    }
+    // A name: the cleaner read wins; a record: the one that isn't doubtful. Disagreement is flagged.
+    const goodName = (r: ScannedStanding) => (r.name.includes(' ') ? 2 : r.name ? 1 : 0) - (r.check ? 1 : 0)
+    const pick = goodName(y) > goodName(x) ? y : x
+    const goodRec = (r: ScannedStanding) => (r.record ? (r.check ? 1 : 2) : 0)
+    const rec = goodRec(y) > goodRec(x) ? y : x
+    const disagree = Boolean(x.record && y.record && x.record !== y.record)
+    rows.push({ place: p, name: pick.name, record: rec.record, check: (pick.check && !!pick.name) || (rec.check && !!rec.record) || disagree || !pick.name || !rec.record })
+  }
+  // A row with a record but no name: another read may have seen the name further down the page.
+  rows.forEach((r) => {
+    const nm = spare.get(r.place)
+    if (!r.name && nm) {
+      r.name = nm
+      r.check = true
+    }
+  })
+  const seen = Math.max(0, ...[a, b].flatMap((r) => (r.warnings ?? []).map((w) => Number(w.match(/about (\d+)/)?.[1] ?? 0))))
+  const warnings: string[] = []
+  if (seen > rows.length) warnings.push(`The page seems to have about ${seen} rows but only ${rows.length} were read; some may be missing.`)
+  const noRecord = rows.filter((r) => !r.record).length
+  if (noRecord) warnings.push(`${noRecord} record${noRecord > 1 ? 's' : ''} couldn’t be read.`)
+  return { tournament: a.tournament || b.tournament, rows, warnings }
+}
+
+async function scanOnce(file: File, onProgress: ((msg: string) => void) | undefined, evenLight: boolean): Promise<StandingsScan> {
   onProgress?.('Straightening the photo…')
   let image = straighten(await loadCanvas(file))
+  if (evenLight) image = enhance(image)
 
   onProgress?.('Loading text recognition (first time takes a moment)…')
   const T = await import('tesseract.js')
@@ -434,7 +580,7 @@ export async function scanStandingsImage(file: File, onProgress?: (msg: string) 
       page = await ocr(worker, image)
     }
     // No "Record" header: grid lines in a screenshot may be hiding it. Erase them and look again.
-    const hasRecord = (p: typeof page) => p.words.some((w) => w.text.replace(/[^A-Za-z]/g, '').toLowerCase() === 'record')
+    const hasRecord = (p: typeof page) => p.words.some((w) => isRecordWord(w.text))
     if (!hasRecord(page)) {
       const erased = removeRules(image, lineHeight)
       const again = await ocr(worker, erased)
@@ -456,14 +602,14 @@ export async function scanStandingsImage(file: File, onProgress?: (msg: string) 
     // Several divisions on one page (e.g. Senior above Masters): use the Masters table.
     const divisionWords = page.words.filter((w) => /^(junior|juniors|senior|seniors|masters|standings)$/.test(clean(w.text)))
     const masters = divisionWords.find((w) => clean(w.text) === 'masters')
-    let records = page.words.filter((w) => clean(w.text) === 'record')
+    let records = page.words.filter((w) => isRecordWord(w.text))
     if (masters && !records.some((w) => w.y0 > masters.y1)) {
       // The Masters table's headers didn't read with the whole page: read just the part below.
       const below = await ocr(worker, crop(image, 0, masters.y1, image.width, image.height), masters.y1)
       page = { ...page, words: [...page.words, ...below.words], lines: [...page.lines, ...below.lines] }
-      records = page.words.filter((w) => clean(w.text) === 'record')
+      records = page.words.filter((w) => isRecordWord(w.text))
     }
-    const record = (masters && records.find((w) => w.y0 > masters.y1)) || records[0]
+    const record = (masters && records.find((w) => w.y0 > masters.y1)) || records[0] || guessRecordHeader(page.words)
     if (!record) throw new Error('Couldn’t find the standings table. Use a photo of a TOM “Standings” page with the column headers visible.')
     const cy = (w: Word) => (w.y0 + w.y1) / 2
     const rowH = record.y1 - record.y0
@@ -533,7 +679,12 @@ export async function scanStandingsImage(file: File, onProgress?: (msg: string) 
     // Every real row has a record: the table ends at the last one (footer text below is ignored).
     const lastRecord = recGrid.rows.reduce((last, r, k) => (r && parseRecord(r.text, maxGames).record ? k : last), -1)
     const offset = nameGrid.firstPlace - 1 // names row 0 is this many rows down the table
-    const count = Math.max(0, Math.min(nameGrid.rows.length + offset, lastRecord + 2)) - offset
+    // Placing numbers that read cleanly show where the table really ends, even if the records
+    // column was skipped for the bottom rows (they get re-read row by row below).
+    // Table rows are counted from the top of the table (row t is place t+1); names row k is table
+    // row k + offset. When the names column barely read (blur), the records column still shows
+    // how many rows there are, and the names get re-read row by row.
+    const total = Math.max(Math.min(nameGrid.rows.length + offset, lastRecord + 2), lastRecord + 1, nameGrid.lastAnchored + 1 + offset)
     await worker.setParameters({ tessedit_pageseg_mode: T.PSM.SINGLE_LINE })
     /** Read one row on its own, as-is and enlarged (each helps different photos). */
     const rereads = async (grid: Grid, k: number, x0: number, x1: number) => {
@@ -552,22 +703,21 @@ export async function scanStandingsImage(file: File, onProgress?: (msg: string) 
     onProgress?.('Double-checking skipped rows…')
     const names: { text: string }[] = []
     const recTexts: string[] = []
-    for (let k = 0; k < count; k++) {
-      const line = nameGrid.rows[k]
+    for (let t = 0; t < total; t++) {
+      const k = t - offset // the same table row in the names column
+      const line = k >= 0 ? nameGrid.rows[k] : undefined
       names.push({ text: line ? nameText(line) : await reread(nameGrid, k, textLeft, nameRight) })
-      const rk = k + offset // the same table row in the records column
-      recTexts.push(recGrid.rows[rk]?.text ?? (await reread(recGrid, rk, recLeft, recRight)))
+      recTexts.push(recGrid.rows[t]?.text ?? (await reread(recGrid, t, recLeft, recRight)))
     }
     // The last rows may have been skipped by both column reads: keep reading row by row while
     // there's still a name and a record below.
-    for (let k = names.length, end = k + 5; k < end && recGrid.at(k + offset) + recGrid.gap < bottom; ) {
-      const rec = await reread(recGrid, k + offset, recLeft, recRight)
+    for (let t = names.length, end = t + 5; t < end && recGrid.at(t) + recGrid.gap < bottom; t++) {
+      const rec = await reread(recGrid, t, recLeft, recRight)
       if (!parseRecord(rec, maxGames).record) break
-      const nm = await reread(nameGrid, k, textLeft, nameRight)
+      const nm = await reread(nameGrid, t - offset, textLeft, nameRight)
       if (!cleanName(nm).name) break
       names.push({ text: nm })
       recTexts.push(rec)
-      k++
     }
     // Do this table's "(points)" equal 3 per win + 1 per tie? Then they can check the records.
     const pointsFit = recTexts.map((t) => {
@@ -583,7 +733,7 @@ export async function scanStandingsImage(file: File, onProgress?: (msg: string) 
     // A record that was read but garbled gets single-line re-reads too.
     for (let k = 0; k < recs.length; k++) {
       if (recs[k].record) continue
-      for (const t of await rereads(recGrid, k + offset, recLeft, recRight)) {
+      for (const t of await rereads(recGrid, k, recLeft, recRight)) {
         const again = parseRecord(t, maxGames, usePoints)
         if (again.record) {
           recs[k] = { ...again, check: true }
@@ -605,7 +755,7 @@ export async function scanStandingsImage(file: File, onProgress?: (msg: string) 
     // A doubtful name gets a second, single-line read of just its row; keep whichever is cleaner.
     for (let k = 0; k < parsedNames.length; k++) {
       if (!parsedNames[k].check) continue
-      for (const t of await rereads(nameGrid, k, textLeft, nameRight)) {
+      for (const t of await rereads(nameGrid, k - offset, textLeft, nameRight)) {
         const again = cleanName(t)
         if (!again.check && again.name) {
           parsedNames[k] = { ...again, place: parsedNames[k].place ?? again.place }
@@ -614,11 +764,8 @@ export async function scanStandingsImage(file: File, onProgress?: (msg: string) 
       }
     }
 
-    // Placings: the names grid already knows which placing row 0 is (from the numbers that read cleanly).
-    const start = nameGrid.firstPlace
-
     const rows: ScannedStanding[] = parsedNames.map((n, i) => ({
-      place: Math.max(1, start) + i,
+      place: i + 1,
       name: n.name,
       record: recs[i]?.record ?? '',
       check: n.check || !recs[i]?.record || Boolean(recs[i]?.check),
@@ -630,11 +777,11 @@ export async function scanStandingsImage(file: File, onProgress?: (msg: string) 
     // Fill gaps from the page read's whole rows: matched by position on the page, and only when
     // its placing number (if read) agrees.
     for (const pr of pageRows) {
-      const k = Math.round((pr.y - nameGrid.at(0)) / nameGrid.gap)
-      const place = Math.max(1, start) + k
+      const k = Math.round((pr.y - nameGrid.at(-offset)) / nameGrid.gap) // table row, 0 = place 1
+      const place = k + 1
       // (A table border can add a leading "1" to the placing: "11" for 1.)
       const placeOk = pr.place === null || String(pr.place).endsWith(String(place))
-      if (k < 0 || !placeOk || Math.abs(pr.y - nameGrid.at(k)) > nameGrid.gap * 0.4) continue
+      if (k < 0 || !placeOk || Math.abs(pr.y - nameGrid.at(k - offset)) > nameGrid.gap * 0.4) continue
       const row = rows[k]
       if (!row) {
         if (k === rows.length && pr.name) rows.push({ place, name: pr.name, record: pr.record.record, check: true })
@@ -645,10 +792,58 @@ export async function scanStandingsImage(file: File, onProgress?: (msg: string) 
       if (!row.record && pr.record.record) row.record = pr.record.record
     }
     // Footer text read as one more row (no name, or a scrap of one with no record): not a player.
-    const junk = (r: ScannedStanding) => !r.name || (!r.record && (r.check || !r.name.includes(' ')))
-    while (rows.length && junk(rows[rows.length - 1])) rows.pop()
+    // (Rows up to the last readable placing number are real, whatever state they're in.)
+    // (A record read with no name is still a row: the name is blank/flagged for the reader to fill.)
+    const junk = (r: ScannedStanding, i: number) => i > nameGrid.lastAnchored + offset && (!r.name ? !r.record : !r.record && (r.check || !r.name.includes(' ')))
+    while (rows.length && junk(rows[rows.length - 1], rows.length - 1)) rows.pop()
     if (!rows.length) throw new Error('Couldn’t read any players. Try a sharper, straighter photo.')
-    return { tournament, rows }
+
+    // Sanity: every player plays the same number of Swiss rounds (a few fewer if they dropped,
+    // a few more in the top cut). A record far outside that is a misread, e.g. a table border
+    // read as a leading "1": "3-0-0" turned into "13-0-0". Fix the obvious ones, flag the rest.
+    const totals = rows.map((r) => r.record.split('-').map(Number).reduce((a, b) => a + b, 0)).filter((t) => t > 0)
+    const modeOf = (xs: number[]) => {
+      const counts = new Map<number, number>()
+      for (const x of xs) counts.set(x, (counts.get(x) ?? 0) + 1)
+      return [...counts].sort((a, b) => b[1] - a[1] || b[0] - a[0])[0]?.[0] ?? 0
+    }
+    const swiss = rounds || modeOf(totals)
+    if (swiss) {
+      rows.forEach((r, i) => {
+        if (!r.record) return
+        const [w, l, t] = r.record.split('-').map(Number)
+        const total = w + l + t
+        if (total <= swiss + 5 && !(w >= 10 && swiss < 10)) {
+          // A table border can also leave a ghost loss/tie behind; extra games are only normal in the top cut.
+          if (total > swiss && i >= 16) r.check = true
+          return
+        }
+        const trimmed = w >= 10 ? Number(String(w).slice(1)) : NaN
+        if (!Number.isNaN(trimmed) && trimmed + l + t <= swiss + 3) r.record = `${trimmed}-${l}-${t}`
+        r.check = true
+      })
+    }
+
+    // Warnings the reader should see: rows that seem to be missing, or records that wouldn't read.
+    const warnings: string[] = []
+    const lastPlace = nameGrid.lastAnchored >= 0 ? nameGrid.firstPlace + nameGrid.lastAnchored : 0
+    // (A photo showing the same table twice, e.g. two windows, doubles the page rows: ignore that count.)
+    const seen = pageRows.length > rows.length * 1.8 ? lastPlace : Math.max(pageRows.length, lastPlace)
+    if (seen > rows.length) warnings.push(`The page seems to have about ${seen} rows but only ${rows.length} were read; some may be missing.`)
+    const noRecord = rows.filter((r) => !r.record).length
+    if (noRecord) warnings.push(`${noRecord} record${noRecord > 1 ? 's' : ''} couldn’t be read.`)
+    // Names that read well below the last row (with a placing that fits): their records may have
+    // read in the other pass.
+    const spare: { place: number; name: string }[] = []
+    nameGrid.rows.forEach((line, k) => {
+      if (!line || k + offset < rows.length) return
+      const place = k + offset + 1
+      const c = cleanName(line.text)
+      // The placing may read as several numbers ("1 11 Musa Suma"): any of them fitting is enough.
+      const fits = (line.text.match(/\d{1,3}/g) ?? []).some((n) => n.endsWith(String(place)))
+      if (fits && c.name.includes(' ')) spare.push({ place, name: cleanName(nameText(line)).name || c.name })
+    })
+    return { tournament, rows, warnings, spare }
   } finally {
     await worker.terminate()
   }

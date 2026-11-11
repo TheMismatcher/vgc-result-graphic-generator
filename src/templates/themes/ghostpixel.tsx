@@ -7,6 +7,7 @@ import { GhostWall } from '../eras/ghostpixel'
 import { makeTop4Photos } from '../top4-photos'
 import { makeTop8Mixed } from '../top8-mixed'
 import { makeTop8Photos } from '../top8-photos'
+import { makeWide } from '../wide'
 import type { StandingsLayout, StandingsTemplate } from '../types'
 import type { Theme } from './theme'
 import '../eras/ghostpixel.css'
@@ -16,6 +17,7 @@ const ghostTheme: Theme = {
   id: 'ghost-pixel',
   style: 'Ghost Pixels',
   className: 'theme-ghostpixel',
+  wide: 'ghost',
   Background: ({ data, width, height }) => (
     <div style={{ position: 'absolute', inset: 0, background: '#0c090d' }}>
       <GhostWall seed={data.tournament.name} width={width} height={height} />
@@ -30,4 +32,8 @@ export const GhostPixelLayouts: [StandingsTemplate, StandingsLayout][] = [
   [makeChampion(false, ghostTheme), 'champion'],
   [makeChampion(false, ghostTheme, true), 'championphoto'],
   [makeBracket(false, ghostTheme), 'bracket'],
+  [makeWide('rows', ghostTheme), 'widerows'],
+  [makeWide('spotlight', ghostTheme), 'widespot'],
+  [makeWide('columns', ghostTheme), 'widecols'],
+  [makeWide('plain', ghostTheme), 'widecolsplain'],
 ]

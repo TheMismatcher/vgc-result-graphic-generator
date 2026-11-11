@@ -42,6 +42,7 @@ import violetBookCover from './violet-book-cover-sv.jpg'
 import scarletBookSquare from './scarlet-book-square-sv.jpg'
 import violetBookSquare from './violet-book-square-sv.jpg'
 import { BackdropImage } from '../../lib/backdrop'
+import { applyWeather, type Weather } from './weather'
 import '../eras/eras.css'
 import './places.css'
 
@@ -55,18 +56,19 @@ interface Crop {
   sy: number
   sw: number
   smooth?: boolean // painted art: smooth scaling; pixel maps: nearest-neighbour
+  weather?: Weather // pixel maps: Emerald's rain or harsh sunlight, done the game's way at native size (weather.ts)
 }
 
 // Pre-scaled once on a canvas so the PNG export gets the exact pixels (CSS pixelated scaling isn't reliable there).
 const cache = new Map<string, Promise<string>>()
-function scaled({ src, sx, sy, sw, smooth }: Crop, w: number, h: number) {
-  const key = `${src}|${sx}|${sy}|${sw}|${w}x${h}`
+function scaled({ src, sx, sy, sw, smooth, weather }: Crop, w: number, h: number) {
+  const key = `${src}|${sx}|${sy}|${sw}|${w}x${h}|${weather ?? ''}`
   if (!cache.has(key))
     cache.set(
       key,
       new Promise((resolve) => {
         const img = new Image()
-        img.onload = () => {
+        img.onload = async () => {
           const c = document.createElement('canvas')
           c.width = w
           c.height = h
@@ -76,7 +78,16 @@ function scaled({ src, sx, sy, sw, smooth }: Crop, w: number, h: number) {
           // Height follows the frame's aspect; slide up if the crop would run off the bottom of the map.
           const sh = Math.min((sw * h) / w, img.naturalHeight)
           const top = Math.max(0, Math.min(sy, img.naturalHeight - sh))
-          g.drawImage(img, sx, top, sw, sh, 0, 0, w, h)
+          if (weather && !smooth) {
+            // Weather works on the game's own pixels, then the result is scaled up.
+            const n = document.createElement('canvas')
+            n.width = sw
+            n.height = Math.round(sh)
+            const ng = n.getContext('2d', { willReadFrequently: true })!
+            ng.drawImage(img, sx, top, sw, sh, 0, 0, n.width, n.height)
+            await applyWeather(ng, n.width, n.height, weather, key)
+            g.drawImage(n, 0, 0, w, h)
+          } else g.drawImage(img, sx, top, sw, sh, 0, 0, w, h)
           resolve(c.toDataURL(smooth ? 'image/jpeg' : 'image/png', 0.92))
         }
         img.onerror = () => resolve('')
@@ -140,7 +151,7 @@ const makePlace = (id: string, name: string, description: string, crop: Crop, cl
     <div className={`dmv pl ${cls} ${mod}`} style={{ width: W, height: H }}>
       <MapWall crop={crop} />
       <div className="pl-shade" />
-      <LocationHead data={data} cls="pl" kicker="" />
+      <LocationHead data={data} cls="pl" kicker="" split />
       <LocationRows data={data} cls="pl" grow />
     </div>
   ),
