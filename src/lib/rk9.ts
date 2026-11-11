@@ -1,17 +1,14 @@
 // Read Regionals/ICs data from RK9 (rk9.gg): the roster (with public team lists) and the
 // pairings (for each player's current record).
 //
-// RK9 doesn't allow other websites to read its pages directly, so requests go through
-// "/rk9/…" on our own site, which forwards them to rk9.gg:
-//   - locally: the proxy in vite.config.ts
-//   - on Netlify: public/_redirects
+// RK9 doesn't allow other websites to read its pages directly, so requests go through our own
+// pass-through (lib/proxy.ts → functions/packages/proxy/fetch).
 // RK9 has no official API; if they redesign their pages, the parsing below needs updating.
 
 import type { Mon } from '../types'
 import { resolveForm, resolveItem, resolvePokemon } from '../data/dex'
 import { emptyMon } from './state'
-
-const BASE = '/rk9'
+import { proxyGet } from './proxy'
 
 export interface RosterEntry {
   first: string
@@ -31,9 +28,9 @@ export function rk9Id(input: string): string | null {
 }
 
 async function page(path: string): Promise<Document> {
-  const res = await fetch(`${BASE}${path}`)
+  const res = await proxyGet('rk9', path)
   if (!res.ok) throw new Error(`RK9 didn't respond (${res.status}). Check the link, or try again in a moment.`)
-  return new DOMParser().parseFromString(await res.text(), 'text/html')
+  return new DOMParser().parseFromString(res.body, 'text/html')
 }
 
 const text = (el: Element | null | undefined) => (el?.textContent ?? '').replace(/\s+/g, ' ').trim()

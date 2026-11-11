@@ -2,13 +2,14 @@
 //   - Limitless (play.limitlesstcg.com/tournament/<id>): open to other websites, read directly.
 //   - Pokédata (pokedata.ovh/standingsVGC/<id>/masters/): official Regionals, Internationals and
 //     Worlds, one JSON file per division. It doesn't allow other websites, so requests go through
-//     "/pokedata/…" on our own site (vite.config.ts locally, public/_redirects on Netlify).
+//     our own pass-through (lib/proxy.ts → functions/packages/proxy/fetch).
 
 import type { Mon } from '../types'
 import { resolveItem, resolvePokemon } from '../data/dex'
 import { emptyMon } from './state'
 import { formatRecord, limitlessId, rankedStandings, toTeam, type LimitlessStanding } from './limitless'
 import { resolveRk9Species } from './rk9'
+import { proxyGet } from './proxy'
 
 export type ResultsSource = 'limitless' | 'pokedata'
 
@@ -67,9 +68,9 @@ interface PokedataPlayer {
 
 async function loadPokedata({ id, division }: ResultsLink) {
   const label = division[0].toUpperCase() + division.slice(1)
-  const res = await fetch(`/pokedata/standingsVGC/${id}/${division}/${id}_${label}.json`)
+  const res = await proxyGet('pokedata', `/standingsVGC/${id}/${division}/${id}_${label}.json`)
   if (!res.ok) throw new Error(`Pokédata didn't respond (${res.status}). Check the link, or try again in a moment.`)
-  const players: PokedataPlayer[] = await res.json()
+  const players: PokedataPlayer[] = JSON.parse(res.body)
   const entries = players
     .slice()
     .sort((a, b) => (a.placing ?? Infinity) - (b.placing ?? Infinity))
