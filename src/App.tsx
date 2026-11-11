@@ -40,6 +40,8 @@ export default function App() {
     showCP: state.settings.showCP,
     setShowCP: (on) => setState((s) => ({ ...s, settings: { ...s.settings, showCP: on } })),
     looks: { ...DEFAULT_LOOKS, ...state.settings.looks },
+    tileShuffle: state.settings.tileShuffle ?? 0,
+    shuffleTiles: () => setState((s) => ({ ...s, settings: { ...s.settings, tileShuffle: (s.settings.tileShuffle ?? 0) + 1 } })),
     setLook: (group, value) => setState((s) => ({ ...s, settings: { ...s.settings, looks: { ...s.settings.looks, [group]: value } } })),
     // CP depends on whether it's a Cup or a Challenge: that's the tournament type.
     cpEvent: cpEventFor(state.tournament.type),
@@ -103,7 +105,7 @@ export default function App() {
                 }}
               />
             </label>
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...sampleState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels }, 'Load sample replaces everything on every tab (standings, usage, bracket, replay, team battle, and regional results). Branding is kept.')}>
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...sampleState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels, templates: state.templates }, 'Load sample replaces everything on every tab (standings, usage, bracket, replay, team battle, and regional results). Branding and the selected templates are kept.')}>
               Load sample
             </Button>
             <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...initialState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels }, 'Start over clears the tournament, players, usage, bracket, replay, team battle, and regional results. Branding is kept.')}>

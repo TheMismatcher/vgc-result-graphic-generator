@@ -73,7 +73,7 @@ export function Preview<T extends Template>({
   const [busy, setBusy] = useState(false)
   const [copied, setCopied] = useState(false)
   const [saved, setSaved] = useState<{ file: File; url: string } | null>(null) // phone: rendered image waiting to be saved
-  const { showMegas, setShowMegas, showCP, setShowCP, cpEvent, setCpEvent, setLook } = useDisplay()
+  const { showMegas, setShowMegas, showCP, setShowCP, cpEvent, setCpEvent, setLook, shuffleTiles } = useDisplay()
   const dialog = useDialog()
   // Custom Glass: the photo is dragged on the preview; the live position stays local until the drag ends.
   const backdropCtx = useBackdrop()
@@ -248,6 +248,12 @@ export function Preview<T extends Template>({
           </div>
         )}
       </div>
+      {template.style?.startsWith('Mosaic') && (
+        <div className="-mt-1 flex items-center gap-3 text-sm text-slate-700">
+          <Button onClick={shuffleTiles}>Shuffle tiles</Button>
+          <span className="text-xs text-slate-500">New tile pattern for the wall; editing the event name or date also gives a new one.</span>
+        </div>
+      )}
       {allowCP && showCP && (
         <p className="-mt-2 text-xs text-slate-500">Official 2027 CP table. Placings below the attendance kicker earn 0 and show no CP; attendance uses the Masters count (or the total if Masters is blank).</p>
       )}

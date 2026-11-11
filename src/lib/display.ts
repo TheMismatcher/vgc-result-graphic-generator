@@ -15,6 +15,9 @@ export interface Display {
   /** Styles with switches open the way they were last set (Glass or Solid, Classic or Modern, ...). */
   looks: Looks
   setLook: (group: LookGroup, value: string) => void
+  /** Mosaic tile wall: added to the wall's seed (0 = the layout from the event's name and date). */
+  tileShuffle: number
+  shuffleTiles: () => void
 }
 
 // map: Route 119 opens on the bridge; styles without that map open on their first one (Sinnoh Snow: Lake Acuity).
@@ -29,6 +32,8 @@ export const DisplayContext = createContext<Display>({
   setCpEvent: () => {},
   looks: DEFAULT_LOOKS,
   setLook: () => {},
+  tileShuffle: 0,
+  shuffleTiles: () => {},
 })
 export const useDisplay = () => useContext(DisplayContext)
 

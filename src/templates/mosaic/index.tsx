@@ -32,6 +32,9 @@ function seeded(text: string) {
 
 interface Tile { x: number; y: number; w: number; h: number }
 
+/** The Preview's "Shuffle tiles" count added to a wall's seed (0 = the wall from the seed alone, as it always was). */
+const shuffled = (seed: string, shuffle: number) => (shuffle ? `${seed}|shuffle${shuffle}` : seed)
+
 /**
  * Pack the page with tiles, left to right, top to bottom: 1×1, 2×1, 1×2 and 2×2 cells, or with
  * `squares` only 1×1 and 2×2 (so every Pokémon fills its tile).
@@ -137,6 +140,8 @@ export function MosaicTiles({ data, gradient, squares, width = W, height = H }: 
 /** The tile wall for any list of Pokémon ids (repeats removed); `seed` fixes the tile layout. */
 export function MosaicWall({ mons: list, seed, gradient, squares, width = W, height = H, colors, splitEdge = false, bigAt }: { mons: string[]; seed: string; gradient: boolean; squares: boolean; width?: number; height?: number; colors?: { main: string; second: string }; splitEdge?: boolean; bigAt?: [number, number][] }) {
   const brand = useBrand()
+  // "Shuffle tiles" in the preview: a new seed for every press; 0 keeps the event's own layout (name + date).
+  const { tileShuffle } = useDisplay()
   const { main, second } = colors ?? brand.colors // `colors` (#rrggbb) overrides the brand, e.g. an event's colour
   const mons = [...new Set(list.filter(Boolean))]
   // splitEdge: a big tile that would run off the bottom edge becomes small tiles along the visible row,
@@ -150,7 +155,7 @@ export function MosaicWall({ mons: list, seed, gradient, squares, width = W, hei
   const rowsShown = Math.floor(height / cell)
   const cols = fits ? Math.max(COLS, width / CELL) : Math.ceil(width / cell)
   const rows = fits ? Math.max(ROWS, height / CELL) : Math.ceil(height / cell)
-  const tiles: Tile[] = layout(seed, squares, cols, rows)
+  const tiles: Tile[] = layout(shuffled(seed, tileShuffle), squares, cols, rows)
     .filter((t) => t.y * cell < height && t.x * cell < width)
     .flatMap((t): Tile[] =>
       splitEdge && t.y + t.h > rowsShown ? Array.from({ length: t.w }, (_, k) => ({ x: t.x + k, y: t.y, w: 1, h: 1 })) : [t],
@@ -195,11 +200,11 @@ const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'se
   maxPlayers: 8,
   Component: ({ data }) => {
     const brand = useBrand()
-    const { showMegas } = useDisplay()
+    const { showMegas, tileShuffle } = useDisplay()
     const { main, second } = brand.colors
     // Every Pokémon on the top cut's teams (no repeats), then repeated to fill all the tiles.
     const mons = [...new Set(data.players.flatMap((p) => p.team.map((m) => (m.pokemon ? displayPokemon(m, showMegas) : ''))).filter(Boolean))]
-    const tiles = layout(`${data.tournament.name}|${data.dateLabel}`, squares)
+    const tiles = layout(shuffled(`${data.tournament.name}|${data.dateLabel}`, tileShuffle), squares)
     const tint = (t: Tile) => (gradient ? (t.x + t.y) / (COLS + ROWS - 2) : 0)
     const lineColor = (t: Tile) => (gradient ? mix(main, second, tint(t)) : second)
     // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
