@@ -105,22 +105,16 @@
   height: 100%;
   object-fit: cover;
 }
-/* Fit whole photo: the photo uncropped, a blurred, darkened copy filling the space around it. */
+/* Fit whole photo: the photo uncropped, over the same background the style shows when there is no photo. */
 .dmv-photo-fit {
   position: relative;
   overflow: hidden;
-  background: var(--ink);
 }
 .dmv-photo-fit > img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-}
-.dmv-photo-blur {
-  object-fit: cover;
-  filter: blur(22px) brightness(0.7);
-  transform: scale(1.2);
 }
 .dmv-photo-img {
   object-fit: contain;
@@ -177,3 +171,8 @@
 .dmv-mon.pixel img.render {
   image-rendering: pixelated;
 }
+
+/* Top Cut with 5-7 players (fillClass): --n is the player count. */
+.n5 { --n: 5; }
+.n6 { --n: 6; }
+.n7 { --n: 7; }

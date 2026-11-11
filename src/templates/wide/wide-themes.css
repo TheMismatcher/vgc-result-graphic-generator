@@ -1,0 +1,343 @@
+/* Wide (landscape) layouts in the non-map styles: the tag, header facts, cards, place blocks and names follow the same
+   rules each style gives its portrait layouts (themes/editorial.css, arena.css, ghostpixel.css, power/power.css). */
+
+/* ---------- Editorial: flat cards with a heavy top rule, upright type, accent numerals ---------- */
+.themed.theme-editorial .wd-tag,
+.themed.theme-editorial .wd-champ-tag {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  transform: none;
+  padding: 0;
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+}
+.themed.theme-editorial .wd-champ-tag {
+  padding: 4px 18px;
+  background: var(--solid);
+  border-left: 8px solid var(--accent);
+  letter-spacing: 0.2em;
+}
+.themed.theme-editorial .wd-facts {
+  color: var(--fg);
+  text-shadow: none;
+  letter-spacing: 0.08em;
+}
+.themed.theme-editorial .wd-name {
+  color: inherit;
+  font-style: normal;
+  text-shadow: none;
+}
+.themed.theme-editorial .wd-sub {
+  color: var(--muted);
+  opacity: 1;
+}
+.themed.theme-editorial .dmv-panel.first .wd-sub {
+  color: rgba(255, 255, 255, 0.78);
+}
+.themed.theme-editorial .wd-place,
+.themed.theme-editorial .wd-place.red,
+.themed.theme-editorial .wd-place.first {
+  margin: 0;
+  background: transparent;
+  clip-path: none;
+}
+.themed.theme-editorial .wd-place span {
+  margin: 0;
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+.themed.theme-editorial .dmv-panel.first .wd-place span {
+  color: var(--band-num);
+}
+.themed.theme-editorial .wd-col-place,
+.themed.theme-editorial .wd-col-place.red,
+.themed.theme-editorial .wd-col-place.first {
+  background: var(--solid);
+  color: var(--accent);
+  border: 0;
+  border-left: 8px solid var(--accent);
+  border-radius: 0;
+  box-shadow: none;
+  font-style: normal;
+  font-weight: 900;
+  transform: none;
+}
+
+/* ---------- Arena: dark glass, coloured left edge, cut corner, white italic type ---------- */
+.themed.theme-arena .wd-tag,
+.themed.theme-arena .wd-champ-tag {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  transform: none;
+  padding: 0;
+  color: var(--yellow);
+  font-style: normal;
+  letter-spacing: 0.3em;
+}
+.themed.theme-arena .wd-champ-tag {
+  padding: 4px 18px;
+  background: rgba(8, 10, 22, 0.85);
+  border-left: 6px solid var(--yellow);
+  letter-spacing: 0.2em;
+}
+.themed.theme-arena .wd-facts {
+  color: rgba(255, 255, 255, 0.78);
+  text-shadow: none;
+  letter-spacing: 0.04em;
+}
+.themed.theme-arena .wd-name {
+  color: #fff;
+  text-shadow: none;
+}
+.themed.theme-arena .wd-sub {
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 1;
+}
+.themed.theme-arena .wd-place,
+.themed.theme-arena .wd-place.red,
+.themed.theme-arena .wd-place.first {
+  margin: 0;
+  background: rgba(8, 10, 22, 0.75);
+  clip-path: none;
+}
+.themed.theme-arena .wd-place span {
+  margin: 0;
+  color: #fff;
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+.themed.theme-arena .dmv-panel.first .wd-place span {
+  color: var(--yellow);
+}
+.themed.theme-arena .wd-col-place,
+.themed.theme-arena .wd-col-place.red,
+.themed.theme-arena .wd-col-place.first {
+  background: rgba(8, 10, 22, 0.85);
+  color: #fff;
+  border: 0;
+  border-left: 6px solid var(--red);
+  box-shadow: none;
+  transform: none;
+}
+.themed.theme-arena .wd-col-place.blue {
+  border-left-color: var(--blue);
+}
+.themed.theme-arena .wd-col-place.first {
+  color: var(--yellow);
+  border-left-color: var(--yellow);
+}
+
+/* ---------- Ghost Pixels: pixel-bordered purple panels, Press Start type ---------- */
+.themed.theme-ghostpixel .wd-tag,
+.themed.theme-ghostpixel .wd-champ-tag {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  transform: none;
+  padding: 0;
+  color: var(--gp-line);
+  font-family: 'Press Start 2P', monospace;
+  font-style: normal;
+  letter-spacing: 0.1em;
+}
+.themed.theme-ghostpixel .wd-champ-tag {
+  padding: 8px 14px;
+  background: rgba(16, 10, 28, 0.85);
+  border-left: 6px solid var(--gp-line);
+  font-size: 18px;
+}
+.themed.theme-ghostpixel .wd-facts {
+  color: #cdbbf0;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.themed.theme-ghostpixel .wd-name {
+  color: #fff;
+  font-style: normal;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.themed.theme-ghostpixel .wd-sub {
+  color: #cdbbf0;
+  opacity: 1;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.themed.theme-ghostpixel .wd-place,
+.themed.theme-ghostpixel .wd-place.red,
+.themed.theme-ghostpixel .wd-place.first {
+  margin: 0;
+  background: var(--gp-glass);
+  border-right: 4px solid var(--gp-purple);
+  clip-path: none;
+}
+.themed.theme-ghostpixel .wd-place.first {
+  background: #fff;
+}
+.themed.theme-ghostpixel .wd-place span {
+  margin: 0;
+  color: var(--gp-line);
+  font-family: 'Press Start 2P', monospace;
+  font-style: normal;
+  font-size: 30px;
+}
+.themed.theme-ghostpixel .wd-place.first span {
+  color: #0c090d;
+}
+.themed.theme-ghostpixel .wd-col-place,
+.themed.theme-ghostpixel .wd-col-place.red,
+.themed.theme-ghostpixel .wd-col-place.first {
+  background: rgba(16, 10, 28, 0.88);
+  color: var(--gp-line);
+  border: 0;
+  border-left: 6px solid var(--gp-line);
+  box-shadow: none;
+  font-family: 'Press Start 2P', monospace;
+  font-style: normal;
+  transform: none;
+}
+.themed.theme-ghostpixel .wd-col-place.first {
+  background: #fff;
+  color: #0c090d;
+}
+
+/* ---------- Terastal / Mega Evolution / Dynamax: the style's own place shape, card and glow ---------- */
+.dmv.themed.theme-power .wd-tag,
+.dmv.themed.theme-power .wd-champ-tag {
+  background: var(--pw-place);
+  color: var(--pw-place-ink);
+  border: 0;
+  border-radius: var(--pw-place-radius, 0);
+  clip-path: var(--pw-place-clip, none);
+  box-shadow: none;
+  transform: none;
+  font-family: var(--pw-font);
+  font-style: normal;
+  padding: 2px 24px;
+  letter-spacing: 0.08em;
+}
+.dmv.themed.theme-power .wd-facts {
+  color: var(--pw-accent);
+  text-shadow: var(--pw-title-shadow);
+}
+.dmv.themed.theme-power .wd-name {
+  color: var(--pw-ink);
+  font-family: var(--pw-font);
+  font-style: normal;
+  text-shadow: var(--pw-title-shadow);
+}
+.dmv.themed.theme-power .wd-sub {
+  color: var(--pw-muted);
+  opacity: 1;
+}
+.dmv.themed.theme-power .wd-place,
+.dmv.themed.theme-power .wd-place.red,
+.dmv.themed.theme-power .wd-place.first {
+  margin: 0 0 0 10px;
+  align-self: center;
+  width: 92px;
+  height: 92px;
+  background: var(--pw-place);
+  clip-path: var(--pw-place-clip, none);
+  border-radius: var(--pw-place-radius, 0);
+}
+.dmv.themed.theme-power .wd-place.first {
+  background: var(--pw-place-first);
+}
+.dmv.themed.theme-power .wd-place span {
+  margin: 0;
+  color: var(--pw-place-ink);
+  font-family: var(--pw-font);
+  font-style: normal;
+  font-size: 36px;
+}
+.dmv.themed.theme-power .wd-place.first span {
+  color: var(--pw-place-first-ink);
+}
+.dmv.themed.theme-power .wd-col-place,
+.dmv.themed.theme-power .wd-col-place.red,
+.dmv.themed.theme-power .wd-col-place.first {
+  background: var(--pw-place);
+  color: var(--pw-place-ink);
+  border: 0;
+  border-radius: var(--pw-place-radius, 0);
+  box-shadow: none;
+  font-family: var(--pw-font);
+  font-style: normal;
+  transform: none;
+}
+.dmv.themed.theme-power .wd-col-place.first {
+  background: var(--pw-place-first);
+  color: var(--pw-place-first-ink);
+}
+
+/* Ghost Pixels: the header sits on a framed plate, so the text never fights the sprite wall. */
+.themed.theme-ghostpixel .wd-header {
+  left: 40px;
+  right: 40px;
+  top: 20px;
+  height: 160px;
+  padding: 0 28px;
+  background: rgba(16, 10, 28, 0.82);
+  border: 4px solid var(--gp-line);
+  box-shadow: 0 0 0 4px #0c090d, 8px 8px 0 4px rgba(92, 62, 150, 0.9);
+}
+
+/* ---------- Columns without photos: the place band per style ---------- */
+.themed.theme-editorial .wd-pc-place,
+.themed.theme-editorial .wd-pc-place.red,
+.themed.theme-editorial .wd-pc-place.first {
+  margin: 0 -8px 10px;
+  background: transparent;
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+.themed.theme-editorial .dmv-panel.first .wd-pc-place {
+  color: var(--band-num);
+}
+.themed.theme-arena .wd-pc-place,
+.themed.theme-arena .wd-pc-place.red,
+.themed.theme-arena .wd-pc-place.first {
+  margin: 0 -8px 10px -16px;
+  background: rgba(8, 10, 22, 0.75);
+  color: #fff;
+}
+.themed.theme-arena .wd-pc-place.first {
+  color: var(--yellow);
+}
+.themed.theme-ghostpixel .wd-pc-place,
+.themed.theme-ghostpixel .wd-pc-place.red,
+.themed.theme-ghostpixel .wd-pc-place.first {
+  margin: -4px -12px 10px;
+  background: var(--gp-glass);
+  color: var(--gp-line);
+  font-family: 'Press Start 2P', monospace;
+  font-style: normal;
+  font-size: 28px;
+}
+.themed.theme-ghostpixel .wd-pc-place.first {
+  background: #fff;
+  color: #0c090d;
+}
+.dmv.themed.theme-power .wd-pc-place,
+.dmv.themed.theme-power .wd-pc-place.red,
+.dmv.themed.theme-power .wd-pc-place.first {
+  align-self: center;
+  margin: 12px 0 10px;
+  padding: 4px 30px;
+  background: var(--pw-place);
+  color: var(--pw-place-ink);
+  border-radius: var(--pw-place-radius, 0);
+  clip-path: var(--pw-place-clip, none);
+  font-family: var(--pw-font);
+  font-style: normal;
+  font-size: 36px;
+}
+.dmv.themed.theme-power .wd-pc-place.first {
+  background: var(--pw-place-first);
+  color: var(--pw-place-first-ink);
+}

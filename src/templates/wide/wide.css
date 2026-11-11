@@ -216,7 +216,7 @@
 }
 .wd-champ-photo {
   position: relative;
-  height: 440px; /* about 3:2 at 700 wide, so landscape photos need little cropping */
+  height: 400px; /* wide enough that landscape photos need little cropping, short enough for big team sprites */
   flex: none;
   border-bottom: 7px solid var(--ink);
 }
@@ -252,11 +252,12 @@
   line-height: 1.05;
 }
 .wd-champ-team {
-  margin-top: auto;
-  align-self: center;
+  flex: 1;
+  align-self: stretch;
   display: grid;
-  grid-template-columns: repeat(3, 124px);
-  gap: 0 70px;
+  grid-template-columns: repeat(3, 1fr);
+  align-content: space-evenly;
+  justify-items: center;
 }
 .wd-list {
   flex: 1;
@@ -302,7 +303,7 @@
 .wd-col-photo {
   position: relative;
   flex: none;
-  height: 340px;
+  height: 380px;
   border-bottom: 7px solid var(--ink);
 }
 .wd-col-photo .dmv-photo {
@@ -341,11 +342,12 @@
   max-width: 100%;
 }
 .wd-col-team {
-  margin: auto 0 10px;
-  align-self: center;
+  flex: 1;
   display: grid;
-  grid-template-columns: repeat(3, 124px);
-  gap: 18px 8px;
+  grid-template-columns: repeat(3, 1fr);
+  align-content: space-evenly;
+  justify-items: center;
+  padding: 0 4px 6px;
 }
 
 /* ---- Map / Glass styles: the place's panel and accent colours ---- */
@@ -476,4 +478,116 @@
 }
 .themed.theme-mosaic.few .wd-row .wd-team {
   gap: 0 48px;
+}
+
+/* ---- Columns without photos: up to 8 player columns, place band on top, the team stacked (1st wider and gold) ---- */
+.wd-pcols {
+  position: absolute;
+  top: 214px;
+  left: 48px;
+  right: 48px;
+  bottom: 40px;
+  display: flex;
+  gap: 16px;
+}
+.wd-pcol {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 8px 14px;
+  border-radius: 18px;
+  overflow: hidden;
+  text-align: center;
+}
+.wd-pcol.first {
+  flex: none;
+  width: 300px;
+}
+.wd-pc-place {
+  align-self: stretch;
+  margin: -7px -15px 10px;
+  padding: 10px 0 8px;
+  background: var(--blue-dark);
+  color: #fff;
+  font-size: 40px;
+  font-weight: 900;
+  font-style: italic;
+}
+.wd-pc-place.red {
+  background: var(--red);
+}
+.wd-pc-place.first {
+  background: var(--ink);
+  color: var(--yellow);
+  font-size: 48px;
+}
+.wd.wd-tint .wd-pc-place:is(.blue, .red) {
+  background: transparent;
+}
+.wd.wd-tint .dmv-panel.blue .wd-name,
+.wd.wd-tint .dmv-panel.red .wd-name {
+  color: #fff;
+}
+.wd-pcol .wd-sub {
+  margin-top: 2px;
+}
+.wd-pc-team {
+  flex: 1;
+  min-height: 0;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+/* 5-6: the team 2 x 3 */
+.wd-pc-team.grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-content: space-evenly;
+  justify-content: space-evenly;
+  gap: 0 12px;
+  align-self: stretch;
+}
+/* 4 or fewer: four equal columns, the team 2 x 3 */
+.wd.few .wd-pcol.first {
+  flex: 1;
+  width: auto;
+}
+.wd.few .wd-pc-place {
+  font-size: 54px;
+}
+.wd.few .wd-pc-team {
+  display: grid;
+  grid-template-columns: repeat(2, 170px);
+  align-content: space-evenly;
+  gap: 0 40px;
+}
+
+/* map / Glass styles */
+.themed.theme-place .wd-pc-place {
+  margin: -5px -13px 10px;
+  background: var(--pl-a);
+}
+.themed.theme-place .wd-pc-place.red {
+  background: var(--pl-b);
+}
+.themed.theme-place .wd-pc-place.first {
+  background: var(--pl-dark);
+  color: var(--pl-first);
+}
+/* Mosaic */
+.themed.theme-mosaic .wd-pc-place {
+  margin: 0 -8px 10px;
+  font-style: normal;
+  background: color-mix(in srgb, var(--blue-dark) 70%, #fff);
+}
+.themed.theme-mosaic .wd-pc-place.red {
+  background: color-mix(in srgb, var(--red) 75%, #fff);
+}
+.themed.theme-mosaic .wd-pc-place.first {
+  background: color-mix(in srgb, var(--yellow) 85%, #fff);
+  color: var(--mz-ink);
 }

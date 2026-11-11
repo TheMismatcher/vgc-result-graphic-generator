@@ -95,6 +95,7 @@ export const PLACE_LAYOUTS: Record<string, [StandingsTemplate, StandingsLayout][
         [makeWide('rows', t), 'widerows'],
         [makeWide('spotlight', t), 'widespot'],
         [makeWide('columns', t), 'widecols'],
+        [makeWide('plain', t), 'widecolsplain'],
       ],
     ]
   }),

@@ -16,6 +16,7 @@ export const MOSAIC_THEME: Theme = {
   id: 'mosaic',
   style: 'Mosaic',
   className: 'theme-mosaic',
+  wide: 'mosaic',
   Background: ({ data, width, height }) => <MosaicTiles data={data} gradient squares width={width} height={height} />,
 }
 
@@ -27,4 +28,7 @@ export const MosaicLayouts: [StandingsTemplate, StandingsLayout][] = [
   [makeChampion(false, MOSAIC_THEME, true), 'championphoto'],
   [makeBracket(false, MOSAIC_THEME), 'bracket'],
   [makeWide('rows', MOSAIC_THEME), 'widerows'],
+  [makeWide('spotlight', MOSAIC_THEME), 'widespot'],
+  [makeWide('columns', MOSAIC_THEME), 'widecols'],
+  [makeWide('plain', MOSAIC_THEME), 'widecolsplain'],
 ]

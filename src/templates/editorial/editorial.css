@@ -345,3 +345,8 @@
   gap: 0 6px;
   margin-left: auto;
 }
+
+/* 5-7 players: the champion block grows a little, the rows share the rest of what 8 players use (178 + 7 x 97 = 857). */
+.ed.mid .ed-winner { height: 210px; }
+.ed.mid .ed-row { height: calc(647px / (var(--n) - 1)); }
+.ed.mid .ed-sub { font-size: 22px; }

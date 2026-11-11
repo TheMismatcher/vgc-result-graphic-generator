@@ -15,7 +15,11 @@ export const makeTop8Photos = (white: boolean, loud = false, theme?: Theme): Sta
   width: 1080,
   height: 1350,
   maxPlayers: 8,
-  Component: ({ data }) => (
+  Component: ({ data }) => {
+    // 5-6 players: three taller rows fill the page; 5 and 7: the last card is centred.
+    const n = data.players.length
+    const fill = n === 5 || n === 6
+    return (
     <div className={`dmv p8 ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1350 }}>
       {theme ? <theme.Background data={data} width={1080} height={1350} /> : loud ? (
         <LoudBackground top="red" bottom="blue" split={[30, 10]} burst={[130, 120]} />
@@ -35,7 +39,7 @@ export const makeTop8Photos = (white: boolean, loud = false, theme?: Theme): Sta
         </div>
       </header>
 
-      <main className="p8-grid">
+      <main className={`p8-grid ${fill ? 'fill3' : ''} ${n % 2 && n > 1 ? 'odd' : ''}`}>
         {data.players.map((p, i) => (
           <div key={p.uid} className={`p8-card dmv-panel ${white ? (i === 0 ? 'first' : '') : cardColor(i)}`}>
             <div className="p8-photo">
@@ -44,11 +48,11 @@ export const makeTop8Photos = (white: boolean, loud = false, theme?: Theme): Sta
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="photo-cp" />}
             </div>
             <div className="p8-info">
-              <FitText className="p8-name" text={p.name || 'Player'} max={30} width={212} min={16} />
+              <FitText className="p8-name" text={p.name || 'Player'} max={fill ? 34 : 30} width={212} min={16} />
               <div className="p8-sub">{[p.record, p.social].filter(Boolean).join('  ·  ')}</div>
               <div className="p8-team">
                 {p.team.map((m, j) => (
-                  <MonSprite key={j} mon={m} size={64} showTera={data.format.tera} />
+                  <MonSprite key={j} mon={m} size={fill ? 76 : 64} showTera={data.format.tera} />
                 ))}
               </div>
             </div>
@@ -56,7 +60,8 @@ export const makeTop8Photos = (white: boolean, loud = false, theme?: Theme): Sta
         ))}
       </main>
     </div>
-  ),
+    )
+  },
 })
 
 const Top8Photos = makeTop8Photos(false)

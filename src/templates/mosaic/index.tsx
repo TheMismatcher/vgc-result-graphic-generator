@@ -5,7 +5,7 @@
 import { useEffect, useState } from 'react'
 import type { StandingsTemplate } from '../types'
 import { CpBadge, FitText, Logo, MonSprite } from '../shared/parts'
-import { eventFacts, ordinal } from '../shared/format'
+import { eventFacts, ordinal, fillClass } from '../shared/format'
 import { sprites } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { useBrand } from '../../brand'
@@ -206,7 +206,7 @@ const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'se
     const few = data.players.length <= 4
 
     return (
-      <div className={`dmv mz ${cardTint ? `mz-tint ${cardTint}` : ''} ${shadow ? 'shadow' : ''} ${few ? 'few' : ''}`} style={{ width: W, height: H, background: gradient ? `linear-gradient(135deg, ${main}, ${second})` : second }}>
+      <div className={`dmv mz ${cardTint ? `mz-tint ${cardTint}` : ''} ${shadow ? 'shadow' : ''} ${fillClass(data.players.length)}`} style={{ width: W, height: H, background: gradient ? `linear-gradient(135deg, ${main}, ${second})` : second }}>
         {tiles.map((t, i) => {
           const size = Math.min(t.w, t.h) * CELL - GAP - 14
           const id = mons.length ? mons[i % mons.length] : ''
@@ -243,7 +243,7 @@ const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'se
               </div>
               <div className="mz-team">
                 {p.team.map((m, j) => (
-                  <MonSprite key={j} mon={m} size={few ? 100 : 72} showTera={data.format.tera} />
+                  <MonSprite key={j} mon={m} size={few ? 100 : data.players.length === 5 ? 74 : 72} showTera={data.format.tera} />
                 ))}
               </div>
             </div>

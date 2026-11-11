@@ -6,7 +6,7 @@ import { Facts } from '../shared/Facts'
 import '@fontsource/press-start-2p/400.css'
 import type { StandingsTemplate } from '../types'
 import { CpBadge, FitText, Logo, MonSprite } from '../shared/parts'
-import { eventFacts, ordinal } from '../shared/format'
+import { eventFacts, ordinal, fillClass } from '../shared/format'
 import { sprites } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import './eras.css'
@@ -26,7 +26,7 @@ export const KantoGameBoy: StandingsTemplate = {
     // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
     const few = data.players.length <= 4
     return (
-      <div className={`dmv gb ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
+      <div className={`dmv gb ${fillClass(data.players.length)}`} style={{ width: 1080, height: 1350 }}>
         <div className="gb-box gb-head">
           <FitText className="gb-title" text={data.tournament.name || 'Tournament'} max={44} width={940} min={20} weight={400} italic={false} family="'Press Start 2P'" />
           <div className="gb-facts">{facts(data).join(' / ').toUpperCase()}</div>
@@ -75,7 +75,7 @@ export const Unova: StandingsTemplate = {
     // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
     const few = data.players.length <= 4
     return (
-    <div className={`dmv uv ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
+    <div className={`dmv uv ${fillClass(data.players.length)}`} style={{ width: 1080, height: 1350 }}>
       <div className="uv-band a" />
       <div className="uv-band b" />
       <header className="uv-head">
@@ -97,7 +97,7 @@ export const Unova: StandingsTemplate = {
             </div>
             <div className="uv-team">
               {p.team.map((m, j) => (
-                <MonSprite key={j} mon={m} size={few ? 108 : 82} showTera={data.format.tera} />
+                <MonSprite key={j} mon={m} size={few ? 108 : data.players.length === 5 ? 90 : 82} showTera={data.format.tera} />
               ))}
             </div>
           </div>
@@ -127,12 +127,12 @@ type Data = Parameters<StandingsTemplate['Component']>[0]['data']
 /**
  * The shared results list for the location templates; each location styles it with its own CSS.
  * `grow`: with four players or fewer the rows get the class `few` and larger names and Pokémon
- * (the family's CSS makes the rows taller and the team a 3 x 2 grid; only the places do so far).
+ * (the family's CSS makes the rows taller and the team a 3 x 2 grid; only the places do so far); 5-7 players get `mid nN` (rows fill the page).
  */
 export function LocationRows({ data, cls, grow = false }: { data: Data; cls: string; grow?: boolean }) {
   const few = grow && data.players.length <= 4
   return (
-    <main className={`${cls}-rows ${few ? 'few' : ''}`}>
+    <main className={`${cls}-rows ${grow ? fillClass(data.players.length) : ''}`}>
       {data.players.map((p, i) => (
         <div key={p.uid} className={`${cls}-row ${i === 0 ? 'first' : ''}`}>
           <div className={`${cls}-place ${data.cp ? 'loc-place-cp' : ''}`}>
@@ -147,7 +147,7 @@ export function LocationRows({ data, cls, grow = false }: { data: Data; cls: str
           </div>
           <div className={`${cls}-team`}>
             {p.team.map((m, j) => (
-              <MonSprite key={j} mon={m} size={few ? 104 : 78} showTera={data.format.tera} />
+              <MonSprite key={j} mon={m} size={few ? 104 : grow && data.players.length === 5 ? 92 : 78} showTera={data.format.tera} />
             ))}
           </div>
         </div>

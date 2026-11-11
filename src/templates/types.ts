@@ -74,7 +74,7 @@ export type LookGroup = 'panels' | 'card' | 'champion' | 'map' | 'book' | 'sprit
 export type Looks = Record<LookGroup, string>
 
 /** The standings layouts, chosen after the style in the picker. */
-export type StandingsLayout = 'topcut' | 'top8photos' | 'top8mixed' | 'top4photos' | 'champion' | 'championphoto' | 'bracket' | 'widerows' | 'widespot' | 'widecols'
+export type StandingsLayout = 'topcut' | 'top8photos' | 'top8mixed' | 'top4photos' | 'champion' | 'championphoto' | 'bracket' | 'widerows' | 'widespot' | 'widecols' | 'widecolsplain'
 
 interface TemplateBase {
   id: string

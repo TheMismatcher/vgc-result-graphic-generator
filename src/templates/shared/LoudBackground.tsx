@@ -2,10 +2,24 @@
 // two colour panels split by a jagged black lightning edge, a sunburst, halftone dots and
 // speed lines. Templates choose the colours, where the split runs and where the burst sits.
 
+import { createContext, useContext, type JSX } from 'react'
 import { useBrand } from '../../brand'
 import './loud.css'
 
 type Colour = 'red' | 'blue' | 'yellow'
+
+/** Comic Book Flipped (comparison trial): red and blue swap places on every Comic Book background. */
+const LoudFlipContext = createContext(false)
+const flipColour = (c: Colour): Colour => (c === 'red' ? 'blue' : c === 'blue' ? 'red' : c)
+export function withLoudFlip<T extends { id: string; name: string; Component: (props: { data: never }) => JSX.Element }>(t: T): T {
+  const Inner = t.Component as (props: object) => JSX.Element
+  const Component = (props: object) => (
+    <LoudFlipContext.Provider value={true}>
+      <Inner {...props} />
+    </LoudFlipContext.Provider>
+  )
+  return { ...t, id: `${t.id}-flipped`, name: `${t.name} · Flipped`, Component }
+}
 
 interface Props {
   /** Colour above the split and below it. */
@@ -40,7 +54,10 @@ function boltPath(a: number, b: number, vertical: boolean, w = 3) {
   return `polygon(${[...one, ...two].join(', ')})`
 }
 
-export function LoudBackground({ top, bottom, split, burst, burstBelow, vertical = false }: Props) {
+export function LoudBackground({ top: topIn, bottom: bottomIn, split, burst, burstBelow, vertical = false }: Props) {
+  const flip = useContext(LoudFlipContext)
+  const top = flip ? flipColour(topIn) : topIn
+  const bottom = flip ? flipColour(bottomIn) : bottomIn
   const [a, b] = split
   const topClip = vertical ? `polygon(0 0, ${a}% 0, ${b}% 100%, 0 100%)` : `polygon(0 0, 100% 0, 100% ${b}%, 0 ${a}%)`
   const bottomClip = vertical ? `polygon(${a}% 0, 100% 0, 100% 100%, ${b}% 100%)` : `polygon(0 ${a}%, 100% ${b}%, 100% 100%, 0 100%)`

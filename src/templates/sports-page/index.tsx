@@ -2,6 +2,7 @@
 // the winner, a box-score table for the rest of the top cut, newsprint texture and the brand red
 // as the spot ink (slightly off-register on the headline, like a cheap print run).
 
+import { fillClass } from '../shared/format'
 import '@fontsource/anton/400.css'
 import '@fontsource/oswald/500.css'
 import '@fontsource/oswald/700.css'
@@ -36,7 +37,7 @@ const SportsPage: StandingsTemplate = {
     const few = data.players.length <= 4
 
     return (
-      <div className={`sp ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
+      <div className={`sp ${fillClass(data.players.length)}`} style={{ width: 1080, height: 1350 }}>
         <svg className="sp-grain" width="1080" height="1350" aria-hidden>
           <filter id="sp-noise">
             <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" />

@@ -1,0 +1,452 @@
+/* Comic Book landscape (designs/comic.tsx): ink panels with hard offset shadows, narration captions, starbursts,
+   a speech balloon. Colours: brand blue / red panels, gold for 1st (like the Comic Book Top Cut). */
+.wc {
+  position: absolute;
+  inset: 0;
+}
+.wc .dmv-panel {
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 10px 10px 0 var(--ink);
+  background: #fff;
+  color: var(--ink);
+}
+/* Halftone dots inside the coloured panels, heavier toward the bottom, like printed comics. */
+.wc .dmv-panel.blue,
+.wc .dmv-panel.red {
+  color: #fff;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.13) 2.4px, transparent 2.9px) 0 0 / 13px 13px,
+    var(--blue-dark);
+}
+.wc .dmv-panel.red {
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.12) 2.4px, transparent 2.9px) 0 0 / 13px 13px,
+    var(--red-dark);
+}
+.wc .dmv-panel.first {
+  color: var(--ink);
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.35) 2.6px, transparent 3.1px) 0 0 / 14px 14px,
+    var(--yellow);
+}
+
+/* ---- Header: cover logo title, facts in a narration box, a starburst ---- */
+.wc-head {
+  position: absolute;
+  top: 26px;
+  left: 56px;
+  right: 56px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.wc-head-text {
+  flex: 1;
+  min-width: 0;
+}
+.wc-title {
+  padding: 6px 8px;
+  transform: rotate(-2deg);
+  transform-origin: left center;
+  text-shadow: 0.06em 0.08em 0 var(--ink);
+}
+.wc-caption {
+  display: inline-block;
+  padding: 4px 18px;
+  background: var(--yellow);
+  border: 5px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  color: var(--ink);
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.wc-facts {
+  margin-top: 16px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: #fff;
+  font-size: 22px;
+  transform: rotate(-1deg);
+}
+.wc-burst {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wc-burst svg {
+  position: absolute;
+  inset: 0;
+}
+.wc-burst span {
+  position: relative;
+  max-width: 76%;
+  text-align: center;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 0.95;
+  color: var(--ink);
+  transform: rotate(-10deg);
+}
+.wc-head-burst {
+  transform: rotate(8deg);
+}
+
+/* The place: a narration caption pinned over the panel's corner. */
+.wc-place {
+  position: absolute;
+  top: -20px;
+  left: -16px;
+  z-index: 2;
+  font-size: 38px;
+  transform: rotate(-5deg);
+}
+.wc-place.first {
+  background: var(--ink);
+  color: var(--yellow);
+  border-color: var(--ink);
+  box-shadow: 5px 5px 0 var(--red);
+}
+.wc-name {
+  line-height: 1.1;
+  padding: 2px 4px;
+}
+.wc-sub {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 19px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.wc-sub.center {
+  justify-content: center;
+}
+.wc-team {
+  display: flex;
+  gap: 10px;
+}
+.wc-team.grid {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 30px;
+}
+
+/* ---- Rows: 2 x 4 panels with wide gutters ---- */
+.wc-rows {
+  position: absolute;
+  top: 262px;
+  left: 70px;
+  right: 70px;
+  bottom: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 1fr;
+  gap: 26px 48px;
+}
+.wc-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  padding: 20px 24px 6px 28px;
+}
+.wc-panel-who {
+  padding-left: 100px;
+}
+.wc-panel .wc-team {
+  margin-top: 2px;
+}
+.wc-panel-burst {
+  position: absolute;
+  top: -58px;
+  right: -40px;
+  z-index: 2;
+  transform: rotate(10deg);
+}
+.wc-rows.few .wc-panel-who {
+  padding-left: 130px;
+}
+.wc-rows.few .wc-place {
+  font-size: 54px;
+}
+
+/* ---- Spotlight: photo panel + CHAMPION! burst + speech balloon, the rest as a strip ---- */
+.wc-spot {
+  position: absolute;
+  top: 262px;
+  left: 70px;
+  right: 70px;
+  bottom: 40px;
+  display: grid;
+  grid-template-columns: 720px 1fr;
+  grid-template-rows: 100%;
+  gap: 0 56px;
+}
+.wc-champ {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.wc-champ-photo {
+  flex: none;
+  height: 290px;
+  overflow: hidden;
+  background: var(--blue-dark) !important;
+}
+.wc-champ-photo .dmv-photo {
+  width: 100%;
+  height: 100%;
+}
+.wc-champ-burst {
+  position: absolute;
+  top: -50px;
+  right: -40px;
+  z-index: 3;
+  transform: rotate(12deg);
+}
+.wc-balloon {
+  position: relative;
+  margin-top: 30px;
+  padding: 12px 30px 14px;
+  background: #fff;
+  border: 6px solid var(--ink);
+  border-radius: 46px;
+  box-shadow: 8px 8px 0 var(--ink);
+  color: var(--ink);
+}
+/* the balloon's tail, pointing up at the photo */
+.wc-balloon::before,
+.wc-balloon::after {
+  content: '';
+  position: absolute;
+  left: 90px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+.wc-balloon::before {
+  top: -34px;
+  border-width: 0 0 34px 34px;
+  border-color: transparent transparent var(--ink) transparent;
+}
+.wc-balloon::after {
+  top: -22px;
+  left: 97px;
+  border-width: 0 0 24px 22px;
+  border-color: transparent transparent #fff transparent;
+}
+.wc-balloon-name {
+  color: var(--ink);
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+  line-height: 1.05;
+}
+.wc-champ-team {
+  flex: 1;
+  min-height: 0;
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 18px 20px;
+}
+.wc-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  border-width: 5px !important;
+  box-shadow: 6px 6px 0 var(--ink) !important;
+}
+.wc-mini-name {
+  color: var(--ink);
+  -webkit-text-stroke: 0;
+  line-height: 1;
+}
+.wc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+  min-height: 0;
+  padding: 6px 10px 6px 18px;
+}
+.wc-strip {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-right: 22px;
+}
+.wc-place.side {
+  position: relative;
+  top: auto;
+  left: -30px;
+  margin-right: -26px;
+  font-size: 34px;
+}
+.wc-who {
+  flex: none;
+  width: 290px;
+  min-width: 0;
+}
+.wc-strip .wc-team {
+  margin-left: auto;
+  gap: 4px;
+}
+
+/* ---- Top 4: a four-panel strip ---- */
+.wc-cols {
+  position: absolute;
+  top: 262px;
+  left: 70px;
+  right: 70px;
+  bottom: 40px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 48px;
+}
+.wc-frame {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.wc-frame-photo {
+  position: relative;
+  flex: none;
+  height: 300px;
+  border-bottom: 7px solid var(--ink);
+}
+.wc-frame-photo .dmv-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 2px 2px 0 0;
+}
+.wc-frame-photo .wc-place {
+  top: auto;
+  bottom: -26px;
+  left: 14px;
+  font-size: 42px;
+}
+.wc-frame-burst {
+  position: absolute;
+  top: -48px;
+  right: -34px;
+  z-index: 3;
+  transform: rotate(12deg);
+}
+.wc-banner {
+  margin: 34px 28px 8px;
+  padding: 4px 14px;
+  background: var(--ink);
+  transform: skewX(-10deg);
+  text-align: center;
+}
+.wc-banner-name {
+  color: #fff;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  transform: skewX(10deg);
+}
+.wc-frame .first .wc-banner,
+.wc-frame.first .wc-banner {
+  background: var(--red);
+}
+.wc-frame-team {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-content: space-evenly;
+  justify-items: center;
+  padding: 0 20px 14px;
+}
+/* Record / handle line: kept off the ink border; the handle ellipsises, the CP never gets pushed out. */
+.wc-frame-sub {
+  padding: 0 24px;
+}
+.wc-frame-sub-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wc-frame-sub .dmv-cp {
+  flex: none;
+}
+
+/* ---- Plain columns (up to 8): a tall strip ---- */
+.wc-plain {
+  position: absolute;
+  top: 270px;
+  left: 70px;
+  right: 70px;
+  bottom: 40px;
+  display: flex;
+  gap: 28px;
+}
+.wc-tall {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 58px 16px 18px;
+  text-align: center;
+}
+.wc-tall.first {
+  flex: none;
+  width: 290px;
+}
+.wd.few .wc-tall.first {
+  flex: 1;
+  width: auto;
+}
+.wc-place.top {
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-4deg);
+}
+.wc-tall-team {
+  flex: 1;
+  min-height: 0;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.wc-tall-team.grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-content: space-evenly;
+  justify-content: space-evenly;
+  align-self: stretch;
+  gap: 0 12px;
+}
+
+/* Names on the gold (1st) panel: solid ink, the white outlined title type gets lost on yellow at small sizes. */
+.wc .dmv-panel.first .wc-name {
+  color: var(--ink);
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+.wc-mini-name {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+}

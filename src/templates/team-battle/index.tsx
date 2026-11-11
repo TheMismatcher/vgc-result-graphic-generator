@@ -69,7 +69,13 @@ export const makeTeamBattle = (variant: Variant, loud = false, theme?: SideTheme
             {variant !== 'neutral' && <div className="tb-mood" />}
           </>
         ) : loud ? (
-          <LoudBackground top="blue" bottom="red" split={[54, 46]} burst={[540, 110]} vertical />
+          <>
+            <div className="tb-loud-bg">
+              <LoudBackground top="blue" bottom="red" split={[54, 46]} burst={[540, 110]} vertical />
+            </div>
+            {/* Comic Book Win / Loss: the result's mood over the comic background. */}
+            {variant !== 'neutral' && <div className="tb-mood" />}
+          </>
         ) : (
           <>
             <div className="tb-bg" />
@@ -133,3 +139,5 @@ export default TeamBattle
 export const TeamBattleWin = makeTeamBattle('win')
 export const TeamBattleLoss = makeTeamBattle('loss')
 export const TeamBattleLoud = makeTeamBattle('neutral', true)
+export const TeamBattleLoudWin = makeTeamBattle('win', true)
+export const TeamBattleLossLoud = makeTeamBattle('loss', true)

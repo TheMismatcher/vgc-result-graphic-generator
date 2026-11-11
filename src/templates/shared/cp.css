@@ -3,15 +3,25 @@
    (Top Cut, Top 8, Top 4, Champion, Bracket, Wide). Classic / Comic Book / White keep the default
    comic bubble (yellow, ink outline). */
 
-/* Map / art / Glass styles: a flat tag in the 1st-place block's colours. */
+/* Map / art / Glass styles: a tag in the 1st-place block's colours with a thin outline in the style's dark
+   colour (like Classic's ink outline), so it stands off light panels and the see-through glass. On the gold
+   1st-place card it flips to a dark tag with gold letters, so it doesn't melt into the gold. */
 .themed.theme-place {
   --cp-bg: var(--pl-first);
   --cp-ink: var(--pl-first-ink);
-  --cp-border-w: 0px;
+  --cp-line: var(--pl-dark);
+  --cp-border-w: 2px;
   --cp-radius: 8px;
   --cp-italic: normal;
   --cp-weight: 800;
-  --cp-pad: 3px 10px;
+  --cp-pad: 2px 9px;
+  --cp-glow: 0 2px 0 color-mix(in srgb, var(--pl-dark) 55%, transparent);
+}
+.themed.theme-place .first,
+.themed.theme-place .dmv-panel.first {
+  --cp-bg: var(--pl-dark);
+  --cp-ink: var(--pl-first);
+  --cp-line: var(--pl-first);
 }
 
 /* Location rows (the map styles' Top Cut, Ghost Pixels, eras): the CP sits under the place number,
@@ -25,6 +35,7 @@
   --cp-weight: 800;
   --cp-shadow: inherit;
   --cp-font: inherit;
+  --cp-glow: none;
 }
 .loc-place-cp .dmv-cp.loc-cp {
   margin: 4px 0 0;

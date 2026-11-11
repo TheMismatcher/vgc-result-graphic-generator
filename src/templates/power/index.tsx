@@ -9,7 +9,7 @@ import '@fontsource/anton/400.css'
 import type { CSSProperties, ReactNode } from 'react'
 import type { StandingsData, StandingsTemplate } from '../types'
 import { CpBadge, FitText, Logo, MonSprite } from '../shared/parts'
-import { eventFacts, ordinal } from '../shared/format'
+import { eventFacts, fillClass, ordinal } from '../shared/format'
 import { teraType } from '../../data/options'
 import { sprites } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
@@ -362,8 +362,10 @@ const ANTON: Font = { family: 'Anton', weight: 400 }
  * sits on top of the header (outside it, so a clipped header doesn't cut it off). */
 function PowerTopCut({ data, cls, Background, emblem, above, font = MONTSERRAT, titleWidth = 760 }: { data: StandingsData; cls: string; Background: (p: BgProps) => ReactNode; emblem?: ReactNode; above?: ReactNode; font?: Font; titleWidth?: number }) {
   const fit = { weight: font.weight, family: font.family, italic: false }
+  const n = data.players.length
+  const few = n <= 4
   return (
-    <div className={`dmv pw ${cls}`} style={{ width: 1080, height: 1350 }}>
+    <div className={`dmv pw ${cls} ${fillClass(n)}`} style={{ width: 1080, height: 1350 }}>
       <Background data={data} width={1080} height={1350} />
       <header className="pw-head">
         <Logo size={130} />
@@ -381,7 +383,7 @@ function PowerTopCut({ data, cls, Background, emblem, above, font = MONTSERRAT, 
               <span>{ordinal(i + 1)}</span>
             </div>
             <div className="pw-player">
-              <FitText className="pw-name" text={p.name || 'Player'} max={32} width={300} min={16} {...fit} />
+              <FitText className="pw-name" text={p.name || 'Player'} max={few ? 46 : 32} width={few ? 400 : 300} min={16} {...fit} />
               <div className="pw-sub">
                 {[p.record, p.social].filter(Boolean).join('  ·  ')}
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="pw-cp" />}
@@ -389,7 +391,7 @@ function PowerTopCut({ data, cls, Background, emblem, above, font = MONTSERRAT, 
             </div>
             <div className="pw-team">
               {p.team.map((m, j) => (
-                <MonSprite key={j} mon={m} size={80} showTera={data.format.tera} />
+                <MonSprite key={j} mon={m} size={few ? 100 : n === 5 ? 88 : 80} showTera={data.format.tera} />
               ))}
             </div>
           </div>

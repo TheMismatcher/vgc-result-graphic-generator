@@ -255,3 +255,6 @@
 .sp.few .sp-mons .dmv-mon {
   margin: 2px 4px 2px 0;
 }
+
+/* 5-7 players: box-score rows share the height 8 rows use (8 x 68). */
+.sp.mid .sp-box td { height: calc(590px / var(--n)); }

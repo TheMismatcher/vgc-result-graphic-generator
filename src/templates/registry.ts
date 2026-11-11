@@ -1,5 +1,6 @@
-import { WideColumns, WideColumnsWhite, WideRows, WideRowsWhite, WideSpotlight, WideSpotlightWhite } from './wide'
+import { WideColumns, WideColumnsLoud, WideColumnsPlain, WideColumnsPlainLoud, WideColumnsPlainWhite, WideColumnsWhite, WideRows, WideRowsLoud, WideRowsWhite, WideSpotlight, WideSpotlightLoud, WideSpotlightWhite } from './wide'
 import { withPixelSprites } from './shared/parts'
+import { withLoudFlip } from './shared/LoudBackground'
 // Every template the generator can output. Add new designs here.
 
 import type { Day2Template, MatchTemplate, StandingsTemplate, TeamBattleTemplate, UsageTemplate } from './types'
@@ -9,10 +10,12 @@ import Usage, { UsageLoud } from './usage'
 import Bracket, { BracketLoud } from './bracket'
 import { ArenaGrid, ArenaSpotlight, ArenaSunset } from './arena'
 import VsResult, { VsResultLoud } from './vs-result'
+import { TeamBattlePoster, VsResultPoster } from './comic-ref'
 import Day2Clean from './day2/clean'
+import { Day2ArenaGrid, Day2ArenaSpotlight, Day2ArenaSunset, Day2CardClassic, Day2CardModern, Day2ComicBook, Day2Classic } from './day2/styles'
 import { RegionalMosaic, RegionalMosaicContrast } from './day2/mosaic'
 import { EventEditorialNight, EventEditorialPaper } from './day2/editorial'
-import TeamBattle, { TeamBattleLoss, TeamBattleLoud, TeamBattleWin } from './team-battle'
+import TeamBattle, { TeamBattleLoss, TeamBattleLossLoud, TeamBattleLoud, TeamBattleLoudWin, TeamBattleWin } from './team-battle'
 import Top8Photos, { Top8PhotosLoud, Top8PhotosWhite } from './top8-photos'
 import Top4Photos, { Top4PhotosLoud } from './top4-photos'
 import Top8Mixed, { Top8MixedLoud, Top8MixedWhite } from './top8-mixed'
@@ -52,6 +55,7 @@ export const STANDINGS_LAYOUTS: { id: StandingsLayout; label: string }[] = [
   { id: 'widerows', label: 'Wide Rows' },
   { id: 'widespot', label: 'Wide Spotlight' },
   { id: 'widecols', label: 'Wide Top 4 Columns' },
+  { id: 'widecolsplain', label: 'Wide Columns (No Photos)' },
 ]
 
 // Every standings template, grouped by style (the picker shows styles in this order, then the
@@ -78,7 +82,9 @@ const ALL: BrandColour[] = ['main', 'second', 'highlight']
 export const BRAND_COLOURS: Record<string, BrandColour[]> = {
   Classic: ALL,
   'Comic Book': ALL,
-  White: ALL,
+  'Comic Book Flipped': ALL,
+  'Comic Book Poster': ALL,
+  'Classic (White team background)': ALL,
   'Custom Glass': ALL,
   Mosaic: ALL,
   'Editorial Paper': ['main', 'highlight'],
@@ -93,16 +99,28 @@ export const BRAND_COLOURS: Record<string, BrandColour[]> = {
   'Classic · Loss': ['second'],
 }
 
-const COMIC_BOOK: [StandingsTemplate, StandingsLayout][] = [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top8MixedLoud, 'top8mixed'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [ChampionLoudPhoto, 'championphoto'], [BracketLoud, 'bracket']]
+const COMIC_BOOK: [StandingsTemplate, StandingsLayout][] = [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top8MixedLoud, 'top8mixed'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [ChampionLoudPhoto, 'championphoto'], [BracketLoud, 'bracket'], [WideRowsLoud, 'widerows'], [WideSpotlightLoud, 'widespot'], [WideColumnsLoud, 'widecols'], [WideColumnsPlainLoud, 'widecolsplain']]
 
 export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
-  ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [ChampionPhoto, 'championphoto'], [Bracket, 'bracket'], [WideRows, 'widerows'], [WideSpotlight, 'widespot'], [WideColumns, 'widecols']]),
+  ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [ChampionPhoto, 'championphoto'], [Bracket, 'bracket'], [WideRows, 'widerows'], [WideSpotlight, 'widespot'], [WideColumns, 'widecols'], [WideColumnsPlain, 'widecolsplain']]),
   // Comic Book with the HOME 3D renders (the card) or the pixel sprites.
   ...versions('Comic Book', [
     ['Comic Book', { sprites: 'render' }, COMIC_BOOK],
     ['Comic Book Pixel', { sprites: 'pixel' }, COMIC_BOOK.map(([t, l]) => [withPixelSprites(t), l] as [StandingsTemplate, StandingsLayout])],
   ]),
-  ...tag('White', [[TopCutBannerWhite, 'topcut'], [Top8PhotosWhite, 'top8photos'], [Top8MixedWhite, 'top8mixed'], [WideRowsWhite, 'widerows'], [WideSpotlightWhite, 'widespot'], [WideColumnsWhite, 'widecols']]),
+  // Comparison trial (Nov 10): every Comic Book layout with red and blue swapped on the background.
+  ...tag('Comic Book Flipped', COMIC_BOOK.map(([t, l]) => [withLoudFlip(t), l] as [StandingsTemplate, StandingsLayout])),
+  // Classic (White team background), formerly "White" = Classic with white cards; retired Nov 11. Top 4 Photos, Champion,
+  // Champion + Photo and Bracket are already white cards on the Classic background, so it has its own copy of each (own
+  // id, so the picker can tell the two styles apart). Ids unchanged, so saved selections still open.
+  ...retire('Classic (White team background)', [
+    [TopCutBannerWhite, 'topcut'], [Top8PhotosWhite, 'top8photos'], [Top8MixedWhite, 'top8mixed'],
+    [{ ...Top4Photos, id: 'dmv-top4-photos-white', name: 'Top 4 Photos (White)' }, 'top4photos'],
+    [{ ...Champion, id: 'dmv-champion-white', name: 'Champion (White)' }, 'champion'],
+    [{ ...ChampionPhoto, id: 'dmv-champion-photo-white', name: 'Champion + Photo (White)' }, 'championphoto'],
+    [{ ...Bracket, id: 'dmv-bracket-white', name: 'Bracket (White)' }, 'bracket'],
+    [WideRowsWhite, 'widerows'], [WideSpotlightWhite, 'widespot'], [WideColumnsWhite, 'widecols'], [WideColumnsPlainWhite, 'widecolsplain'],
+  ]),
   ...versions('Custom Glass', [
     ['Custom Glass', { panels: 'glass' }, [[CustomGlass, 'topcut'], ...PLACE_LAYOUTS['Custom Glass']]],
     ['Custom Glass Light', { panels: 'solid' }, [[CustomLight, 'topcut'], ...PLACE_LAYOUTS['Custom Glass Light']]],
@@ -183,7 +201,22 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...retire('Dynamax Cloud', [[DynamaxCloud, 'topcut'], ...DynamaxCloudLayouts]),
   ...retire('Dynamax Official', [[DynamaxOfficial, 'topcut'], ...PLACE_LAYOUTS['Dynamax Official']]),
 ]
-export const DAY2_TEMPLATES: Day2Template[] = [Day2Clean, RegionalMosaic, RegionalMosaicContrast, EventEditorialPaper, EventEditorialNight] // first = the default
+// Event Results: styles in the Standings picker (style cards, no layouts). First = the default.
+const day2 = (style: string, t: Day2Template): Day2Template => ({ ...t, style })
+export const DAY2_TEMPLATES: Day2Template[] = [
+  day2('Artist', Day2Clean),
+  day2('Classic', Day2Classic),
+  day2('Comic Book', Day2ComicBook),
+  day2('Mosaic', RegionalMosaic),
+  day2('Mosaic Contrast', RegionalMosaicContrast),
+  day2('Editorial Paper', EventEditorialPaper),
+  day2('Editorial Night', EventEditorialNight),
+  day2('Arena Spotlight', Day2ArenaSpotlight),
+  day2('Arena Grid', Day2ArenaGrid),
+  day2('Arena Sunset', Day2ArenaSunset),
+  Day2CardClassic,
+  Day2CardModern,
+]
 
 // Usage / Replay / Team Battle use the Standings picker too (style cards and switches, no layouts). Each
 // themed version shares its theme id with a Standings style, so it takes that style's card name, switches,
@@ -201,7 +234,7 @@ function sideTemplates<T extends Template>(own: [T, string][], themed: (theme: S
   return [...own.map(([t, style]) => ({ ...t, style })), ...list.sort((a, b) => order(a) - order(b))]
 }
 export const USAGE_TEMPLATES: UsageTemplate[] = sideTemplates([[Usage, 'Classic'], [UsageLoud, 'Comic Book']], (t) => makeUsage(t))
-export const MATCH_TEMPLATES: MatchTemplate[] = sideTemplates([[VsResult, 'Classic'], [VsResultLoud, 'Comic Book']], (t) => makeVsResult(t))
+export const MATCH_TEMPLATES: MatchTemplate[] = sideTemplates([[VsResult, 'Classic'], [VsResultLoud, 'Comic Book'], [VsResultPoster, 'Comic Book Poster']], (t) => makeVsResult(t))
 // Team Battle Win / Loss (from the posting team's side, on the left) as a Result switch on the style's card.
 // Trial styles: Mosaic, Editorial Night, Route 119, Sinnoh Snow, Spear Pillar.
 const RESULT_THEMES = new Set([
@@ -211,9 +244,16 @@ const RESULT_THEMES = new Set([
   'place-spear-pillar-hall-floor', 'place-spear-pillar-hall-floor-glass', 'place-spear-pillar-cutscene', 'place-spear-pillar-cutscene-glass',
 ])
 export const TEAM_BATTLE_TEMPLATES: TeamBattleTemplate[] = sideTemplates(
-  [[TeamBattle, 'Classic'], [TeamBattleLoud, 'Comic Book'], [TeamBattleWin, 'Classic · Win'], [TeamBattleLoss, 'Classic · Loss']],
+  [[TeamBattle, 'Classic'], [TeamBattleLoud, 'Comic Book'], [TeamBattlePoster, 'Comic Book Poster'], [TeamBattleWin, 'Classic · Win'], [TeamBattleLoss, 'Classic · Loss']],
   (t) => makeTeamBattle('neutral', false, t),
 ).flatMap((t) => {
+  // Comic Book: Win / Loss on the card's Result switch too.
+  if (t.id === TeamBattleLoud.id)
+    return [
+      { ...t, look: { result: 'neutral' } },
+      { ...TeamBattleLoudWin, style: 'Comic Book · Win', variantOf: 'Comic Book', look: { result: 'win' } },
+      { ...TeamBattleLossLoud, style: 'Comic Book · Loss', variantOf: 'Comic Book', look: { result: 'loss' } },
+    ]
   const theme = SIDE_THEMES.find((x) => RESULT_THEMES.has(x.id) && t.id === `${x.id}-dmv-team-battle`)
   if (!theme) return [t]
   // The map itself in the game's weather: Hoenn routes under Emerald's harsh sunlight (Win) or rain (Loss); Sinnoh Snow

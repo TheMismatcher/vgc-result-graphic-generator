@@ -135,7 +135,7 @@ export function photoStyle(x: number, y: number, zoom: number): CSSProperties {
   }
 }
 
-/** A player's photo cropped to fill its box (or, with photoFit, shown whole on a blurred copy of itself),
+/** A player's photo cropped to fill its box (or, with photoFit, shown whole over the style's empty-photo background),
  *  or their initials if no photo was uploaded. */
 export function PlayerPhoto({ player, className = '', style }: { player: Player; className?: string; style?: CSSProperties }) {
   const live = useContext(PhotoFrameContext)
@@ -144,8 +144,7 @@ export function PlayerPhoto({ player, className = '', style }: { player: Player;
     const { x, y } = live?.uid === player.uid ? live : f
     if (player.photoFit)
       return (
-        <div className={`dmv-photo dmv-photo-fit ${className}`} style={style}>
-          <img className="dmv-photo-blur" src={player.photo} alt="" aria-hidden />
+        <div className={`dmv-photo dmv-photo-empty dmv-photo-fit ${className}`} style={style}>
           <img className="dmv-photo-img" src={player.photo} alt={player.name} data-photo={player.uid} style={photoStyle(x, y, f.zoom)} />
         </div>
       )
@@ -185,7 +184,7 @@ export function Logo({ size, style }: { size: number; style?: CSSProperties }) {
 
 let measureCtx: CanvasRenderingContext2D | null | undefined
 
-function textWidth(text: string, font: string) {
+export function textWidth(text: string, font: string) {
   if (measureCtx === undefined) measureCtx = document.createElement('canvas').getContext('2d')
   if (!measureCtx) return 0
   measureCtx.font = font
@@ -193,7 +192,7 @@ function textWidth(text: string, font: string) {
 }
 
 /** Re-render once web fonts finish loading, so text measurements use the real font. */
-function useFontsReady() {
+export function useFontsReady() {
   const [, setReady] = useState(document.fonts.status === 'loaded')
   useEffect(() => {
     document.fonts.ready.then(() => setReady(true))

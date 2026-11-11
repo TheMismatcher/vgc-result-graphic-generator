@@ -16,7 +16,7 @@ export interface Player {
   photoY?: number // vertical framing of the photo, 0 = top, 100 = bottom
   photoX?: number // horizontal framing, 0 = left, 100 = right (default 50)
   photoZoom?: number // 1 = just fills its box; larger zooms in
-  photoFit?: boolean // show the whole photo (no crop); a blurred copy fills the empty space around it
+  photoFit?: boolean // show the whole photo (no crop); the style's empty-photo background shows around it
   wins?: number
   losses?: number
   ties?: number

@@ -1,0 +1,418 @@
+/* Editorial landscape (designs/editorial.tsx). Colours come from .themed.theme-editorial (--fg, --muted, --accent,
+   --band, --band-fg, --band-num, --hair): Paper and Night share the layout. */
+.we {
+  position: absolute;
+  inset: 0;
+  color: var(--fg);
+  font-style: normal;
+}
+.we-head {
+  position: absolute;
+  top: 40px;
+  left: 64px;
+  right: 64px;
+  height: 214px;
+  display: flex;
+  align-items: flex-end;
+  gap: 40px;
+  padding-bottom: 22px;
+  border-bottom: 8px solid var(--fg);
+}
+/* the thin second rule under the heavy one */
+.we-head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -20px;
+  height: 2px;
+  background: var(--fg);
+}
+.we-head-text {
+  flex: 1;
+  min-width: 0;
+}
+.we-kicker,
+.we-label {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.we-title {
+  margin-top: 8px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--fg);
+}
+.we-facts {
+  margin-top: 14px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.we-sep {
+  margin: 0 14px;
+  color: var(--accent);
+}
+.we-format {
+  margin-left: 28px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--muted);
+}
+.we-head .dmv-logo {
+  flex: none;
+  margin-bottom: 6px;
+}
+
+.we-num {
+  flex: none;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  color: var(--accent);
+}
+.we-name {
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.08;
+  color: inherit;
+}
+.we-sub {
+  margin-top: 4px;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.we .dmv-mon img.render {
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.18));
+}
+/* The winner's colour band. */
+.we .band {
+  background: var(--band);
+  color: var(--band-fg);
+}
+.we .band .we-num,
+.we .band .we-label {
+  color: var(--band-num);
+}
+.we .band .we-sub {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+/* ---- Rows: a two-column ruled table, read down each column ---- */
+.we-rows {
+  position: absolute;
+  top: 300px;
+  left: 64px;
+  right: 64px;
+  bottom: 44px;
+  display: grid;
+  grid-template-columns: 1fr 2px 1fr;
+  gap: 0 40px;
+}
+.we-vrule {
+  background: var(--hair);
+}
+.we-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.we-entry {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 0 20px 0 0;
+  border-bottom: 2px solid var(--hair);
+}
+.we-entry.band {
+  padding-left: 22px;
+  border-bottom-color: transparent;
+}
+.we-entry .we-num {
+  width: 128px;
+  font-size: 92px;
+}
+.we-body {
+  flex: 1;
+  min-width: 0;
+}
+.we-name-line {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+.we-name-line .we-label {
+  font-size: 16px;
+  flex: none;
+}
+.we-team {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+.we-team.grid {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+}
+
+/* ---- Spotlight: the champion on a full-height colour band (cover), the rest as a ruled list ---- */
+.we-spot {
+  position: absolute;
+  grid-template-rows: 100%;
+  top: 300px;
+  left: 64px;
+  right: 64px;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 700px 1fr;
+  gap: 0 52px;
+}
+.we-cover {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 30px 36px 28px;
+  background: var(--band);
+  color: var(--band-fg);
+}
+.we-cover-top {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+}
+.we-cover-num {
+  font-size: 150px;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 0.78;
+  color: var(--band-num);
+}
+.we-cover-who {
+  flex: 1;
+  min-width: 0;
+}
+.we-cover .we-label {
+  color: var(--band-num);
+}
+.we-cover-name {
+  margin-top: 6px;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.02;
+}
+.we-cover .we-sub {
+  color: rgba(255, 255, 255, 0.74);
+}
+.we-cover-photo {
+  flex: none;
+  height: 220px;
+  overflow: hidden;
+  border-top: 4px solid var(--band-num);
+}
+.we-cover-photo .dmv-photo {
+  width: 100%;
+  height: 100%;
+}
+.we-spec {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  border-top: 2px solid rgba(255, 255, 255, 0.28);
+}
+.we-spec-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 4px 6px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.18);
+}
+.we-spec-cell:not(:nth-child(3n + 1)) {
+  border-left: 2px solid rgba(255, 255, 255, 0.18);
+}
+.we-spec-mon {
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.we-spec-item {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.72;
+  white-space: nowrap;
+}
+.we-list {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 44px;
+  min-width: 0;
+}
+.we-line {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border-bottom: 2px solid var(--hair);
+}
+.we-line .we-num {
+  width: 104px;
+  font-size: 66px;
+}
+.we-who {
+  width: 290px;
+  min-width: 0;
+}
+.we-line .we-team {
+  margin: 0 0 0 auto;
+}
+
+/* ---- Top 4 columns: portrait columns, heavy rule on top, hairlines between ---- */
+.we-cols {
+  position: absolute;
+  top: 300px;
+  left: 64px;
+  right: 64px;
+  bottom: 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
+.we-pcol {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 18px 26px 0;
+  border-top: 8px solid var(--fg);
+}
+.we-pcol + .we-pcol {
+  border-left: 2px solid var(--hair);
+}
+.we-pcol.band {
+  border-top-color: var(--accent);
+}
+.we-pcol-head {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  height: 96px;
+}
+.we-pcol-head .we-num {
+  font-size: 104px;
+}
+.we-pcol-head .we-label {
+  margin-bottom: 10px;
+}
+.we-pcol-head .we-cp {
+  margin: 0 0 10px auto;
+}
+.we-pcol-photo {
+  flex: none;
+  height: 270px;
+  margin: 12px 0 12px;
+  overflow: hidden;
+}
+.we-pcol-photo .dmv-photo {
+  width: 100%;
+  height: 100%;
+}
+.we-pcol-team {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-content: space-evenly;
+  justify-items: center;
+  padding-bottom: 20px;
+}
+
+/* ---- Plain columns (up to 8, no photos): a table turned on its side ---- */
+.we-plain {
+  position: absolute;
+  top: 300px;
+  left: 64px;
+  right: 64px;
+  bottom: 0;
+  display: flex;
+}
+.we-tcol {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 8px 30px;
+  text-align: center;
+  border-top: 8px solid var(--fg);
+}
+.we-tcol + .we-tcol {
+  border-left: 2px solid var(--hair);
+}
+.we-tcol.band {
+  flex: none;
+  width: 300px;
+  border-top-color: var(--accent);
+}
+.we-tcol .we-num {
+  font-size: 72px;
+  margin-bottom: 8px;
+}
+.we-tcol-team {
+  flex: 1;
+  min-height: 0;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.we-tcol-team.grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-content: space-evenly;
+  justify-content: space-evenly;
+  align-self: stretch;
+  gap: 0 12px;
+}
+.we-plain .we-tcol.band:only-child,
+.wd.few .we-tcol.band {
+  flex: 1;
+  width: auto;
+}
+
+/* The empty photo (no photo uploaded) on the band: a light tint so it doesn't vanish into the band. */
+.we .band .dmv-photo-empty,
+.we-cover .dmv-photo-empty {
+  background: rgba(255, 255, 255, 0.12);
+}
+.we .band .dmv-photo-empty span,
+.we-cover .dmv-photo-empty span {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Few: entries in the Spotlight list sit on the ruled list without the band. */
+.we-list .we-entry .we-num {
+  width: 104px;
+  font-size: 66px;
+}
+.we-team.grid {
+  column-gap: 14px;
+}

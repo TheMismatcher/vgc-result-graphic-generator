@@ -225,3 +225,79 @@
 .themed.theme-place.giratina.tb .tb-set-score {
   background: rgba(16, 10, 12, 0.35); /* Giratina's eyes sit right behind the score column */
 }
+
+/* ---------------- Comic Book (loud) ---------------- */
+.tb-loud-bg {
+  position: absolute;
+  inset: 0;
+}
+.loud .tb-mood {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.loud.tb-win .tb-header,
+.loud.tb-loss .tb-header {
+  top: 104px;
+}
+.loud.tb-win .tb-result-tag,
+.loud.tb-loss .tb-result-tag {
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+/* Win: a gold sunburst blasting from the top, gold tag, your team's winning cards in gold. */
+.loud.tb-win .tb-loud-bg {
+  filter: saturate(1.15) brightness(1.06);
+}
+.loud.tb-win .tb-mood {
+  background:
+    repeating-conic-gradient(from 0deg at 50% 6%, rgba(255, 255, 255, 0.26) 0 4deg, transparent 4deg 11deg),
+    radial-gradient(ellipse 75% 34% at 50% 0%, color-mix(in srgb, var(--yellow) 85%, transparent) 0%, transparent 100%);
+}
+.loud.tb-win .tb-result-tag {
+  background: var(--yellow);
+  color: var(--ink);
+}
+.loud.tb-win .tb-card.right.won {
+  background: #fff;
+  color: var(--ink);
+  opacity: 0.85;
+}
+.loud.tb-win .tb-banner {
+  box-shadow: 8px 8px 0 var(--ink);
+}
+
+/* Loss: the comic background drained to a dark, desaturated version; your players' set wins keep your colour. */
+.loud.tb-loss .tb-loud-bg {
+  filter: saturate(0.2) brightness(0.55);
+}
+.loud.tb-loss .tb-mood {
+  background: radial-gradient(ellipse 80% 40% at 20% 0%, color-mix(in srgb, var(--blue) 30%, transparent) 0%, transparent 100%);
+}
+.loud.tb-loss .tb-result-tag {
+  background: #2a2d3a;
+  color: #fff;
+  border-color: #fff;
+}
+.loud.tb-loss .tb-card {
+  background: #343847;
+}
+.loud.tb-loss .tb-card.left.won {
+  background: var(--blue);
+  color: #fff;
+}
+.loud.tb-loss .tb-card.right.won {
+  background: #4a4f62;
+  color: #fff;
+}
+.loud.tb-loss .tb-card.lost {
+  opacity: 0.6;
+}
+.loud.tb-loss .tb-banner {
+  background: #14151c;
+  border-color: #fff;
+  box-shadow: 8px 8px 0 #000;
+}
+.loud.tb-loss .tb-banner .dmv-title {
+  color: #fff;
+}

@@ -201,6 +201,22 @@
   gap: 0 8px;
 }
 
+/* 5-7 players: rows share the height 8 rows use (8 x 124 + 7 x 10 gaps). 5 get the 3 x 2 team grid; 6 and 7 keep one line. */
+.tc.mid .tc-row {
+  height: calc((1062px - (var(--n) - 1) * 10px) / var(--n));
+}
+.tc.mid .tc-place {
+  font-size: 46px;
+}
+.tc.mid .tc-sub {
+  font-size: 24px;
+}
+.tc.mid.n5 .tc-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
+}
+
 /* ---------- Loud ---------- */
 .tc.loud .tc-rule {
   height: 10px;

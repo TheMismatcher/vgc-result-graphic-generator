@@ -1,7 +1,7 @@
 import type { StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, CpBadge } from '../shared/parts'
 import { LoudBackground } from '../shared/LoudBackground'
-import { eventFacts, ordinal } from '../shared/format'
+import { eventFacts, fillClass, isMid, ordinal } from '../shared/format'
 import './top-cut.css'
 
 // Header variants: a "clean" single line of text, or a slanted caption banner (dark or white).
@@ -19,8 +19,9 @@ const makeTopCut = (header: 'clean' | 'banner' | 'banner-white', loud = false): 
   Component: ({ data }) => {
     // Four players or fewer: taller rows, bigger names, and the team as a 3 x 2 grid of larger Pokémon.
     const few = data.players.length <= 4
+    const mid = isMid(data.players.length)
     return (
-    <div className={`dmv tc ${loud ? 'loud' : ''} ${few ? 'few' : ''}`} style={{ width: 1080, height: 1350 }}>
+    <div className={`dmv tc ${loud ? 'loud' : ''} ${fillClass(data.players.length)}`} style={{ width: 1080, height: 1350 }}>
       {loud ? (
         <LoudBackground top="blue" bottom="red" split={[32, 12]} burst={[140, 125]} />
       ) : (
@@ -82,12 +83,12 @@ const makeTopCut = (header: 'clean' | 'banner' | 'banner-white', loud = false): 
               {data.cp && <CpBadge points={data.cp(i + 1)} className="tc-cp" />}
             </div>
             <div className="tc-player">
-              <FitText className="dmv-title" text={p.name || 'Player'} max={few ? 60 : 40} width={few ? 440 : 290} min={22} />
+              <FitText className="dmv-title" text={p.name || 'Player'} max={few ? 60 : mid ? 46 : 40} width={few ? 440 : 290} min={22} />
               <div className="tc-sub">{[p.record, p.social].filter(Boolean).join('  ·  ')}</div>
             </div>
             <div className="tc-team">
               {p.team.map((m, j) => (
-                <MonSprite key={j} mon={m} size={few ? 120 : 86} showTera={data.format.tera} />
+                <MonSprite key={j} mon={m} size={few ? 120 : data.players.length === 5 ? 94 : 86} showTera={data.format.tera} />
               ))}
             </div>
           </div>

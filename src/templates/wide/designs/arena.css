@@ -1,0 +1,410 @@
+/* Arena landscape (designs/arena.tsx). Cards are the style's .dmv-panel (dark glass, coloured left edge, cut corner,
+   gold for 1st) from themes/arena.css; this file lays them out and adds the broadcast pieces. */
+.wa {
+  position: absolute;
+  inset: 0;
+  color: #fff;
+}
+.wa-head {
+  position: absolute;
+  top: 36px;
+  left: 64px;
+  right: 64px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.wa-head-text {
+  flex: 1;
+  min-width: 0;
+}
+.wa-kicker {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+.wa-title {
+  margin-top: 6px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.02;
+  color: #fff;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+.wa-underline {
+  width: 220px;
+  height: 9px;
+  margin-top: 14px;
+  background: linear-gradient(90deg, var(--yellow), transparent);
+  transform: skewX(-20deg);
+}
+.wa-head .dmv-logo {
+  border: 0;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* Ticker: event facts along the bottom, a yellow tag for the event type. */
+.wa-ticker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 58px;
+  display: flex;
+  align-items: stretch;
+  background: rgba(8, 10, 22, 0.88);
+  border-top: 4px solid var(--yellow);
+}
+.wa-ticker-tag {
+  display: flex;
+  align-items: center;
+  padding: 0 40px 0 64px;
+  background: var(--yellow);
+  color: #0b0d18;
+  font-size: 22px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 26px) 100%, 0 100%);
+}
+.wa-ticker-text {
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.wa-num {
+  flex: none;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+.wa .first .wa-num {
+  color: var(--yellow);
+}
+.wa-name {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: #fff;
+}
+.wa-sub {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.wa-name-line {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+.wa-cp {
+  flex: none;
+  font-size: 17px;
+}
+.wa-team {
+  display: flex;
+  gap: 6px;
+}
+.wa .dmv-mon img.render {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
+}
+
+/* ---- Rows: 2 x 4 broadcast bars ---- */
+.wa-rows {
+  position: absolute;
+  top: 252px;
+  left: 64px;
+  right: 64px;
+  bottom: 84px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 1fr;
+  gap: 16px 28px;
+}
+.wa-bar {
+  display: flex;
+  align-items: center;
+  min-height: 0;
+  overflow: hidden;
+}
+.wa-bar .wa-num {
+  width: 140px;
+  text-align: center;
+  font-size: 118px;
+}
+.wa-bar-body {
+  flex: 1;
+  min-width: 0;
+  padding-right: 30px;
+}
+.wa-bar .wa-team {
+  margin-top: 4px;
+}
+.wa-rows.few .wa-bar .wa-num {
+  width: 190px;
+  font-size: 190px;
+}
+.wa-rows.few .wa-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  gap: 0 20px;
+}
+
+/* ---- Spotlight ---- */
+.wa-spot {
+  position: absolute;
+  top: 252px;
+  left: 64px;
+  right: 64px;
+  bottom: 84px;
+  display: grid;
+  grid-template-columns: 760px 1fr;
+  grid-template-rows: 100%;
+  gap: 0 32px;
+}
+.wa-champ {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.wa-banner {
+  align-self: flex-start;
+  padding: 6px 70px 6px 26px;
+  background: linear-gradient(90deg, var(--red), color-mix(in srgb, var(--red) 40%, transparent));
+  clip-path: polygon(0 0, 100% 0, calc(100% - 30px) 100%, 0 100%);
+  font-size: 34px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.wa-champ-who {
+  padding: 10px 0 12px;
+}
+.wa-champ-name {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.04;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+.wa-champ-photo {
+  flex: none;
+  height: 200px;
+  overflow: hidden;
+  border-left: 8px solid var(--yellow);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%);
+}
+.wa-champ-photo .dmv-photo {
+  width: 100%;
+  height: 100%;
+}
+.wa-cells {
+  flex: 1;
+  min-height: 0;
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 12px;
+}
+.wa-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--ar-glass), var(--ar-glass-solid);
+  border-left: 6px solid var(--red);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+}
+.wa-cell:nth-child(even) {
+  border-left-color: var(--blue);
+}
+.wa-cell-mon {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.wa-cell-item {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.65);
+  white-space: nowrap;
+}
+.wa-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  min-height: 0;
+}
+.wa-list > * {
+  flex: 1;
+  min-height: 0;
+}
+.wa-line {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-right: 30px;
+  overflow: hidden;
+}
+.wa-num.small {
+  width: 96px;
+  text-align: center;
+  font-size: 78px;
+}
+.wa-who {
+  flex: none;
+  width: 280px;
+  min-width: 0;
+}
+.wa-line .wa-team {
+  margin-left: auto;
+}
+
+/* ---- Top 4 cards ---- */
+.wa-cols {
+  position: absolute;
+  top: 252px;
+  left: 64px;
+  right: 64px;
+  bottom: 84px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 28px;
+}
+.wa-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.wa-card-photo {
+  position: relative;
+  flex: none;
+  height: 300px;
+}
+.wa-card-photo .dmv-photo {
+  width: 100%;
+  height: 100%;
+}
+.wa-card-photo::after {
+  content: '';
+  position: absolute;
+  inset: 40% 0 0;
+  background: linear-gradient(180deg, transparent, rgba(8, 10, 22, 0.85));
+}
+.wa-num.huge {
+  position: absolute;
+  left: 16px;
+  bottom: -18px;
+  z-index: 1;
+  font-size: 170px;
+}
+.wa-card-who {
+  padding: 22px 22px 0;
+}
+.wa-card-who .wa-cp {
+  margin-top: 6px;
+}
+.wa-card-team {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 8px;
+  padding: 14px 30px 32px 18px;
+}
+.wa-mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  background: rgba(255, 255, 255, 0.06);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+}
+
+/* ---- Plain columns (up to 8) ---- */
+.wa-plain {
+  position: absolute;
+  top: 252px;
+  left: 64px;
+  right: 64px;
+  bottom: 84px;
+  display: flex;
+  gap: 16px;
+}
+.wa-tcol {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 8px 26px;
+  text-align: center;
+}
+.wa-tcol.first {
+  flex: none;
+  width: 300px;
+}
+.wa.few .wa-tcol.first,
+.wd.few .wa-tcol.first {
+  flex: 1;
+  width: auto;
+}
+.wa-tcol .wa-num {
+  font-size: 96px;
+}
+.wa-tcol .wa-sub {
+  justify-content: center;
+}
+.wa-tcol-team {
+  flex: 1;
+  min-height: 0;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.wa-tcol-team.grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-content: space-evenly;
+  justify-content: space-evenly;
+  align-self: stretch;
+  gap: 0 12px;
+}

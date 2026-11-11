@@ -301,7 +301,7 @@ export function Preview<T extends Template>({
             </label>
             <Button className="py-1" onClick={() => photos!.onChange(photoPlayer.uid, { photoX: undefined, photoY: photoPlayer.photoFit ? 50 : 30, photoZoom: undefined })}>Reset</Button>
           </div>
-          <p className="text-xs text-slate-500">Drag a photo in the preview to move it in its frame; click another photo to zoom that one. Fit whole photo shows the entire photo with a blurred copy around it, for photos the wrong shape for their frame.</p>
+          <p className="text-xs text-slate-500">Drag a photo in the preview to move it in its frame; click another photo to zoom that one. Fit whole photo shows the entire photo over the style’s empty-photo background, for photos the wrong shape for their frame.</p>
         </div>
       )}
 

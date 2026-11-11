@@ -10,17 +10,25 @@ import type { Theme } from '../themes/theme'
 import type { StandingsData, StandingsTemplate } from '../types'
 import type { Player } from '../../types'
 import { CpBadge, FitText, Logo, MonSprite, PlayerPhoto } from '../shared/parts'
+import { LoudBackground } from '../shared/LoudBackground'
 import { cardColor, lineColor, ordinal } from '../shared/format'
 import './wide.css'
+import './wide-themes.css'
 
 const W = 1920
 const H = 1080
 
-type Kind = 'rows' | 'spotlight' | 'columns'
+import { plainGrid, plainMon, type Kind } from './common'
+import { EditorialWide } from './designs/editorial'
+import { ArenaWide } from './designs/arena'
+import { ComicWide } from './designs/comic'
+import { GhostWide } from './designs/ghost'
+import { MosaicWide } from './designs/mosaic'
 const INFO: Record<Kind, { id: string; name: string; description: string }> = {
   rows: { id: 'wide-rows', name: 'Wide Rows', description: 'Landscape: two columns of four, each team in a line.' },
   spotlight: { id: 'wide-spotlight', name: 'Wide Spotlight', description: 'Landscape: the champion big on the left, 2nd–8th as rows on the right.' },
   columns: { id: 'wide-columns', name: 'Wide Top 4 Columns', description: 'Landscape: the top 4 as columns side by side.' },
+  plain: { id: 'wide-columns-plain', name: 'Wide Columns (No Photos)', description: 'Landscape: up to eight player columns side by side, no photos, each team stacked.' },
 }
 
 const sub = (p: Player) => [p.record, p.social].filter(Boolean).join('  ·  ')
@@ -88,7 +96,7 @@ function Spotlight({ data }: { data: StandingsData }) {
             {data.cp && <CpBadge points={data.cp(1)} />}
             <div className="wd-champ-team">
               {champ.team.map((m, j) => (
-                <MonSprite key={j} mon={m} size={124} showTera={data.format.tera} />
+                <MonSprite key={j} mon={m} size={148} showTera={data.format.tera} />
               ))}
             </div>
           </div>
@@ -128,7 +136,7 @@ function Spotlight({ data }: { data: StandingsData }) {
             {data.cp && <CpBadge points={data.cp(k + 2)} />}
             <div className="wd-team">
               {p.team.map((m, j) => (
-                <MonSprite key={j} mon={m} size={88} showTera={data.format.tera} />
+                <MonSprite key={j} mon={m} size={100} showTera={data.format.tera} />
               ))}
             </div>
           </div>
@@ -156,7 +164,7 @@ function Columns({ data }: { data: StandingsData }) {
           </div>
           <div className="wd-col-team">
             {p.team.map((m, j) => (
-              <MonSprite key={j} mon={m} size={124} showTera={data.format.tera} />
+              <MonSprite key={j} mon={m} size={132} showTera={data.format.tera} />
             ))}
           </div>
         </div>
@@ -165,27 +173,67 @@ function Columns({ data }: { data: StandingsData }) {
   )
 }
 
-/** `white`: the White style's plain white cards (Classic tints them blue / red). Ignored with a theme. */
-export const makeWide = (kind: Kind, theme?: Theme, white = false): StandingsTemplate => ({
-  id: theme ? `${theme.id}-${INFO[kind].id}` : `dmv-${INFO[kind].id}${white ? '-white' : ''}`,
-  name: theme ? `${INFO[kind].name} (${theme.style})` : white ? `${INFO[kind].name} (White)` : INFO[kind].name,
+// Columns without photos: every player a tall column (1st wider and gold), place band on top, the team stacked.
+function PlainColumns({ data }: { data: StandingsData }) {
+  const f = few(data)
+  const n = data.players.length
+  return (
+    <main className="wd-pcols">
+      {data.players.map((p, i) => (
+        <div key={p.uid} className={`wd-pcol dmv-panel ${lineColor(i)}`}>
+          <div className={`wd-pc-place ${lineColor(i)}`}>{ordinal(i + 1)}</div>
+          <FitText className="wd-name" text={p.name || 'Player'} max={f ? 40 : plainGrid(data) ? 32 : i === 0 ? 30 : 24} width={f ? 400 : plainGrid(data) ? 250 : i === 0 ? 270 : 180} min={12} />
+          <div className="wd-sub">{p.record}</div>
+          {data.cp && <CpBadge points={data.cp(i + 1)} />}
+          <div className={`wd-pc-team ${plainGrid(data) ? 'grid' : ''}`}>
+            {p.team.map((m, j) => (
+              <MonSprite key={j} mon={m} size={n > 6 && i === 0 ? 112 : plainMon(data, [170, 130, 116, 104])} showTera={data.format.tera} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </main>
+  )
+}
+
+/** `white`: the White style's plain white cards (Classic tints them blue / red). `loud`: the Comic Book background
+ *  (sunburst, speed lines, halftone, jagged split) behind the tinted cards. Both ignored with a theme. */
+export const makeWide = (kind: Kind, theme?: Theme, white = false, loud = false): StandingsTemplate => ({
+  id: theme ? `${theme.id}-${INFO[kind].id}` : `dmv-${INFO[kind].id}${white ? '-white' : ''}${loud ? '-loud' : ''}`,
+  name: theme ? `${INFO[kind].name} (${theme.style})` : white ? `${INFO[kind].name} (White)` : loud ? `${INFO[kind].name} (Comic Book)` : INFO[kind].name,
   description: INFO[kind].description,
   kind: 'standings',
   width: W,
   height: H,
   maxPlayers: kind === 'columns' ? 4 : 8,
   Component: ({ data }) => (
-    <div className={`dmv wd wd-is-${kind} ${few(data) ? 'few' : ''} ${theme ? `themed ${theme.className}` : white ? 'wd-white' : 'wd-tint'}`} style={{ width: W, height: H }}>
+    <div className={`dmv wd wd-is-${kind} ${few(data) ? 'few' : ''} ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : white ? 'wd-white' : 'wd-tint'}`} style={{ width: W, height: H }}>
       {theme ? (
         <theme.Background data={data} width={W} height={H} />
+      ) : loud ? (
+        <LoudBackground top="red" bottom="blue" vertical split={[30, 20]} burst={[250, 120]} />
       ) : (
         <>
           <div className="wd-bg" />
           <div className="dmv-halftone" />
         </>
       )}
-      <Header data={data} theme={theme} tag={kind === 'spotlight' ? 'Results' : `Top ${Math.max(data.players.length, 1)}`} />
-      {kind === 'rows' ? <Rows data={data} /> : kind === 'spotlight' ? <Spotlight data={data} /> : <Columns data={data} />}
+      {theme?.wide === 'editorial' ? (
+        <EditorialWide kind={kind} data={data} />
+      ) : theme?.wide === 'arena' ? (
+        <ArenaWide kind={kind} data={data} />
+      ) : theme?.wide === 'mosaic' ? (
+        <MosaicWide kind={kind} data={data} />
+      ) : theme?.wide === 'ghost' ? (
+        <GhostWide kind={kind} data={data} />
+      ) : loud ? (
+        <ComicWide kind={kind} data={data} />
+      ) : (
+        <>
+          <Header data={data} theme={theme} tag={kind === 'spotlight' ? 'Results' : `Top ${Math.max(data.players.length, 1)}`} />
+          {kind === 'rows' ? <Rows data={data} /> : kind === 'spotlight' ? <Spotlight data={data} /> : kind === 'plain' ? <PlainColumns data={data} /> : <Columns data={data} />}
+        </>
+      )}
     </div>
   ),
 })
@@ -196,3 +244,9 @@ export const WideColumns = makeWide('columns')
 export const WideRowsWhite = makeWide('rows', undefined, true)
 export const WideSpotlightWhite = makeWide('spotlight', undefined, true)
 export const WideColumnsWhite = makeWide('columns', undefined, true)
+export const WideRowsLoud = makeWide('rows', undefined, false, true)
+export const WideSpotlightLoud = makeWide('spotlight', undefined, false, true)
+export const WideColumnsPlain = makeWide('plain')
+export const WideColumnsPlainWhite = makeWide('plain', undefined, true)
+export const WideColumnsPlainLoud = makeWide('plain', undefined, false, true)
+export const WideColumnsLoud = makeWide('columns', undefined, false, true)

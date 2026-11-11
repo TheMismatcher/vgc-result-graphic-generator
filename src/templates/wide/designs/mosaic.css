@@ -1,0 +1,324 @@
+/* Mosaic landscape (designs/mosaic.tsx): cards are tiles on the wall's 120px grid. Colours from .themed.theme-mosaic
+   (--mz-card soft white, --mz-ink, --mz-muted, --mz-shadow) plus the brand tints Mosaic uses everywhere. */
+.wm {
+  position: absolute;
+  inset: 0;
+  color: var(--mz-ink);
+}
+.wm > header,
+.wm main > * {
+  position: absolute;
+}
+.wm-head,
+.wm-card,
+.wm-champ,
+.wm-col,
+.wm-tall {
+  border-radius: 18px;
+  background: var(--mz-card);
+  box-shadow: var(--mz-shadow);
+  overflow: hidden;
+}
+.wm .red {
+  background: color-mix(in srgb, var(--red) 10%, var(--mz-card));
+}
+.wm .blue {
+  background: color-mix(in srgb, var(--blue) 14%, var(--mz-card));
+}
+.wm .first {
+  background: color-mix(in srgb, var(--yellow) 28%, var(--mz-card));
+}
+
+/* ---- header plate (top-left tiles only) ---- */
+.wm-head {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 28px;
+}
+.wm-head .dmv-logo {
+  flex: none;
+}
+.wm-head-text {
+  min-width: 0;
+}
+.wm-tag {
+  display: inline-block;
+  padding: 3px 16px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--red) 80%, #fff);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+.wm-title {
+  margin-top: 6px;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: var(--mz-ink);
+}
+.wm-facts {
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--red) 85%, #000);
+  white-space: nowrap;
+}
+.wm-format {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--mz-muted);
+  white-space: nowrap;
+}
+
+/* ---- place tab: the coloured rounded block at the card's left (Mosaic Top Cut) ---- */
+.wm-place {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 82px;
+  align-self: stretch;
+  background: color-mix(in srgb, var(--blue-dark) 70%, #fff);
+  color: #fff;
+  font-size: 30px;
+  font-weight: 900;
+}
+.wm .red .wm-place {
+  background: color-mix(in srgb, var(--red) 75%, #fff);
+}
+.wm .first .wm-place {
+  background: color-mix(in srgb, var(--yellow) 85%, #fff);
+  color: var(--mz-ink);
+}
+.wm-place.pill {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  width: auto;
+  padding: 4px 18px;
+  border-radius: 12px;
+  font-size: 26px;
+  box-shadow: 0 4px 12px rgba(20, 24, 40, 0.2);
+}
+.wm-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--mz-ink);
+}
+.wm-sub {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--mz-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wm-sub.center {
+  text-align: center;
+}
+.wm-name-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.wm-cp {
+  flex: none;
+  font-size: 15px;
+}
+
+/* ---- one-tile-high card: tab | who | team ---- */
+.wm-card {
+  display: flex;
+}
+.wm-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px 0 16px;
+}
+.wm-who {
+  flex: none;
+  width: 256px;
+  min-width: 0;
+}
+.wm-team {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+/* two tiles high: name on top, team underneath */
+.wm-card.stack .wm-body {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 20px;
+}
+.wm-card.stack .wm-who {
+  width: 100%;
+}
+.wm-card.stack .wm-place {
+  width: 110px;
+  font-size: 40px;
+}
+.wm-card.stack .wm-team {
+  margin: 0;
+}
+
+/* ---- spotlight champion: six tiles wide, seven high ---- */
+.wm-champ {
+  display: flex;
+  flex-direction: column;
+}
+.wm-champ-photo {
+  position: relative;
+  flex: none;
+  height: 336px;
+}
+.wm-champ-photo .dmv-photo {
+  width: 100%;
+  height: 100%;
+}
+.wm-champ-tag {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  padding: 4px 20px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--yellow) 85%, #fff);
+  color: var(--mz-ink);
+  font-size: 24px;
+  font-weight: 900;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(20, 24, 40, 0.2);
+}
+.wm-champ-who {
+  padding: 16px 24px 0;
+}
+.wm-champ-team {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-content: space-evenly;
+  justify-items: center;
+}
+
+/* ---- Top 4: three tiles wide, six high ---- */
+.wm-col {
+  display: flex;
+  flex-direction: column;
+}
+.wm-col-photo {
+  position: relative;
+  flex: none;
+  height: 264px;
+}
+.wm-col-photo .dmv-photo {
+  width: 100%;
+  height: 100%;
+}
+.wm-col-who {
+  padding: 12px 18px 0;
+}
+.wm-col-who .wm-cp {
+  margin-top: 4px;
+}
+.wm-col-team {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-content: space-evenly;
+  justify-items: center;
+}
+
+/* ---- No Photos: tall tiles ---- */
+.wm-tall {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 66px 8px 12px;
+  text-align: center;
+}
+.wm-tall .wm-place.pill {
+  left: 50%;
+  transform: translateX(-50%);
+}
+.wm-tall-team {
+  flex: 1;
+  min-height: 0;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.wm-tall-team.grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-content: space-evenly;
+  gap: 0 18px;
+}
+.wm .dmv-mon img.render {
+  filter: drop-shadow(0 3px 4px rgba(20, 24, 40, 0.18));
+}
+
+.wm-sub-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin-top: 2px;
+}
+
+/* ---- Rows: big tiles, two rows read left to right (three tiles high) ---- */
+.wm-tile {
+  border-radius: 18px;
+  background: var(--mz-card);
+  box-shadow: var(--mz-shadow);
+  overflow: hidden;
+  display: flex;
+}
+.wm-tile.wide .wm-place {
+  width: 110px;
+  font-size: 44px;
+}
+.wm-tile-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 20px 12px;
+}
+.wm-tile-who {
+  flex: none;
+  min-width: 0;
+}
+.wm-tile-who .wm-place.pill {
+  position: static;
+  display: inline-flex;
+  margin-bottom: 8px;
+  font-size: 24px;
+  padding: 2px 16px;
+}
+.wm-tile-team {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-content: space-evenly;
+  justify-items: center;
+}
+.wm-tile-team.line {
+  grid-template-columns: repeat(6, 1fr);
+  align-content: center;
+}

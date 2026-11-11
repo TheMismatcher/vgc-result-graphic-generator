@@ -1,0 +1,420 @@
+/* Ghost Pixels landscape (designs/ghost.tsx): pixel windows on the sprite wall. Colours from .themed.theme-ghostpixel
+   (--gp-line lavender, --gp-purple, --gp-glass, --gp-ink). Hard edges only: no radius, no soft shadows. */
+.wg {
+  position: absolute;
+  inset: 0;
+  color: #f3ebff;
+}
+.wg-win {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: rgba(16, 10, 28, 0.86);
+  border: 4px solid var(--gp-line);
+  box-shadow: 0 0 0 4px #0c090d, 8px 8px 0 4px rgba(92, 62, 150, 0.95);
+}
+.wg-win.first {
+  border-color: #fff;
+}
+.wg-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 46px;
+  padding: 0 14px;
+  background: var(--gp-purple);
+  border-bottom: 4px solid var(--gp-line);
+}
+.wg-win.first .wg-bar {
+  background: #fff;
+  border-bottom-color: #fff;
+  color: #0c090d;
+}
+.wg-bar.center {
+  justify-content: center;
+}
+.wg-no {
+  flex: none;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 20px;
+  color: #fff;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.wg-win.first .wg-no {
+  color: #0c090d;
+  text-shadow: none;
+}
+.wg-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: #fff;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.wg-win.first .wg-bar .wg-name {
+  color: #0c090d;
+  text-shadow: none;
+}
+.wg-name.dark {
+  margin-top: 10px;
+}
+.wg-bar .dmv-cp {
+  margin-left: auto;
+}
+.wg-sub {
+  font-size: 18px;
+  font-weight: 700;
+  color: #cdbbf0;
+  text-shadow: 2px 2px 0 #0c090d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wg-sub.center {
+  text-align: center;
+  margin-top: 8px;
+}
+.wg-slots {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+.wg-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  background: rgba(92, 62, 150, 0.32);
+  border: 3px solid rgba(182, 156, 228, 0.55);
+}
+.wg-win.first .wg-slot {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+/* ---- Header: a framed window with the facts stacked on the right ---- */
+.wg-head {
+  position: absolute;
+  top: 26px;
+  left: 44px;
+  right: 44px;
+  height: 172px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 0 30px;
+  background: rgba(16, 10, 28, 0.86);
+  border: 4px solid var(--gp-line);
+  box-shadow: 0 0 0 4px #0c090d, 8px 8px 0 4px rgba(92, 62, 150, 0.95);
+}
+.wg-head .dmv-logo {
+  border: 4px solid var(--gp-line);
+  box-shadow: 4px 4px 0 var(--gp-purple);
+}
+.wg-head-text {
+  flex: 1;
+  min-width: 0;
+}
+.wg-kicker {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 20px;
+  color: var(--gp-line);
+}
+.wg-title {
+  margin-top: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: #fff;
+  text-shadow: 4px 4px 0 var(--gp-purple);
+}
+.wg-head-facts {
+  flex: none;
+  text-align: right;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: #cdbbf0;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+
+/* ---- Rows: 2 x 4 windows ---- */
+.wg-rows {
+  position: absolute;
+  top: 236px;
+  left: 52px;
+  right: 60px;
+  bottom: 44px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 1fr;
+  gap: 26px 36px;
+}
+.wg-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 14px 10px;
+}
+.wg-body .wg-slots {
+  flex: 1;
+  min-height: 0;
+}
+.wg-rows.few .wg-slots {
+  gap: 10px;
+}
+
+/* ---- Spotlight ---- */
+.wg-spot {
+  position: absolute;
+  top: 236px;
+  left: 52px;
+  right: 60px;
+  bottom: 44px;
+  display: grid;
+  grid-template-columns: 720px 1fr;
+  grid-template-rows: 100%;
+  gap: 0 40px;
+}
+.wg-champ {
+  gap: 14px;
+  padding-bottom: 14px;
+}
+.wg-champ .wg-no {
+  font-size: 24px;
+}
+.wg-champ-photo {
+  flex: 1;
+  min-height: 0;
+  margin: 0 14px;
+  overflow: hidden;
+  border: 4px solid var(--gp-line);
+}
+.wg-champ-photo .dmv-photo {
+  width: 100%;
+  height: 100%;
+}
+/* A game text box: white, double border, the ▼ prompt in the corner. */
+.wg-textbox {
+  position: relative;
+  flex: none;
+  margin: 0 14px;
+  padding: 12px 22px 14px;
+  background: #f8f6ff;
+  border: 4px solid #0c090d;
+  box-shadow: inset 0 0 0 4px var(--gp-line);
+  color: #0c090d;
+}
+.wg-textbox-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: #0c090d;
+}
+.wg-textbox .wg-sub {
+  color: #5c3e96;
+  text-shadow: none;
+}
+.wg-cursor {
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+  font-size: 22px;
+  color: #5c3e96;
+}
+.wg-champ > .wg-slots {
+  flex: none;
+  height: 128px;
+  margin: 0 14px;
+}
+.wg-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+  min-height: 0;
+}
+.wg-win.line {
+  flex: 1;
+}
+.wg-win.line .wg-bar {
+  height: 38px;
+}
+.wg-win.line .wg-no {
+  font-size: 16px;
+}
+.wg-body.row {
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  padding: 4px 10px;
+}
+.wg-body.row .wg-sub {
+  flex: none;
+  width: 250px;
+}
+.wg-body.row .wg-slots {
+  flex: 1;
+  height: 100%;
+  gap: 6px;
+}
+
+/* ---- Top 4 windows ---- */
+.wg-cols {
+  position: absolute;
+  top: 236px;
+  left: 52px;
+  right: 60px;
+  bottom: 44px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 40px;
+}
+.wg-col-photo {
+  flex: none;
+  height: 300px;
+  overflow: hidden;
+  border-bottom: 4px solid var(--gp-line);
+}
+.wg-col-photo .dmv-photo {
+  width: 100%;
+  height: 100%;
+}
+.wg-win.col > .wg-slots {
+  flex: 1;
+  min-height: 0;
+  margin: 10px 14px 14px;
+}
+.wg-win.col .wg-bar .wg-name {
+  min-width: 0;
+}
+
+/* ---- Plain columns (up to 8) ---- */
+.wg-plain {
+  position: absolute;
+  top: 236px;
+  left: 52px;
+  right: 60px;
+  bottom: 44px;
+  display: flex;
+  gap: 26px;
+}
+.wg-win.tall {
+  flex: 1;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 12px;
+}
+.wg-win.tall.first {
+  flex: none;
+  width: 290px;
+}
+.wd.few .wg-win.tall.first {
+  flex: 1;
+  width: auto;
+}
+.wg-win.tall .wg-bar {
+  align-self: stretch;
+}
+.wg-win.tall .wg-name {
+  padding: 0 6px;
+}
+.wg-stack {
+  flex: 1;
+  min-height: 0;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.wg-stack.grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-content: space-evenly;
+  justify-content: space-evenly;
+  align-self: stretch;
+  gap: 0 12px;
+}
+
+.wg-win.col .wg-name.dark {
+  margin-top: 12px;
+  text-align: center;
+}
+.wg-win.col .wg-sub.center {
+  margin-top: 2px;
+}
+
+/* Wide Rows / Spotlight: the team on one dark plate (lilac pixel border, hard purple drop), as in the Ghost Pixels
+   Top Cut's team box, instead of a box per Pokémon. Sprites sit evenly spaced and centred in their cells. */
+.wg-slots.strip {
+  gap: 0;
+  align-items: center;
+  justify-items: center;
+  padding: 2px 8px;
+  background: rgba(12, 8, 22, 0.78);
+  border: 3px solid rgba(182, 156, 228, 0.7);
+  box-shadow: 4px 4px 0 rgba(92, 62, 150, 0.8);
+}
+.wg-slots.strip .wg-slot {
+  background: none;
+  border: 0;
+}
+.wg-win.first .wg-slots.strip {
+  border-color: rgba(255, 255, 255, 0.75);
+}
+
+/* Record over handle beside the plate (Rows at 5-8, Spotlight list). */
+.wg-who {
+  flex: none;
+  width: 200px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.wg-sub.dim {
+  font-size: 16px;
+  opacity: 0.85;
+}
+.wg-body.row .wg-slots.strip {
+  align-self: stretch;
+  height: auto;
+}
+.wg-rows .wg-body.row {
+  padding: 8px 12px;
+}
+/* Spotlight list: the title block on the left (No. + CP, name under), like the place block of the Top Cut rows,
+   so the team plate gets the window's full height. */
+.wg-win.side {
+  flex-direction: row;
+}
+.wg-win.side > .wg-bar {
+  flex: none;
+  width: 320px;
+  height: auto;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-bottom: 0;
+  border-right: 4px solid var(--gp-line);
+}
+.wg-win.side.first > .wg-bar {
+  border-right-color: #fff;
+}
+.wg-bar-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.wg-win.side .wg-body.row {
+  padding: 6px 10px;
+}

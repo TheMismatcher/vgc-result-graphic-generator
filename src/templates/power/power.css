@@ -482,3 +482,17 @@
 .dmv.themed.theme-power .vs-plate .dmv-title {
   color: var(--pw-ink);
 }
+
+/* Top Cut with 4 or fewer players: rows fill the page, team 3 x 2. 5-7: rows share the height 8 rows use (8 x 112 + 7 x 12 gaps); 5 get the 3 x 2 grid. */
+.pw.few .pw-row { height: 236px; }
+.pw.few .pw-place { width: 150px; }
+.pw.few .pw-player { width: 420px; }
+.pw.few .pw-sub { font-size: 24px; }
+.pw.mid .pw-row { height: calc((980px - (var(--n) - 1) * 12px) / var(--n)); }
+.pw.mid .pw-sub { font-size: 22px; }
+.pw.few .pw-team,
+.pw.mid.n5 .pw-team {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 6px;
+}
