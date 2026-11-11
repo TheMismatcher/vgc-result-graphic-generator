@@ -10,6 +10,7 @@ import { LimitlessImport } from '../components/LimitlessImport'
 import { TdfUpload } from '../components/tdfUpload'
 import { StandingsPhotoImport } from '../components/StandingsPhotoImport'
 import { BracketEditor } from '../components/BracketEditor'
+import { BulkTeamSheetImport } from '../components/BulkTeamSheetImport'
 import { Button, Card } from '../components/ui'
 import { Box, Tab, Tabs } from '@mui/material'
 import React, { type ReactNode } from 'react'
@@ -50,6 +51,7 @@ export function StandingsPage({
   const [inputTab, setInputTab] = React.useState(0);
   // The Data panel's own source tabs (Limitless / TOM File / Photo / PDF); separate from Templates / Data.
   const [sourceTab, setSourceTab] = React.useState(0);
+  const [bulkSheets, setBulkSheets] = React.useState(false);
   const template = STANDINGS_TEMPLATES.find((t) => t.id === state.templates.standings) ?? STANDINGS_TEMPLATES[0];
   const render = (t: StandingsTemplate): ReactNode => <t.Component data={standingsData(state, t.maxPlayers)}></t.Component>;
   const onSelect = (id: string) => setState((s) => ({ ...s, templates: { ...s.templates, standings: id } }));
@@ -138,6 +140,15 @@ export function StandingsPage({
                 <h2 className="text-lg font-bold text-slate-900">Standings</h2>
                 <span className="text-sm text-slate-500">Order = placing. Use ↑ ↓ to reorder.</span>
               </div>
+              {bulkSheets ? (
+                <BulkTeamSheetImport
+                  players={state.players}
+                  onApply={(players) => { setState((s) => ({ ...s, players })); setBulkSheets(false) }}
+                  onCancel={() => setBulkSheets(false)}
+                />
+              ) : (
+                <Button className="w-full" onClick={() => setBulkSheets(true)}>Import team lists for everyone (photos, screenshots, PDFs)</Button>
+              )}
               {state.players.map((p, i) => (
                 <PlayerEditor
                   key={p.uid}

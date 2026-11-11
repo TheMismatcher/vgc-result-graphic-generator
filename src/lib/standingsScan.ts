@@ -19,9 +19,9 @@ export interface StandingsScan {
   spare?: { place: number; name: string }[] // names read below the last row (the other read of the same photo may know their records)
 }
 
-type Worker = Awaited<ReturnType<(typeof import('tesseract.js'))['createWorker']>>
-interface Line { text: string; y: number; x0: number; words: Word[] }
-interface Word { text: string; x0: number; x1: number; y0: number; y1: number }
+export type Worker = Awaited<ReturnType<(typeof import('tesseract.js'))['createWorker']>>
+export interface Line { text: string; y: number; x0: number; words: Word[] }
+export interface Word { text: string; x0: number; x1: number; y0: number; y1: number }
 
 // ---------- Image prep ----------
 
@@ -70,7 +70,7 @@ function skewAngle(src: HTMLCanvasElement) {
   return best
 }
 
-function straighten(src: HTMLCanvasElement) {
+export function straighten(src: HTMLCanvasElement) {
   const angle = skewAngle(src)
   if (Math.abs(angle) < 0.25) return src
   const c = document.createElement('canvas')
@@ -94,7 +94,7 @@ function resize(src: HTMLCanvasElement, factor: number) {
   return c
 }
 
-function crop(src: HTMLCanvasElement, x0: number, y0: number, x1: number, y1: number) {
+export function crop(src: HTMLCanvasElement, x0: number, y0: number, x1: number, y1: number) {
   x0 = Math.max(0, Math.round(x0))
   y0 = Math.max(0, Math.round(y0))
   x1 = Math.min(src.width, Math.round(x1))
@@ -110,7 +110,7 @@ function crop(src: HTMLCanvasElement, x0: number, y0: number, x1: number, y1: nu
  * Erase table borders: dark runs much longer than a letter, across or down. Screenshots have
  * solid black grid lines round every cell, which stop OCR reading the text inside them.
  */
-function removeRules(src: HTMLCanvasElement, textHeight: number) {
+export function removeRules(src: HTMLCanvasElement, textHeight: number) {
   const { width: w, height: h } = src
   const ctx = src.getContext('2d')!
   const img = ctx.getImageData(0, 0, w, h)
@@ -145,7 +145,7 @@ function removeRules(src: HTMLCanvasElement, textHeight: number) {
 
 // ---------- OCR helpers ----------
 
-async function ocr(worker: Worker, image: HTMLCanvasElement, yOffset = 0, xOffset = 0) {
+export async function ocr(worker: Worker, image: HTMLCanvasElement, yOffset = 0, xOffset = 0) {
   const { data } = await worker.recognize(image, {}, { blocks: true })
   const lines: Line[] = []
   const words: Word[] = []
@@ -455,7 +455,7 @@ function guessRecordHeader(words: Word[]): Word | undefined {
  * Photos with glare or uneven light: divide out the slowly changing background (shade
  * correction) so the text has the same contrast everywhere, then stretch the contrast.
  */
-function enhance(src: HTMLCanvasElement) {
+export function enhance(src: HTMLCanvasElement) {
   const { width: w, height: h } = src
   const small = document.createElement('canvas')
   small.width = Math.max(1, Math.round(w / 24))
