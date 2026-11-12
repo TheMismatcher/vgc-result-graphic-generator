@@ -8,6 +8,7 @@ import { FitText, MonSprite, PlayerPhoto } from '../shared/parts'
 import { eventFor } from './events'
 import './day2.css'
 import './editorial.css'
+import { gt } from '../../i18n'
 
 const SIZE = 1644
 const TEAM_CELLS = [
@@ -46,10 +47,10 @@ const make = (mood: 'paper' | 'night'): Day2Template => ({
         </div>
         <div className="d2e-rule" style={box(70, 196, 900, 8)} />
         <div className="d2e-namebox" style={box(70, 230, 920, 190)}>
-          <FitText className="d2e-name" text={p.name || 'Player Name'} max={120} width={900} min={40} italic={false} weight={900} />
+          <FitText className="d2e-name" text={p.name || gt('gfx.common.playerName')} max={120} width={900} min={40} italic={false} weight={900} />
         </div>
         <div className="d2e-record" style={box(70, 450, 460, 84)}>
-          <FitText className="d2e-recordtext" text={!p.record ? 'Record' : /[a-z]/i.test(p.record) ? p.record : `Record ${p.record}`} max={50} width={410} min={20} italic={false} weight={800} />
+          <FitText className="d2e-recordtext" text={!p.record ? gt('gfx.day2.record') : /[a-z]/i.test(p.record) ? p.record : gt('gfx.day2.recordN', { record: p.record })} max={50} width={410} min={20} italic={false} weight={800} />
         </div>
 
         <div className="d2e-photo" style={box(62, 640, 803, 802)}>

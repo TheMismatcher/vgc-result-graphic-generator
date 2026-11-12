@@ -6,6 +6,7 @@ import type { Day2Template } from '../types'
 import { FitText, MonSprite, PlayerPhoto } from '../shared/parts'
 import { eventFor } from './events'
 import './day2.css'
+import { gt } from '../../i18n'
 
 const SIZE = 1644
 
@@ -87,10 +88,10 @@ const Day2Clean: Day2Template = {
           <FitText className="d2-text light" text={data.event || event.title} max={58} width={760} italic={false} weight={800} />
         </div>
         <div className="d2-bar" style={box(150, 245, 840, 157)}>
-          <FitText className="d2-text" style={{ color: c.nameText }} text={p.name || 'Player Name'} max={100} width={740} italic={false} weight={800} />
+          <FitText className="d2-text" style={{ color: c.nameText }} text={p.name || gt('gfx.common.playerName')} max={100} width={740} italic={false} weight={800} />
         </div>
         <div className="d2-bar" style={box(615, 445, 415, 80)}>
-          <FitText className="d2-text light" text={!p.record ? 'Record' : /[a-z]/i.test(p.record) ? p.record : `Record ${p.record}`} max={52} width={350} italic={false} weight={800} />
+          <FitText className="d2-text light" text={!p.record ? gt('gfx.day2.record') : /[a-z]/i.test(p.record) ? p.record : gt('gfx.day2.recordN', { record: p.record })} max={52} width={350} italic={false} weight={800} />
         </div>
 
         {p.photo && (

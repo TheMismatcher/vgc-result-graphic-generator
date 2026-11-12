@@ -12,6 +12,8 @@ import { TeamLogo } from '../index'
 import { TeamName } from './shared'
 import '../../arena/arena.css'
 import './arena.css'
+import { gt } from '../../../i18n'
+import { gtFormatName } from '../../../data/options'
 
 const W = 1080
 const H = 1350
@@ -32,12 +34,12 @@ export const makeArenaResult = (result: 'win' | 'loss', theme: SideTheme): TeamB
     const rowH = (SETS_BOTTOM - SETS_TOP - GAP * (n - 1)) / n
     const grid = rowH >= 180 // few sets: each team as a 3 x 2 grid of bigger Pokémon
     const mon = grid ? Math.min(86, Math.floor((rowH - 60) / 2)) : Math.min(58, Math.floor(rowH * 0.56))
-    const us = a.name || 'Your team'
-    const headline = result === 'win' ? `${us} win ${data.score[0]}–${data.score[1]}` : `${us} fall ${data.score[0]}–${data.score[1]}`
-    const facts = [data.league, data.week, `${data.sets.length} set${data.sets.length === 1 ? '' : 's'}`, data.format.name].filter(Boolean).join('  ·  ')
+    const us = a.name || gt('gfx.teamBattle.yourTeam')
+    const headline = result === 'win' ? gt('gfx.teamBattle.winScore', { team: us, score1: data.score[0], score2: data.score[1] }) : gt('gfx.teamBattle.fallScore', { team: us, score1: data.score[0], score2: data.score[1] })
+    const facts = [data.league, data.week, gt('gfx.teamBattle.setCount', { count: data.sets.length }), gtFormatName(data.format.name)].filter(Boolean).join('  ·  ')
     const plates = [
-      { team: a, fallback: 'Team A', side: 'left', won: result === 'win' },
-      { team: b, fallback: 'Team B', side: 'right', won: result === 'loss' },
+      { team: a, fallback: gt('gfx.teamBattle.teamA'), side: 'left', won: result === 'win' },
+      { team: b, fallback: gt('gfx.teamBattle.teamB'), side: 'right', won: result === 'loss' },
     ] as const
     return (
       <div className={`dmv tbx tbx-ar ar tbx-${result}`} style={{ width: W, height: H }}>
@@ -47,9 +49,9 @@ export const makeArenaResult = (result: 'win' | 'loss', theme: SideTheme): TeamB
         <div className="tbx-ar-mood" />
 
         <div className="tbx-ar-banner">
-          <div className="tbx-ar-banner-word">{result === 'win' ? 'Victory' : 'Final'}</div>
+          <div className="tbx-ar-banner-word">{result === 'win' ? gt('gfx.teamBattle.victory') : gt('gfx.teamBattle.final')}</div>
         </div>
-        <div className="tbx-ar-kicker">{['Team Battle', data.league, data.week].filter(Boolean).join('  ·  ')}</div>
+        <div className="tbx-ar-kicker">{[gt('gfx.teamBattle.title'), data.league, data.week].filter(Boolean).join('  ·  ')}</div>
 
         <div className="tbx-ar-board">
           {plates.map((p, i) => (
@@ -57,7 +59,7 @@ export const makeArenaResult = (result: 'win' | 'loss', theme: SideTheme): TeamB
               <TeamLogo name={p.team.name || p.fallback} logo={p.team.logo} size={96} />
               <div className="tbx-ar-plate-text">
                 <TeamName className="tbx-ar-plate-name" text={p.team.name || p.fallback} max={40} width={194} twoAt={30} italic />
-                {p.team.record && <div className="tbx-ar-plate-sub">Season {p.team.record}</div>}
+                {p.team.record && <div className="tbx-ar-plate-sub">{gt('gfx.teamBattle.season', { record: p.team.record })}</div>}
               </div>
             </div>
           ))}
@@ -74,7 +76,7 @@ export const makeArenaResult = (result: 'win' | 'loss', theme: SideTheme): TeamB
               <div className="tbx-ar-set-num">{i + 1}</div>
               {([0, 1] as const).map((side) => (
                 <div key={side} className={`tbx-ar-player ${side ? 'right' : 'left'} ${s.winner === side ? 'won' : s.winner === null ? '' : 'lost'}`} style={{ order: side ? 4 : 2 }}>
-                  <FitText className="tbx-ar-name" text={s.players[side].name || 'Player'} max={Math.min(32, rowH * 0.28)} width={360} min={14} />
+                  <FitText className="tbx-ar-name" text={s.players[side].name || gt('gfx.common.player')} max={Math.min(32, rowH * 0.28)} width={360} min={14} />
                   <div className={`tbx-ar-mons ${grid ? 'grid' : ''}`}>
                     {s.players[side].team.map((m, j) => (
                       <MonSprite key={j} mon={m} size={mon} showTera={data.format.tera} />

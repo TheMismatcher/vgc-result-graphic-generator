@@ -10,6 +10,7 @@ import { displayPokemon, useDisplay } from '../../lib/display'
 import { eventFor } from './events'
 import './day2.css'
 import './mosaic.css'
+import { gt } from '../../i18n'
 
 const SIZE = 1644
 const WALL = 1080 // the wall is built at 1080 and scaled up to the 1644 artwork size
@@ -81,10 +82,10 @@ const makeRegionalMosaic = (contrast: boolean): Day2Template => ({
           <FitText className="d2-text light" text={data.event || event.title} max={58} width={780} italic={false} weight={800} />
         </div>
         <div className="d2m-card" style={{ ...box(110, 245, 850, 157), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <FitText className="d2-text" style={{ color: 'var(--d2m-ink)' }} text={p.name || 'Player Name'} max={100} width={770} italic={false} weight={800} />
+          <FitText className="d2-text" style={{ color: 'var(--d2m-ink)' }} text={p.name || gt('gfx.common.playerName')} max={100} width={770} italic={false} weight={800} />
         </div>
         <div className="d2m-card d2m-accent" style={{ ...box(110, 445, 520, 80), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <FitText className="d2-text light" text={!p.record ? 'Record' : /[a-z]/i.test(p.record) ? p.record : `Record ${p.record}`} max={52} width={450} italic={false} weight={800} />
+          <FitText className="d2-text light" text={!p.record ? gt('gfx.day2.record') : /[a-z]/i.test(p.record) ? p.record : gt('gfx.day2.recordN', { record: p.record })} max={52} width={450} italic={false} weight={800} />
         </div>
 
         <div className="d2m-card" style={{ ...box(62, 640, 803, 802), background: p.photo ? 'rgba(255,255,255,0.92)' : tint, overflow: 'hidden' }}>

@@ -30,6 +30,7 @@ import '@fontsource/cabin/500.css'
 import '@fontsource/cabin/700.css'
 import '@fontsource/cabin/700-italic.css'
 import './cards.css'
+import { gt } from '../../i18n'
 
 type Energy = 'grass' | 'fire' | 'water' | 'lightning' | 'psychic' | 'fighting' | 'darkness' | 'metal' | 'dragon' | 'fairy' | 'colorless'
 type Era = 'classic' | 'modern'
@@ -94,7 +95,7 @@ function useCard(data: StandingsData, era: Era): CardInfo {
   const ace = team[0]
   const energy = ace ? cardEnergy(ace.id, era) : 'colorless'
   return {
-    name: w?.name || 'Player',
+    name: w?.name || gt('gfx.common.player'),
     record: w?.record || '',
     social: w?.social || '',
     team,
@@ -111,19 +112,23 @@ const W = 1080
 const H = 1350
 
 /** `role`: what the card calls its player (Champion on the standings; Event Results uses Competitor). */
-function Classic({ data, photo, role = 'Champion' }: { data: StandingsData; photo?: boolean; role?: string }) {
+type Role = 'champion' | 'competitor'
+const roleLabel = (role: Role) => (role === 'champion' ? gt('gfx.common.champion') : gt('gfx.tradingCard.competitor'))
+
+function Classic({ data, photo, role = 'champion' }: { data: StandingsData; photo?: boolean; role?: Role }) {
   const c = useCard(data, 'classic')
+  const roleName = roleLabel(role)
   const cp = data.cp?.(1)
   return (
     <div className="dmv tcard tc-classic" style={{ width: W, height: H }}>
       <div className={`tc-card en-${c.energy}`}>
         <div className="tc-frame">
           <div className="tc-grain" />
-          <div className="cc-stage">{role}</div>
+          <div className="cc-stage">{roleName}</div>
           <FitText className="cc-name" text={c.name} max={56} width={560} min={30} weight={700} italic={false} uppercase={false} family="Cabin" />
           <div className="cc-hp">
             {c.record || '—'}
-            <span> REC</span>
+            <span> {gt('gfx.eras.rec')}</span>
             <Icon e={c.energy} size={60} />
           </div>
           <div className="cc-art">
@@ -133,8 +138,9 @@ function Classic({ data, photo, role = 'Champion' }: { data: StandingsData; phot
             </div>
           </div>
           <div className="cc-strip">
-            {role} Pokémon. {data.typeLabel || 'Tournament'}
-            {c.players ? `, Players: ${c.players}` : ''}
+            {c.players
+              ? gt('gfx.tradingCard.stripPlayers', { role: roleName, type: data.typeLabel || gt('gfx.common.tournament'), count: c.players })
+              : gt('gfx.tradingCard.strip', { role: roleName, type: data.typeLabel || gt('gfx.common.tournament') })}
           </div>
           <div className="cc-moves">
             {c.team.map((m, i) => (
@@ -146,7 +152,7 @@ function Classic({ data, photo, role = 'Champion' }: { data: StandingsData; phot
                 </div>
                 <div className="cc-move-text">
                   <b>{m.name}</b>
-                  {m.item && <span> Holding {m.item}.</span>}
+                  {m.item && <span>{gt('gfx.tradingCard.holding', { item: m.item })}</span>}
                 </div>
                 <img className="tc-move-mon" src={sprites.render(m.id)} alt="" />
                 {m.itemSrc ? <img className="tc-move-item" src={m.itemSrc} alt="" /> : <span className="tc-move-item" />}
@@ -155,26 +161,29 @@ function Classic({ data, photo, role = 'Champion' }: { data: StandingsData; phot
           </div>
           <div className="cc-wrr">
             <div>
-              <span>weakness</span>
+              <span>{gt('gfx.tradingCard.weakness')}</span>
               {c.weak && <Icon e={c.weak} size={38} />}
             </div>
             <div>
-              <span>resistance</span>
+              <span>{gt('gfx.tradingCard.resistance')}</span>
               {c.resist && <Icon e={c.resist} size={38} />}
             </div>
             <div>
-              <span>retreat cost</span>
+              <span>{gt('gfx.tradingCard.retreatCost')}</span>
               <Icon e="colorless" size={38} />
             </div>
           </div>
           <div className="cc-flavor">
-            {c.facts || 'Tournament champion'}.{data.formatLabel ? ` ${data.formatLabel}.` : ''}
-            {cp ? `  +${cp} CP.` : ''}
+            {gt('gfx.tradingCard.flavor', {
+              facts: c.facts || gt('gfx.tradingCard.defaultFacts'),
+              format: data.formatLabel ? gt('gfx.tradingCard.flavorFormat', { format: data.formatLabel }) : '',
+              cp: cp ? gt('gfx.tradingCard.flavorCpClassic', { cp }) : '',
+            })}
             <span className="cc-lv">#1</span>
           </div>
           <div className="cc-foot">
-            <span>{c.social ? `Illus. ${c.social}` : ''}</span>
-            <span className="cc-copy">©{yearOf(data)} {data.tournament.name || 'VGC'}</span>
+            <span>{c.social ? gt('gfx.tradingCard.illus', { social: c.social }) : ''}</span>
+            <span className="cc-copy">©{yearOf(data)} {data.tournament.name || 'VGC' /* i18n-ignore: brand fallback */}</span>
             <span className="cc-num">
               1/{c.players || 1} <i>★</i>
             </span>
@@ -185,8 +194,9 @@ function Classic({ data, photo, role = 'Champion' }: { data: StandingsData; phot
   )
 }
 
-function Modern({ data, photo, role = 'Champion' }: { data: StandingsData; photo?: boolean; role?: string }) {
+function Modern({ data, photo, role = 'champion' }: { data: StandingsData; photo?: boolean; role?: Role }) {
   const c = useCard(data, 'modern')
+  const roleName = roleLabel(role)
   const cp = data.cp?.(1)
   const reg = /Regulation\s+([A-Z])/i.exec(data.formatLabel)?.[1]?.toUpperCase() ?? 'G'
   return (
@@ -197,10 +207,10 @@ function Modern({ data, photo, role = 'Champion' }: { data: StandingsData; photo
           <svg className="sv-swoosh" viewBox="0 0 870 140" preserveAspectRatio="none" aria-hidden>
             <path d="M560 0 H870 V140 H690 C640 140 640 70 590 70 H560 Z" />
           </svg>
-          <div className="sv-stage">CHAMPION</div>
+          <div className="sv-stage">{gt('gfx.common.champion').toUpperCase()}</div>
           <FitText className="sv-name" text={c.name} max={50} width={460} min={28} weight={700} italic={false} uppercase={false} family="Cabin" />
           <div className="sv-hp">
-            <small>REC</small>
+            <small>{gt('gfx.eras.rec')}</small>
             <b>{c.record || '—'}</b>
             <Icon e={c.energy} size={60} />
           </div>
@@ -208,9 +218,9 @@ function Modern({ data, photo, role = 'Champion' }: { data: StandingsData; photo
             {photo && data.players[0] ? <PlayerPhoto player={data.players[0]} className="tc-photo" /> : c.ace && <img className="tc-ace" src={sprites.render(c.ace.id)} alt={c.ace.name} />}
           </div>
           <div className="sv-strip">
-            <span>NO. 0001</span>
-            <span>{role === 'Champion' ? 'Champion of the' : `${role} at the`} {data.typeLabel || 'Tournament'}</span>
-            {c.players > 0 && <span>Players: {c.players}</span>}
+            <span>{gt('gfx.tradingCard.no')}</span>
+            <span>{gt(role === 'champion' ? 'gfx.tradingCard.championOf' : 'gfx.tradingCard.roleAt', { role: roleName, type: data.typeLabel || gt('gfx.common.tournament') })}</span>
+            {c.players > 0 && <span>{gt('gfx.tradingCard.players', { count: c.players })}</span>}
           </div>
           <div className="sv-moves">
             {c.team.map((m, i) => (
@@ -231,7 +241,7 @@ function Modern({ data, photo, role = 'Champion' }: { data: StandingsData; photo
           </div>
           <div className="sv-wrr">
             <div className="sv-wrr-a">
-              <span>weakness</span>
+              <span>{gt('gfx.tradingCard.weakness')}</span>
               {c.weak && (
                 <>
                   <Icon e={c.weak} size={30} />
@@ -239,7 +249,7 @@ function Modern({ data, photo, role = 'Champion' }: { data: StandingsData; photo
                 </>
               )}
               <i className="sv-bar" />
-              <span>resistance</span>
+              <span>{gt('gfx.tradingCard.resistance')}</span>
               {c.resist && (
                 <>
                   <Icon e={c.resist} size={30} />
@@ -248,23 +258,26 @@ function Modern({ data, photo, role = 'Champion' }: { data: StandingsData; photo
               )}
             </div>
             <div className="sv-wrr-b">
-              <span>retreat</span>
+              <span>{gt('gfx.tradingCard.retreat')}</span>
               <Icon e="colorless" size={30} />
             </div>
           </div>
-          <div className="sv-illus">{c.social ? `Illus. ${c.social}` : ''}</div>
+          <div className="sv-illus">{c.social ? gt('gfx.tradingCard.illus', { social: c.social }) : ''}</div>
           <div className="sv-set">
             <span className="sv-reg">{reg}</span>
-            <span className="sv-code">DMV</span>
+            <span className="sv-code">DMV{/* i18n-ignore: set code */}</span>
             <span className="sv-num">
               {pad(1, 3)}/{pad(c.players || 1, 3)} <i>★</i>
             </span>
           </div>
           <div className="sv-flavor">
-            {c.facts || 'Tournament champion'}.{data.formatLabel ? ` ${data.formatLabel}.` : ''}
-            {cp ? ` +${cp} CP.` : ''}
+            {gt('gfx.tradingCard.flavor', {
+              facts: c.facts || gt('gfx.tradingCard.defaultFacts'),
+              format: data.formatLabel ? gt('gfx.tradingCard.flavorFormat', { format: data.formatLabel }) : '',
+              cp: cp ? gt('gfx.tradingCard.flavorCpModern', { cp }) : '',
+            })}
           </div>
-          <div className="sv-copy">©{yearOf(data)} {data.tournament.name || 'VGC'}</div>
+          <div className="sv-copy">©{yearOf(data)} {data.tournament.name || 'VGC' /* i18n-ignore: brand fallback */}</div>
         </div>
       </div>
     </div>
@@ -307,5 +320,5 @@ export const TradingCardModernPhoto: StandingsTemplate = {
 }
 
 /** The photo versions for other graphics (Event Results): same cards, the player called `role`. */
-export const TradingCardClassicRole = ({ data, role }: { data: StandingsData; role: string }) => <Classic data={data} photo role={role} />
-export const TradingCardModernRole = ({ data, role }: { data: StandingsData; role: string }) => <Modern data={data} photo role={role} />
+export const TradingCardClassicRole = ({ data, role }: { data: StandingsData; role: Role }) => <Classic data={data} photo role={role} />
+export const TradingCardModernRole = ({ data, role }: { data: StandingsData; role: Role }) => <Modern data={data} photo role={role} />

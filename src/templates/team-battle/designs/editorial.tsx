@@ -13,6 +13,8 @@ import { TeamLogo } from '../index'
 import { TeamName } from './shared'
 import '../../editorial/editorial.css'
 import './editorial.css'
+import { gt } from '../../../i18n'
+import { gtFormatName } from '../../../data/options'
 
 const W = 1080
 const H = 1350
@@ -34,16 +36,16 @@ export const makeEditorialResult = (result: 'win' | 'loss', theme: SideTheme): T
     // Few sets: tall rows, so each team goes to a 3 x 2 grid of bigger Pokémon (no empty bands).
     const grid = rowH >= 170
     const mon = grid ? Math.min(84, Math.floor((rowH - 56) / 2)) : Math.min(50, Math.floor(rowH * 0.46))
-    const kicker = ['Team Battle', data.league, data.week].filter(Boolean)
+    const kicker = [gt('gfx.teamBattle.title'), data.league, data.week].filter(Boolean)
     // Box score: your team first; on a win it's the champion band (black, gold numeral).
     const rows = [
-      { team: a, score: data.score[0], fallback: 'Team A', won: result === 'win' },
-      { team: b, score: data.score[1], fallback: 'Team B', won: result === 'loss' },
+      { team: a, score: data.score[0], fallback: gt('gfx.teamBattle.teamA'), won: result === 'win' },
+      { team: b, score: data.score[1], fallback: gt('gfx.teamBattle.teamB'), won: result === 'loss' },
     ]
     return (
       <div className={`dmv tbx tbx-ed ed ed-${mood} tbx-${result}`} style={{ width: W, height: H }}>
         <aside className="tbx-ed-side">
-          <FitText className="tbx-ed-side-word" text={result === 'win' ? 'Victory' : 'Final'} max={210} width={1250} italic={false} />
+          <FitText className="tbx-ed-side-word" text={result === 'win' ? gt('gfx.teamBattle.victory') : gt('gfx.teamBattle.final')} max={210} width={1250} italic={false} />
         </aside>
 
         <div className="tbx-ed-main">
@@ -62,7 +64,7 @@ export const makeEditorialResult = (result: 'win' | 'loss', theme: SideTheme): T
               <div key={i} className={`tbx-ed-line ${r.won ? 'won' : ''} ${result === 'win' && r.won ? 'band' : ''}`}>
                 <TeamLogo name={r.team.name || r.fallback} logo={r.team.logo} size={96} />
                 <div className="tbx-ed-team">
-                  <div className="tbx-ed-team-kicker">{[r.won ? 'Winner' : '', r.team.record && `Season ${r.team.record}`].filter(Boolean).join('  ·  ') || ' '}</div>
+                  <div className="tbx-ed-team-kicker">{[r.won ? gt('gfx.teamBattle.winner') : '', r.team.record && gt('gfx.teamBattle.season', { record: r.team.record })].filter(Boolean).join('  ·  ') || ' '}</div>
                   <TeamName className="tbx-ed-team-name" text={r.team.name || r.fallback} max={58} width={500} twoAt={40} />
                 </div>
                 <div className="tbx-ed-num">{r.score}</div>
@@ -72,9 +74,9 @@ export const makeEditorialResult = (result: 'win' | 'loss', theme: SideTheme): T
 
           <div className="tbx-ed-head">
             <span />
-            <span>{a.name || 'Team A'}</span>
-            <span>Set</span>
-            <span>{b.name || 'Team B'}</span>
+            <span>{a.name || gt('gfx.teamBattle.teamA')}</span>
+            <span>{gt('gfx.teamBattle.set')}</span>
+            <span>{b.name || gt('gfx.teamBattle.teamB')}</span>
           </div>
         </div>
 
@@ -86,7 +88,7 @@ export const makeEditorialResult = (result: 'win' | 'loss', theme: SideTheme): T
                 <div className="tbx-ed-set-num">{String(i + 1).padStart(2, '0')}</div>
                 {([0, 1] as const).map((side) => (
                   <div key={side} className={`tbx-ed-player ${side ? 'right' : 'left'} ${s.winner === side ? 'won' : s.winner === null ? '' : 'lost'}`} style={{ order: side ? 3 : 1 }}>
-                    <FitText className="tbx-ed-player-name" text={s.players[side].name || 'Player'} max={Math.min(30, rowH * 0.24)} width={300} min={14} italic={false} />
+                    <FitText className="tbx-ed-player-name" text={s.players[side].name || gt('gfx.common.player')} max={Math.min(30, rowH * 0.24)} width={300} min={14} italic={false} />
                     <div className={`tbx-ed-mons ${grid ? 'grid' : ''}`}>
                       {s.players[side].team.map((m, j) => (
                         <MonSprite key={j} mon={m} size={mon} showTera={data.format.tera} />
@@ -104,7 +106,7 @@ export const makeEditorialResult = (result: 'win' | 'loss', theme: SideTheme): T
           })}
         </div>
 
-        <div className="tbx-ed-foot">{[`${data.sets.length} set${data.sets.length === 1 ? '' : 's'}`, data.format.name].filter(Boolean).join('  ·  ')}</div>
+        <div className="tbx-ed-foot">{[gt('gfx.teamBattle.setCount', { count: data.sets.length }), gtFormatName(data.format.name)].filter(Boolean).join('  ·  ')}</div>
       </div>
     )
   },

@@ -9,6 +9,7 @@ import { getPokemon } from '../../../data/dex'
 import { displayPokemon, useDisplay } from '../../../lib/display'
 import { factsOf, few, sub, type Kind, plainGrid, plainMon } from '../common'
 import './comic.css'
+import { gt } from '../../../i18n'
 
 /** Jagged starburst with a word in it (POW-style). */
 export function Burst({ text, size, className = '' }: { text: string; size: number; className?: string }) {
@@ -38,7 +39,7 @@ function Head({ data, burst }: { data: StandingsData; burst: string }) {
     <header className="wc-head">
       <Logo size={150} />
       <div className="wc-head-text">
-        <FitText className="dmv-title wc-title" text={data.tournament.name || 'Tournament'} max={92} width={1180} min={40} />
+        <FitText className="dmv-title wc-title" text={data.tournament.name || gt('gfx.common.tournament')} max={92} width={1180} min={40} />
         <div className="wc-caption wc-facts">{[...factsOf(data), data.formatLabel].filter(Boolean).join('  •  ')}</div>
       </div>
       <Burst text={burst} size={190} className="wc-head-burst" />
@@ -57,9 +58,9 @@ function Rows({ data }: { data: StandingsData }) {
       {data.players.map((p, i) => (
         <div key={p.uid} className={`wc-panel dmv-panel ${cardColor(i)}`} style={tilt(i)}>
           <Caption i={i} />
-          {i === 0 && <Burst text="Winner!" size={f ? 170 : 140} className="wc-panel-burst" />}
+          {i === 0 && <Burst text={gt('gfx.wide.winnerBurst')} size={f ? 170 : 140} className="wc-panel-burst" />}
           <div className="wc-panel-who">
-            <FitText className="dmv-title wc-name" text={p.name || 'Player'} max={f ? 46 : 34} width={f ? 600 : 470} min={16} />
+            <FitText className="dmv-title wc-name" text={p.name || gt('gfx.common.player')} max={f ? 46 : 34} width={f ? 600 : 470} min={16} />
             <div className="wc-sub">
               {sub(p)}
               {data.cp && <CpBadge points={data.cp(i + 1)} />}
@@ -87,9 +88,9 @@ function Spotlight({ data }: { data: StandingsData }) {
           <div className="wc-champ-photo dmv-panel">
             <PlayerPhoto player={w} />
           </div>
-          <Burst text="Champion!" size={220} className="wc-champ-burst" />
+          <Burst text={gt('gfx.wide.championBurst')} size={220} className="wc-champ-burst" />
           <div className="wc-balloon">
-            <FitText className="dmv-title wc-balloon-name" text={w.name || 'Player'} max={54} width={560} min={22} />
+            <FitText className="dmv-title wc-balloon-name" text={w.name || gt('gfx.common.player')} max={54} width={560} min={22} />
             <div className="wc-sub">
               {sub(w)}
               {data.cp && <CpBadge points={data.cp(1)} />}
@@ -110,7 +111,7 @@ function Spotlight({ data }: { data: StandingsData }) {
           <div key={p.uid} className={`wc-strip dmv-panel ${lineColor(k + 1)}`} style={tilt(k + 1)}>
             <Caption i={k + 1} className="side" />
             <div className="wc-who">
-              <FitText className="dmv-title wc-name" text={p.name || 'Player'} max={f ? 40 : 28} width={290} min={14} />
+              <FitText className="dmv-title wc-name" text={p.name || gt('gfx.common.player')} max={f ? 40 : 28} width={290} min={14} />
               <div className="wc-sub">
                 {sub(p)}
                 {data.cp && <CpBadge points={data.cp(k + 2)} />}
@@ -138,9 +139,9 @@ function Columns({ data }: { data: StandingsData }) {
             <PlayerPhoto player={p} />
             <Caption i={i} />
           </div>
-          {i === 0 && <Burst text="Winner!" size={180} className="wc-frame-burst" />}
+          {i === 0 && <Burst text={gt('gfx.wide.winnerBurst')} size={180} className="wc-frame-burst" />}
           <div className="wc-banner">
-            <FitText className="wc-banner-name" text={p.name || 'Player'} max={34} width={300} min={14} />
+            <FitText className="wc-banner-name" text={p.name || gt('gfx.common.player')} max={34} width={300} min={14} />
           </div>
           <div className="wc-sub center wc-frame-sub">
             <span className="wc-frame-sub-text">{sub(p)}</span>
@@ -164,7 +165,7 @@ function Plain({ data }: { data: StandingsData }) {
       {data.players.map((p, i) => (
         <div key={p.uid} className={`wc-tall dmv-panel ${lineColor(i)}`} style={tilt(i)}>
           <Caption i={i} className="top" />
-          <FitText className="dmv-title wc-name" text={p.name || 'Player'} max={f ? 36 : plainGrid(data) ? 28 : i === 0 ? 26 : 21} width={f ? 370 : plainGrid(data) ? 226 : i === 0 ? 240 : 140} min={12} />
+          <FitText className="dmv-title wc-name" text={p.name || gt('gfx.common.player')} max={f ? 36 : plainGrid(data) ? 28 : i === 0 ? 26 : 21} width={f ? 370 : plainGrid(data) ? 226 : i === 0 ? 240 : 140} min={12} />
           <div className="wc-sub center">{p.record}</div>
           {data.cp && <CpBadge points={data.cp(i + 1)} />}
           <div className={`wc-tall-team ${plainGrid(data) ? 'grid' : ''}`}>
@@ -182,7 +183,7 @@ export function ComicWide({ kind, data }: { kind: Kind; data: StandingsData }) {
   const n = Math.max(data.players.length, 1)
   return (
     <div className="wc">
-      <Head data={data} burst={kind === 'spotlight' ? 'Results!' : `Top ${n}!`} />
+      <Head data={data} burst={kind === 'spotlight' ? gt('gfx.wide.resultsBurst') : gt('gfx.wide.topBurst', { count: n })} />
       {kind === 'rows' ? <Rows data={data} /> : kind === 'spotlight' ? <Spotlight data={data} /> : kind === 'columns' ? <Columns data={data} /> : <Plain data={data} />}
     </div>
   )

@@ -122,6 +122,7 @@ const stateFile = path.join(tmp, 'state.json')
   sparse.day2 = { ...sparse.day2, event: '', caption: '', players: sparse.day2.players.map((p) => blank(p, { name: '', record: '' })) }
   sparse.tournament.date = ''
   sparse.match = { ...sparse.match, bestOf: 3, gamesPlayed: 0 }
+  sparse.teamBattle = { ...sparse.teamBattle, league: '', week: '', teams: sparse.teamBattle.teams.map((t) => ({ ...t, name: '' })) }
   // Unfinished 4-player bracket with a blank name (TBD); a third set has no bracket at all.
   sparse.bracket = { size: 4, slots: sparse.players.map((p) => p.name), winners: [[null, null], [null]] }
   const nobracket = { ...structuredClone(sparse), bracket: { size: 0, slots: [], winners: [] } }

@@ -12,6 +12,7 @@ import { TeamLogo } from '../index'
 import { TeamName } from './shared'
 import '../../wide/designs/ghost.css'
 import './ghost.css'
+import { gt } from '../../../i18n'
 
 const W = 1080
 const H = 1350
@@ -29,14 +30,14 @@ export const makeGhostResult = (result: 'win' | 'loss', theme: SideTheme): TeamB
   Component: ({ data }) => {
     const { showMegas } = useDisplay()
     const [a, b] = data.teams
-    const us = a.name || 'Team A'
-    const them = b.name || 'Team B'
+    const us = a.name || gt('gfx.teamBattle.teamA')
+    const them = b.name || gt('gfx.teamBattle.teamB')
     const n = Math.max(data.sets.length, 1)
     const rowH = (SETS_BOTTOM - SETS_TOP - GAP * (n - 1)) / n
     const grid = rowH >= 190
     const mon = grid ? Math.min(78, Math.floor((rowH - 70) / 2) - 8) : Math.min(50, Math.floor(rowH * 0.5))
     const wallMons = data.sets.flatMap((st) => st.players.flatMap((p) => p.team.map((m) => (m.pokemon ? displayPokemon(m, showMegas) : ''))))
-    const lines = result === 'win' ? [`${them} was defeated!`, `${us} won ${data.score[0]}-${data.score[1]}!`] : [`${us} blacked out!`, `Final score ${data.score[0]}-${data.score[1]}.`]
+    const lines = result === 'win' ? [gt('gfx.teamBattle.defeated', { team: them }), gt('gfx.teamBattle.won', { team: us, score1: data.score[0], score2: data.score[1] })] : [gt('gfx.teamBattle.blackedOut', { team: us }), gt('gfx.teamBattle.finalScore', { score1: data.score[0], score2: data.score[1] })]
     const msgSize = lines.join('').length > 64 ? 20 : 24
     return (
       <div className={`dmv tbx tbx-gp themed ${theme.className} tbx-${result}`} style={{ width: W, height: H }}>
@@ -45,15 +46,15 @@ export const makeGhostResult = (result: 'win' | 'loss', theme: SideTheme): TeamB
 
         <div className={`wg-win tbx-gp-head ${result === 'win' ? 'first' : ''}`}>
           <div className="wg-bar">
-            <span className="wg-no">Team Battle</span>
+            <span className="wg-no">{gt('gfx.teamBattle.title')}</span>
             <span className="tbx-gp-bar-facts">{[data.league, data.week].filter(Boolean).join(' · ')}</span>
           </div>
           <div className="tbx-gp-board">
             {[a, b].map((t, i) => (
               <div key={i} className="tbx-gp-team" style={{ order: i ? 3 : 1 }}>
-                <TeamLogo name={t.name || (i ? 'Team B' : 'Team A')} logo={t.logo} size={124} />
-                <TeamName className="tbx-gp-team-name" text={t.name || (i ? 'Team B' : 'Team A')} max={34} width={300} twoAt={26} />
-                {t.record && <div className="wg-sub">Season {t.record}</div>}
+                <TeamLogo name={t.name || (i ? gt('gfx.teamBattle.teamB') : gt('gfx.teamBattle.teamA'))} logo={t.logo} size={124} />
+                <TeamName className="tbx-gp-team-name" text={t.name || (i ? gt('gfx.teamBattle.teamB') : gt('gfx.teamBattle.teamA'))} max={34} width={300} twoAt={26} />
+                {t.record && <div className="wg-sub">{gt('gfx.teamBattle.season', { record: t.record })}</div>}
               </div>
             ))}
             <div className="tbx-gp-score" style={{ order: 2 }}>
@@ -68,7 +69,7 @@ export const makeGhostResult = (result: 'win' | 'loss', theme: SideTheme): TeamB
               <div className="tbx-gp-num">{i + 1}</div>
               {([0, 1] as const).map((side) => (
                 <div key={side} className={`tbx-gp-player ${side ? 'right' : 'left'} ${s.winner === side ? 'won' : s.winner === null ? '' : 'lost'}`} style={{ order: side ? 4 : 2 }}>
-                  <FitText className="wg-name tbx-gp-name" text={s.players[side].name || 'Player'} max={Math.min(26, rowH * 0.26)} width={360} min={12} italic={false} />
+                  <FitText className="wg-name tbx-gp-name" text={s.players[side].name || gt('gfx.common.player')} max={Math.min(26, rowH * 0.26)} width={360} min={12} italic={false} />
                   <div className={`tbx-gp-slots ${grid ? 'grid' : ''}`}>
                     {s.players[side].team.map((m, j) => (
                       <div key={j} className="wg-slot" style={{ width: mon + 8, height: mon + 8 }}>

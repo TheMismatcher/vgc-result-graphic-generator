@@ -7,21 +7,22 @@ import regionals from './regionals-logo.png'
 import internationals from './internationals-logo.png'
 import worlds from './worlds-logo.png'
 import play from './special-logo.png'
-import type { GfxKey, UiKey } from '../../i18n'
+import { gt, type GfxKey, type UiKey } from '../../i18n'
 
 export type Day2EventKind = 'regionals' | 'play' | 'internationals' | 'special' | 'worlds'
 
-// `title` is the top bar's text when no event name is typed.
+// `title` is the top bar's text when no event name is typed. `label` and `title` are looked up in the catalog each
+// time they're read (getters), so they follow the graphics' language.
 export const DAY2_EVENTS: Record<Day2EventKind, { label: string; title: string; logo: string; hue: number }> = {
   // Red from the Regionals broadcast graphics.
-  regionals: { label: 'Regionals', title: 'Regional Championships', logo: regionals, hue: 354 },
+  regionals: { get label() { return gt(day2LabelKey('regionals')) }, get title() { return gt('gfx.day2.title.regionals') }, logo: regionals, hue: 354 },
   // Play! Pokémon red.
-  play: { label: 'Play! Pokémon', title: 'Play! Pokémon Event', logo: play, hue: 354 },
+  play: { get label() { return gt(day2LabelKey('play')) }, get title() { return gt('gfx.day2.title.play') }, logo: play, hue: 354 },
   // The blue of the International Championships shield.
-  internationals: { label: 'Internationals', title: 'International Championships', logo: internationals, hue: 205 },
-  special: { label: 'Special Events', title: 'Special Championships', logo: play, hue: 28 },
+  internationals: { get label() { return gt(day2LabelKey('internationals')) }, get title() { return gt('gfx.day2.title.internationals') }, logo: internationals, hue: 205 },
+  special: { get label() { return gt(day2LabelKey('special')) }, get title() { return gt('gfx.day2.title.special') }, logo: play, hue: 28 },
   // The blue of the World Championships rings.
-  worlds: { label: 'Worlds', title: 'World Championships', logo: worlds, hue: 222 },
+  worlds: { get label() { return gt(day2LabelKey('worlds')) }, get title() { return gt('gfx.day2.title.worlds') }, logo: worlds, hue: 222 },
 }
 
 /** Catalog keys for what people see on the website (the graphics read `label` and `title` above until they move to gt()). */

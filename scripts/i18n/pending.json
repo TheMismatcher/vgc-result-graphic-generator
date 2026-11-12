@@ -1,25 +1,4 @@
 {
   "note": "Files still to move into the string catalog. npm run i18n:check -- --update drops finished ones.",
-  "files": [
-    "src/templates/cards/index.tsx",
-    "src/templates/comic-ref/index.tsx",
-    "src/templates/day2/clean.tsx",
-    "src/templates/day2/designs.tsx",
-    "src/templates/day2/editorial.tsx",
-    "src/templates/day2/events.ts",
-    "src/templates/day2/mosaic.tsx",
-    "src/templates/day2/styles.tsx",
-    "src/templates/team-battle/designs/arena.tsx",
-    "src/templates/team-battle/designs/book.tsx",
-    "src/templates/team-battle/designs/editorial.tsx",
-    "src/templates/team-battle/designs/ghost.tsx",
-    "src/templates/team-battle/designs/mega.tsx",
-    "src/templates/team-battle/index.tsx",
-    "src/templates/wide/designs/arena.tsx",
-    "src/templates/wide/designs/comic.tsx",
-    "src/templates/wide/designs/editorial.tsx",
-    "src/templates/wide/designs/ghost.tsx",
-    "src/templates/wide/designs/mosaic.tsx",
-    "src/templates/wide/index.tsx"
-  ]
+  "files": []
 }

@@ -8,13 +8,14 @@ import { getItem, getPokemon } from '../../../data/dex'
 import { displayPokemon, useDisplay } from '../../../lib/display'
 import { factsOf, few, num, sub, type Kind, plainGrid, plainMon } from '../common'
 import './editorial.css'
+import { gt } from '../../../i18n'
 
 function Masthead({ data, kicker }: { data: StandingsData; kicker: string }) {
   return (
     <header className="we-head">
       <div className="we-head-text">
         <div className="we-kicker">{kicker}</div>
-        <FitText className="we-title" text={data.tournament.name || 'Tournament'} max={92} width={1420} min={40} weight={900} italic={false} />
+        <FitText className="we-title" text={data.tournament.name || gt('gfx.common.tournament')} max={92} width={1420} min={40} weight={900} italic={false} />
         <div className="we-facts">
           {factsOf(data).map((f, i) => (
             <span key={f}>
@@ -38,8 +39,8 @@ function Entry({ data, i, size, grid = false }: { data: StandingsData; i: number
       <div className="we-num">{num(i)}</div>
       <div className="we-body">
         <div className="we-name-line">
-          {i === 0 && <span className="we-label">Champion</span>}
-          <FitText className="we-name" text={p.name || 'Player'} max={grid ? 52 : 38} width={grid ? 560 : 520} min={18} weight={800} italic={false} />
+          {i === 0 && <span className="we-label">{gt('gfx.common.champion')}</span>}
+          <FitText className="we-name" text={p.name || gt('gfx.common.player')} max={grid ? 52 : 38} width={grid ? 560 : 520} min={18} weight={800} italic={false} />
           {data.cp && <CpBadge points={data.cp(i + 1)} className="we-cp" />}
         </div>
         <div className="we-sub">{sub(p)}</div>
@@ -100,8 +101,8 @@ function Spotlight({ data }: { data: StandingsData }) {
           <div className="we-cover-top">
             <div className="we-cover-num">01</div>
             <div className="we-cover-who">
-              <div className="we-label">Champion</div>
-              <FitText className="we-cover-name" text={w.name || 'Player'} max={60} width={500} min={24} weight={900} italic={false} />
+              <div className="we-label">{gt('gfx.common.champion')}</div>
+              <FitText className="we-cover-name" text={w.name || gt('gfx.common.player')} max={60} width={500} min={24} weight={900} italic={false} />
               <div className="we-sub">{sub(w)}</div>
               {data.cp && <CpBadge points={data.cp(1)} className="we-cp" />}
             </div>
@@ -119,7 +120,7 @@ function Spotlight({ data }: { data: StandingsData }) {
           <div key={p.uid} className="we-line">
             <div className="we-num">{num(k + 1)}</div>
             <div className="we-who">
-              <FitText className="we-name" text={p.name || 'Player'} max={30} width={290} min={14} weight={800} italic={false} />
+              <FitText className="we-name" text={p.name || gt('gfx.common.player')} max={30} width={290} min={14} weight={800} italic={false} />
               <div className="we-sub">{sub(p)}</div>
             </div>
             {data.cp && <CpBadge points={data.cp(k + 2)} className="we-cp" />}
@@ -143,13 +144,13 @@ function Columns({ data }: { data: StandingsData }) {
         <div key={p.uid} className={`we-pcol ${i === 0 ? 'band' : ''}`}>
           <div className="we-pcol-head">
             <div className="we-num">{num(i)}</div>
-            {i === 0 && <div className="we-label">Champion</div>}
+            {i === 0 && <div className="we-label">{gt('gfx.common.champion')}</div>}
             {data.cp && <CpBadge points={data.cp(i + 1)} className="we-cp" />}
           </div>
           <div className="we-pcol-photo">
             <PlayerPhoto player={p} />
           </div>
-          <FitText className="we-name" text={p.name || 'Player'} max={38} width={390} min={16} weight={800} italic={false} />
+          <FitText className="we-name" text={p.name || gt('gfx.common.player')} max={38} width={390} min={16} weight={800} italic={false} />
           <div className="we-sub">{sub(p)}</div>
           <div className="we-pcol-team">
             {p.team.map((m, j) => (
@@ -170,7 +171,7 @@ function Plain({ data }: { data: StandingsData }) {
       {data.players.map((p, i) => (
         <div key={p.uid} className={`we-tcol ${i === 0 ? 'band' : ''}`}>
           <div className="we-num">{num(i)}</div>
-          <FitText className="we-name" text={p.name || 'Player'} max={f ? 36 : plainGrid(data) ? 28 : i === 0 ? 26 : 22} width={f ? 380 : plainGrid(data) ? 250 : i === 0 ? 250 : 170} min={12} weight={800} italic={false} />
+          <FitText className="we-name" text={p.name || gt('gfx.common.player')} max={f ? 36 : plainGrid(data) ? 28 : i === 0 ? 26 : 22} width={f ? 380 : plainGrid(data) ? 250 : i === 0 ? 250 : 170} min={12} weight={800} italic={false} />
           <div className="we-sub">{p.record}</div>
           {data.cp && <CpBadge points={data.cp(i + 1)} className="we-cp" />}
           <div className={`we-tcol-team ${plainGrid(data) ? 'grid' : ''}`}>
@@ -185,7 +186,7 @@ function Plain({ data }: { data: StandingsData }) {
 }
 
 export function EditorialWide({ kind, data }: { kind: Kind; data: StandingsData }) {
-  const kicker = kind === 'spotlight' ? 'Final Standings' : kind === 'columns' ? `The Top ${Math.max(data.players.length, 1)}` : `Top ${Math.max(data.players.length, 1)} Standings`
+  const kicker = kind === 'spotlight' ? gt('gfx.editorial.finalStandings') : kind === 'columns' ? gt('gfx.wide.theTopN', { count: Math.max(data.players.length, 1) }) : gt('gfx.arena.kicker', { count: Math.max(data.players.length, 1) })
   return (
     <div className="we">
       <Masthead data={data} kicker={kicker} />

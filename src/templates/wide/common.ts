@@ -1,6 +1,7 @@
 // Shared bits for the landscape (1920x1080) layouts and their per-style designs (designs/*).
 import type { Player } from '../../types'
 import type { StandingsData } from '../types'
+import { gt } from '../../i18n'
 
 export type Kind = 'rows' | 'spotlight' | 'columns' | 'plain'
 export const W = 1920
@@ -19,4 +20,4 @@ export const sub = (p: Player) => [p.record, p.social].filter(Boolean).join('  Â
 /** Two-digit numeral (01, 02, ...), the Editorial way. */
 export const num = (i: number) => String(i + 1).padStart(2, '0')
 /** Event facts without the format (it gets its own line). */
-export const factsOf = (d: StandingsData) => [d.typeLabel, d.dateLabel, d.playerCount ? `${d.playerCount} Players` : ''].filter(Boolean)
+export const factsOf = (d: StandingsData) => [d.typeLabel, d.dateLabel, d.playerCount ? gt('gfx.facts.players', { count: d.playerCount }) : ''].filter(Boolean)

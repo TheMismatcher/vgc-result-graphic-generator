@@ -9,13 +9,14 @@ import { getItem, getPokemon } from '../../../data/dex'
 import { displayPokemon, useDisplay } from '../../../lib/display'
 import { factsOf, few, sub, type Kind, plainGrid, plainMon } from '../common'
 import './arena.css'
+import { gt } from '../../../i18n'
 
 function Head({ data, kicker }: { data: StandingsData; kicker: string }) {
   return (
     <header className="wa-head">
       <div className="wa-head-text">
         <div className="wa-kicker">{kicker}</div>
-        <FitText className="wa-title" text={data.tournament.name || 'Tournament'} max={84} width={1400} min={36} />
+        <FitText className="wa-title" text={data.tournament.name || gt('gfx.common.tournament')} max={84} width={1400} min={36} />
         <div className="wa-underline" />
       </div>
       <Logo size={150} />
@@ -40,7 +41,7 @@ function Bar({ data, i, color, size }: { data: StandingsData; i: number; color: 
       <div className="wa-num">{i + 1}</div>
       <div className="wa-bar-body">
         <div className="wa-name-line">
-          <FitText className="wa-name" text={p.name || 'Player'} max={36} width={430} min={16} />
+          <FitText className="wa-name" text={p.name || gt('gfx.common.player')} max={36} width={430} min={16} />
           {data.cp && <CpBadge points={data.cp(i + 1)} className="wa-cp" />}
         </div>
         <div className="wa-sub">{sub(p)}</div>
@@ -88,9 +89,9 @@ function Spotlight({ data }: { data: StandingsData }) {
     <main className="wa-spot">
       {w && (
         <section className="wa-champ">
-          <div className="wa-banner">Champion</div>
+          <div className="wa-banner">{gt('gfx.common.champion')}</div>
           <div className="wa-champ-who">
-            <FitText className="wa-champ-name" text={w.name || 'Player'} max={60} width={720} min={24} />
+            <FitText className="wa-champ-name" text={w.name || gt('gfx.common.player')} max={60} width={720} min={24} />
             <div className="wa-sub">
               {sub(w)}
               {data.cp && <CpBadge points={data.cp(1)} className="wa-cp" />}
@@ -110,7 +111,7 @@ function Spotlight({ data }: { data: StandingsData }) {
             <div key={p.uid} className={`wa-line dmv-panel ${lineColor(k + 1)}`}>
               <div className="wa-num small">{k + 2}</div>
               <div className="wa-who">
-                <FitText className="wa-name" text={p.name || 'Player'} max={28} width={280} min={14} />
+                <FitText className="wa-name" text={p.name || gt('gfx.common.player')} max={28} width={280} min={14} />
                 <div className="wa-sub">
                   {data.cp && <CpBadge points={data.cp(k + 2)} className="wa-cp" />}
                   {sub(p)}
@@ -140,7 +141,7 @@ function Columns({ data }: { data: StandingsData }) {
             <div className="wa-num huge">{i + 1}</div>
           </div>
           <div className="wa-card-who">
-            <FitText className="wa-name" text={p.name || 'Player'} max={36} width={360} min={16} />
+            <FitText className="wa-name" text={p.name || gt('gfx.common.player')} max={36} width={360} min={16} />
             <div className="wa-sub">{sub(p)}</div>
             {data.cp && <CpBadge points={data.cp(i + 1)} className="wa-cp" />}
           </div>
@@ -164,7 +165,7 @@ function Plain({ data }: { data: StandingsData }) {
       {data.players.map((p, i) => (
         <div key={p.uid} className={`wa-tcol dmv-panel ${lineColor(i)}`}>
           <div className="wa-num">{i + 1}</div>
-          <FitText className="wa-name" text={p.name || 'Player'} max={f ? 36 : plainGrid(data) ? 28 : i === 0 ? 26 : 21} width={f ? 380 : plainGrid(data) ? 250 : i === 0 ? 250 : 168} min={12} />
+          <FitText className="wa-name" text={p.name || gt('gfx.common.player')} max={f ? 36 : plainGrid(data) ? 28 : i === 0 ? 26 : 21} width={f ? 380 : plainGrid(data) ? 250 : i === 0 ? 250 : 168} min={12} />
           <div className="wa-sub">{p.record}</div>
           {data.cp && <CpBadge points={data.cp(i + 1)} className="wa-cp" />}
           <div className={`wa-tcol-team ${plainGrid(data) ? 'grid' : ''}`}>
@@ -180,7 +181,7 @@ function Plain({ data }: { data: StandingsData }) {
 
 export function ArenaWide({ kind, data }: { kind: Kind; data: StandingsData }) {
   const n = Math.max(data.players.length, 1)
-  const kicker = kind === 'spotlight' ? 'Final Standings' : `Top ${n} Standings`
+  const kicker = kind === 'spotlight' ? gt('gfx.editorial.finalStandings') : gt('gfx.arena.kicker', { count: n })
   return (
     <div className="wa">
       <Head data={data} kicker={kicker} />

@@ -13,6 +13,8 @@ import { getItem, getPokemon } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { eventFor } from './events'
 import './designs.css'
+import { gt } from '../../i18n'
+import { gtFormatName } from '../../data/options'
 
 const SIZE = 1644
 const box = (left: number, top: number, width: number, height: number): CSSProperties => ({ position: 'absolute', left, top, width, height })
@@ -33,7 +35,7 @@ export function ArenaProfile({ data, bg }: { data: Day2Data; bg: 'spotlight' | '
         <FitText className="d2a-kicker" text={data.event || event.title} max={30} width={1080} min={16} italic={false} weight={800} />
       </div>
       <div style={box(90, 150, 1100, 150)}>
-        <FitText className="d2a-name" text={p.name || 'Player Name'} max={132} width={1100} min={44} />
+        <FitText className="d2a-name" text={p.name || gt('gfx.common.playerName')} max={132} width={1100} min={44} />
       </div>
       <div className="d2a-underline" style={box(96, 318, 300, 12)} />
 
@@ -42,7 +44,7 @@ export function ArenaProfile({ data, bg }: { data: Day2Data; bg: 'spotlight' | '
       </div>
 
       <div style={box(870, 400, 690, 250)} className="d2a-stat">
-        <div className="d2a-stat-label">Record</div>
+        <div className="d2a-stat-label">{gt('gfx.day2.record')}</div>
         <FitText className="d2a-stat-value" text={record || '—'} max={isRecord(record) ? 210 : 110} width={680} min={40} />
       </div>
 
@@ -58,7 +60,7 @@ export function ArenaProfile({ data, bg }: { data: Day2Data; bg: 'spotlight' | '
 
       <div className="d2a-ticker" style={box(0, 1552, SIZE, 92)}>
         <div className="d2a-ticker-tag">{event.label}</div>
-        <div className="d2a-ticker-text">{data.caption.trim() || data.format.name}</div>
+        <div className="d2a-ticker-text">{data.caption.trim() || gtFormatName(data.format.name)}</div>
       </div>
     </div>
   )
@@ -93,7 +95,7 @@ export function ComicCover({ data }: { data: Day2Data }) {
       {record && <Burst text={isRecord(record) ? `${record}!` : record} size={300} className="d2c-burst" />}
 
       <div className="d2c-balloon" style={box(90, 1370, 840, 210)}>
-        <FitText className="dmv-title d2c-name" text={p.name || 'Player Name'} max={104} width={760} min={36} />
+        <FitText className="dmv-title d2c-name" text={p.name || gt('gfx.common.playerName')} max={104} width={760} min={36} />
       </div>
 
       <div className="d2c-team" style={box(1010, 440, 580, 1150)}>

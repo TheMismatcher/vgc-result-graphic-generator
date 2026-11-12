@@ -11,6 +11,8 @@ import { ArenaProfile, ComicCover } from './designs'
 import { formatByName } from '../../data/options'
 import './day2.css'
 import './styles.css'
+import { gt } from '../../i18n'
+import { gtFormatName } from '../../data/options'
 
 const SIZE = 1644
 const TEAM_CELLS = [
@@ -25,7 +27,7 @@ const CELL = 288
 const MON = 252
 
 const box = (left: number, top: number, width: number, height: number): CSSProperties => ({ position: 'absolute', left, top, width, height })
-const recordText = (record: string) => (!record ? 'Record' : /[a-z]/i.test(record) ? record : `Record ${record}`)
+const recordText = (record: string) => (!record ? gt('gfx.day2.record') : /[a-z]/i.test(record) ? record : gt('gfx.day2.recordN', { record }))
 
 /** The shared layout; `root` is the style's own root class(es), `back` its background. */
 function Layout({ data, root, back }: { data: Day2Data; root: string; back: ReactNode }) {
@@ -40,7 +42,7 @@ function Layout({ data, root, back }: { data: Day2Data; root: string; back: Reac
         <FitText className="d2s-event-text" text={data.event || event.title} max={58} width={760} min={20} italic={false} weight={800} />
       </div>
       <div className="d2s-name dmv-panel" style={box(110, 245, 880, 157)}>
-        <FitText className="d2s-name-text" text={p.name || 'Player Name'} max={100} width={780} min={30} italic={false} weight={900} />
+        <FitText className="d2s-name-text" text={p.name || gt('gfx.common.playerName')} max={100} width={780} min={30} italic={false} weight={900} />
       </div>
       <div className="d2s-record" style={box(110, 445, 520, 80)}>
         <FitText className="d2s-record-text" text={recordText(p.record)} max={52} width={450} min={18} italic={false} weight={800} />
@@ -121,7 +123,7 @@ function cardData(data: Day2Data): StandingsData {
   return {
     tournament: { name: data.event || event.title, type: '', date: '', format: data.format.name, customFormat: '', divisions: { masters: '', seniors: '', juniors: '' } },
     format: data.format ?? formatByName(''),
-    formatLabel: data.format.name,
+    formatLabel: gtFormatName(data.format.name),
     typeLabel: event.label,
     dateLabel: '',
     playerCount: 0,
@@ -147,7 +149,7 @@ const card = (modern: boolean): Day2Template => ({
     return (
       <div className="dmv d2 d2s d2s-card" style={{ width: SIZE, height: SIZE }}>
         <div style={{ position: 'absolute', left: 340, top: 12, width: 1080, height: 1350, transform: `scale(${SCALE})`, transformOrigin: '0 0' }}>
-          <Card data={cardData(data)} role="Competitor" />
+          <Card data={cardData(data)} role="competitor" />
         </div>
         <img className="d2s-logo" src={event.logo} alt="" style={{ ...box(36, 70, 360, 330), objectFit: 'contain' }} />
         <div className="d2s-card-event" style={box(36, 430, 350, 520)}>

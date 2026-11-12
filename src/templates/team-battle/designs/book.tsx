@@ -10,6 +10,8 @@ import { FitText, MonSprite } from '../../shared/parts'
 import { TeamLogo } from '../index'
 import { TeamName } from './shared'
 import './book.css'
+import { gt } from '../../../i18n'
+import { gtFormatName } from '../../../data/options'
 
 const W = 1080
 const H = 1350
@@ -26,13 +28,13 @@ export const makeBookResult = (result: 'win' | 'loss', theme: SideTheme): TeamBa
   height: H,
   Component: ({ data }) => {
     const [a, b] = data.teams
-    const us = a.name || 'Team A'
+    const us = a.name || gt('gfx.teamBattle.teamA')
     const n = Math.max(data.sets.length, 1)
     const rowH = (SETS_BOTTOM - SETS_TOP - GAP * (n - 1)) / n
     const grid = rowH >= 180
     const mon = grid ? Math.min(84, Math.floor((rowH - 58) / 2)) : Math.min(56, Math.floor(rowH * 0.5))
     const winSide = result === 'win' ? 0 : 1
-    const facts = [data.league, data.week, `${data.sets.length} set${data.sets.length === 1 ? '' : 's'}`, data.format.name].filter(Boolean).join(' • ')
+    const facts = [data.league, data.week, gt('gfx.teamBattle.setCount', { count: data.sets.length }), gtFormatName(data.format.name)].filter(Boolean).join(' • ')
     return (
       <div className={`dmv tbx tbx-bk themed ${theme.className} tbx-${result}`} style={{ width: W, height: H }}>
         <div className="tbx-bk-wall">
@@ -40,16 +42,16 @@ export const makeBookResult = (result: 'win' | 'loss', theme: SideTheme): TeamBa
         </div>
         <div className="tbx-bk-shade" />
 
-        <div className="tbx-bk-tag">{result === 'win' ? 'Victory' : 'Final'}</div>
-        <div className="tbx-bk-kicker">{['Team Battle', data.league, data.week].filter(Boolean).join(' • ')}</div>
+        <div className="tbx-bk-tag">{result === 'win' ? gt('gfx.teamBattle.victory') : gt('gfx.teamBattle.final')}</div>
+        <div className="tbx-bk-kicker">{[gt('gfx.teamBattle.title'), data.league, data.week].filter(Boolean).join(' • ')}</div>
 
         <div className="tbx-bk-panel tbx-bk-board">
           {[a, b].map((t, i) => (
             <div key={i} className={`tbx-bk-team ${i ? 'right' : 'left'}`} style={{ order: i ? 4 : 1 }}>
-              <TeamLogo name={t.name || (i ? 'Team B' : 'Team A')} logo={t.logo} size={104} />
+              <TeamLogo name={t.name || (i ? gt('gfx.teamBattle.teamB') : gt('gfx.teamBattle.teamA'))} logo={t.logo} size={104} />
               <div className="tbx-bk-team-text">
-                <TeamName className="tbx-bk-team-name" text={t.name || (i ? 'Team B' : 'Team A')} max={42} width={200} twoAt={32} />
-                {t.record && <div className="tbx-bk-sub">Season {t.record}</div>}
+                <TeamName className="tbx-bk-team-name" text={t.name || (i ? gt('gfx.teamBattle.teamB') : gt('gfx.teamBattle.teamA'))} max={42} width={200} twoAt={32} />
+                {t.record && <div className="tbx-bk-sub">{gt('gfx.teamBattle.season', { record: t.record })}</div>}
               </div>
             </div>
           ))}
@@ -66,7 +68,7 @@ export const makeBookResult = (result: 'win' | 'loss', theme: SideTheme): TeamBa
               <div className={`tbx-bk-cell ${s.winner === 0 ? 'gold' : i % 2 ? 'b' : ''}`}>{i + 1}</div>
               {([0, 1] as const).map((side) => (
                 <div key={side} className={`tbx-bk-player ${side ? 'right' : 'left'} ${s.winner === side ? 'won' : s.winner === null ? '' : 'lost'}`} style={{ order: side ? 4 : 2 }}>
-                  <FitText className="tbx-bk-name" text={s.players[side].name || 'Player'} max={Math.min(28, rowH * 0.27)} width={330} min={13} italic={false} />
+                  <FitText className="tbx-bk-name" text={s.players[side].name || gt('gfx.common.player')} max={Math.min(28, rowH * 0.27)} width={330} min={13} italic={false} />
                   <div className={`tbx-bk-mons ${grid ? 'grid' : ''}`}>
                     {s.players[side].team.map((m, j) => (
                       <MonSprite key={j} mon={m} size={mon} showTera={data.format.tera} />
@@ -82,7 +84,7 @@ export const makeBookResult = (result: 'win' | 'loss', theme: SideTheme): TeamBa
         </div>
 
         <footer className="tbx-bk-foot">
-          <FitText className="tbx-bk-foot-title" text={result === 'win' ? `${us} win ${data.score[0]}–${data.score[1]}` : `${us} fall ${data.score[0]}–${data.score[1]}`} max={40} width={960} min={22} />
+          <FitText className="tbx-bk-foot-title" text={result === 'win' ? gt('gfx.teamBattle.winScore', { team: us, score1: data.score[0], score2: data.score[1] }) : gt('gfx.teamBattle.fallScore', { team: us, score1: data.score[0], score2: data.score[1] })} max={40} width={960} min={22} />
           <div className="tbx-bk-foot-facts">{facts}</div>
         </footer>
       </div>

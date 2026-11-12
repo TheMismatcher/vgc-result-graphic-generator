@@ -9,6 +9,7 @@ import { createContext, useContext, type JSX } from 'react'
 import type { MatchTemplate, TeamBattleTemplate } from '../types'
 import { FitText, Logo, MonSprite, PlayerPhoto, textWidth, useFontsReady } from '../shared/parts'
 import './comic-ref.css'
+import { gt } from '../../i18n'
 
 const S = 1080
 
@@ -101,7 +102,7 @@ export const VsResultPoster: MatchTemplate = {
         <div className="cr-band-logo right">
           <Logo size={176} />
         </div>
-        <div className="cr-vs-word">VS</div>
+        <div className="cr-vs-word">{gt('gfx.comicRef.vs')}</div>
 
         {data.players.map((p, i) => (
           <div key={i} className={`cr-panel ${i ? 'red' : 'blue'}`} style={{ top: i ? 562 : 232 }}>
@@ -118,7 +119,7 @@ export const VsResultPoster: MatchTemplate = {
           <PlayerPhoto player={shown} />
         </div>
 
-        <WinStrip lines={!winnerName ? [data.round || 'Match result'] : winnerName.length <= 12 ? [`${winnerName} wins`] : [winnerName, 'Wins']} />
+        <WinStrip lines={!winnerName ? [data.round || gt('gfx.vsResult.matchResult')] : winnerName.length <= 12 ? [gt('gfx.vsResult.wins', { name: winnerName })] : [winnerName, gt('gfx.comicRef.winsLine')]} />
       </div>
     )
   },
@@ -151,17 +152,17 @@ const makeTeamBattlePoster = (result: PosterResult): TeamBattleTemplate => ({
     const scoreSize = Math.max(42, Math.round(nameMax * 1.1))
     const scoreW = Math.max(140, Math.round(scoreSize * 3.1))
     const nameW = Math.min(320, (828 - scoreW - 28) / 2)
-    const winner = data.winner === null ? '' : data.teams[data.winner].name || `Team ${data.winner ? 'B' : 'A'}`
+    const winner = data.winner === null ? '' : data.teams[data.winner].name || (data.winner ? gt('gfx.teamBattle.teamB') : gt('gfx.teamBattle.teamA'))
     const score = data.winner === 1 ? `${data.score[1]} - ${data.score[0]}` : `${data.score[0]} - ${data.score[1]}`
-    const us = a.name || 'Team A'
+    const us = a.name || gt('gfx.teamBattle.teamA')
     const strip =
       result === 'win'
-        ? [`${us} win`, `${data.score[0]} - ${data.score[1]}`]
+        ? [gt('gfx.teamBattle.winLine', { team: us }), `${data.score[0]} - ${data.score[1]}`]
         : result === 'loss'
-          ? [`${us} fall`, `${data.score[0]} - ${data.score[1]}`]
+          ? [gt('gfx.teamBattle.fallLine', { team: us }), `${data.score[0]} - ${data.score[1]}`]
           : winner
-            ? [`${winner} win`, score]
-            : [data.league || 'Team Battle', score]
+            ? [gt('gfx.teamBattle.winLine', { team: winner }), score]
+            : [data.league || gt('gfx.teamBattle.title'), score]
     return (
       <div className={`dmv cr cr-tb cr-${result} ${useContext(PosterFlip) ? 'cr-flip' : ''}`} style={{ width: S, height: S }}>
         <Poster />
@@ -169,23 +170,23 @@ const makeTeamBattlePoster = (result: PosterResult): TeamBattleTemplate => ({
 
         <div className="cr-board">
           <div className="cr-week">
-            <FitText className="cr-week-text" text={data.week || data.league || 'Team Battle'} max={84} width={560} min={30} />
+            <FitText className="cr-week-text" text={data.week || data.league || gt('gfx.teamBattle.title')} max={84} width={560} min={30} />
           </div>
           <div className="cr-sets" style={{ gridAutoRows: rowH }}>
             {data.sets.map((s, i) => (
               <div key={i} className="cr-set" style={{ gridTemplateColumns: `1fr ${scoreW}px 1fr` }}>
-                <FitText className={`cr-set-name ${s.winner === 0 ? 'won ours' : ''}`} text={s.players[0].name || 'Player'} max={nameMax} width={nameW} min={16} italic={false} weight={800} uppercase={false} />
+                <FitText className={`cr-set-name ${s.winner === 0 ? 'won ours' : ''}`} text={s.players[0].name || gt('gfx.common.player')} max={nameMax} width={nameW} min={16} italic={false} weight={800} uppercase={false} />
                 <div className="cr-set-score" style={{ fontSize: scoreSize }}>
                   <span className={s.winner === 0 ? 'w' : ''}>{s.score[0]}</span> - <span className={s.winner === 1 ? 'w' : ''}>{s.score[1]}</span>
                 </div>
-                <FitText className={`cr-set-name ${s.winner === 1 ? 'won' : ''}`} text={s.players[1].name || 'Player'} max={nameMax} width={nameW} min={16} italic={false} weight={800} uppercase={false} />
+                <FitText className={`cr-set-name ${s.winner === 1 ? 'won' : ''}`} text={s.players[1].name || gt('gfx.common.player')} max={nameMax} width={nameW} min={16} italic={false} weight={800} uppercase={false} />
               </div>
             ))}
           </div>
         </div>
         <div className="cr-tab">
           {/* WIN! / FINAL are wider than VS: fitted inside the tab's slanted sides. */}
-          {result === 'neutral' ? 'VS' : <FitText className="cr-tab-word" text={result === 'win' ? 'WIN!' : 'FINAL'} max={118} width={236} min={60} />}
+          {result === 'neutral' ? gt('gfx.comicRef.vs') : <FitText className="cr-tab-word" text={result === 'win' ? gt('gfx.comicRef.win') : gt('gfx.comicRef.final')} max={118} width={236} min={60} />}
         </div>
         <div className="cr-corner left">
           {result === 'win' && <div className="cr-burst" />}

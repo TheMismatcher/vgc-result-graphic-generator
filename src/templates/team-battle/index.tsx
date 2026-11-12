@@ -5,6 +5,7 @@ import { displayPokemon, useDisplay } from '../../lib/display'
 import type { SideTheme } from '../themes/side'
 import './team-battle.css'
 import './results.css'
+import { gt } from '../../i18n'
 
 const W = 1080
 const H = 1350
@@ -46,19 +47,19 @@ export const makeTeamBattle = (variant: Variant, loud = false, theme?: SideTheme
     const rowH = Math.min(118, (ROWS_BOTTOM - ROWS_TOP - GAP * (n - 1)) / n)
     const mon = Math.min(56, Math.floor(rowH * 0.5))
     const kicker = [data.league, data.week].filter(Boolean).join('  ·  ')
-    const winnerName = data.winner === null ? '' : data.teams[data.winner].name || `Team ${data.winner ? 'B' : 'A'}`
+    const winnerName = data.winner === null ? '' : data.teams[data.winner].name || (data.winner ? gt('gfx.teamBattle.teamB') : gt('gfx.teamBattle.teamA'))
     const logoSize = variant === 'neutral' ? 140 : 112 // smaller when the Victory/Final tag takes room up top
-    const us = a.name || 'Your team'
+    const us = a.name || gt('gfx.teamBattle.yourTeam')
     // Themed Win / Loss: the background is built from your team's Pokémon only.
     const wallMons = data.sets.flatMap((st) => (variant === 'neutral' ? st.players : [st.players[0]]).flatMap((p) => p.team.map((m) => (m.pokemon ? displayPokemon(m, showMegas) : ''))))
     const banner =
       variant === 'win'
-        ? `${us} win ${data.score[0]}–${data.score[1]}`
+        ? gt('gfx.teamBattle.winScore', { team: us, score1: data.score[0], score2: data.score[1] })
         : variant === 'loss'
-          ? `${us} fall ${data.score[0]}–${data.score[1]}`
+          ? gt('gfx.teamBattle.fallScore', { team: us, score1: data.score[0], score2: data.score[1] })
           : winnerName
-            ? `${winnerName} wins`
-            : data.week || 'Team Battle'
+            ? gt('gfx.teamBattle.wins', { name: winnerName })
+            : data.week || gt('gfx.teamBattle.title')
 
     return (
       <div className={`dmv tb tb-${variant} ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : ''}`} style={{ width: W, height: H }}>
@@ -83,14 +84,14 @@ export const makeTeamBattle = (variant: Variant, loud = false, theme?: SideTheme
           </>
         )}
 
-        {variant !== 'neutral' && <div className="tb-result-tag">{variant === 'win' ? 'Victory' : 'Final'}</div>}
+        {variant !== 'neutral' && <div className="tb-result-tag">{variant === 'win' ? gt('gfx.teamBattle.victory') : gt('gfx.teamBattle.final')}</div>}
         {kicker && <div className={`tb-kicker dmv-pill ${variant !== 'neutral' ? 'with-tag' : ''}`}>{kicker}</div>}
 
         <header className="tb-header">
           <div className="tb-team">
             <TeamLogo name={a.name} logo={a.logo} size={logoSize} />
-            <FitText className="dmv-title tb-team-name" text={a.name || 'Team A'} max={40} width={300} min={18} />
-            {a.record && <div className="tb-record">Season {a.record}</div>}
+            <FitText className="dmv-title tb-team-name" text={a.name || gt('gfx.teamBattle.teamA')} max={40} width={300} min={18} />
+            {a.record && <div className="tb-record">{gt('gfx.teamBattle.season', { record: a.record })}</div>}
           </div>
           <div className="tb-score dmv-title">
             {data.score[0]}
@@ -99,8 +100,8 @@ export const makeTeamBattle = (variant: Variant, loud = false, theme?: SideTheme
           </div>
           <div className="tb-team">
             <TeamLogo name={b.name} logo={b.logo} size={logoSize} />
-            <FitText className="dmv-title tb-team-name" text={b.name || 'Team B'} max={40} width={300} min={18} />
-            {b.record && <div className="tb-record">Season {b.record}</div>}
+            <FitText className="dmv-title tb-team-name" text={b.name || gt('gfx.teamBattle.teamB')} max={40} width={300} min={18} />
+            {b.record && <div className="tb-record">{gt('gfx.teamBattle.season', { record: b.record })}</div>}
           </div>
         </header>
 
@@ -112,7 +113,7 @@ export const makeTeamBattle = (variant: Variant, loud = false, theme?: SideTheme
                 className={`tb-card dmv-panel ${side ? 'right' : 'left'} ${s.winner === null ? '' : s.winner === side ? 'won' : 'lost'}`}
                 style={{ order: side ? 3 : 1 }}
               >
-                <FitText className="tb-player" text={s.players[side].name || 'Player'} max={Math.min(26, rowH * 0.24)} width={390} min={14} />
+                <FitText className="tb-player" text={s.players[side].name || gt('gfx.common.player')} max={Math.min(26, rowH * 0.24)} width={390} min={14} />
                 <div className="tb-mons">
                   {s.players[side].team.map((m, j) => (
                     <MonSprite key={j} mon={m} size={mon} showTera={data.format.tera} />

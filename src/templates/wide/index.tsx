@@ -24,6 +24,7 @@ import { ArenaWide } from './designs/arena'
 import { ComicWide } from './designs/comic'
 import { GhostWide } from './designs/ghost'
 import { MosaicWide } from './designs/mosaic'
+import { gt } from '../../i18n'
 const INFO: Record<Kind, { id: string; name: string; description: string }> = {
   rows: { id: 'wide-rows', name: 'Wide Rows', description: 'Landscape: two columns of four, each team in a line.' },
   spotlight: { id: 'wide-spotlight', name: 'Wide Spotlight', description: 'Landscape: the champion big on the left, 2nd–8th as rows on the right.' },
@@ -39,7 +40,7 @@ function Header({ data, theme, tag }: { data: StandingsData; theme?: Theme; tag:
       <Logo size={150} />
       <div className="wd-heading">
         <div className="wd-tag">{tag}</div>
-        <FitText className="dmv-title" text={data.tournament.name || 'Tournament'} max={70} width={1000} />
+        <FitText className="dmv-title" text={data.tournament.name || gt('gfx.common.tournament')} max={70} width={1000} />
       </div>
       <div className="wd-facts-box">
         <Facts data={data} className="wd-facts" split={theme?.splitFacts ?? true} />
@@ -63,7 +64,7 @@ function Rows({ data }: { data: StandingsData }) {
           <div className="wd-row-body">
             <div className="wd-row-who">
               <div className="wd-name-line">
-                <FitText className="wd-name" text={p.name || 'Player'} max={f ? 44 : 32} width={f ? 480 : 500} min={16} />
+                <FitText className="wd-name" text={p.name || gt('gfx.common.player')} max={f ? 44 : 32} width={f ? 480 : 500} min={16} />
                 {data.cp && <CpBadge points={data.cp(i + 1)} />}
               </div>
               <div className="wd-sub">{sub(p)}</div>
@@ -88,10 +89,10 @@ function Spotlight({ data }: { data: StandingsData }) {
         <section className="wd-champ dmv-panel first">
           <div className="wd-champ-photo">
             <PlayerPhoto player={champ} />
-            <div className="wd-champ-tag">Champion</div>
+            <div className="wd-champ-tag">{gt('gfx.common.champion')}</div>
           </div>
           <div className="wd-champ-info">
-            <FitText className="wd-champ-name" text={champ.name || 'Player'} max={48} width={640} min={22} />
+            <FitText className="wd-champ-name" text={champ.name || gt('gfx.common.player')} max={48} width={640} min={22} />
             <div className="wd-sub">{sub(champ)}</div>
             {data.cp && <CpBadge points={data.cp(1)} />}
             <div className="wd-champ-team">
@@ -112,7 +113,7 @@ function Spotlight({ data }: { data: StandingsData }) {
               <div className="wd-row-body">
                 <div className="wd-row-who">
                   <div className="wd-name-line">
-                    <FitText className="wd-name" text={p.name || 'Player'} max={38} width={540} min={16} />
+                    <FitText className="wd-name" text={p.name || gt('gfx.common.player')} max={38} width={540} min={16} />
                     {data.cp && <CpBadge points={data.cp(k + 2)} />}
                   </div>
                   <div className="wd-sub">{sub(p)}</div>
@@ -130,7 +131,7 @@ function Spotlight({ data }: { data: StandingsData }) {
               <span>{ordinal(k + 2)}</span>
             </div>
             <div className="wd-who">
-              <FitText className="wd-name" text={p.name || 'Player'} max={28} width={300} min={14} />
+              <FitText className="wd-name" text={p.name || gt('gfx.common.player')} max={28} width={300} min={14} />
               <div className="wd-sub">{sub(p)}</div>
             </div>
             {data.cp && <CpBadge points={data.cp(k + 2)} />}
@@ -158,7 +159,7 @@ function Columns({ data }: { data: StandingsData }) {
             <div className={`wd-col-place ${lineColor(i)}`}>{ordinal(i + 1)}</div>
           </div>
           <div className="wd-col-info">
-            <FitText className="wd-name" text={p.name || 'Player'} max={42} width={390} min={16} />
+            <FitText className="wd-name" text={p.name || gt('gfx.common.player')} max={42} width={390} min={16} />
             <div className="wd-sub">{sub(p)}</div>
             {data.cp && <CpBadge points={data.cp(i + 1)} />}
           </div>
@@ -182,7 +183,7 @@ function PlainColumns({ data }: { data: StandingsData }) {
       {data.players.map((p, i) => (
         <div key={p.uid} className={`wd-pcol dmv-panel ${lineColor(i)}`}>
           <div className={`wd-pc-place ${lineColor(i)}`}>{ordinal(i + 1)}</div>
-          <FitText className="wd-name" text={p.name || 'Player'} max={f ? 40 : plainGrid(data) ? 32 : i === 0 ? 30 : 24} width={f ? 400 : plainGrid(data) ? 250 : i === 0 ? 270 : 180} min={12} />
+          <FitText className="wd-name" text={p.name || gt('gfx.common.player')} max={f ? 40 : plainGrid(data) ? 32 : i === 0 ? 30 : 24} width={f ? 400 : plainGrid(data) ? 250 : i === 0 ? 270 : 180} min={12} />
           <div className="wd-sub">{p.record}</div>
           {data.cp && <CpBadge points={data.cp(i + 1)} />}
           <div className={`wd-pc-team ${plainGrid(data) ? 'grid' : ''}`}>
@@ -230,7 +231,7 @@ export const makeWide = (kind: Kind, theme?: Theme, white = false, loud = false)
         <ComicWide kind={kind} data={data} />
       ) : (
         <>
-          <Header data={data} theme={theme} tag={kind === 'spotlight' ? 'Results' : `Top ${Math.max(data.players.length, 1)}`} />
+          <Header data={data} theme={theme} tag={kind === 'spotlight' ? gt('gfx.wide.results') : gt('gfx.common.topN', { count: Math.max(data.players.length, 1) })} />
           {kind === 'rows' ? <Rows data={data} /> : kind === 'spotlight' ? <Spotlight data={data} /> : kind === 'plain' ? <PlainColumns data={data} /> : <Columns data={data} />}
         </>
       )}

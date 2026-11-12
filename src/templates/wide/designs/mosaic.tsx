@@ -10,6 +10,7 @@ import { CpBadge, FitText, Logo, MonSprite, PlayerPhoto, textWidth, useFontsRead
 import { lineColor, ordinal } from '../../shared/format'
 import { factsOf, few, sub, type Kind } from '../common'
 import './mosaic.css'
+import { gt } from '../../../i18n'
 
 const T = 120 // one tile
 const IN = 6 // inset inside a tile cell, so cards line up with the tiles' gaps
@@ -21,7 +22,7 @@ const at = (c: number, r: number, w: number, h: number): CSSProperties => ({ lef
 function Head({ data, tag, cols = 8 }: { data: StandingsData; tag: string; cols?: number }) {
   useFontsReady()
   const logo = !!useBrand().logo
-  const title = data.tournament.name || 'Tournament'
+  const title = data.tournament.name || gt('gfx.common.tournament')
   const facts = factsOf(data).join('  •  ')
   const side = 56 + (logo ? 174 : 0) + IN * 2 // padding, logo + gap, tile inset
   const need = side + Math.max(textWidth(title.toUpperCase(), '900 58px Montserrat') * 1.08, textWidth(facts.toUpperCase(), '800 20px Montserrat'), textWidth(data.formatLabel ?? '', '700 17px Montserrat'))
@@ -47,7 +48,7 @@ function Card({ data, i, color, style, size, stack = false }: { data: StandingsD
       <div className="wm-body">
         <div className="wm-who">
           <div className="wm-name-line">
-            <FitText className="wm-name" text={p.name || 'Player'} max={stack ? 40 : 28} width={stack ? 520 : 256} min={14} weight={900} italic={false} />
+            <FitText className="wm-name" text={p.name || gt('gfx.common.player')} max={stack ? 40 : 28} width={stack ? 520 : 256} min={14} weight={900} italic={false} />
             {stack && data.cp && <CpBadge points={data.cp(i + 1)} className="wm-cp" />}
           </div>
           {/* one tile high: the CP sits on the record line, so the name keeps its width */}
@@ -99,7 +100,7 @@ function RowTile({ data, i, color, style, wide, w }: { data: StandingsData; i: n
       <div className="wm-tile-body">
         <div className="wm-tile-who">
           {!wide && <div className="wm-place pill">{ordinal(i + 1)}</div>}
-          <FitText className="wm-name" text={p.name || 'Player'} max={wide ? 44 : w === 5 ? 38 : 34} width={nameW} min={14} weight={900} italic={false} />
+          <FitText className="wm-name" text={p.name || gt('gfx.common.player')} max={wide ? 44 : w === 5 ? 38 : 34} width={nameW} min={14} weight={900} italic={false} />
           <div className="wm-sub-line">
             {data.cp && <CpBadge points={data.cp(i + 1)} className="wm-cp" />}
             <div className="wm-sub">{sub(p)}</div>
@@ -124,11 +125,11 @@ function Spotlight({ data }: { data: StandingsData }) {
         <section className="wm-champ" style={at(1, 2, 6, 7)}>
           <div className="wm-champ-photo">
             <PlayerPhoto player={w} />
-            <div className="wm-champ-tag">Champion</div>
+            <div className="wm-champ-tag">{gt('gfx.common.champion')}</div>
           </div>
           <div className="wm-champ-who">
             <div className="wm-name-line">
-              <FitText className="wm-name" text={w.name || 'Player'} max={44} width={500} min={18} weight={900} italic={false} />
+              <FitText className="wm-name" text={w.name || gt('gfx.common.player')} max={44} width={500} min={18} weight={900} italic={false} />
               {data.cp && <CpBadge points={data.cp(1)} className="wm-cp" />}
             </div>
             <div className="wm-sub">{sub(w)}</div>
@@ -164,7 +165,7 @@ function Columns({ data }: { data: StandingsData }) {
             <div className="wm-place pill">{ordinal(i + 1)}</div>
           </div>
           <div className="wm-col-who">
-            <FitText className="wm-name" text={p.name || 'Player'} max={30} width={320} min={14} weight={900} italic={false} />
+            <FitText className="wm-name" text={p.name || gt('gfx.common.player')} max={30} width={320} min={14} weight={900} italic={false} />
             <div className="wm-sub">{sub(p)}</div>
             {data.cp && <CpBadge points={data.cp(i + 1)} className="wm-cp" />}
           </div>
@@ -192,7 +193,7 @@ function Plain({ data }: { data: StandingsData }) {
       {data.players.map((p, i) => (
         <div key={p.uid} className={`wm-tall ${lineColor(i)}`} style={at(start + i * (w + gap), i % 2 ? 3 : 2, w, 6)}>
           <div className="wm-place pill">{ordinal(i + 1)}</div>
-          <FitText className="wm-name" text={p.name || 'Player'} max={w === 3 ? 32 : 24} width={w * T - 44} min={11} weight={900} italic={false} />
+          <FitText className="wm-name" text={p.name || gt('gfx.common.player')} max={w === 3 ? 32 : 24} width={w * T - 44} min={11} weight={900} italic={false} />
           <div className="wm-sub center">{p.record}</div>
           {data.cp && <CpBadge points={data.cp(i + 1)} className="wm-cp" />}
           <div className="wm-tall-team grid">
@@ -210,7 +211,7 @@ export function MosaicWide({ kind, data }: { kind: Kind; data: StandingsData }) 
   const n = Math.max(data.players.length, 1)
   return (
     <div className="wm">
-      <Head data={data} tag={kind === 'spotlight' ? 'Results' : `Top ${n}`} cols={kind === 'spotlight' ? 7 : 8} />
+      <Head data={data} tag={kind === 'spotlight' ? gt('gfx.wide.results') : gt('gfx.common.topN', { count: n })} cols={kind === 'spotlight' ? 7 : 8} />
       {kind === 'rows' ? <Rows data={data} /> : kind === 'spotlight' ? <Spotlight data={data} /> : kind === 'columns' ? <Columns data={data} /> : <Plain data={data} />}
     </div>
   )
