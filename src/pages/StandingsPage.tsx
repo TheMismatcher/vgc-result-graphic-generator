@@ -15,6 +15,7 @@ import { Button, Card } from '../components/ui'
 import { Box, Tab, Tabs } from '@mui/material'
 import React, { type ReactNode } from 'react'
 import type { StandingsTemplate } from '../templates/types'
+import { t } from '../i18n'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -79,9 +80,9 @@ export function StandingsPage({
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <Card className="space-y-2">
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={inputTab} onChange={handleInputTabChange} aria-label="basic tabs example">
-              <Tab label="Templates" {...a11yProps(0)} />
-              <Tab label="Data" {...a11yProps(1)} />
+            <Tabs value={inputTab} onChange={handleInputTabChange} aria-label={t('ui.standings.tabsLabel')}>
+              <Tab label={t('ui.standings.tabTemplates')} {...a11yProps(0)} />
+              <Tab label={t('ui.standings.tabData')} {...a11yProps(1)} />
             </Tabs>
           </Box>
           {/* template pannel */}
@@ -90,7 +91,7 @@ export function StandingsPage({
               <StylePicker templates={STANDINGS_TEMPLATES} current={template} onSelect={onSelect} render={render} />
             ) : STANDINGS_TEMPLATES.length > 1 && (
               <div>
-                <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Template</h3>
+                <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">{t('ui.standings.templateHeading')}</h3>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {STANDINGS_TEMPLATES.map((t) => (
                     <button
@@ -116,12 +117,13 @@ export function StandingsPage({
           <CustomTabPanel value={inputTab} index={1}>
             <div className="space-y-3">
               <Card className="space-y-3">
-                <h2 className="text-lg font-bold text-slate-900">Data Source</h2>
+                <h2 className="text-lg font-bold text-slate-900">{t('ui.standings.dataSource')}</h2>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <Tabs value={sourceTab} onChange={(_e, v: number) => setSourceTab(v)} aria-label="Data source">
+                  <Tabs value={sourceTab} onChange={(_e, v: number) => setSourceTab(v)} aria-label={t('ui.standings.sourceLabel')}>
+                    {/* i18n-ignore: brand name */}
                     <Tab label="Limitless" {...a11yProps(0, 'source')} />
-                    <Tab label="TOM File" {...a11yProps(1, 'source')} />
-                    <Tab label="Photo / PDF" {...a11yProps(2, 'source')} />
+                    <Tab label={t('ui.standings.sourceTom')} {...a11yProps(1, 'source')} />
+                    <Tab label={t('ui.standings.sourcePhoto')} {...a11yProps(2, 'source')} />
                   </Tabs>
                 </Box>
                 <CustomTabPanel value={sourceTab} index={0}>
@@ -137,8 +139,8 @@ export function StandingsPage({
               <TournamentForm value={state.tournament} onChange={(tournament) => setState((s) => ({ ...s, tournament }))} />
 
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold text-slate-900">Standings</h2>
-                <span className="text-sm text-slate-500">Order = placing. Use ↑ ↓ to reorder.</span>
+                <h2 className="text-lg font-bold text-slate-900">{t('ui.standings.standingsHeading')}</h2>
+                <span className="text-sm text-slate-500">{t('ui.standings.orderHint')}</span>
               </div>
               {bulkSheets ? (
                 <BulkTeamSheetImport
@@ -147,7 +149,7 @@ export function StandingsPage({
                   onCancel={() => setBulkSheets(false)}
                 />
               ) : (
-                <Button className="w-full" onClick={() => setBulkSheets(true)}>Import team lists for everyone (photos, screenshots, PDFs)</Button>
+                <Button className="w-full" onClick={() => setBulkSheets(true)}>{t('ui.standings.bulkImport')}</Button>
               )}
               {state.players.map((p, i) => (
                 <PlayerEditor
@@ -162,7 +164,7 @@ export function StandingsPage({
                   onRemove={() => setPlayers((ps) => ps.filter((x) => x.uid !== p.uid))}
                 />
               ))}
-              <Button className="w-full py-3" onClick={() => setPlayers((ps) => [...ps, newPlayer()])}>+ Add player</Button>
+              <Button className="w-full py-3" onClick={() => setPlayers((ps) => [...ps, newPlayer()])}>{t('ui.standings.addPlayer')}</Button>
               <BracketEditor state={state} setState={setState} />
             </div>  
           </CustomTabPanel>

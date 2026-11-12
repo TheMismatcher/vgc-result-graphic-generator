@@ -10,6 +10,7 @@
 
 import { ITEMS, getItem, resolvePokemon, sprites } from '../data/dex'
 import { asset } from '../brand'
+import { t } from '../i18n'
 
 export interface ScannedMon {
   nickname: string
@@ -316,8 +317,8 @@ async function identify(source: HTMLCanvasElement, card: Box, data: ScanData, ni
 // ---------- Putting it together ----------
 
 export async function scanTeamScreenshot(file: File, onProgress?: (msg: string) => void): Promise<ScannedMon[]> {
-  if (!file.type.startsWith('image/')) throw new Error('That file isn’t an image.')
-  onProgress?.('Reading the screenshot…')
+  if (!file.type.startsWith('image/')) throw new Error(t('ui.import.notImage'))
+  onProgress?.(t('ui.import.screenshot.reading'))
   const bitmap = await createImageBitmap(file)
   const canvas = document.createElement('canvas')
   canvas.width = bitmap.width
@@ -327,17 +328,17 @@ export async function scanTeamScreenshot(file: File, onProgress?: (msg: string) 
 
   const cards = findCards(canvas)
   if (!cards.length) {
-    throw new Error('Couldn’t find the six team cards. Use a screenshot of the “Moves & More” team screen, uncropped.')
+    throw new Error(t('ui.import.screenshot.noCards'))
   }
 
-  onProgress?.('Loading text recognition (first time takes a moment)…')
+  onProgress?.(t('ui.import.ocrLoading'))
   const [{ createWorker, PSM }, data] = await Promise.all([import('tesseract.js'), loadScanData()])
   const worker = await createWorker('eng')
   await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_LINE })
   try {
     const results: ScannedMon[] = []
     for (const [i, card] of cards.entries()) {
-      onProgress?.(`Reading Pokémon ${i + 1} of 6…`)
+      onProgress?.(t('ui.import.screenshot.readingMon', { n: i + 1 }))
       const read = async (field: keyof typeof FIELDS) => (await worker.recognize(lineImage(canvas, card, FIELDS[field]))).data.text.trim()
       const nickname = await read('nickname')
       const ability = closest(await read('ability'), data.abilities)
@@ -352,7 +353,7 @@ export async function scanTeamScreenshot(file: File, onProgress?: (msg: string) 
     }
     // The Stats screen has the same cards but no abilities, items, or moves to read.
     const readable = results.reduce((n, r) => n + r.moves.length + (r.ability ? 1 : 0) + (r.item ? 1 : 0), 0)
-    if (readable < 8) throw new Error('Couldn’t read moves or items. Use the “Moves & More” screen, not the Stats screen.')
+    if (readable < 8) throw new Error(t('ui.import.screenshot.noMoves'))
     return results
   } finally {
     await worker.terminate()

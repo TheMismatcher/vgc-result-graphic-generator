@@ -4,6 +4,7 @@
 import type { Mon } from '../types'
 import { resolveItem, resolvePokemon } from '../data/dex'
 import { emptyMon } from './state'
+import { t } from '../i18n'
 
 const BASE = 'https://replay.pokemonshowdown.com'
 
@@ -33,8 +34,8 @@ export function replayId(input: string): string | null {
 
 export async function fetchReplay(id: string): Promise<ReplayGame> {
   const res = await fetch(`${BASE}/${id}.json`)
-  if (res.status === 404) throw new Error(`Replay "${id}" wasn't found. It may be private or never uploaded.`)
-  if (!res.ok) throw new Error(`Couldn't load replay "${id}" (${res.status}).`)
+  if (res.status === 404) throw new Error(t('ui.import.replay.notFound', { id }))
+  if (!res.ok) throw new Error(t('ui.import.replay.loadError', { id, status: res.status }))
   const data = await res.json()
   return { id: data.id, formatId: data.formatid, format: data.format, uploadtime: data.uploadtime, ...parseLog(data.log) }
 }

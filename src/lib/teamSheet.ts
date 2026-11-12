@@ -20,6 +20,7 @@ import { loadNames, type NameTable } from '../data/names'
 import { resolveRk9Species } from './rk9'
 import { GENDERED, distance, key, loadScanData, type ScanData } from './teamScan'
 import { crop, enhance, ocr, removeRules, straighten, type Word, type Worker } from './standingsScan'
+import { t } from '../i18n'
 
 export interface SheetMon {
   written: string // the Pokémon row as read, for reference
@@ -357,12 +358,12 @@ function identify(data: ScanData, legal: Legal, box: Box): SheetMon {
     else if (male.startsWith('basculegion')) {
       const guess = guessBasculegion(moves, nature)
       pokemon = guess.gender === 'male' ? male : female
-      note = `Gender not written: ${guess.gender === 'male' ? 'Male' : 'Female'} from its ${guess.sure ? 'moves' : 'moves (not sure)'}`
+      note = t(guess.sure ? 'ui.import.teamSheet.genderMoves' : 'ui.import.teamSheet.genderMovesUnsure', { gender: guess.gender === 'male' ? t('ui.import.teamSheet.male') : t('ui.import.teamSheet.female') })
       if (!guess.sure) confident = false
     } else {
       const other = scored.find((s) => s.id === (pokemon === male ? female : male))
       if (other && top.score - other.score < 2) {
-        note = 'Gender not written'
+        note = t('ui.import.teamSheet.genderMissing')
         confident = false
       }
     }
@@ -606,8 +607,8 @@ async function imageCanvas(file: File) {
     bmp = await createImageBitmap(file)
   } catch {
     throw new Error(/heic|heif/i.test(file.type + file.name)
-      ? 'This browser can’t open HEIC photos. Share the photo as a JPEG (on iPhone, Photos sends JPEG when you share or AirDrop it), or take a screenshot of it.'
-      : 'Couldn’t open that image.')
+      ? t('ui.import.teamSheet.heic')
+      : t('ui.import.teamSheet.openImage'))
   }
   const scale = SIZE / Math.max(bmp.width, bmp.height)
   const c = document.createElement('canvas')
@@ -873,11 +874,11 @@ async function readStrips(worker: Worker, page: HTMLCanvasElement, strips: { x0:
 const clean = (t: string) => t.replace(/¥/g, 'Y').replace(/[|_—=~]+/g, ' ').replace(/(^|\s)[[(]?\d{2,3}[\])]?(?=\s|$)/g, ' ').replace(/\s+/g, ' ').trim()
 
 async function pictureText(src: HTMLCanvasElement, readable: (row: number, text: string) => boolean, onProgress?: (msg: string) => void): Promise<RawSheet> {
-  onProgress?.('Loading text recognition (first time takes a moment)…')
+  onProgress?.(t('ui.import.ocrLoading'))
   const { createWorker, PSM } = await import('tesseract.js')
   const worker: Worker = await createWorker('eng')
   try {
-    onProgress?.('Finding the team list boxes…')
+    onProgress?.(t('ui.import.teamSheet.finding'))
     for (const k of Object.keys(sheetDebug)) if (k !== 'keepStrips') delete sheetDebug[k]
     // Sideways photos: turn the way the text lines run, and if the form's labels still can't be
     // found, try the other ways round (upside down, the other quarter turn).
@@ -888,12 +889,12 @@ async function pictureText(src: HTMLCanvasElement, readable: (row: number, text:
     if (findLabels(lines).length < 12 && !otsLayout(lines.flatMap((l) => l.words), page.width)) {
       let found = findLabels(lines).length
       for (const extra of [2, 1, 3]) {
-        const t = (turns + extra) % 4
-        onProgress?.('Turning the picture round…')
-        const p2 = enhance(straighten(quarterTurn(src, t)))
+        const turn = (turns + extra) % 4
+        onProgress?.(t('ui.import.teamSheet.turning'))
+        const p2 = enhance(straighten(quarterTurn(src, turn)))
         const again = await ocr(worker, p2)
         const n = findLabels(again.lines).length, isOts = !!otsLayout(again.lines.flatMap((l) => l.words), p2.width)
-        if (n > found || isOts) [page, lines, turns, found] = [p2, again.lines, t, isOts ? 99 : n]
+        if (n > found || isOts) [page, lines, turns, found] = [p2, again.lines, turn, isOts ? 99 : n]
         if (found >= 12) break
       }
     }
@@ -922,7 +923,7 @@ async function pictureText(src: HTMLCanvasElement, readable: (row: number, text:
     }
     const boxes = groupBoxes(labels, page.width)
     Object.assign(sheetDebug, { lines: lines.map((l) => l.words.map((w) => `${w.text}@${Math.round(w.x0)},${Math.round(w.y0)}-${Math.round(w.x1)}`).join(' ')), labels, boxes })
-    if (boxes.length < 2) throw new Error('Couldn’t find the team list. Use a straight-on photo, scan or screenshot of one whole sheet (for a booklet, one page per photo).')
+    if (boxes.length < 2) throw new Error(t('ui.import.teamSheet.noList'))
 
     const pitch = median(boxes.flatMap((b) => b.slice(1).map((l, i) => (l.y - b[i].y) / (l.row - b[i].row))).filter((s) => s > 0)) || median(labels.map((l) => l.h)) * 2
     const map = darkMap(page)
@@ -939,7 +940,7 @@ async function pictureText(src: HTMLCanvasElement, readable: (row: number, text:
 
     const out: Box[] = []
     for (const [bi, b] of boxes.entries()) {
-      onProgress?.(`Reading Pokémon ${bi + 1} of ${boxes.length}…`)
+      onProgress?.(t('ui.import.teamSheet.readingMon', { n: bi + 1, total: boxes.length }))
       // Each row's height from the labels found in this box: a straight line through rows 1-7.
       // The Pokémon row is a bit taller than the others, so it sits ~1.2 rows above row 1.
       const fit = b.filter((l) => l.row > 0)
@@ -1086,7 +1087,7 @@ function otsFromSegments(segs: Segment[], width: number): RawSheet | null {
 async function otsFromPicture(worker: Worker, page: HTMLCanvasElement, layout: OtsLayout, onProgress?: (msg: string) => void): Promise<RawSheet> {
   const tables: string[][] = []
   for (const [bi, b] of layout.blocks.entries()) {
-    onProgress?.(`Reading the ${b.lang} table…`)
+    onProgress?.(t('ui.import.teamSheet.readingTable', { lang: b.lang }))
     // Column by column, top to bottom: strip c*8 + r.
     const strips = layout.columns.flatMap(([x0, x1]) => b.rows.map((y) => ({ x0: x0 + 2, x1: x1 - 2, y })))
     tables[bi] = await readStrips(worker, page, strips, layout.pitch)
@@ -1142,7 +1143,7 @@ const blankMon = (): SheetMon => ({ written: '', ability: '', item: '', itemWrit
 export async function readTeamSheets(file: File, onProgress?: (msg: string) => void): Promise<TeamSheet[]> {
   const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name)
   const isImage = file.type.startsWith('image/') || /\.(heic|heif)$/i.test(file.name)
-  if (!isPdf && !isImage) throw new Error('Use a photo, screenshot, or PDF of the team list.')
+  if (!isPdf && !isImage) throw new Error(t('ui.import.teamSheet.usePhoto'))
   const [data, legal] = await Promise.all([loadScanData(), loadLegal()])
   const finish = async (raw: RawSheet, exact: boolean): Promise<TeamSheet> => {
     raw = await addForeign(raw)
@@ -1151,7 +1152,7 @@ export async function readTeamSheets(file: File, onProgress?: (msg: string) => v
     // A picture where not one Pokémon could even be guessed is a failed read: say so rather
     // than showing six empty slots. Any guesses at all are still shown (marked to check).
     if (!exact && !mons.some((m) => m.pokemon)) {
-      throw new Error('Couldn’t read this team list: none of the Pokémon could be made out. Try a sharper, straight-on photo or scan of one sheet, or the PDF if you have it.')
+      throw new Error(t('ui.import.teamSheet.noneReadable'))
     }
     return { player: exact ? raw.player.trim() : plausibleName(raw.player), mons, exact }
   }
@@ -1160,7 +1161,7 @@ export async function readTeamSheets(file: File, onProgress?: (msg: string) => v
   const readable = (row: number, text: string) => !!best(text, lists[row] ?? [], 0.75)
   if (isImage) return [await finish(await pictureText(await imageCanvas(file), readable, onProgress), false)]
 
-  onProgress?.('Reading the PDF…')
+  onProgress?.(t('ui.import.teamSheet.readingPdf'))
   const pdf = await openPdf(file)
   const sheets: TeamSheet[] = []
   const sig = (t: TeamSheet) => `${key(t.player)}|${t.mons.map((m) => m.pokemon).join(',')}`
@@ -1169,9 +1170,9 @@ export async function readTeamSheets(file: File, onProgress?: (msg: string) => v
     let sheet: TeamSheet
     if (text && text.boxes.some((b) => b[0])) sheet = await finish(text, true)
     else {
-      if (pdf.numPages > 1) onProgress?.(`Page ${p} of ${pdf.numPages}…`)
+      if (pdf.numPages > 1) onProgress?.(t('ui.import.teamSheet.pageOf', { p, total: pdf.numPages }))
       try {
-        sheet = await finish(await pictureText(await pdfPicture(pdf, p), readable, (m) => onProgress?.(pdf.numPages > 1 ? `Page ${p} of ${pdf.numPages}: ${m}` : m)), false)
+        sheet = await finish(await pictureText(await pdfPicture(pdf, p), readable, (m) => onProgress?.(pdf.numPages > 1 ? t('ui.import.teamSheet.pageStatus', { p, total: pdf.numPages, status: m }) : m)), false)
       } catch (e) {
         if (pdf.numPages === 1) throw e
         continue // not a team list page (e.g. a cover page)
@@ -1181,7 +1182,7 @@ export async function readTeamSheets(file: File, onProgress?: (msg: string) => v
     if (sheets.length && sig(sheets[sheets.length - 1]) === sig(sheet)) continue
     sheets.push(sheet)
   }
-  if (!sheets.length) throw new Error('Couldn’t find a team list in that file.')
+  if (!sheets.length) throw new Error(t('ui.import.teamSheet.noListInFile'))
   return sheets
 }
 

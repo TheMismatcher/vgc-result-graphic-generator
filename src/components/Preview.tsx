@@ -3,6 +3,7 @@
 import { createPortal } from 'react-dom'
 import { useLayoutEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
 import type { LookGroup, StandingsLayout, Template } from '../templates/types'
+import { eventTypeKey } from '../data/options'
 import { BRAND_COLOURS, STANDINGS_LAYOUTS, type BrandColour } from '../templates/registry'
 import { copyPng, downloadPng, renderPngFile, slugify, canUseShareSheet } from '../lib/exportImage'
 import { brandVars, useBrand } from '../brand'
@@ -13,6 +14,7 @@ import { PhotoFrameContext, photoFrame } from '../templates/shared/parts'
 import { useDialog } from './Dialog'
 import { Button, Card } from './ui'
 import { styleName, templateDescription } from '../i18n/templates'
+import { t, type UiKey } from '../i18n'
 
 /** Shows a fixed-size graphic scaled down to fit its container. */
 export function Scaled({ width, height, maxWidth, children, nodeRef, fitViewport = false,}: { width: number; height: number; maxWidth?: number; children: ReactNode; nodeRef?: React.Ref<HTMLDivElement>; fitViewport?: boolean; }) {
@@ -159,7 +161,7 @@ export function Preview<T extends Template>({
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch (e) {
-      dialog.notify(`Couldn't copy the image: ${e instanceof Error ? e.message : e}\n\nUse Download PNG instead.`)
+      dialog.notify(t('ui.preview.copyError', { message: e instanceof Error ? e.message : String(e) }))
     } finally {
       setBusy(false)
     }
@@ -179,7 +181,7 @@ export function Preview<T extends Template>({
         await downloadPng(node.current, template.width, template.height, filename)
       }
     } catch (e) {
-      dialog.notify(`Couldn't create the image: ${e instanceof Error ? e.message : e}`)
+      dialog.notify(t('ui.preview.createError', { message: e instanceof Error ? e.message : String(e) }))
     } finally {
       setBusy(false)
     }
@@ -196,7 +198,7 @@ export function Preview<T extends Template>({
       closeSaved()
     } catch (e) {
       if (e instanceof Error && e.name === 'AbortError') return // closed the share sheet
-      dialog.notify(`Couldn't open the share sheet: ${e instanceof Error ? e.message : e}\n\nPress and hold the image instead, then tap Save to Photos.`)
+      dialog.notify(t('ui.preview.shareError', { message: e instanceof Error ? e.message : String(e) }))
     }
   }
 
@@ -204,36 +206,36 @@ export function Preview<T extends Template>({
     <Card className="space-y-4">
       {saved && createPortal(
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-black/80 p-4" onClick={closeSaved}>
-          <img src={saved.url} alt="Your graphic" className="max-h-[65vh] max-w-full rounded-lg object-contain shadow-lg" onClick={(e) => e.stopPropagation()} />
-          <p className="text-center text-sm text-white/80">Tap Save Image in the share menu, or press and hold the image and tap Save to Photos.</p>
+          <img src={saved.url} alt={t('ui.preview.imageAlt')} className="max-h-[65vh] max-w-full rounded-lg object-contain shadow-lg" onClick={(e) => e.stopPropagation()} />
+          <p className="text-center text-sm text-white/80">{t('ui.preview.saveHint')}</p>
           <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-            <Button onClick={closeSaved}>Close</Button>
-            <Button variant="primary" onClick={share}>Save to Photos</Button>
+            <Button onClick={closeSaved}>{t('ui.common.close')}</Button>
+            <Button variant="primary" onClick={share}>{t('ui.preview.saveToPhotos')}</Button>
           </div>
         </div>,
         document.body,
       )}
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-lg font-bold text-slate-900">Preview</h2>
+        <h2 className="text-lg font-bold text-slate-900">{t('ui.preview.title')}</h2>
         <div className="flex gap-2">
-          <Button disabled={busy} onClick={copy}>{copied ? 'Copied!' : 'Copy image'}</Button>
-          <Button variant="primary" disabled={busy} onClick={download}>{busy ? 'Creating…' : 'Download PNG'}</Button>
+          <Button disabled={busy} onClick={copy}>{copied ? t('ui.preview.copied') : t('ui.preview.copyImage')}</Button>
+          <Button variant="primary" disabled={busy} onClick={download}>{busy ? t('ui.preview.creating') : t('ui.preview.downloadPng')}</Button>
         </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
         <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
           <input type="checkbox" className="h-4 w-4 accent-[#b3121b]" checked={showMegas} onChange={(e) => setShowMegas(e.target.checked)} />
-          Show Mega forms
+          {t('ui.preview.showMegas')}
         </label>
         {allowCP && (
           <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
             <input type="checkbox" className="h-4 w-4 accent-[#b3121b]" checked={showCP} onChange={(e) => setShowCP(e.target.checked)} />
-            Show CP earned
+            {t('ui.preview.showCP')}
           </label>
         )}
         {allowCP && showCP && (
-          <div className="flex overflow-hidden rounded-lg border border-slate-300 text-sm" role="radiogroup" aria-label="Event type for CP">
+          <div className="flex overflow-hidden rounded-lg border border-slate-300 text-sm" role="radiogroup" aria-label={t('ui.preview.cpEventLabel')}>
             {(['cup', 'challenge'] as const).map((k) => (
               <button
                 key={k}
@@ -243,7 +245,7 @@ export function Preview<T extends Template>({
                 onClick={() => setCpEvent(k)}
                 className={`px-3 py-1 font-semibold ${cpEvent === k ? 'bg-[#b3121b] text-white' : 'bg-white text-slate-700 hover:bg-slate-50'}`}
               >
-                {k === 'cup' ? 'League Cup' : 'League Challenge'}
+                {t(eventTypeKey(k))}
               </button>
             ))}
           </div>
@@ -251,18 +253,18 @@ export function Preview<T extends Template>({
       </div>
       {template.style?.startsWith('Mosaic') && (
         <div className="-mt-1 flex items-center gap-3 text-sm text-slate-700">
-          <Button onClick={shuffleTiles}>Shuffle tiles</Button>
-          <span className="text-xs text-slate-500">New tile pattern for the wall; editing the event name or date also gives a new one.</span>
+          <Button onClick={shuffleTiles}>{t('ui.preview.shuffleTiles')}</Button>
+          <span className="text-xs text-slate-500">{t('ui.preview.shuffleHint')}</span>
         </div>
       )}
       {allowCP && showCP && (
-        <p className="-mt-2 text-xs text-slate-500">Official 2027 CP table. Placings below the attendance kicker earn 0 and show no CP; attendance uses the Masters count (or the total if Masters is blank).</p>
+        <p className="-mt-2 text-xs text-slate-500">{t('ui.preview.cpNote')}</p>
       )}
 
       {switches.map(({ g, options }) => (
         <div key={g} className="flex items-center gap-3 text-sm text-slate-700">
-          <span className="w-24">{LOOK_LABELS[g]}</span>
-          <div className="flex overflow-hidden rounded-lg border border-slate-300" role="radiogroup" aria-label={LOOK_LABELS[g]}>
+          <span className="w-24">{t(LOOK_LABELS[g])}</span>
+          <div className="flex overflow-hidden rounded-lg border border-slate-300" role="radiogroup" aria-label={t(LOOK_LABELS[g])}>
             {options.map((v) => (
               <button
                 key={v}
@@ -272,7 +274,7 @@ export function Preview<T extends Template>({
                 onClick={() => flip(g, v)}
                 className={`px-3 py-1 font-semibold ${template.look![g] === v ? 'bg-[#b3121b] text-white' : 'bg-white text-slate-700 hover:bg-slate-50'}`}
               >
-                {OPTION_LABELS[v]}
+                {t(OPTION_LABELS[v])}
               </button>
             ))}
           </div>
@@ -284,9 +286,9 @@ export function Preview<T extends Template>({
       {photoPlayer && (
         <div className="space-y-1 rounded-xl border border-slate-200 p-3">
           <div className="flex flex-wrap items-center gap-3 text-sm text-slate-700">
-            <span className="font-semibold text-slate-900">{photoPlayer.name || 'Player'}’s photo</span>
+            <span className="font-semibold text-slate-900">{photoPlayer.name ? t('ui.preview.photoOf', { name: photoPlayer.name }) : t('ui.preview.photoOfUnnamed')}</span>
             <label className="flex min-w-48 flex-1 items-center gap-2">
-              Zoom
+              {t('ui.preview.zoom')}
               <input
                 type="range"
                 min={1}
@@ -304,11 +306,11 @@ export function Preview<T extends Template>({
                 onChange={(e) => photos!.onChange(photoPlayer.uid, { photoFit: e.target.checked || undefined, photoX: undefined, photoY: e.target.checked ? 50 : 30, photoZoom: undefined })}
                 className="accent-[#b3121b]"
               />
-              Fit whole photo
+              {t('ui.preview.fitWhole')}
             </label>
-            <Button className="py-1" onClick={() => photos!.onChange(photoPlayer.uid, { photoX: undefined, photoY: photoPlayer.photoFit ? 50 : 30, photoZoom: undefined })}>Reset</Button>
+            <Button className="py-1" onClick={() => photos!.onChange(photoPlayer.uid, { photoX: undefined, photoY: photoPlayer.photoFit ? 50 : 30, photoZoom: undefined })}>{t('ui.preview.reset')}</Button>
           </div>
-          <p className="text-xs text-slate-500">Drag a photo in the preview to move it in its frame; click another photo to zoom that one. Fit whole photo shows the entire photo over the style’s empty-photo background, for photos the wrong shape for their frame.</p>
+          <p className="text-xs text-slate-500">{t('ui.preview.photoHint')}</p>
         </div>
       )}
 
@@ -331,7 +333,7 @@ export function Preview<T extends Template>({
             <StylePicker templates={templates} current={template} onSelect={onSelect} render={render} />
           ) : templates.length > 1 && (
             <div>
-              <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Template</h3>
+              <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">{t('ui.preview.templateHeading')}</h3>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 {templates.map((t) => (
                   <button
@@ -357,36 +359,55 @@ export function Preview<T extends Template>({
   )
 }
 
+/** Layout button names. The registry keeps the English label for the review sheet; what people see comes from here. */
+const LAYOUT_NAMES: Record<StandingsLayout, UiKey> = {
+  topcut: 'ui.picker.layout.topcut',
+  top8photos: 'ui.picker.layout.top8photos',
+  top8mixed: 'ui.picker.layout.top8mixed',
+  top4photos: 'ui.picker.layout.top4photos',
+  champion: 'ui.picker.layout.champion',
+  championphoto: 'ui.picker.layout.championphoto',
+  bracket: 'ui.picker.layout.bracket',
+  widerows: 'ui.picker.layout.widerows',
+  widespot: 'ui.picker.layout.widespot',
+  widecols: 'ui.picker.layout.widecols',
+  widecolsplain: 'ui.picker.layout.widecolsplain',
+}
+const layoutName = (id: StandingsLayout) => t(LAYOUT_NAMES[id])
+
 /** The Preview's switches for styles that come several ways. */
-const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on', map: 'Map', book: 'Book', sprites: 'Sprites', colors: 'Colors', result: 'Result', snowfall: 'Weather', scene: 'Loss scene' }
-const OPTION_LABELS: Record<string, string> = {
-  neutral: 'Neutral',
-  game: 'As in game',
-  strong: 'Stronger',
-  climax: 'Climax sky',
-  portal: 'Giratina in portal',
-  emerged: 'Giratina out',
-  win: 'Win',
-  loss: 'Loss',
-  render: '3D',
-  pixel: 'Pixel',
-  standard: 'Original',
-  flipped: 'Flipped',
-  hall: 'Hall of Origin',
-  sky: 'Cutscene Sky',
-  solid: 'Solid',
-  glass: 'Glass',
-  classic: 'Classic',
-  modern: 'Modern',
+const LOOK_LABELS: Record<LookGroup, UiKey> = {
+  panels: 'ui.preview.look.panels', card: 'ui.preview.look.card', champion: 'ui.preview.look.champion', map: 'ui.preview.look.map', book: 'ui.preview.look.book',
+  sprites: 'ui.preview.look.sprites', colors: 'ui.preview.look.colors', result: 'ui.preview.look.result', snowfall: 'ui.preview.look.snowfall', scene: 'ui.preview.look.scene',
+}
+const OPTION_LABELS: Record<string, UiKey> = {
+  neutral: 'ui.preview.option.neutral',
+  game: 'ui.preview.option.game',
+  strong: 'ui.preview.option.strong',
+  climax: 'ui.preview.option.climax',
+  portal: 'ui.preview.option.portal',
+  emerged: 'ui.preview.option.emerged',
+  win: 'ui.preview.option.win',
+  loss: 'ui.preview.option.loss',
+  render: 'ui.preview.option.render',
+  pixel: 'ui.preview.option.pixel',
+  standard: 'ui.preview.option.standard',
+  flipped: 'ui.preview.option.flipped',
+  hall: 'ui.preview.option.hall',
+  sky: 'ui.preview.option.sky',
+  solid: 'ui.preview.option.solid',
+  glass: 'ui.preview.option.glass',
+  classic: 'ui.preview.option.classic',
+  modern: 'ui.preview.option.modern',
   // Route 119 (north to south), then Sinnoh Snow
-  waterfall: 'Waterfall',
-  bridge: 'Bridge',
-  route120: 'Route 120',
-  route217: 'Route 217',
-  acuity: 'Lake Acuity',
-  snowpoint: 'Snowpoint',
-  scarlet: 'Scarlet',
-  violet: 'Violet',
+  waterfall: 'ui.preview.option.waterfall',
+  bridge: 'ui.preview.option.bridge',
+  route120: 'ui.preview.option.route120',
+  route217: 'ui.preview.option.route217',
+  acuity: 'ui.preview.option.acuity',
+  snowpoint: 'ui.preview.option.snowpoint',
+  scarlet: 'ui.preview.option.scarlet',
+  violet: 'ui.preview.option.violet',
 }
 
 /** Custom Glass: upload, zoom, centre and remove the background photo. */
@@ -401,7 +422,7 @@ function BackdropControls({ glass }: { glass: boolean }) {
     try {
       setBackdrop(await readBackdrop(file))
     } catch (e) {
-      dialog.notify(`Couldn't use that photo: ${e instanceof Error ? e.message : e}`)
+      dialog.notify(t('ui.preview.photoError', { message: e instanceof Error ? e.message : String(e) }))
     } finally {
       setBusy(false)
     }
@@ -409,18 +430,18 @@ function BackdropControls({ glass }: { glass: boolean }) {
   return (
     <div className="space-y-2 rounded-xl border border-slate-200 p-3">
       <div className="flex flex-wrap items-center gap-2">
-        <h3 className="mr-auto text-xs font-semibold uppercase tracking-wide text-slate-500">Background photo</h3>
+        <h3 className="mr-auto text-xs font-semibold uppercase tracking-wide text-slate-500">{t('ui.preview.backgroundPhoto')}</h3>
         <label className="inline-flex cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50 focus-within:ring-2 focus-within:ring-blue-200">
-          {busy ? 'Loading…' : backdrop ? 'Change photo' : 'Upload photo'}
+          {busy ? t('ui.common.loading') : backdrop ? t('ui.player.changePhoto') : t('ui.preview.uploadPhoto')}
           <input type="file" accept="image/*" className="sr-only" onChange={(e) => { upload(e.target.files?.[0]); e.target.value = '' }} />
         </label>
-        {backdrop && <Button onClick={() => setBackdrop({ ...backdrop, x: 0.5, y: 0.5, zoom: 1 })}>Reset position</Button>}
-        {backdrop && <Button variant="danger" onClick={() => setBackdrop(null)}>Remove</Button>}
+        {backdrop && <Button onClick={() => setBackdrop({ ...backdrop, x: 0.5, y: 0.5, zoom: 1 })}>{t('ui.preview.resetPosition')}</Button>}
+        {backdrop && <Button variant="danger" onClick={() => setBackdrop(null)}>{t('ui.common.remove')}</Button>}
       </div>
       {backdrop ? (
         <>
           <label className="flex items-center gap-3 text-sm text-slate-700">
-            <span className="w-14">Zoom</span>
+            <span className="w-14">{t('ui.preview.zoom')}</span>
             <input
               type="range"
               min={1}
@@ -431,13 +452,13 @@ function BackdropControls({ glass }: { glass: boolean }) {
               className="flex-1 accent-[#b3121b]"
             />
           </label>
-          <p className="text-xs text-slate-500">Drag the preview to move the photo. Panel and number colors come from the Branding tab.</p>
+          <p className="text-xs text-slate-500">{t('ui.preview.backdropDragHint')}</p>
         </>
       ) : (
-        <p className="text-xs text-slate-500">Upload any photo for the background; you can drag it into place. Panel and number colors come from the Branding tab.</p>
+        <p className="text-xs text-slate-500">{t('ui.preview.backdropUploadHint')}</p>
       )}
       <label className="flex items-center gap-3 text-sm text-slate-700">
-        <span className="w-14">Opacity</span>
+        <span className="w-14">{t('ui.preview.opacity')}</span>
         <input
           type="range"
           min={0}
@@ -449,7 +470,7 @@ function BackdropControls({ glass }: { glass: boolean }) {
         />
         <span className="w-10 text-right tabular-nums text-slate-500">{Math.round(opacity[mode] * 100)}%</span>
         <button type="button" className="text-xs font-semibold text-slate-500 hover:text-slate-800" onClick={() => setOpacity({ ...opacity, [mode]: DEFAULT_OPACITY[mode] })}>
-          Default
+          {t('ui.preview.default')}
         </button>
       </label>
     </div>
@@ -498,14 +519,14 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
   return (
     <div className="space-y-4">
       {layouts && <div>
-        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">1. Layout</h3>
-        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Layout">
-          {STANDINGS_LAYOUTS.map(({ id, label }) => {
+        <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">{t('ui.picker.layoutHeading')}</h3>
+        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t('ui.picker.layoutLabel')}>
+          {STANDINGS_LAYOUTS.map(({ id }) => {
             // Same style, same version (Solid / Glass etc.): only the layout changes.
             const own = find(current.style!, id)
             // Otherwise it opens in the first style that has the layout (in the saved Solid / Glass look).
             const other = own ? undefined : templates.find((x) => x.layout === id && !x.variantOf && !x.retired)
-            const t = own ?? (other && prefer(other))
+            const layoutTemplate = own ?? (other && prefer(other))
             const opensAs = other && styleName(other.variantOf ?? other.style ?? '')
             return (
               <button
@@ -513,9 +534,9 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
                 type="button"
                 role="radio"
                 aria-checked={current.layout === id}
-                disabled={!t}
-                title={opensAs ? `${styleName(currentStyle ?? '')} doesn't have ${label} yet, so it opens as ${opensAs}` : undefined}
-                onClick={() => t && onSelect(t.id)}
+                disabled={!layoutTemplate}
+                title={opensAs ? t('ui.picker.layoutMissingTitle', { style: styleName(currentStyle ?? ''), layout: layoutName(id), opensAs }) : undefined}
+                onClick={() => layoutTemplate && onSelect(layoutTemplate.id)}
                 className={`rounded-lg border-2 px-3 py-1.5 text-sm font-semibold transition ${
                   current.layout === id
                     ? 'border-[#b3121b] bg-red-50 text-slate-900'
@@ -524,37 +545,36 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
                       : 'border-dashed border-slate-300 text-slate-400 hover:border-slate-500 hover:text-slate-600'
                 }`}
               >
-                {label}
-                {opensAs && <span className="block text-[10px] font-medium leading-tight">Opens as {opensAs}</span>}
+                {layoutName(id)}
+                {opensAs && <span className="block text-[10px] font-medium leading-tight">{t('ui.picker.opensAs', { name: opensAs })}</span>}
               </button>
             )
           })}
         </div>
         <p className="mt-1 text-xs text-slate-500">
           {templateDescription(current)}
-          {STANDINGS_LAYOUTS.some(({ id }) => !find(current.style!, id)) && <> Dashed layouts aren't made for {styleName(currentStyle ?? '')} yet and open in another style.</>}
+          {STANDINGS_LAYOUTS.some(({ id }) => !find(current.style!, id)) && <>{' '}{t('ui.picker.dashedNote', { style: styleName(currentStyle ?? '') })}</>}
         </p>
       </div>}
       <div>
         <div className="mb-2 flex items-center justify-between gap-2">
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">{layouts ? '2. Style' : 'Style'}</h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">{layouts ? t('ui.picker.styleHeadingN') : t('ui.picker.styleHeading')}</h3>
           {retiredCount > 0 && (
             <label className="flex items-center gap-1.5 text-xs text-slate-600">
               <input type="checkbox" checked={showRetired} onChange={(e) => setShowRetired(e.target.checked)} />
-              Show retired styles ({retiredCount})
+              {t('ui.picker.showRetired', { count: retiredCount })}
             </label>
           )}
         </div>
         <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-500">
-          <span className="flex items-center gap-1">{brandDots(['main', 'second', 'highlight'])} uses your Branding colors (one dot per color)</span>
-          <span className="flex items-center gap-1"><span className="rounded bg-slate-900/80 px-1 font-semibold leading-4 text-white">2</span> versions: switch between them in the preview</span>
+          <span className="flex items-center gap-1">{brandDots(['main', 'second', 'highlight'])} {t('ui.picker.brandDotsHint')}</span>
+          <span className="flex items-center gap-1"><span className="rounded bg-slate-900/80 px-1 font-semibold leading-4 text-white">2</span> {t('ui.picker.versionsHint')}</span>
         </div>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
           {styles.map((style) => {
             // Show the style in the chosen layout; styles without it show (and open as) their fallback layout.
             const own = find(style, current.layout)
             const target = prefer(own ?? fallback(style))
-            const t = target
             const count = inStyle(style).length
             const versions = versionCount(style, target.layout)
             // With 'Show retired styles' on, retired cards stand out so they're easy to go through.
@@ -563,20 +583,20 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
               <button
                 key={style}
                 type="button"
-                title={own ? undefined : `${styleName(style)} isn't made for this layout yet, so it opens as ${STANDINGS_LAYOUTS.find((l) => l.id === target.layout)?.label ?? 'its own layout'}`}
+                title={own ? undefined : t('ui.picker.styleMissingTitle', { style: styleName(style), layout: target.layout ? layoutName(target.layout) : t('ui.picker.ownLayout') })}
                 onClick={() => onSelect(target.id)}
                 className={`rounded-xl border-2 p-1.5 text-left transition ${style === currentStyle ? 'border-[#b3121b] bg-red-50' : retired ? 'border-amber-400 bg-amber-50 hover:border-amber-600' : own ? 'border-slate-200 hover:border-slate-400' : 'border-dashed border-slate-300 hover:border-slate-500'}`}
               >
                 <div className="picker-thumb pointer-events-none relative mb-1.5 overflow-hidden rounded-md" aria-hidden>
-                  <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>
+                  <Scaled width={target.width} height={target.height}>{render(target)}</Scaled>
                   <div className="absolute right-1 top-1 flex items-center gap-1">
                     {BRAND_COLOURS[style] && <span className="rounded-full bg-white/90 p-0.5 shadow">{brandDots(BRAND_COLOURS[style])}</span>}
-                    {retired && <span className="rounded bg-amber-500 px-1 text-[10px] font-bold uppercase leading-4 text-white shadow">Retired</span>}
+                    {retired && <span className="rounded bg-amber-500 px-1 text-[10px] font-bold uppercase leading-4 text-white shadow">{t('ui.picker.retired')}</span>}
                     {versions > 1 && <span className="rounded bg-slate-900/80 px-1 text-[10px] font-semibold leading-4 text-white shadow">{versions}</span>}
                   </div>
                 </div>
                 <div className="text-xs font-semibold leading-tight text-slate-900">{styleName(style)}</div>
-                {layouts && <div className="text-[11px] text-slate-500">{own ? (count === 1 ? '1 layout' : `${count} layouts`) : `Opens as ${STANDINGS_LAYOUTS.find((l) => l.id === target.layout)?.label ?? 'its own layout'}`}</div>}
+                {layouts && <div className="text-[11px] text-slate-500">{own ? t('ui.picker.layoutCount', { count }) : t('ui.picker.opensAs', { name: target.layout ? layoutName(target.layout) : t('ui.picker.ownLayout') })}</div>}
               </button>
             )
           })}

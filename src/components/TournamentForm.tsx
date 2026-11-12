@@ -1,5 +1,5 @@
 import type { Tournament } from '../types'
-import { FORMATS, TOURNAMENT_TYPES, eventTypeKey } from '../data/options'
+import { FORMATS, TOURNAMENT_TYPES, eventTypeKey, formatName } from '../data/options'
 import { Card, Field, Input, Select } from './ui'
 import { t, type UiKey } from '../i18n'
 
@@ -34,7 +34,7 @@ export function TournamentForm({ value, onChange }: { value: Tournament; onChang
         <Field label={t('ui.tournament.format')} className={value.format === 'Custom Format' ? '' : 'sm:col-span-2'}>
           <Select value={value.format} onChange={(e) => set('format', e.target.value)}>
             {FORMATS.map((f) => (
-              <option key={f.name}>{f.name}</option>
+              <option key={f.name} value={f.name}>{formatName(f.name)}</option>
             ))}
           </Select>
         </Field>

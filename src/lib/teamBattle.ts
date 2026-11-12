@@ -6,6 +6,7 @@ import type { TeamBattleData } from '../templates/types'
 import type { Format } from '../types'
 import { fetchReplay, replayId, summarize } from './replay'
 import { newPlayer } from './state'
+import { t } from '../i18n'
 
 const toID = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
 
@@ -15,7 +16,7 @@ const toID = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
  */
 export async function loadSet(set: TeamSet, link: string, teamAPlayers: string[], teamBPlayers: string[]): Promise<{ set: TeamSet; notes: string[] }> {
   const id = replayId(link)
-  if (!id) throw new Error('That isn’t a Showdown replay link.')
+  if (!id) throw new Error(t('ui.teamBattle.notReplay'))
   const game = await fetchReplay(id)
   const sum = summarize([game])
   let order: [0 | 1, 0 | 1] = [0, 1]
@@ -25,10 +26,10 @@ export async function loadSet(set: TeamSet, link: string, teamAPlayers: string[]
 
   const notes: string[] = []
   if (sum.bestOf > 1 && Math.max(...sum.score) < Math.ceil(sum.bestOf / 2)) {
-    notes.push(`Set isn’t finished in this replay (${sum.score[0]}–${sum.score[1]}); paste the last game of the set.`)
+    notes.push(t('ui.teamBattle.setNotFinished', { score1: sum.score[0], score2: sum.score[1] }))
   }
-  if (!game.hasTeamSheets) notes.push('No team sheets in this replay, so items are missing.')
-  if (game.unmatched.length) notes.push(`Couldn’t match: ${game.unmatched.join(', ')}.`)
+  if (!game.hasTeamSheets) notes.push(t('ui.teamBattle.noTeamSheets'))
+  if (game.unmatched.length) notes.push(t('ui.day2.unmatched', { names: game.unmatched.join(', ') }))
 
   const winner = sum.winner === null ? null : sum.winner === order[0] ? 0 : 1
   return {

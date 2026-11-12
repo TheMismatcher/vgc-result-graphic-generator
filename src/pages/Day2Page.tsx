@@ -1,4 +1,4 @@
-import { DAY2_EVENTS, DAY2_EVENT_KINDS, kindFor } from '../templates/day2/events'
+import { DAY2_EVENTS, DAY2_EVENT_KINDS, day2ExampleKey, day2LabelKey, kindFor } from '../templates/day2/events'
 import { mosaicDefaults } from '../templates/day2/mosaic'
 import { useMemo, useState } from 'react'
 import type { AppState, Day2, Player } from '../types'
@@ -11,6 +11,8 @@ import { PlayerEditor } from '../components/PlayerEditor'
 import { Preview } from '../components/Preview'
 import { Button, Card, Field, Input, Select } from '../components/ui'
 import { useDialog } from '../components/Dialog'
+import { rich } from '../components/rich'
+import { t } from '../i18n'
 
 export function Day2Page({ state, setState }: { state: AppState; setState: (fn: (s: AppState) => AppState) => void }) {
   const day2 = state.day2
@@ -37,14 +39,14 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
 
   const loadFromLink = async () => {
     const link = parseResultsLink(resultsUrl)
-    if (!link) return setResultsMessage('Paste a Limitless tournament link (play.limitlesstcg.com/tournament/…) or a Pokédata event link (pokedata.ovh/standingsVGC/…).')
+    if (!link) return setResultsMessage(t('ui.day2.pasteLink'))
     setResultsBusy(true)
     setResultsMessage('')
     try {
       const { event, entries } = await loadResults(link)
       setResults(entries)
       if (event && !day2.event.trim()) setDay2({ event })
-      setResultsMessage(`Loaded ${entries.length} players${link.source === 'pokedata' ? ` (${link.division})` : ''}. Search for a name, or pick from the top of the standings.`)
+      setResultsMessage(link.source === 'pokedata' ? t('ui.day2.loadedResultsDivision', { count: entries.length, division: link.division }) : t('ui.day2.loadedResults', { count: entries.length }))
     } catch (e) {
       setResults([])
       setResultsMessage(e instanceof Error ? e.message : String(e))
@@ -60,27 +62,27 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
 
   const addResult = async (entry: ResultEntry) => {
     if (day2.players.some((p) => p.name.trim().toLowerCase() === entry.name.toLowerCase())) {
-      if (!(await dialog.confirm(`${entry.name} is already in your list. Add them again?`, 'Add again'))) return
+      if (!(await dialog.confirm(t('ui.day2.alreadyInList', { name: entry.name }), t('ui.day2.addAgain')))) return
     }
     const player: Player = { ...newPlayer(), name: entry.name, record: entry.record, team: entry.team }
     setState((s) => ({ ...s, day2: { ...s.day2, players: [...s.day2.players, player], selected: player.uid } }))
-    const notes = [`Added ${player.name}${entry.record ? ` (${entry.record})` : ''}.`]
-    if (!entry.hasTeam) notes.push('Their team list isn’t public; add the team by hand.')
-    if (entry.unmatched.length) notes.push(`Couldn’t match: ${entry.unmatched.join(', ')}.`)
+    const notes = [entry.record ? t('ui.day2.added', { name: player.name, record: entry.record }) : t('ui.day2.addedNoRecord', { name: player.name })]
+    if (!entry.hasTeam) notes.push(t('ui.day2.teamNotPublic'))
+    if (entry.unmatched.length) notes.push(t('ui.day2.unmatched', { names: entry.unmatched.join(', ') }))
     setResultsMessage(notes.join(' '))
     setResultsQuery('')
   }
 
   const loadRoster = async () => {
     const id = rk9Id(day2.rk9)
-    if (!id) return setMessage('Paste an RK9 tournament link, e.g. https://rk9.gg/tournament/LO002-…')
+    if (!id) return setMessage(t('ui.day2.pasteRk9'))
     setBusy('roster')
     setMessage('')
     try {
       const { players } = await fetchRoster(id)
       setRoster(players)
       setRosterId(id)
-      setMessage(`Loaded ${players.length} players. Search for a name below.`)
+      setMessage(t('ui.day2.loadedRoster', { count: players.length }))
     } catch (e) {
       setMessage(e instanceof Error ? e.message : String(e))
     } finally {
@@ -99,10 +101,10 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
   const add = async (entry: RosterEntry) => {
     // Use the tournament the roster came from, even if the link box was edited or cleared since.
     const id = rosterId
-    if (!id) return setMessage('Load the roster again, then add the player.')
+    if (!id) return setMessage(t('ui.day2.reloadRoster'))
     const name = fullName(entry)
     if (day2.players.some((p) => p.name.trim().toLowerCase() === name.toLowerCase())) {
-      if (!(await dialog.confirm(`${name} is already in your list. Add them again?`, 'Add again'))) return
+      if (!(await dialog.confirm(t('ui.day2.alreadyInList', { name }), t('ui.day2.addAgain')))) return
     }
     setBusy(fullName(entry))
     setMessage('')
@@ -113,10 +115,10 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
       ])
       const player: Player = { ...newPlayer(), name: fullName(entry), record, team: teamResult.team }
       setState((s) => ({ ...s, day2: { ...s.day2, players: [...s.day2.players, player], selected: player.uid } }))
-      const notes = [`Added ${player.name}${record ? ` (${record})` : ''}.`]
-      if (!entry.teamUrl) notes.push('Their team list isn’t public yet; add the team by hand.')
-      if (!record) notes.push('Couldn’t find their record in the pairings; type it in.')
-      if (teamResult.unmatched.length) notes.push(`Couldn’t match: ${teamResult.unmatched.join(', ')}.`)
+      const notes = [record ? t('ui.day2.added', { name: player.name, record }) : t('ui.day2.addedNoRecord', { name: player.name })]
+      if (!entry.teamUrl) notes.push(t('ui.day2.teamNotPublicYet'))
+      if (!record) notes.push(t('ui.day2.noRecord'))
+      if (teamResult.unmatched.length) notes.push(t('ui.day2.unmatched', { names: teamResult.unmatched.join(', ') }))
       setMessage(notes.join(' '))
       setQuery('')
     } catch (e) {
@@ -132,27 +134,27 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div className="space-y-4">
         <Card className="space-y-3">
-          <h2 className="text-lg font-bold text-slate-900">Import from a results link</h2>
+          <h2 className="text-lg font-bold text-slate-900">{t('ui.day2.resultsHeading')}</h2>
           <p className="text-sm text-slate-600">
-            Paste a <strong>Limitless</strong> tournament link or a <strong>Pokédata</strong> event link (Regionals, Internationals, Worlds), then pick a player. Their record and team come from the standings.
+            {rich(t('ui.day2.resultsIntro'))}
           </p>
           <div className="flex flex-wrap items-end gap-2">
-            <Field label="Limitless or Pokédata link" className="min-w-0 flex-1">
-              <Input placeholder="https://pokedata.ovh/standingsVGC/…  or  https://play.limitlesstcg.com/tournament/…" value={resultsUrl} onChange={(e) => setResultsUrl(e.target.value)} />
+            <Field label={t('ui.day2.resultsLinkLabel')} className="min-w-0 flex-1">
+              <Input placeholder={t('ui.day2.resultsLinkPlaceholder')} value={resultsUrl} onChange={(e) => setResultsUrl(e.target.value)} />
             </Field>
-            <Button variant="primary" disabled={resultsBusy} onClick={loadFromLink}>{resultsBusy ? 'Loading…' : 'Load standings'}</Button>
+            <Button variant="primary" disabled={resultsBusy} onClick={loadFromLink}>{resultsBusy ? t('ui.common.loading') : t('ui.day2.loadStandings')}</Button>
           </div>
           {results.length > 0 && (
             <div className="space-y-2">
-              <Input placeholder="Search a player name… (or pick from the top 8)" value={resultsQuery} onChange={(e) => setResultsQuery(e.target.value)} />
+              <Input placeholder={t('ui.day2.searchResults')} value={resultsQuery} onChange={(e) => setResultsQuery(e.target.value)} />
               <ul className="divide-y divide-slate-100 rounded-xl border border-slate-200">
                 {resultMatches.map((r, i) => (
                   <li key={`${r.name}-${i}`} className="flex items-center justify-between gap-2 px-3 py-2 text-sm">
                     <span>
                       <span className="font-semibold text-slate-900">{r.name}</span>
-                      <span className="text-slate-500"> · {r.placing ? `#${r.placing}` : 'dropped'} · {r.record}{r.hasTeam ? '' : ' · no team list'}</span>
+                      <span className="text-slate-500">{t(r.hasTeam ? 'ui.day2.resultMeta' : 'ui.day2.resultMetaNoTeam', { place: r.placing ? t('ui.day2.placing', { n: r.placing }) : t('ui.day2.dropped'), record: r.record })}</span>
                     </span>
-                    <Button onClick={() => addResult(r)}>Add</Button>
+                    <Button onClick={() => addResult(r)}>{t('ui.day2.add')}</Button>
                   </li>
                 ))}
               </ul>
@@ -162,24 +164,24 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
         </Card>
 
         <Card className="space-y-3">
-          <h2 className="text-lg font-bold text-slate-900">Import from RK9</h2>
+          <h2 className="text-lg font-bold text-slate-900">{t('ui.day2.rk9Heading')}</h2>
           <p className="text-sm text-slate-600">
-            Paste the event’s RK9 link, load the roster, then search for each player. Their record comes from the pairings and their team from their public team list.
+            {t('ui.day2.rk9Intro')}
           </p>
           <div className="flex flex-wrap items-end gap-2">
-            <Field label="RK9 tournament link" className="min-w-0 flex-1">
-              <Input placeholder="https://rk9.gg/tournament/…" value={day2.rk9} onChange={(e) => setDay2({ rk9: e.target.value })} />
+            <Field label={t('ui.day2.rk9LinkLabel')} className="min-w-0 flex-1">
+              <Input placeholder={t('ui.day2.rk9LinkPlaceholder')} value={day2.rk9} onChange={(e) => setDay2({ rk9: e.target.value })} />
             </Field>
-            <Button variant="primary" disabled={busy === 'roster'} onClick={loadRoster}>{busy === 'roster' ? 'Loading…' : 'Load roster'}</Button>
+            <Button variant="primary" disabled={busy === 'roster'} onClick={loadRoster}>{busy === 'roster' ? t('ui.common.loading') : t('ui.day2.loadRoster')}</Button>
           </div>
           {roster.length > 0 && (
             <div className="space-y-2">
               <div className="flex gap-2">
-                <Input placeholder="Search a player or trainer name…" value={query} onChange={(e) => setQuery(e.target.value)} />
-                <Select className="w-32" value={division} onChange={(e) => setDivision(e.target.value)} aria-label="Division">
-                  <option>Masters</option>
-                  <option>Seniors</option>
-                  <option>Juniors</option>
+                <Input placeholder={t('ui.day2.searchRoster')} value={query} onChange={(e) => setQuery(e.target.value)} />
+                <Select className="w-32" value={division} onChange={(e) => setDivision(e.target.value)} aria-label={t('ui.day2.divisionLabel')}>
+                  <option value="Masters">{t('ui.day2.division.masters')}</option>
+                  <option value="Seniors">{t('ui.day2.division.seniors')}</option>
+                  <option value="Juniors">{t('ui.day2.division.juniors')}</option>
                 </Select>
               </div>
               {matches.length > 0 && (
@@ -190,7 +192,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
                         <span className="font-semibold text-slate-900">{fullName(p)}</span>
                         <span className="text-slate-500"> · {p.trainer} · {p.country}</span>
                       </span>
-                      <Button disabled={!!busy} onClick={() => add(p)}>{busy === fullName(p) ? 'Adding…' : 'Add'}</Button>
+                      <Button disabled={!!busy} onClick={() => add(p)}>{busy === fullName(p) ? t('ui.day2.adding') : t('ui.day2.add')}</Button>
                     </li>
                   ))}
                 </ul>
@@ -202,8 +204,8 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
 
         <Card className="grid gap-3 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <span className="mb-1 block text-sm font-medium text-slate-700">Event type</span>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-5 lg:grid-cols-3 xl:grid-cols-5" role="radiogroup" aria-label="Event type">
+            <span className="mb-1 block text-sm font-medium text-slate-700">{t('ui.day2.eventType')}</span>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-5 lg:grid-cols-3 xl:grid-cols-5" role="radiogroup" aria-label={t('ui.day2.eventType')}>
               {DAY2_EVENT_KINDS.map((k) => (
                 <button
                   key={k}
@@ -214,23 +216,23 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
                   className={`flex min-w-0 flex-col items-center gap-1 rounded-xl border-2 px-1 py-2 text-center text-xs font-semibold leading-tight transition sm:text-sm ${kind === k ? 'border-[#b3121b] bg-red-50 text-slate-900' : 'border-slate-200 text-slate-700 hover:border-slate-400'}`}
                 >
                   <img src={DAY2_EVENTS[k].logo} alt="" className="h-9 w-9 shrink-0 object-contain" />
-                  <span className="w-full">{DAY2_EVENTS[k].label}</span>
+                  <span className="w-full">{t(day2LabelKey(k))}</span>
                 </button>
               ))}
             </div>
-            <p className="mt-1 text-xs text-slate-500">Sets the logo (Regionals, Play! Pokémon, Internationals, Special Events or Worlds) and the starting background color.</p>
+            <p className="mt-1 text-xs text-slate-500">{t('ui.day2.eventTypeHint')}</p>
           </div>
-          <Field label="Event (top bar)">
-            <Input placeholder={DAY2_EVENTS[kind].example} value={day2.event} onChange={(e) => setDay2({ event: e.target.value })} />
+          <Field label={t('ui.day2.eventTopBar')}>
+            <Input placeholder={t(day2ExampleKey(kind))} value={day2.event} onChange={(e) => setDay2({ event: e.target.value })} />
           </Field>
-          <Field label="Caption bar on the photo (optional)">
-            <Input placeholder="Leave empty for no caption bar" value={day2.caption} onChange={(e) => setDay2({ caption: e.target.value })} />
+          <Field label={t('ui.day2.captionLabel')}>
+            <Input placeholder={t('ui.day2.captionPlaceholder')} value={day2.caption} onChange={(e) => setDay2({ caption: e.target.value })} />
           </Field>
           <div className="sm:col-span-2">
             <div className="mb-1 flex items-center justify-between">
-              <label htmlFor="d2-hue" className="text-sm font-medium text-slate-700">Background color</label>
+              <label htmlFor="d2-hue" className="text-sm font-medium text-slate-700">{t('ui.day2.backgroundColor')}</label>
               <button type="button" className="text-xs font-semibold text-slate-500 hover:text-slate-800" onClick={() => setDay2({ hue: undefined })}>
-                Reset to {DAY2_EVENTS[kind].label} color
+                {t('ui.day2.resetColor', { event: t(day2LabelKey(kind)) })}
               </button>
             </div>
             <input
@@ -243,14 +245,14 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
               className="h-3 w-full cursor-pointer appearance-none rounded-full"
               style={{ background: 'linear-gradient(to right, hsl(0 50% 50%), hsl(60 50% 50%), hsl(120 50% 50%), hsl(180 50% 50%), hsl(240 50% 50%), hsl(300 50% 50%), hsl(359 50% 50%))' }}
             />
-            <p className="mt-1 text-xs text-slate-500">Sets the Event Results background; the Mosaic versions can use two colors below.</p>
+            <p className="mt-1 text-xs text-slate-500">{t('ui.day2.backgroundHint')}</p>
           </div>
           {state.templates.day2.includes('mosaic') && (
             <div className="sm:col-span-2">
               <div className="mb-1 flex items-center justify-between">
-                <span className="text-sm font-medium text-slate-700">Mosaic gradient colors</span>
+                <span className="text-sm font-medium text-slate-700">{t('ui.day2.mosaicColors')}</span>
                 <button type="button" className="text-xs font-semibold text-slate-500 hover:text-slate-800" onClick={() => setDay2({ colors: undefined })}>
-                  Use the background color above
+                  {t('ui.day2.useBackground')}
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -265,25 +267,25 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
                         onChange={(e) => setDay2({ colors: { ...(day2.colors ?? fallback), [k]: e.target.value } })}
                         className="h-9 w-12 cursor-pointer rounded border border-slate-300 bg-white p-0.5"
                       />
-                      {k === 'main' ? 'Start (top left)' : 'End (bottom right)'}
+                      {k === 'main' ? t('ui.day2.gradientStart') : t('ui.day2.gradientEnd')}
                     </label>
                   )
                 })}
               </div>
-              <p className="mt-1 text-xs text-slate-500">The wall fades from the first color to the second. Only the Mosaic versions use these.</p>
+              <p className="mt-1 text-xs text-slate-500">{t('ui.day2.gradientHint')}</p>
             </div>
           )}
         </Card>
 
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900">Players</h2>
-          <span className="text-sm text-slate-500">One graphic per player</span>
+          <h2 className="text-lg font-bold text-slate-900">{t('ui.day2.playersHeading')}</h2>
+          <span className="text-sm text-slate-500">{t('ui.day2.onePerPlayer')}</span>
         </div>
         {day2.players.map((p, i) => (
           <PlayerEditor
             key={p.uid}
             player={p}
-            label={`#${i + 1}`}
+            label={t('ui.day2.playerBadge', { n: i + 1 })}
             format={format}
             defaultOpen={false}
             isFirst={i === 0}
@@ -306,13 +308,13 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
             setState((s) => ({ ...s, day2: { ...s.day2, players: [...s.day2.players, player], selected: player.uid } }))
           }}
         >
-          + Add player by hand
+          {t('ui.day2.addByHand')}
         </Button>
       </div>
 
       <div className="space-y-3 lg:sticky lg:top-4 lg:self-start lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto lg:overscroll-contain">
         {day2.players.length > 1 && (
-          <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Player to preview">
+          <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t('ui.day2.previewPlayer')}>
             {day2.players.map((p) => (
               <button
                 key={p.uid}
@@ -322,7 +324,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
                 onClick={() => setDay2({ selected: p.uid })}
                 className={`rounded-full border px-3 py-1 text-sm font-semibold ${p.uid === selected?.uid ? 'border-[#b3121b] bg-[#b3121b] text-white' : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'}`}
               >
-                {p.name || 'Unnamed'}
+                {p.name || t('ui.day2.unnamed')}
               </button>
             ))}
           </div>
@@ -337,7 +339,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
           />
         ) : (
           <Card>
-            <p className="text-sm text-slate-600">Add a player to see their graphic.</p>
+            <p className="text-sm text-slate-600">{t('ui.day2.addPlayerHint')}</p>
           </Card>
         )}
       </div>

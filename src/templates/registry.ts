@@ -49,18 +49,18 @@ import type { Looks, StandingsLayout, Template } from './types'
 
 /** Layouts in picker order, with their labels. */
 export const STANDINGS_LAYOUTS: { id: StandingsLayout; label: string }[] = [
-  { id: 'topcut', label: 'Top Cut' },
-  { id: 'top8photos', label: 'Top 8 Photos' },
-  { id: 'top8mixed', label: 'Top 8 + Top 4 Photos' },
-  { id: 'top4photos', label: 'Top 4 Photos' },
-  { id: 'champion', label: 'Champion' },
-  { id: 'championphoto', label: 'Champion + Photo' },
-  { id: 'bracket', label: 'Bracket' },
+  { id: 'topcut', label: 'Top Cut' }, // i18n-ignore (English for the sheet; shown via ui.picker.layout.topcut)
+  { id: 'top8photos', label: 'Top 8 Photos' }, // i18n-ignore (English for the sheet; shown via ui.picker.layout.top8photos)
+  { id: 'top8mixed', label: 'Top 8 + Top 4 Photos' }, // i18n-ignore (English for the sheet; shown via ui.picker.layout.top8mixed)
+  { id: 'top4photos', label: 'Top 4 Photos' }, // i18n-ignore (English for the sheet; shown via ui.picker.layout.top4photos)
+  { id: 'champion', label: 'Champion' }, // i18n-ignore (English for the sheet; shown via ui.picker.layout.champion)
+  { id: 'championphoto', label: 'Champion + Photo' }, // i18n-ignore (English for the sheet; shown via ui.picker.layout.championphoto)
+  { id: 'bracket', label: 'Bracket' }, // i18n-ignore (English for the sheet; shown via ui.picker.layout.bracket)
   // Landscape trials (1920x1080).
-  { id: 'widerows', label: 'Wide Rows' },
-  { id: 'widespot', label: 'Wide Spotlight' },
-  { id: 'widecols', label: 'Wide Top 4 Columns' },
-  { id: 'widecolsplain', label: 'Wide Columns (No Photos)' },
+  { id: 'widerows', label: 'Wide Rows' }, // i18n-ignore (English for the sheet; shown via ui.picker.layout.widerows)
+  { id: 'widespot', label: 'Wide Spotlight' }, // i18n-ignore (English for the sheet; shown via ui.picker.layout.widespot)
+  { id: 'widecols', label: 'Wide Top 4 Columns' }, // i18n-ignore (English for the sheet; shown via ui.picker.layout.widecols)
+  { id: 'widecolsplain', label: 'Wide Columns (No Photos)' }, // i18n-ignore (English for the sheet; shown via ui.picker.layout.widecolsplain)
 ]
 
 // Every standings template, grouped by style (the picker shows styles in this order, then the

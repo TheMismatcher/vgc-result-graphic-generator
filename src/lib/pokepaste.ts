@@ -3,6 +3,7 @@
 import type { Mon } from '../types'
 import { resolveItem, resolvePokemon } from '../data/dex'
 import { emptyTeam } from './state'
+import { t } from '../i18n'
 
 export interface ImportResult {
   team: Mon[]
@@ -13,14 +14,14 @@ const PASTE_URL = /^(https?:\/\/)?(www\.)?pokepast\.es\/[^/\s]+/i
 
 export async function importTeam(input: string): Promise<ImportResult> {
   const text = input.trim()
-  if (!text) throw new Error('Paste a pokepast.es link or a Showdown team export.')
+  if (!text) throw new Error(t('ui.import.pokepaste.pasteLink'))
   if (PASTE_URL.test(text)) {
     const url = text.replace(/^(?!https?:\/\/)/, 'https://').replace(/\/+$/, '').replace(/\/raw$/, '') + '/raw'
     const res = await fetch(url)
-    if (!res.ok) throw new Error(`Couldn't load that paste (${res.status}). Check the link.`)
+    if (!res.ok) throw new Error(t('ui.import.pokepaste.loadError', { status: res.status }))
     return parseShowdown(await res.text())
   }
-  if (/^https?:\/\//i.test(text)) throw new Error('Only pokepast.es links are supported.')
+  if (/^https?:\/\//i.test(text)) throw new Error(t('ui.import.pokepaste.onlyPokepaste'))
   return parseShowdown(text)
 }
 
@@ -45,6 +46,6 @@ export function parseShowdown(text: string): ImportResult {
     team[i] = { pokemon, item, tera }
   })
 
-  if (!blocks.length) throw new Error('No Pokémon found in that text.')
+  if (!blocks.length) throw new Error(t('ui.import.pokepaste.noPokemon'))
   return { team, unmatched }
 }

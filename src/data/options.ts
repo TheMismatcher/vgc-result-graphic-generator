@@ -1,5 +1,5 @@
 import type { Format } from '../types'
-import { gt, type GfxKey, type UiKey } from '../i18n'
+import { gt, t, type GfxKey, type UiKey } from '../i18n'
 
 export const FORMATS: Format[] = [
   { name: 'VGC 2026 - Regulation M-C', tera: false, items: true },
@@ -44,6 +44,47 @@ export const TERA_TYPES: { id: string; name: string; color: string }[] = [
   { id: 'fairy', name: 'Fairy', color: '#ef70ef' },
   { id: 'stellar', name: 'Stellar', color: '#44b4c4' },
 ]
+
+// `name` is also the id (saved in files, matched by the imports); what people see comes from the catalog (term.format.*).
+const FORMAT_KEYS: Record<string, UiKey & GfxKey> = {
+  'VGC 2026 - Regulation M-C': 'term.format.reg2026MC',
+  'VGC 2026 - Regulation M-B': 'term.format.reg2026MB',
+  'VGC 2026 - Regulation M-A': 'term.format.reg2026MA',
+  'VGC 2025 - Regulation J': 'term.format.reg2025J',
+  'VGC 2025 - Regulation I': 'term.format.reg2025I',
+  'VGC 2025 - Regulation H': 'term.format.reg2025H',
+  'VGC 2024 - Regulation G': 'term.format.reg2024G',
+  'VGC 2025 - Regulation F': 'term.format.reg2025F',
+  'Custom Format': 'term.format.custom',
+}
+/** A format's name for the website. Names that aren't ours (e.g. from an import) show as they are. */
+export const formatName = (name: string) => (FORMAT_KEYS[name] ? t(FORMAT_KEYS[name]) : name)
+/** A format's name as printed on graphics. */
+export const gtFormatName = (name: string) => (FORMAT_KEYS[name] ? gt(FORMAT_KEYS[name]) : name)
+
+const TYPE_KEYS: Record<string, UiKey & GfxKey> = {
+  normal: 'term.type.normal',
+  fire: 'term.type.fire',
+  water: 'term.type.water',
+  electric: 'term.type.electric',
+  grass: 'term.type.grass',
+  ice: 'term.type.ice',
+  fighting: 'term.type.fighting',
+  poison: 'term.type.poison',
+  ground: 'term.type.ground',
+  flying: 'term.type.flying',
+  psychic: 'term.type.psychic',
+  bug: 'term.type.bug',
+  rock: 'term.type.rock',
+  ghost: 'term.type.ghost',
+  dragon: 'term.type.dragon',
+  dark: 'term.type.dark',
+  steel: 'term.type.steel',
+  fairy: 'term.type.fairy',
+  stellar: 'term.type.stellar',
+}
+/** A Tera / Pokémon type's name for the website (and graphics via `gtTypeName`). */
+export const typeName = (id: string) => (TYPE_KEYS[id] ? t(TYPE_KEYS[id]) : id)
 
 export const formatByName = (name: string) => FORMATS.find((f) => f.name === name) ?? FORMATS[0]
 export const eventTypeKey = (id: string) => `term.eventType.${id}` as UiKey & GfxKey

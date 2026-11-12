@@ -1,4 +1,5 @@
 import { toBlob } from 'html-to-image'
+import { t } from '../i18n'
 
 const options = (width: number, height: number) => ({
   width,
@@ -25,7 +26,7 @@ async function renderBlob(node: HTMLElement, width: number, height: number) {
       if (!grew && pass > 0) break
     }
   }
-  if (!blob) throw new Error('Image was empty.')
+  if (!blob) throw new Error(t('ui.error.imageEmpty'))
   return blob
 }
 
@@ -66,7 +67,7 @@ export function canUseShareSheet() {
 /** Render a template's DOM node to a PNG and put it on the clipboard (paste into Discord, X, etc.). */
 export async function copyPng(node: HTMLElement, width: number, height: number) {
   if (!navigator.clipboard || typeof ClipboardItem === 'undefined') {
-    throw new Error('This browser can’t copy images. Use Download PNG instead.')
+    throw new Error(t('ui.error.cantCopyImage'))
   }
   // Safari needs the ClipboardItem created right away (during the click), with the image as a promise.
   const blob = renderBlob(node, width, height)

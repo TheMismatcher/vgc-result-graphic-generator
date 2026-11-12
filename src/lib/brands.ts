@@ -4,6 +4,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import type { BrandSettings } from '../types'
+import { t } from '../i18n'
 
 export interface SavedBrand {
   id: string
@@ -71,11 +72,11 @@ export async function openBrandsFile(file: File): Promise<SavedBrand[]> {
   try {
     data = JSON.parse(await file.text())
   } catch {
-    throw new Error("That file isn't a brands file.")
+    throw new Error(t('ui.branding.notBrandsFile'))
   }
   const d = data as { type?: string; brands?: unknown[] }
-  if (d?.type !== FILE_TYPE || !Array.isArray(d.brands)) throw new Error("That file isn't a brands file (save one with “Export brands”).")
+  if (d?.type !== FILE_TYPE || !Array.isArray(d.brands)) throw new Error(t('ui.branding.notBrandsFileExport'))
   const brands = d.brands.filter(isBrand).map((b) => ({ ...b, id: crypto.randomUUID(), tagline: b.tagline ?? '', logo: b.logo ?? '' }))
-  if (!brands.length) throw new Error('No brands found in that file.')
+  if (!brands.length) throw new Error(t('ui.branding.noBrandsFound'))
   return brands
 }

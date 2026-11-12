@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Format, Mon, Player } from '../types'
 import { ITEMS, POKEMON, getPokemon, sprites } from '../data/dex'
-import { TERA_TYPES } from '../data/options'
+import { TERA_TYPES, typeName } from '../data/options'
 import { importTeam } from '../lib/pokepaste'
 import { resizePhoto } from '../lib/photo'
 import { photoFrame, photoStyle } from '../templates/shared/parts'
@@ -121,7 +121,7 @@ export function PlayerEditor({
                     <Select className="w-28 py-1.5" value={mon.tera} onChange={(e) => setMon(i, { tera: e.target.value })} aria-label={t('ui.player.teraLabel')}>
                       <option value="">{t('ui.player.teraNone')}</option>
                       {TERA_TYPES.map((tera) => (
-                        <option key={tera.id} value={tera.id}>{tera.name}</option>
+                        <option key={tera.id} value={tera.id}>{typeName(tera.id)}</option>
                       ))}
                     </Select>
                   )}

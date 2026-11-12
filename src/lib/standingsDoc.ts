@@ -2,6 +2,7 @@
 // report's own .html file. These hold the real text, so unlike photos nothing is guessed.
 
 import type { ScannedStanding } from './standingsScan'
+import { t } from '../i18n'
 
 export type Division = 'juniors' | 'seniors' | 'masters' | 'all'
 
@@ -25,7 +26,7 @@ function build(tournament: string, tables: Map<Division, ScannedStanding[]>): St
   const counts: StandingsDoc['counts'] = {}
   for (const [d, rows] of tables) counts[d] = rows.length
   const rows = tables.get('masters') ?? tables.get('all') ?? [...tables.values()][0] ?? []
-  if (!rows.length) throw new Error('Couldn’t find a standings table in that file. Use a TOM “Standings” report.')
+  if (!rows.length) throw new Error(t('ui.import.standingsPhoto.noTable'))
   return { tournament, rows, counts }
 }
 

@@ -5,6 +5,7 @@ import { usageFromPlayers } from './usage'
 import { bracketFromLimitless } from './bracket'
 import { resolveItem, resolvePokemon } from '../data/dex'
 import { FORMATS } from '../data/options'
+import { t } from '../i18n'
 import { emptyMon, newPlayer } from './state'
 
 const API = 'https://play.limitlesstcg.com/api/tournaments'
@@ -40,7 +41,7 @@ export async function importLimitless(id: string, top: number): Promise<Limitles
     fetch(`${API}/${id}/standings`),
     fetch(`${API}/${id}/pairings`),
   ])
-  if (!detailsRes.ok || !standingsRes.ok) throw new Error("Couldn't load that tournament from Limitless. Check the link.")
+  if (!detailsRes.ok || !standingsRes.ok) throw new Error(t('ui.import.limitless.loadError'))
   const details: LimitlessDetails = await detailsRes.json()
   const standings: LimitlessStanding[] = await standingsRes.json()
   const pairings = pairingsRes.ok ? await pairingsRes.json() : []
@@ -100,7 +101,7 @@ function usageFrom(standings: LimitlessStanding[]) {
 /** Usage only: count the whole field, or just the top N. */
 export async function importLimitlessUsage(id: string, countTop: number | null) {
   const res = await fetch(`${API}/${id}/standings`)
-  if (!res.ok) throw new Error("Couldn't load that tournament from Limitless. Check the link.")
+  if (!res.ok) throw new Error(t('ui.import.limitless.loadError'))
   const ranked = rankedStandings(await res.json())
   return usageFrom(countTop ? ranked.slice(0, countTop) : ranked)
 }

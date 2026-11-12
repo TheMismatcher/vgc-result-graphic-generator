@@ -2,7 +2,7 @@ import type { AppState, Tournament } from '../types'
 import type { EventInfo, StandingsData } from '../templates/types'
 import { bracketView } from './bracket'
 import { cpEventFor, cpFor } from './cp'
-import { formatByName, tournamentTypeName } from '../data/options'
+import { formatByName, gtFormatName, tournamentTypeName } from '../data/options'
 import { gt, gtDate } from '../i18n'
 
 export function eventInfo(t: Tournament): EventInfo {
@@ -13,7 +13,7 @@ export function eventInfo(t: Tournament): EventInfo {
   return {
     tournament: t,
     format,
-    formatLabel: format.name === 'Custom Format' ? t.customFormat : format.name,
+    formatLabel: format.name === 'Custom Format' ? t.customFormat : gtFormatName(format.name),
     typeLabel: tournamentTypeName(t.type),
     dateLabel,
     playerCount: Number(masters || 0) + Number(seniors || 0) + Number(juniors || 0),

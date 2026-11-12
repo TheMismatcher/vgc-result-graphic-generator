@@ -10,6 +10,7 @@ import { emptyMon } from './state'
 import { formatRecord, limitlessId, rankedStandings, toTeam, type LimitlessStanding } from './limitless'
 import { resolveRk9Species } from './rk9'
 import { proxyGet } from './proxy'
+import { t } from '../i18n'
 
 export type ResultsSource = 'limitless' | 'pokedata'
 
@@ -49,7 +50,7 @@ export async function loadResults(link: ResultsLink): Promise<{ event: string; e
 async function loadLimitless(id: string) {
   const api = `https://play.limitlesstcg.com/api/tournaments/${id}`
   const [detailsRes, standingsRes] = await Promise.all([fetch(`${api}/details`), fetch(`${api}/standings`)])
-  if (!detailsRes.ok || !standingsRes.ok) throw new Error("Couldn't load that tournament from Limitless. Check the link.")
+  if (!detailsRes.ok || !standingsRes.ok) throw new Error(t('ui.import.limitless.loadError'))
   const details: { name: string } = await detailsRes.json()
   const standings: LimitlessStanding[] = await standingsRes.json()
   const entries = rankedStandings(standings).map((s): ResultEntry => {
@@ -69,7 +70,7 @@ interface PokedataPlayer {
 async function loadPokedata({ id, division }: ResultsLink) {
   const label = division[0].toUpperCase() + division.slice(1)
   const res = await proxyGet('pokedata', `/standingsVGC/${id}/${division}/${id}_${label}.json`)
-  if (!res.ok) throw new Error(`Pokédata didn't respond (${res.status}). Check the link, or try again in a moment.`)
+  if (!res.ok) throw new Error(t('ui.import.results.pokedataError', { status: res.status }))
   const players: PokedataPlayer[] = JSON.parse(res.body)
   const entries = players
     .slice()

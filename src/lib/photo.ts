@@ -1,7 +1,9 @@
 // Shrink uploaded images so they stay small enough to keep in browser storage.
 
+import { t } from '../i18n'
+
 async function resize(file: File, maxSize: number, type: 'image/jpeg' | 'image/png', quality?: number): Promise<string> {
-  if (!file.type.startsWith('image/')) throw new Error('That file is not an image.')
+  if (!file.type.startsWith('image/')) throw new Error(t('ui.error.notImage'))
   const bitmap = await createImageBitmap(file)
   const scale = Math.min(1, maxSize / Math.max(bitmap.width, bitmap.height))
   const canvas = document.createElement('canvas')

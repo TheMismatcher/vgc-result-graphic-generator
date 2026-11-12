@@ -3,6 +3,7 @@
 
 import { createContext, useContext, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react'
 import type { BackdropPhoto } from '../types'
+import { t } from '../i18n'
 
 /** Template ids that draw the backdrop (Top Cut, theme layouts and side graphics all share this prefix). */
 export const isBackdropTemplate = (id: string) => id.startsWith('custom-glass')
@@ -49,7 +50,7 @@ export function BackdropImage({ width, height }: { width: number; height: number
 
 /** Photos: JPEG, 1800px on the longest side (room to zoom in on a 1080px graphic). */
 export async function readBackdrop(file: File): Promise<BackdropPhoto> {
-  if (!file.type.startsWith('image/')) throw new Error('That file is not an image.')
+  if (!file.type.startsWith('image/')) throw new Error(t('ui.error.notImage'))
   const bitmap = await createImageBitmap(file)
   const scale = Math.min(1, 1800 / Math.max(bitmap.width, bitmap.height))
   const canvas = document.createElement('canvas')

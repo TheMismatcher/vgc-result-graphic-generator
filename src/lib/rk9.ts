@@ -9,6 +9,7 @@ import type { Mon } from '../types'
 import { resolveForm, resolveItem, resolvePokemon } from '../data/dex'
 import { emptyMon } from './state'
 import { proxyGet } from './proxy'
+import { t } from '../i18n'
 
 export interface RosterEntry {
   first: string
@@ -29,7 +30,7 @@ export function rk9Id(input: string): string | null {
 
 async function page(path: string): Promise<Document> {
   const res = await proxyGet('rk9', path)
-  if (!res.ok) throw new Error(`RK9 didn't respond (${res.status}). Check the link, or try again in a moment.`)
+  if (!res.ok) throw new Error(t('ui.import.rk9.noResponse', { status: res.status }))
   return new DOMParser().parseFromString(res.body, 'text/html')
 }
 
@@ -40,7 +41,7 @@ export async function fetchRoster(id: string): Promise<{ event: string; players:
   const headers = [...doc.querySelectorAll('table thead th')].map((th) => text(th).toLowerCase())
   const col = (name: string) => headers.findIndex((h) => h.includes(name))
   const [first, last, country, division, trainer, team] = ['first', 'last', 'country', 'division', 'trainer', 'team'].map(col)
-  if (first < 0 || last < 0) throw new Error('That doesn’t look like an RK9 roster page.')
+  if (first < 0 || last < 0) throw new Error(t('ui.import.rk9.notRoster'))
   const players = [...doc.querySelectorAll('table tbody tr')].map((tr) => {
     const cells = tr.querySelectorAll('td')
     return {

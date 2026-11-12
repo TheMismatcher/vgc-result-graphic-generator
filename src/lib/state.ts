@@ -28,7 +28,7 @@ export const initialState = (): AppState => ({
   bracket: { size: 0, slots: [], winners: [] },
   usage: { entries: [], totalTeams: '', countTop: '' },
   match: { links: '', games: [], players: [newPlayer(), newPlayer()], score: ['', ''], winner: null, round: '' },
-  day2: { rk9: '', event: '', caption: 'DMV TO DAY 2', players: [], selected: '' },
+  day2: { rk9: '', event: '', caption: 'DMV TO DAY 2', /* i18n-ignore: starting text for a box the person edits */ players: [], selected: '' },
   teamBattle: {
     league: '',
     week: '',

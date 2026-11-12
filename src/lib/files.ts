@@ -4,6 +4,7 @@
 import type { AppState } from '../types'
 import { initialState } from './state'
 import { slugify } from './exportImage'
+import { t } from '../i18n'
 
 const APP = 'dmv-generator'
 const VERSION = 1
@@ -25,10 +26,10 @@ export async function openTournamentFile(file: File, current: AppState): Promise
   try {
     parsed = JSON.parse(await file.text())
   } catch {
-    throw new Error('That file isn’t a saved tournament (it couldn’t be read).')
+    throw new Error(t('ui.app.fileUnreadable'))
   }
-  if (parsed.app !== APP || !parsed.data?.tournament) throw new Error('That file isn’t a tournament saved from this generator.')
-  if ((parsed.version ?? 0) > VERSION) throw new Error('That file was saved by a newer version of the generator. Update and try again.')
+  if (parsed.app !== APP || !parsed.data?.tournament) throw new Error(t('ui.app.fileNotFromHere'))
+  if ((parsed.version ?? 0) > VERSION) throw new Error(t('ui.app.fileTooNew'))
   const base = initialState()
   const d = parsed.data
   return {

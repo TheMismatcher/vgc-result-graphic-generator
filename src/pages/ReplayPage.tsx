@@ -7,6 +7,8 @@ import { fetchReplay, findSetGames, replayId, summarize, type ReplayGame } from 
 import { PlayerEditor } from '../components/PlayerEditor'
 import { Preview } from '../components/Preview'
 import { Button, Card, Field, Input, Select, Textarea } from '../components/ui'
+import { rich } from '../components/rich'
+import { t } from '../i18n'
 
 export function ReplayPage({ state, setState }: { state: AppState; setState: (fn: (s: AppState) => AppState) => void }) {
   const event = eventInfo(state.tournament)
@@ -21,14 +23,14 @@ export function ReplayPage({ state, setState }: { state: AppState; setState: (fn
 
   const load = async () => {
     const ids = [...new Set(match.links.split(/\s+/).map(replayId).filter((id): id is string => Boolean(id)))]
-    if (!ids.length) return setError('Paste a replay link, e.g. https://replay.pokemonshowdown.com/gen9…-123456')
+    if (!ids.length) return setError(t('ui.replay.pasteLink'))
     setBusy(true)
     setError('')
     try {
-      setStatus('Loading replay…')
+      setStatus(t('ui.replay.loading'))
       let games: ReplayGame[] = await Promise.all(ids.map(fetchReplay))
       if (ids.length === 1 && games[0].setId) {
-        setStatus('Looking for the other games in this set…')
+        setStatus(t('ui.replay.lookingForGames'))
         games = await findSetGames(games[0])
       }
       games.sort((a, b) => (a.game ?? 0) - (b.game ?? 0))
@@ -42,20 +44,20 @@ export function ReplayPage({ state, setState }: { state: AppState; setState: (fn
         gamesPlayed: sum.gamesPlayed,
       })
 
-      const notes = [`Loaded ${games.length} game${games.length === 1 ? '' : 's'}.`]
+      const notes = [t('ui.replay.loaded', { count: games.length })]
       const { bestOf, gamesPlayed, fromScoreboard } = sum
       if (bestOf > 1) {
-        const result = `${sum.names[0]} ${sum.score[0]}–${sum.score[1]} ${sum.names[1]}`
+        const result = t('ui.replay.resultLine', { name1: sum.names[0], score1: sum.score[0], score2: sum.score[1], name2: sum.names[1] })
         const finished = Math.max(...sum.score) >= Math.ceil(bestOf / 2)
         if (finished) {
-          notes.push(`Best-of-${bestOf} set: ${result} in ${gamesPlayed} games${fromScoreboard && games.length < gamesPlayed ? ' (set score read from the last game, so earlier games aren’t needed)' : ''}.`)
+          notes.push(t(fromScoreboard && games.length < gamesPlayed ? 'ui.replay.setDoneFromScoreboard' : 'ui.replay.setDone', { bestOf, result, games: gamesPlayed }))
         } else {
-          notes.push(`Best-of-${bestOf} set so far: ${result} after ${gamesPlayed} game${gamesPlayed === 1 ? '' : 's'}. Paste the final game to get the finished result.`)
+          notes.push(t('ui.replay.setSoFar', { bestOf, result, games: gamesPlayed }))
         }
       }
-      if (!games.some((g) => g.hasTeamSheets)) notes.push("This replay doesn't include team sheets, so items weren't filled in. Add them below.")
+      if (!games.some((g) => g.hasTeamSheets)) notes.push(t('ui.replay.noTeamSheets'))
       const unmatched = [...new Set(games.flatMap((g) => g.unmatched))]
-      if (unmatched.length) notes.push(`Couldn't match: ${unmatched.join(', ')}. Pick those by hand.`)
+      if (unmatched.length) notes.push(t('ui.replay.unmatched', { names: unmatched.join(', ') }))
       setStatus(notes.join(' '))
     } catch (e) {
       setStatus('')
@@ -70,7 +72,7 @@ export function ReplayPage({ state, setState }: { state: AppState; setState: (fn
       ...s,
       players: [...s.players.filter((x) => x.name || x.team.some((m) => m.pokemon)), { ...p, uid: crypto.randomUUID() }],
     }))
-    setStatus(`Added ${p.name || 'player'} to the Standings tab.`)
+    setStatus(p.name ? t('ui.replay.added', { name: p.name }) : t('ui.replay.addedUnnamed'))
   }
 
   const score = (v: number | '') => (v === '' ? 0 : v)
@@ -79,17 +81,17 @@ export function ReplayPage({ state, setState }: { state: AppState; setState: (fn
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div className="space-y-4">
         <Card className="space-y-3">
-          <h2 className="text-lg font-bold text-slate-900">Showdown replay</h2>
+          <h2 className="text-lg font-bold text-slate-900">{t('ui.replay.heading')}</h2>
           <p className="text-sm text-slate-600">
-            Paste a replay link. For a best-of-3, paste the <strong>last game of the set</strong> (Game 2 or 3): it has the final record, so the earlier games aren’t needed. An earlier game only gives the score up to that point.
+            {rich(t('ui.replay.intro'))}
           </p>
           <Textarea
             rows={3}
-            placeholder="https://replay.pokemonshowdown.com/gen9championsvgc2026regmcbo3-…"
+            placeholder={t('ui.replay.linkPlaceholder')}
             value={match.links}
             onChange={(e) => setMatch({ links: e.target.value })}
           />
-          <Button variant="primary" disabled={busy} onClick={load}>{busy ? 'Loading…' : 'Load replay'}</Button>
+          <Button variant="primary" disabled={busy} onClick={load}>{busy ? t('ui.common.loading') : t('ui.replay.loadReplay')}</Button>
           {error && <p className="text-sm text-red-700">{error}</p>}
           {status && <p className="text-sm text-slate-700">{status}</p>}
           {match.games.length > 0 && (
@@ -97,9 +99,9 @@ export function ReplayPage({ state, setState }: { state: AppState; setState: (fn
               {match.games.map((g) => (
                 <li key={g.id} className="flex items-center justify-between gap-2 px-3 py-2">
                   <a className="font-semibold text-blue-700 hover:underline" href={`https://replay.pokemonshowdown.com/${g.id}`} target="_blank" rel="noreferrer">
-                    {g.game ? `Game ${g.game}` : 'Game'}
+                    {g.game ? t('ui.replay.gameN', { n: g.game }) : t('ui.replay.game')}
                   </a>
-                  <span className="text-slate-600">{g.winner ? `${g.winner} won` : 'Tie'}</span>
+                  <span className="text-slate-600">{g.winner ? t('ui.replay.winnerWon', { name: g.winner }) : t('ui.replay.tie')}</span>
                 </li>
               ))}
             </ul>
@@ -107,14 +109,14 @@ export function ReplayPage({ state, setState }: { state: AppState; setState: (fn
         </Card>
 
         <Card className="space-y-3">
-          <h2 className="text-lg font-bold text-slate-900">Result</h2>
-          <p className="text-sm text-slate-500">Filled in from the replay; change anything. Tournament name and format come from the Standings tab.</p>
-          <Field label="Round (optional)">
-            <Input placeholder="e.g. Top 8, Winners Finals" value={match.round} onChange={(e) => setMatch({ round: e.target.value })} />
+          <h2 className="text-lg font-bold text-slate-900">{t('ui.replay.resultHeading')}</h2>
+          <p className="text-sm text-slate-500">{t('ui.replay.resultHint')}</p>
+          <Field label={t('ui.replay.roundLabel')}>
+            <Input placeholder={t('ui.replay.roundPlaceholder')} value={match.round} onChange={(e) => setMatch({ round: e.target.value })} />
           </Field>
           <div className="grid grid-cols-3 gap-3">
             {([0, 1] as const).map((i) => (
-              <Field key={i} label={`${match.players[i].name || `Player ${i + 1}`} wins`}>
+              <Field key={i} label={t('ui.replay.winsLabel', { name: match.players[i].name || t('ui.replay.playerN', { n: i + 1 }) })}>
                 <Input
                   type="number"
                   min={0}
@@ -127,11 +129,11 @@ export function ReplayPage({ state, setState }: { state: AppState; setState: (fn
                 />
               </Field>
             ))}
-            <Field label="Winner">
+            <Field label={t('ui.replay.winner')}>
               <Select value={match.winner ?? ''} onChange={(e) => setMatch({ winner: e.target.value === '' ? null : (Number(e.target.value) as 0 | 1) })}>
-                <option value="">None</option>
-                <option value={0}>{match.players[0].name || 'Player 1'}</option>
-                <option value={1}>{match.players[1].name || 'Player 2'}</option>
+                <option value="">{t('ui.replay.winnerNone')}</option>
+                <option value={0}>{match.players[0].name || t('ui.replay.playerN', { n: 1 })}</option>
+                <option value={1}>{match.players[1].name || t('ui.replay.playerN', { n: 2 })}</option>
               </Select>
             </Field>
           </div>
@@ -141,13 +143,13 @@ export function ReplayPage({ state, setState }: { state: AppState; setState: (fn
           <div key={match.players[i].uid} className="space-y-2">
             <PlayerEditor
               player={match.players[i]}
-              label={`P${i + 1}`}
+              label={t('ui.replay.playerBadge', { n: i + 1 })}
               format={event.format}
               defaultOpen={false}
               onChange={(p) => setPlayer(i, p)}
             />
             <Button variant="ghost" className="text-sm" onClick={() => addToStandings(match.players[i])}>
-              + Add {match.players[i].name || `Player ${i + 1}`} to Standings
+              {t('ui.replay.addToStandings', { name: match.players[i].name || t('ui.replay.playerN', { n: i + 1 }) })}
             </Button>
           </div>
         ))}

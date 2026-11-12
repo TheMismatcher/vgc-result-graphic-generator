@@ -5,6 +5,8 @@
 // Photos are tilted and taken at an angle, so: straighten the image, find the column headers,
 // read the Name column and the Match Record column separately, then pair them row by row.
 
+import { t } from '../i18n'
+
 export interface ScannedStanding {
   place: number
   name: string
@@ -15,6 +17,7 @@ export interface ScannedStanding {
 export interface StandingsScan {
   tournament: string // from "Tournament: …", or ''
   rows: ScannedStanding[]
+  seenRows?: number // how many rows the page seems to have (a warning below says so; kept as a number so merging two reads doesn't parse text)
   warnings?: string[] // things worth a look that aren't one row's fault (rows that seem to be missing, …)
   spare?: { place: number; name: string }[] // names read below the last row (the other read of the same photo may know their records)
 }
@@ -493,7 +496,7 @@ export function enhance(src: HTMLCanvasElement) {
  * again with the lighting evened out and keep whichever read is more complete.
  */
 export async function scanStandingsImage(file: File, onProgress?: (msg: string) => void): Promise<StandingsScan> {
-  if (!file.type.startsWith('image/')) throw new Error('That file isn’t an image.')
+  if (!file.type.startsWith('image/')) throw new Error(t('ui.import.notImage'))
   let first: StandingsScan | undefined
   let firstError: unknown
   try {
@@ -503,7 +506,7 @@ export async function scanStandingsImage(file: File, onProgress?: (msg: string) 
   }
   // Good enough? (No warnings, every row has a name and a record, and few rows are doubtful.)
   if (first && !first.warnings?.length && first.rows.every((r) => r.name && r.record) && first.rows.filter((r) => r.check).length <= first.rows.length * 0.25) return first
-  onProgress?.('Trying again with the lighting evened out…')
+  onProgress?.(t('ui.import.standingsPhoto.retryLight'))
   try {
     const second = await scanOnce(file, onProgress, true)
     if (!first) return second
@@ -548,24 +551,24 @@ function mergeScans(a: StandingsScan, b: StandingsScan): StandingsScan {
       r.check = true
     }
   })
-  const seen = Math.max(0, ...[a, b].flatMap((r) => (r.warnings ?? []).map((w) => Number(w.match(/about (\d+)/)?.[1] ?? 0))))
+  const seen = Math.max(0, a.seenRows ?? 0, b.seenRows ?? 0)
   const warnings: string[] = []
-  if (seen > rows.length) warnings.push(`The page seems to have about ${seen} rows but only ${rows.length} were read; some may be missing.`)
+  if (seen > rows.length) warnings.push(t('ui.import.standingsPhoto.missingRows', { seen, read: rows.length }))
   const noRecord = rows.filter((r) => !r.record).length
-  if (noRecord) warnings.push(`${noRecord} record${noRecord > 1 ? 's' : ''} couldn’t be read.`)
-  return { tournament: a.tournament || b.tournament, rows, warnings }
+  if (noRecord) warnings.push(t('ui.import.standingsPhoto.noRecordWarning', { count: noRecord }))
+  return { tournament: a.tournament || b.tournament, rows, warnings, seenRows: seen }
 }
 
 async function scanOnce(file: File, onProgress: ((msg: string) => void) | undefined, evenLight: boolean): Promise<StandingsScan> {
-  onProgress?.('Straightening the photo…')
+  onProgress?.(t('ui.import.standingsPhoto.straightening'))
   let image = straighten(await loadCanvas(file))
   if (evenLight) image = enhance(image)
 
-  onProgress?.('Loading text recognition (first time takes a moment)…')
+  onProgress?.(t('ui.import.ocrLoading'))
   const T = await import('tesseract.js')
   const worker = await T.createWorker('eng')
   try {
-    onProgress?.('Finding the standings table…')
+    onProgress?.(t('ui.import.standingsPhoto.findingTable'))
     await worker.setParameters({ tessedit_pageseg_mode: T.PSM.AUTO })
     let page = await ocr(worker, image)
     // Text reads best around 30px tall. Photos vary (full-size phone shots, shrunk chat images),
@@ -610,7 +613,7 @@ async function scanOnce(file: File, onProgress: ((msg: string) => void) | undefi
       records = page.words.filter((w) => isRecordWord(w.text))
     }
     const record = (masters && records.find((w) => w.y0 > masters.y1)) || records[0] || guessRecordHeader(page.words)
-    if (!record) throw new Error('Couldn’t find the standings table. Use a photo of a TOM “Standings” page with the column headers visible.')
+    if (!record) throw new Error(t('ui.import.standingsPhoto.noTableImage'))
     const cy = (w: Word) => (w.y0 + w.y1) / 2
     const rowH = record.y1 - record.y0
     const header = (re: RegExp) => page.words.find((w) => re.test(clean(w.text)) && Math.abs(cy(w) - cy(record)) < rowH * 4)
@@ -645,9 +648,9 @@ async function scanOnce(file: File, onProgress: ((msg: string) => void) | undefi
 
     await worker.setParameters({ tessedit_pageseg_mode: T.PSM.SINGLE_BLOCK })
     const readColumns = async () => {
-      onProgress?.('Reading names…')
+      onProgress?.(t('ui.import.standingsPhoto.readingNames'))
       const names = (await ocr(worker, crop(image, nameLeft, top, nameRight, bottom), top, nameLeft)).lines.filter((l) => cleanName(l.text).name)
-      onProgress?.('Reading records…')
+      onProgress?.(t('ui.import.standingsPhoto.readingRecords'))
       const recs = (await ocr(worker, crop(image, recLeft, top, recRight, bottom), top, recLeft)).lines.filter((l) => /\d\s*\/\s*\d/.test(l.text) || /\d{3}/.test(l.text))
       return [names, recs]
     }
@@ -700,7 +703,7 @@ async function scanOnce(file: File, onProgress: ((msg: string) => void) | undefi
     const placeEnds = nameLines.flatMap((l) => l.words.slice(0, 3).find((w) => /^\W*\d{1,3}\W*$/.test(w.text))?.x1 ?? [])
     const textLeft = placeEnds.length >= 3 ? median(placeEnds) : nameLeft
     const nameText = (l: Line) => l.words.filter((w) => w.x0 >= textLeft).map((w) => w.text).join(' ')
-    onProgress?.('Double-checking skipped rows…')
+    onProgress?.(t('ui.import.standingsPhoto.doubleChecking'))
     const names: { text: string }[] = []
     const recTexts: string[] = []
     for (let t = 0; t < total; t++) {
@@ -796,7 +799,7 @@ async function scanOnce(file: File, onProgress: ((msg: string) => void) | undefi
     // (A record read with no name is still a row: the name is blank/flagged for the reader to fill.)
     const junk = (r: ScannedStanding, i: number) => i > nameGrid.lastAnchored + offset && (!r.name ? !r.record : !r.record && (r.check || !r.name.includes(' ')))
     while (rows.length && junk(rows[rows.length - 1], rows.length - 1)) rows.pop()
-    if (!rows.length) throw new Error('Couldn’t read any players. Try a sharper, straighter photo.')
+    if (!rows.length) throw new Error(t('ui.import.standingsPhoto.noPlayers'))
 
     // Sanity: every player plays the same number of Swiss rounds (a few fewer if they dropped,
     // a few more in the top cut). A record far outside that is a misread, e.g. a table border
@@ -829,9 +832,9 @@ async function scanOnce(file: File, onProgress: ((msg: string) => void) | undefi
     const lastPlace = nameGrid.lastAnchored >= 0 ? nameGrid.firstPlace + nameGrid.lastAnchored : 0
     // (A photo showing the same table twice, e.g. two windows, doubles the page rows: ignore that count.)
     const seen = pageRows.length > rows.length * 1.8 ? lastPlace : Math.max(pageRows.length, lastPlace)
-    if (seen > rows.length) warnings.push(`The page seems to have about ${seen} rows but only ${rows.length} were read; some may be missing.`)
+    if (seen > rows.length) warnings.push(t('ui.import.standingsPhoto.missingRows', { seen, read: rows.length }))
     const noRecord = rows.filter((r) => !r.record).length
-    if (noRecord) warnings.push(`${noRecord} record${noRecord > 1 ? 's' : ''} couldn’t be read.`)
+    if (noRecord) warnings.push(t('ui.import.standingsPhoto.noRecordWarning', { count: noRecord }))
     // Names that read well below the last row (with a placing that fits): their records may have
     // read in the other pass.
     const spare: { place: number; name: string }[] = []
@@ -843,7 +846,7 @@ async function scanOnce(file: File, onProgress: ((msg: string) => void) | undefi
       const fits = (line.text.match(/\d{1,3}/g) ?? []).some((n) => n.endsWith(String(place)))
       if (fits && c.name.includes(' ')) spare.push({ place, name: cleanName(nameText(line)).name || c.name })
     })
-    return { tournament, rows, warnings, spare }
+    return { tournament, rows, warnings, spare, seenRows: seen }
   } finally {
     await worker.terminate()
   }
