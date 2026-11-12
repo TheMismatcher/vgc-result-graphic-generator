@@ -2,6 +2,7 @@
 
 import { useId, useMemo, useRef, useState } from 'react'
 import { normalize } from '../data/dex'
+import { t } from '../i18n'
 
 export interface Option {
   id: string
@@ -96,7 +97,7 @@ export function Combobox({
         {value && (
           <button
             type="button"
-            aria-label="Clear"
+            aria-label={t('ui.common.clear')}
             className="px-2 text-lg leading-none text-slate-400 hover:text-slate-700"
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => onChange('')}

@@ -3,7 +3,8 @@ import type { AppState, Mon, Player } from '../types'
 import { Button, Field, Input, Select } from './ui'
 import { XMLParser } from 'fast-xml-parser'
 import type { Tournament } from '../types'
-import { TOURNAMENT_TYPES } from '../data/options'
+import { TOURNAMENT_TYPES, eventTypeKey } from '../data/options'
+import { t } from '../i18n'
 
 
 function forceArray(val: any[]) {
@@ -23,7 +24,7 @@ export function TdfUpload({ setState }: { setState: (fn: (s: AppState) => AppSta
 	};
     
     const setSelectedType = (e:string) =>{
-        setType(TOURNAMENT_TYPES.find(t=>t.id == e) ?? TOURNAMENT_TYPES[1]);
+        setType(TOURNAMENT_TYPES.find(x=>x.id == e) ?? TOURNAMENT_TYPES[1]);
     }
 
     const teamBuildFunction = (...mons: [string, string][]): Mon[] => mons.map(([pokemon, item]) => ({ pokemon, item, tera: '' }))
@@ -48,7 +49,7 @@ export function TdfUpload({ setState }: { setState: (fn: (s: AppState) => AppSta
                 const finishedPods = tournamentData.standings.pod.filter((x: { [x: string]: string })=> x['@_type'] == 'finished');
                 
                 // get tournament data
-                const t:Tournament = {
+                const tournament:Tournament = {
                     name: tournamentData.data.name
                     ,type: type.id
                     ,date: new Date(tournamentData.data.startdate).toISOString().split('T')[0]
@@ -137,7 +138,7 @@ export function TdfUpload({ setState }: { setState: (fn: (s: AppState) => AppSta
                     .slice(0, top);
                 
                 setState((s) => ({ ...s 
-                    ,tournament: { ...s.tournament, ...t }
+                    ,tournament: { ...s.tournament, ...tournament }
                     ,players: ps
                     // ,players: result.players
                     // , bracket: result.bracket
@@ -149,7 +150,7 @@ export function TdfUpload({ setState }: { setState: (fn: (s: AppState) => AppSta
         };
 
         reader.onerror = () => {
-            alert("Error reading the file.");
+            alert(t('ui.import.tdf.readError'));
         };
 
         reader.readAsText((file as Blob));
@@ -157,29 +158,29 @@ export function TdfUpload({ setState }: { setState: (fn: (s: AppState) => AppSta
 
   return (
     <div className="space-y-3">
-        <p className="text-sm text-slate-600">Parses standings from a .tdf (XML) file for events run via TOM. All data is processed locally and not retained.</p>
+        <p className="text-sm text-slate-600">{t('ui.import.tdf.intro')}</p>
         <div className="flex flex-col items-start gap-2" style={{width: '100%'}}>
-            <Field label="File Selection">
+            <Field label={t('ui.import.tdf.fileSelection')}>
                 <div className="flex flex-row gap-2" style={{justifyContent: 'space-between', alignItems: 'center'}}>
                     <Button variant='primary'>
-                        <label htmlFor="fileSelect" style={{textWrap: 'nowrap' }}>Select File</label>
+                        <label htmlFor="fileSelect" style={{textWrap: 'nowrap' }}>{t('ui.import.tdf.selectFile')}</label>
                         <input id="fileSelect" name="fileSelect" style={{ display: 'none' }} type="file" onChange={onFileChange} accept='.tdf' />
                     </Button>
-                    <p>{xmlFile ? ` ${xmlFile.name}` : ' No file selected'}</p>
+                    <p>{xmlFile ? ` ${xmlFile.name}` : ` ${t('ui.import.tdf.noFile')}`}</p>
                 </div>
             </Field>
             <div className="flex flex-row align-items" style={{width: '100%', display: 'flex', alignItems: 'end', justifyContent: 'space-between'}}>   
-                <Field label="Type" className="w-90">
+                <Field label={t('ui.tournament.type')} className="w-90">
                     <Select value={type.id} onChange={(e) => setSelectedType(e.target.value)}>
-                        {TOURNAMENT_TYPES.map((t) => (
-                            <option key={t.id} value={t.id}>{t.name}</option>
+                        {TOURNAMENT_TYPES.map((type) => (
+                            <option key={type.id} value={type.id}>{t(eventTypeKey(type.id))}</option>
                         ))}
                     </Select>
                 </Field>
-                <Field label="Top" className="w-20">
+                <Field label={t('ui.common.top')} className="w-20">
                     <Input type="number" min={1} max={64} value={top} onChange={(e) => setTop(Math.max(1, Number(e.target.value) || 1))} />
                 </Field>
-                <Button variant="primary" style={{ height: 'fit-content'}} disabled={!xmlFile} onClick={onImport}>{'Import'}</Button>
+                <Button variant="primary" style={{ height: 'fit-content'}} disabled={!xmlFile} onClick={onImport}>{t('ui.common.import')}</Button>
             </div>
         </div>     
         

@@ -8,6 +8,7 @@ import { photoFrame, photoStyle } from '../templates/shared/parts'
 import { Combobox, type Option } from './Combobox'
 import { Button, Input, Select, Textarea } from './ui'
 import { useDialog } from './Dialog'
+import { t } from '../i18n'
 import { ScreenshotImport } from './ScreenshotImport'
 import { TeamSheetImport } from './TeamSheetImport'
 
@@ -46,7 +47,7 @@ export function PlayerEditor({
       <div className="flex items-center gap-2 p-3">
         <span className="flex h-9 w-12 shrink-0 items-center justify-center rounded-lg bg-slate-900 text-sm font-black italic text-white">{label}</span>
         <button type="button" className="flex min-w-0 flex-1 items-center gap-1 text-left" onClick={() => setOpen(!open)} aria-expanded={open}>
-          <span className="truncate font-semibold text-slate-900">{player.name || 'New player'}</span>
+          <span className="truncate font-semibold text-slate-900">{player.name || t('ui.player.new')}</span>
           <span className="hidden shrink-0 sm:flex">
             {player.team.filter((m) => m.pokemon).map((m, i) => (
               <img key={i} src={sprites.icon(m.pokemon)} alt={getPokemon(m.pokemon)?.name} className="h-8 w-8" />
@@ -55,17 +56,17 @@ export function PlayerEditor({
         </button>
         {onMove && (
           <>
-            <Button variant="ghost" aria-label="Move up" disabled={isFirst} onClick={() => onMove(-1)}>↑</Button>
-            <Button variant="ghost" aria-label="Move down" disabled={isLast} onClick={() => onMove(1)}>↓</Button>
+            <Button variant="ghost" aria-label={t('ui.player.moveUp')} disabled={isFirst} onClick={() => onMove(-1)}>↑</Button>
+            <Button variant="ghost" aria-label={t('ui.player.moveDown')} disabled={isLast} onClick={() => onMove(1)}>↓</Button>
           </>
         )}
         {onRemove && (
           <Button
             variant="danger"
-            aria-label={`Remove ${player.name || 'player'}`}
-            title="Remove player"
+            aria-label={player.name ? t('ui.player.removeLabel', { name: player.name }) : t('ui.player.removeTitle')}
+            title={t('ui.player.removeTitle')}
             onClick={async () => {
-              if (await dialog.confirm(`Remove ${player.name || 'this player'}?`, 'Remove')) onRemove()
+              if (await dialog.confirm(player.name ? t('ui.player.removeConfirm', { name: player.name }) : t('ui.player.removeConfirmUnnamed'), t('ui.common.remove'))) onRemove()
             }}
           >
             <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4" aria-hidden="true">
@@ -73,15 +74,15 @@ export function PlayerEditor({
             </svg>
           </Button>
         )}
-        <Button variant="ghost" aria-label={open ? 'Collapse' : 'Expand'} onClick={() => setOpen(!open)}>{open ? '▾' : '▸'}</Button>
+        <Button variant="ghost" aria-label={open ? t('ui.player.collapse') : t('ui.player.expand')} onClick={() => setOpen(!open)}>{open ? '▾' : '▸'}</Button>
       </div>
 
       {open && (
         <div className="space-y-3 border-t border-slate-100 p-3">
           <div className="grid gap-2 sm:grid-cols-3">
-            <Input placeholder="Player name" value={player.name} onChange={(e) => set('name', e.target.value)} />
-            <Input placeholder="Record (e.g. 6-1-0)" value={player.record} onChange={(e) => set('record', e.target.value)} />
-            <Input placeholder="Social (e.g. @handle)" value={player.social} onChange={(e) => set('social', e.target.value)} />
+            <Input placeholder={t('ui.player.namePlaceholder')} value={player.name} onChange={(e) => set('name', e.target.value)} />
+            <Input placeholder={t('ui.player.recordPlaceholder')} value={player.record} onChange={(e) => set('record', e.target.value)} />
+            <Input placeholder={t('ui.player.socialPlaceholder')} value={player.social} onChange={(e) => set('social', e.target.value)} />
           </div>
 
           <PhotoField player={player} onChange={onChange} />
@@ -100,27 +101,27 @@ export function PlayerEditor({
           )}
           {!showImport && (
             <div className="flex flex-wrap gap-2">
-              <Button onClick={() => setShowImport('paste')}>Import from Pokepaste</Button>
-              <Button onClick={() => setShowImport('screenshot')}>Import from screenshot</Button>
-              <Button onClick={() => setShowImport('sheet')}>Import from team list</Button>
+              <Button onClick={() => setShowImport('paste')}>{t('ui.player.importPokepaste')}</Button>
+              <Button onClick={() => setShowImport('screenshot')}>{t('ui.player.importScreenshot')}</Button>
+              <Button onClick={() => setShowImport('sheet')}>{t('ui.player.importTeamList')}</Button>
             </div>
           )}
 
           <div className="grid gap-2 sm:grid-cols-2">
             {player.team.map((mon, i) => (
               <div key={i} className="space-y-1.5 rounded-xl bg-slate-50 p-2">
-                <Combobox options={POKEMON_OPTIONS} value={mon.pokemon} placeholder={`Pokémon ${i + 1}`} onChange={(id) => setMon(i, { pokemon: id })} pixelated />
+                <Combobox options={POKEMON_OPTIONS} value={mon.pokemon} placeholder={t('ui.player.monPlaceholder', { n: i + 1 })} onChange={(id) => setMon(i, { pokemon: id })} pixelated />
                 <div className="flex gap-1.5">
                   {format.items && (
                     <div className="min-w-0 flex-1">
-                      <Combobox options={ITEM_OPTIONS} value={mon.item} placeholder="Item" onChange={(id) => setMon(i, { item: id })} />
+                      <Combobox options={ITEM_OPTIONS} value={mon.item} placeholder={t('ui.common.item')} onChange={(id) => setMon(i, { item: id })} />
                     </div>
                   )}
                   {format.tera && (
-                    <Select className="w-28 py-1.5" value={mon.tera} onChange={(e) => setMon(i, { tera: e.target.value })} aria-label="Tera type">
-                      <option value="">Tera</option>
-                      {TERA_TYPES.map((t) => (
-                        <option key={t.id} value={t.id}>{t.name}</option>
+                    <Select className="w-28 py-1.5" value={mon.tera} onChange={(e) => setMon(i, { tera: e.target.value })} aria-label={t('ui.player.teraLabel')}>
+                      <option value="">{t('ui.player.teraNone')}</option>
+                      {TERA_TYPES.map((tera) => (
+                        <option key={tera.id} value={tera.id}>{tera.name}</option>
                       ))}
                     </Select>
                   )}
@@ -147,7 +148,7 @@ function PhotoField({ player, onChange }: { player: Player; onChange: (p: Player
     try {
       onChange({ ...player, photo: await resizePhoto(file), photoY: 30, photoX: undefined, photoZoom: undefined })
     } catch (e) {
-      dialog.notify(e instanceof Error ? e.message : "Couldn't read that image.")
+      dialog.notify(e instanceof Error ? e.message : t('ui.player.readImageError'))
     } finally {
       setBusy(false)
     }
@@ -165,17 +166,17 @@ function PhotoField({ player, onChange }: { player: Player; onChange: (p: Player
       <div className="min-w-0 flex-1 space-y-1.5">
         <div className="flex flex-wrap items-center gap-2">
           <label className="inline-flex cursor-pointer items-center rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50 focus-within:ring-2 focus-within:ring-blue-200">
-            {busy ? 'Loading…' : player.photo ? 'Change photo' : 'Add photo'}
+            {busy ? t('ui.common.loading') : player.photo ? t('ui.player.changePhoto') : t('ui.player.addPhoto')}
             <input type="file" accept="image/*" className="sr-only" onChange={(e) => { upload(e.target.files?.[0]); e.target.value = '' }} />
           </label>
           {player.photo && (
-            <Button variant="danger" className="py-1.5" onClick={() => onChange({ ...player, photo: undefined, photoY: undefined, photoX: undefined, photoZoom: undefined, photoFit: undefined })}>Remove</Button>
+            <Button variant="danger" className="py-1.5" onClick={() => onChange({ ...player, photo: undefined, photoY: undefined, photoX: undefined, photoZoom: undefined, photoFit: undefined })}>{t('ui.common.remove')}</Button>
           )}
-          {!player.photo && <span className="text-xs text-slate-500">Used by the photo templates</span>}
+          {!player.photo && <span className="text-xs text-slate-500">{t('ui.player.photoHint')}</span>}
         </div>
         {player.photo && (
           <label className="flex items-center gap-2 text-xs text-slate-500">
-            Framing
+            {t('ui.player.framing')}
             <input type="range" min={0} max={100} value={y} className="w-full accent-[#b3121b]" onChange={(e) => onChange({ ...player, photoY: Number(e.target.value) })} />
           </label>
         )}
@@ -195,7 +196,7 @@ function TeamImport({ onDone, onCancel }: { onDone: (team: Mon[]) => void; onCan
     setError('')
     try {
       const { team, unmatched } = await importTeam(text)
-      if (unmatched.length) dialog.notify(`Imported, but couldn't match: ${unmatched.join(', ')}. Pick those by hand.`)
+      if (unmatched.length) dialog.notify(t('ui.import.pokepaste.unmatched', { names: unmatched.join(', ') }))
       onDone(team)
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
@@ -206,11 +207,11 @@ function TeamImport({ onDone, onCancel }: { onDone: (team: Mon[]) => void; onCan
 
   return (
     <div className="space-y-2 rounded-xl border border-blue-200 bg-blue-50 p-3">
-      <Textarea rows={4} autoFocus placeholder="https://pokepast.es/… or paste a Showdown team export" value={text} onChange={(e) => setText(e.target.value)} />
+      <Textarea rows={4} autoFocus placeholder={t('ui.import.pokepaste.placeholder')} value={text} onChange={(e) => setText(e.target.value)} />
       {error && <p className="text-sm text-red-700">{error}</p>}
       <div className="flex gap-2">
-        <Button variant="primary" disabled={busy} onClick={run}>{busy ? 'Importing…' : 'Import team'}</Button>
-        <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+        <Button variant="primary" disabled={busy} onClick={run}>{busy ? t('ui.common.importing') : t('ui.import.pokepaste.importTeam')}</Button>
+        <Button variant="ghost" onClick={onCancel}>{t('ui.common.cancel')}</Button>
       </div>
     </div>
   )

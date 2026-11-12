@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { t, type UiKey } from './i18n'
 import { BrandContext, resolveBrand } from './brand'
 import { BackdropContext, DEFAULT_OPACITY } from './lib/backdrop'
 import { DEFAULT_LOOKS, DisplayContext, type Display } from './lib/display'
@@ -17,20 +18,23 @@ import { useDialog } from './components/Dialog'
 
 type Tab = 'standings' | 'usage' | 'replay' | 'teamBattle' | 'day2' | 'branding'
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: 'standings', label: 'Standings' },
-  { id: 'usage', label: 'Usage' },
-  { id: 'replay', label: 'Replay' },
-  { id: 'teamBattle', label: 'Team Battle' },
-  { id: 'day2', label: 'Event Results' },
-  { id: 'branding', label: 'Branding' },
+const TABS: { id: Tab; label: UiKey }[] = [
+  { id: 'standings', label: 'ui.app.tab.standings' },
+  { id: 'usage', label: 'ui.app.tab.usage' },
+  { id: 'replay', label: 'ui.app.tab.replay' },
+  { id: 'teamBattle', label: 'ui.app.tab.teamBattle' },
+  { id: 'day2', label: 'ui.app.tab.day2' },
+  { id: 'branding', label: 'ui.app.tab.branding' },
 ]
 
 export default function App() {
   const dialog = useDialog()
+  useEffect(() => {
+    document.title = t('ui.app.pageTitle')
+  }, [])
   // First-time visitors start with the sample tournament so the graphics aren't empty.
   const [state, setState] = usePersistentState(sampleState, () =>
-    dialog.notify("Couldn't save your work in this browser (storage is full). Everything still works, but it will be lost on refresh. Removing some player photos frees space."),
+    dialog.notify(t('ui.app.storageFull')),
   )
   const [tab, setTab] = useState<Tab>('standings')
   const brand = resolveBrand(state.brand)
@@ -52,7 +56,7 @@ export default function App() {
   // offer to save it to a file first.
   const reset = async (next: typeof state, message: string) => {
     if (!isUnchanged(state, [sampleState(), initialState()])) {
-      const choice = await dialog.choose(`${message}\n\nYou have your own data on screen. Save it to a file first?`, ['Save file first', 'Proceed'])
+      const choice = await dialog.choose(t('ui.app.ownDataPrompt', { message }), [t('ui.app.saveFirst'), t('ui.app.proceed')])
       if (choice === null) return
       if (choice === 0) saveTournamentFile(state)
     }
@@ -79,15 +83,15 @@ export default function App() {
             brand.logo && <img src={brand.logo} alt="" className="h-14 w-14 rounded-full bg-white object-cover sm:h-16 sm:w-16" />
           )}
           <div className="mr-auto">
-            <h1 className="text-xl font-black italic uppercase tracking-tight text-white sm:text-2xl">Standings Generator</h1>
+            <h1 className="text-xl font-black italic uppercase tracking-tight text-white sm:text-2xl">{t('ui.app.title')}</h1>
             <p className="text-sm text-slate-400">{[brand.name, brand.tagline].filter(Boolean).join(' · ')}</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => saveTournamentFile(state)} title="Save this tournament to a file">
-              Save file
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => saveTournamentFile(state)} title={t('ui.app.saveFileTitle')}>
+              {t('ui.app.saveFile')}
             </Button>
-            <label className="inline-flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm font-semibold text-slate-300 transition hover:bg-white/10 focus-within:ring-2 focus-within:ring-blue-300" title="Open a saved tournament file">
-              Open file
+            <label className="inline-flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm font-semibold text-slate-300 transition hover:bg-white/10 focus-within:ring-2 focus-within:ring-blue-300" title={t('ui.app.openFileTitle')}>
+              {t('ui.app.openFile')}
               <input
                 type="file"
                 accept=".json,application/json"
@@ -98,30 +102,30 @@ export default function App() {
                   if (!file) return
                   try {
                     const next = await openTournamentFile(file, state)
-                    if (await dialog.confirm(`Open "${next.tournament.name || file.name}"? This replaces what's on screen now.`, 'Open')) setState(next)
+                    if (await dialog.confirm(t('ui.app.openConfirm', { name: next.tournament.name || file.name }), t('ui.app.open'))) setState(next)
                   } catch (err) {
                     dialog.notify(err instanceof Error ? err.message : String(err))
                   }
                 }}
               />
             </label>
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...sampleState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels, templates: state.templates }, 'Load sample replaces everything on every tab (standings, usage, bracket, replay, team battle, and regional results). Branding and the selected templates are kept.')}>
-              Load sample
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...sampleState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels, templates: state.templates }, t('ui.app.loadSampleMessage'))}>
+              {t('ui.app.loadSample')}
             </Button>
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...initialState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels }, 'Start over clears the tournament, players, usage, bracket, replay, team battle, and regional results. Branding is kept.')}>
-              Start over
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...initialState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels }, t('ui.app.startOverMessage'))}>
+              {t('ui.app.startOver')}
             </Button>
           </div>
         </div>
         <nav className="mx-auto flex max-w-7xl flex-wrap gap-1 px-4">
-          {TABS.map((t) => (
+          {TABS.map((tabItem) => (
             <button
-              key={t.id}
+              key={tabItem.id}
               type="button"
-              onClick={() => setTab(t.id)}
-              className={`shrink-0 whitespace-nowrap rounded-t-lg px-3 py-2 text-sm font-bold uppercase tracking-wide sm:px-5 ${tab === t.id ? 'bg-slate-100 text-slate-900' : 'text-slate-400 hover:text-white'}`}
+              onClick={() => setTab(tabItem.id)}
+              className={`shrink-0 whitespace-nowrap rounded-t-lg px-3 py-2 text-sm font-bold uppercase tracking-wide sm:px-5 ${tab === tabItem.id ? 'bg-slate-100 text-slate-900' : 'text-slate-400 hover:text-white'}`}
             >
-              {t.label}
+              {t(tabItem.label)}
             </button>
           ))}
           <a
@@ -130,6 +134,7 @@ export default function App() {
             rel="noopener noreferrer"
             className="shrink-0 whitespace-nowrap rounded-t-lg px-3 py-2 text-sm font-bold uppercase tracking-wide text-slate-400 hover:text-white sm:px-5"
           >
+            {/* i18n-ignore: event name */}
             DMV Invitational
           </a>
           <a
@@ -138,7 +143,7 @@ export default function App() {
             rel="noopener noreferrer"
             className="shrink-0 whitespace-nowrap rounded-t-lg px-3 py-2 text-sm font-bold uppercase tracking-wide text-slate-400 hover:text-white sm:px-5"
           >
-            Bot Configuration
+            {t('ui.app.tab.botConfig')}
           </a>
         </nav>
       </header>

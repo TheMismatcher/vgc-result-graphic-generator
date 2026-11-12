@@ -8,6 +8,8 @@ import { newPlayer } from '../lib/state'
 import { playerNameMatch, readTeamSheets, type SheetMon, type TeamSheet } from '../lib/teamSheet'
 import { SheetReview, toTeam, unsureCount } from './TeamSheetImport'
 import { Button, Select } from './ui'
+import { rich } from './rich'
+import { t } from '../i18n'
 
 const NEW = '__new__'
 const SKIP = ''
@@ -57,15 +59,15 @@ export function BulkTeamSheetImport({ players, onApply, onCancel }: { players: P
     const found: Entry[] = []
     const failed: string[] = []
     for (const [i, file] of list.entries()) {
-      const prefix = list.length > 1 ? `File ${i + 1} of ${list.length} (${file.name}): ` : ''
-      setBusy(prefix + 'starting…')
+      const progress = (status: string) => (list.length > 1 ? t('ui.import.teamSheet.fileProgress', { i: i + 1, total: list.length, name: file.name, status }) : status)
+      setBusy(progress(t('ui.import.teamSheet.starting')))
       try {
-        const sheets = await readTeamSheets(file, (m) => setBusy(prefix + m))
+        const sheets = await readTeamSheets(file, (m) => setBusy(progress(m)))
         sheets.forEach((sheet, j) =>
-          found.push({ id: crypto.randomUUID(), source: sheets.length > 1 ? `${file.name} · sheet ${j + 1}` : file.name, sheet, target: SKIP, open: false }),
+          found.push({ id: crypto.randomUUID(), source: sheets.length > 1 ? t('ui.import.teamSheet.sourceSheet', { name: file.name, n: j + 1 }) : file.name, sheet, target: SKIP, open: false }),
         )
       } catch (e) {
-        failed.push(`${file.name}: ${e instanceof Error ? e.message : String(e)}`)
+        failed.push(t('ui.import.teamSheet.fileError', { name: file.name, message: e instanceof Error ? e.message : String(e) }))
       }
     }
     setBusy('')
@@ -94,14 +96,14 @@ export function BulkTeamSheetImport({ players, onApply, onCancel }: { players: P
   return (
     <div className="space-y-3 rounded-xl border border-blue-200 bg-blue-50 p-3">
       <p className="text-sm text-slate-700">
-        Add everyone’s <strong>team lists</strong> at once: photos, scans, screenshots, or PDFs (a PDF can hold a page per player), of the paper form or of Regionals / International team sheets. Each one is matched to a player by the name on the sheet. Everything is read in your browser and not uploaded.
+        {rich(t('ui.import.teamSheet.bulkIntro'))}
       </p>
       <div className="flex flex-wrap items-center gap-2">
         <label className="inline-flex cursor-pointer items-center rounded-lg bg-[#b3121b] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#8f0e15] focus-within:ring-2 focus-within:ring-blue-300">
-          {entries.length ? 'Add more team lists' : 'Choose team lists'}
+          {entries.length ? t('ui.import.teamSheet.addMore') : t('ui.import.teamSheet.chooseMany')}
           <input type="file" multiple accept="image/*,.heic,.heif,application/pdf,.pdf" className="sr-only" disabled={!!busy} onChange={(e) => { read(e.target.files); e.target.value = '' }} />
         </label>
-        <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+        <Button variant="ghost" onClick={onCancel}>{t('ui.common.cancel')}</Button>
         {busy && <span className="text-sm text-slate-600" role="status">{busy}</span>}
       </div>
       {errors.length > 0 && (
@@ -121,35 +123,35 @@ export function BulkTeamSheetImport({ players, onApply, onCancel }: { players: P
                 <li key={e.id} className={`rounded-lg border bg-white p-2 ${e.target ? 'border-slate-200' : 'border-slate-200 opacity-70'}`}>
                   <div className="flex flex-wrap items-center gap-2">
                     <div className="min-w-0 flex-1">
-                      <div className="truncate text-sm font-semibold text-slate-900">{e.sheet.player ? `“${e.sheet.player}”` : 'No readable name'}</div>
+                      <div className="truncate text-sm font-semibold text-slate-900">{e.sheet.player ? t('ui.import.teamSheet.quotedName', { name: e.sheet.player }) : t('ui.import.teamSheet.noName')}</div>
                       <div className="truncate text-xs text-slate-500">{e.source}</div>
                     </div>
-                    <Select aria-label="Player for this team list" className="w-auto" value={e.target} onChange={(ev) => patch(e.id, { target: ev.target.value })}>
-                      <option value={SKIP}>Don’t import</option>
+                    <Select aria-label={t('ui.import.teamSheet.playerSelect')} className="w-auto" value={e.target} onChange={(ev) => patch(e.id, { target: ev.target.value })}>
+                      <option value={SKIP}>{t('ui.import.teamSheet.dontImport')}</option>
                       {players.map((p, i) => {
                         const other = usedBy(p.uid, e.id)
                         return (
                           <option key={p.uid} value={p.uid}>
-                            {i + 1}. {p.name || 'Unnamed player'}{other ? ' (already chosen)' : ''}
+                            {t(other ? 'ui.import.teamSheet.playerOptionTaken' : 'ui.import.teamSheet.playerOption', { n: i + 1, name: p.name || t('ui.import.teamSheet.unnamedPlayer') })}
                           </option>
                         )
                       })}
-                      <option value={NEW}>+ Add as a new player</option>
+                      <option value={NEW}>{t('ui.import.teamSheet.addAsNew')}</option>
                     </Select>
                   </div>
                   <div className="mt-1.5 flex flex-wrap items-center gap-1">
                     {e.sheet.mons.map((m, i) => (
-                      <span key={i} className={`relative rounded-md ${!m.confident || !m.pokemon ? 'bg-amber-100 ring-1 ring-amber-400' : ''}`} title={m.pokemon ? getPokemon(m.pokemon)?.name : `Unread: “${m.written}”`}>
+                      <span key={i} className={`relative rounded-md ${!m.confident || !m.pokemon ? 'bg-amber-100 ring-1 ring-amber-400' : ''}`} title={m.pokemon ? getPokemon(m.pokemon)?.name : t('ui.import.teamSheet.unread', { written: m.written })}>
                         {m.pokemon ? <img src={sprites.icon(m.pokemon)} alt={getPokemon(m.pokemon)?.name} className="h-10 w-10" /> : <span className="flex h-10 w-10 items-center justify-center text-amber-700">?</span>}
                         {m.item && sprites.item(m.item) && <img src={sprites.item(m.item)} alt="" className="absolute bottom-0 right-0 h-4 w-4" />}
                       </span>
                     ))}
                     <Button variant="ghost" className="ml-auto" onClick={() => patch(e.id, { open: !e.open })}>
-                      {e.open ? 'Done' : unsure ? `Check ${unsure}` : 'Edit'}
+                      {e.open ? t('ui.import.teamSheet.done') : unsure ? t('ui.import.teamSheet.checkCount', { count: unsure }) : t('ui.import.teamSheet.edit')}
                     </Button>
                   </div>
-                  {e.target && usedBy(e.target, e.id) && e.target !== NEW && <p className="mt-1 text-xs font-medium text-red-700">Another team list is also going to this player.</p>}
-                  {replaces && <p className="mt-1 text-xs text-slate-500">Replaces {target?.name || 'this player'}’s current team.</p>}
+                  {e.target && usedBy(e.target, e.id) && e.target !== NEW && <p className="mt-1 text-xs font-medium text-red-700">{t('ui.import.teamSheet.sharedTarget')}</p>}
+                  {replaces && <p className="mt-1 text-xs text-slate-500">{target?.name ? t('ui.import.teamSheet.replaces', { name: target.name }) : t('ui.import.teamSheet.replacesUnnamed')}</p>}
                   {e.open && <div className="mt-2"><SheetReview mons={e.sheet.mons} onChange={(i, p) => updateMon(e.id, i, p)} /></div>}
                 </li>
               )
@@ -157,9 +159,9 @@ export function BulkTeamSheetImport({ players, onApply, onCancel }: { players: P
           </ul>
           <div className="flex flex-wrap items-center gap-2">
             <Button variant="primary" disabled={!toApply.length || !!busy} onClick={apply}>
-              Use {toApply.length} team{toApply.length === 1 ? '' : 's'}
+              {t('ui.import.teamSheet.useCount', { count: toApply.length })}
             </Button>
-            {unsureTotal > 0 && <span className="text-sm text-amber-700">{unsureTotal} Pokémon marked to check</span>}
+            {unsureTotal > 0 && <span className="text-sm text-amber-700">{t('ui.import.teamSheet.markedToCheck', { count: unsureTotal })}</span>}
           </div>
         </>
       )}

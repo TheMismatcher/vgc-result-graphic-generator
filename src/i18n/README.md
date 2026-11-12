@@ -45,6 +45,8 @@ dialog.confirm(t('ui.branding.deleteConfirm', { name, builtIn: DMV_BRAND.name })
 - **Whole sentences, with placeholders.** Never glue pieces together (`name + ' wins ' + event`); write
   `"{lastName} wins {event}"` so a translator can change the word order. Same for a sentence with a
   link or bold word inside: one key per sentence, with the link text as a placeholder.
+- **Bold words inside a sentence:** keep the sentence as one key and mark the words `<b>…</b>`, then
+  show it with `rich(t('…'))` from `src/components/rich.tsx` (only `<b>` is supported).
 - **Counts use plurals:** `"{count, plural, one {# player} other {# players}}"` (`#` = the number; `=0 {…}` also works).
 - **Dates, placings, numbers on graphics:** `gtDate(y, m, d)`, `gtOrdinal(n)`, `gtNumber(n)`. Never `toLocaleDateString('en-US')` or an English suffix table.
 - **Official Pokémon / Play! Pokémon terms** shown on both the site and graphics (event types, type

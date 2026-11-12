@@ -9,6 +9,8 @@ import { readStandingsHtml, readStandingsPdf, type StandingsDoc } from '../lib/s
 import { Button, Field, Input } from './ui'
 import { useDialog } from './Dialog'
 import { suggestTopCut } from '../lib/topCut'
+import { rich } from './rich'
+import { t } from '../i18n'
 
 export function StandingsPhotoImport({ setState }: { setState: (fn: (s: AppState) => AppState) => void }) {
   const dialog = useDialog()
@@ -29,7 +31,7 @@ export function StandingsPhotoImport({ setState }: { setState: (fn: (s: AppState
     try {
       const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name)
       const isHtml = file.type === 'text/html' || /\.html?$/i.test(file.name)
-      if (isPdf || isHtml) setBusy('Reading the file…')
+      if (isPdf || isHtml) setBusy(t('ui.import.standingsPhoto.reading'))
       const result = isPdf ? await readStandingsPdf(file) : isHtml ? await readStandingsHtml(file) : await scanStandingsImage(file, setBusy)
       // Photos only show one table; PDFs and report files list every division.
       setCounts(isPdf || isHtml ? (result as StandingsDoc).counts : { masters: result.rows.length })
@@ -50,7 +52,7 @@ export function StandingsPhotoImport({ setState }: { setState: (fn: (s: AppState
 
   const use = async () => {
     if (!rows) return
-    if (!(await dialog.confirm(`Replace the current standings with these ${Math.min(top, rows.length)} players?`, 'Use standings'))) return
+    if (!(await dialog.confirm(t('ui.import.standingsPhoto.confirm', { count: Math.min(top, rows.length) }), t('ui.import.standingsPhoto.use')))) return
     setState((s) => {
       // Keep teams and photos for players already entered under the same name.
       const existing = new Map(s.players.map((p) => [p.name.trim().toLowerCase(), p]))
@@ -81,31 +83,35 @@ export function StandingsPhotoImport({ setState }: { setState: (fn: (s: AppState
   return (
     <div className="space-y-3">
       <p className="text-sm text-slate-600">
-        For events that only post a picture: upload a photo or screenshot of a TOM <strong>Standings</strong> page (column headers visible). A screenshot works best, but even a photo of the standings on a monitor should work. A <strong>PDF</strong> of the standings page (or TOM’s standings .html report) is read exactly. If several divisions are shown, Masters is used. Everything is read in your browser; check it before using. Teams aren’t on standings pages: for <strong>team lists</strong>, use “Import team lists for everyone” under Standings below.
+        {rich(t('ui.import.standingsPhoto.intro'))}
       </p>
       <div className="flex flex-wrap items-center gap-2">
         <label className="inline-flex cursor-pointer items-center rounded-lg bg-[#b3121b] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#8f0e15] focus-within:ring-2 focus-within:ring-blue-300">
-          {rows ? 'Choose another file' : 'Choose photo or PDF'}
+          {rows ? t('ui.import.standingsPhoto.chooseAnother') : t('ui.import.standingsPhoto.choose')}
           <input type="file" accept="image/*,application/pdf,.pdf,.html,.htm" className="sr-only" disabled={!!busy} onChange={(e) => { scan(e.target.files?.[0]); e.target.value = '' }} />
         </label>
         {busy && <span className="text-sm text-slate-600" role="status">{busy}</span>}
       </div>
       {error && (
         <p className="text-sm text-red-700">
-          {error} This reads standings pages only; a team list goes in “Import team lists for everyone” under Standings below.
+          {error} {t('ui.import.standingsPhoto.notStandings')}
         </p>
       )}
 
       {rows && (
         <div className="space-y-3">
           <p className="text-sm text-slate-700">
-            Read {rows.length} players{tournament && ` from “${tournament}”`}
-            {(counts.seniors || counts.juniors) && ` (plus ${counts.seniors ?? 0} Senior, ${counts.juniors ?? 0} Junior)`}. {flagged ? `${flagged} marked “?” may be misread.` : 'Check the names; anything the photo blurred may be misspelled.'}
+            {t('ui.import.standingsPhoto.summary', {
+              count: rows.length,
+              from: tournament ? t('ui.import.standingsPhoto.from', { tournament }) : '',
+              plus: counts.seniors || counts.juniors ? t('ui.import.standingsPhoto.plus', { seniors: counts.seniors ?? 0, juniors: counts.juniors ?? 0 }) : '',
+              check: flagged ? t('ui.import.standingsPhoto.flagged', { count: flagged }) : t('ui.import.standingsPhoto.checkNames'),
+            })}
           </p>
           {warnings.length > 0 && (
             <ul className="list-disc space-y-0.5 rounded-lg border border-amber-300 bg-amber-50 py-2 pl-7 pr-3 text-sm text-amber-900">
               {warnings.map((w) => <li key={w}>{w}</li>)}
-              <li>Compare against the photo before using these.</li>
+              <li>{t('ui.import.standingsPhoto.compare')}</li>
             </ul>
           )}
           <div className="max-h-96 overflow-auto rounded-lg border border-slate-200">
@@ -113,8 +119,8 @@ export function StandingsPhotoImport({ setState }: { setState: (fn: (s: AppState
               <thead className="sticky top-0 bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
                 <tr>
                   <th className="px-2 py-1.5">#</th>
-                  <th className="px-2 py-1.5">Name</th>
-                  <th className="px-2 py-1.5">Record</th>
+                  <th className="px-2 py-1.5">{t('ui.import.standingsPhoto.colName')}</th>
+                  <th className="px-2 py-1.5">{t('ui.import.standingsPhoto.colRecord')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -125,10 +131,10 @@ export function StandingsPhotoImport({ setState }: { setState: (fn: (s: AppState
                       {r.check && <span className="ml-1 font-semibold text-amber-700">?</span>}
                     </td>
                     <td className="px-2 py-1">
-                      <input aria-label={`Name ${r.place}`} className="w-full rounded border border-transparent px-1 py-0.5 hover:border-slate-300 focus:border-blue-500 focus:outline-none" value={r.name} onChange={(e) => update(i, { name: e.target.value })} />
+                      <input aria-label={t('ui.import.standingsPhoto.nameLabel', { place: r.place })} className="w-full rounded border border-transparent px-1 py-0.5 hover:border-slate-300 focus:border-blue-500 focus:outline-none" value={r.name} onChange={(e) => update(i, { name: e.target.value })} />
                     </td>
                     <td className="px-2 py-1">
-                      <input aria-label={`Record ${r.place}`} className="w-24 rounded border border-transparent px-1 py-0.5 tabular-nums hover:border-slate-300 focus:border-blue-500 focus:outline-none" value={r.record} placeholder="W-L-T" onChange={(e) => update(i, { record: e.target.value })} />
+                      <input aria-label={t('ui.import.standingsPhoto.recordLabel', { place: r.place })} className="w-24 rounded border border-transparent px-1 py-0.5 tabular-nums hover:border-slate-300 focus:border-blue-500 focus:outline-none" value={r.record} placeholder={t('ui.import.standingsPhoto.recordPlaceholder')} onChange={(e) => update(i, { record: e.target.value })} />
                     </td>
                   </tr>
                 ))}
@@ -136,20 +142,20 @@ export function StandingsPhotoImport({ setState }: { setState: (fn: (s: AppState
             </table>
           </div>
           <div className="flex flex-wrap items-end gap-2">
-            <Field label="Tournament name" className="min-w-0 flex-1">
+            <Field label={t('ui.tournament.name')} className="min-w-0 flex-1">
               <Input value={tournament} onChange={(e) => setTournament(e.target.value)} />
             </Field>
-            <Field label="Use top" className="w-24">
+            <Field label={t('ui.import.standingsPhoto.useTop')} className="w-24">
               <Input type="number" min={1} max={rows.length} value={top} onChange={(e) => { setTop(Math.max(1, Number(e.target.value) || 1)); setTopFrom('') }} />
             </Field>
-            <Button variant="primary" onClick={use}>Use standings</Button>
+            <Button variant="primary" onClick={use}>{t('ui.import.standingsPhoto.use')}</Button>
           </div>
           {topFrom && (
             <p className="text-xs text-slate-500">
               {topFrom === 'records'
-                ? `Top ${top}: the players who played top cut games.`
-                : `Top ${top}: the official top cut for ${rows.length} players (no top cut games in these standings).`}{' '}
-              Change it if your event used a different cut.
+                ? t('ui.import.standingsPhoto.topPlayed', { top })
+                : t('ui.import.standingsPhoto.topOfficial', { top, count: rows.length })}{' '}
+              {t('ui.import.standingsPhoto.changeCut')}
             </p>
           )}
         </div>

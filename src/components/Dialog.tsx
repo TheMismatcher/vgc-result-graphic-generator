@@ -3,6 +3,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Button } from './ui'
+import { t } from '../i18n'
 
 interface DialogRequest {
   message: string
@@ -38,9 +39,9 @@ export function DialogProvider({ children }: { children: ReactNode }) {
     [],
   )
   const api: DialogApi = {
-    confirm: async (message, confirmLabel = 'OK') => (await open(message, [confirmLabel], true)) === 0,
+    confirm: async (message, confirmLabel = t('ui.common.ok')) => (await open(message, [confirmLabel], true)) === 0,
     notify: async (message) => {
-      await open(message, ['OK'], false)
+      await open(message, [t('ui.common.ok')], false)
     },
     choose: (message, buttons) => open(message, buttons, true),
   }
@@ -74,7 +75,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
           >
             <p id="dialog-message" className="whitespace-pre-line text-slate-800">{current.message}</p>
             <div className="mt-5 flex flex-wrap justify-end gap-2">
-              {current.cancel && <Button variant="ghost" onClick={() => close(null)}>Cancel</Button>}
+              {current.cancel && <Button variant="ghost" onClick={() => close(null)}>{t('ui.common.cancel')}</Button>}
               {current.buttons.map((label, i) =>
                 i === current.buttons.length - 1 ? (
                   <Button key={label} ref={okRef} variant="primary" onClick={() => close(i)}>{label}</Button>

@@ -42,7 +42,7 @@ const AREAS = {
   common: 'Shared (many places)', app: 'Top of the page / tabs', standings: 'Standings tab', usage: 'Usage tab', replay: 'Replay tab',
   teamBattle: 'Team Battle tab', eventResults: 'Event Results tab', branding: 'Branding tab', preview: 'Preview (every tab)',
   picker: 'Style picker (every tab)', player: 'Player editor', bracket: 'Bracket editor', tournament: 'Event details form', import: 'Imports',
-  dialog: 'Dialogs', facts: 'Facts line under the title', eventType: 'Event types', sportsPage: 'Sports Page',
+  dialog: 'Dialogs', limitless: 'Limitless', tdf: 'TOM file (.tdf)', pokepaste: 'Pokepaste / Showdown', teamSheet: 'Team lists', screenshot: 'Team screenshot', standingsPhoto: 'Standings photo', facts: 'Facts line under the title', eventType: 'Event types', sportsPage: 'Sports Page',
 }
 const camel = (s) => s.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase())
 const area = (k) => {
