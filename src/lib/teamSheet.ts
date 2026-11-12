@@ -83,17 +83,39 @@ const sim = (text: string, name: string) => {
 }
 
 /** Closest name in `list` with its similarity (0-1), or null when nothing is close enough. */
-function best(text: string, list: string[], min = 0.6): { name: string; score: number } | null {
+function best(text: string, list: string[], min = 0.6, bonus?: (name: string) => number): { name: string; score: number } | null {
   if (!readings(text).length) return null
-  let name = '', score = 0
+  let name = '', score = 0, rank = 0
   for (const n of list) {
-    const s = simAny(text, n)
-    if (s > score) [name, score] = [n, s]
+    const s = simAny(text, n), r = s + (bonus?.(n) ?? 0)
+    // A tie goes to the longer name: "Garchompite Z" fits the writing at least as well as "Garchompite".
+    if (r > rank || (r === rank && r > 0 && n.length > name.length)) [name, score, rank] = [n, s, r]
   }
   return score >= min ? { name, score } : null
 }
 
 const ITEM_NAMES = ITEMS.map((i) => i.name)
+// Items players actually run. A rough read that's as close to one of these as to a look-alike
+// nobody uses ("S4ras Berry": Sitrus or Oran?) goes to the common one.
+const COMMON_ITEMS = new Set(['Sitrus Berry', 'Leftovers', 'Focus Sash', 'Life Orb', 'Choice Scarf', 'Choice Specs', 'Choice Band',
+  'Assault Vest', 'Rocky Helmet', 'Safety Goggles', 'Covert Cloak', 'Clear Amulet', 'Lum Berry', 'White Herb', 'Mental Herb',
+  'Booster Energy', 'Grassy Seed', 'Electric Seed', 'Psychic Seed', 'Expert Belt', 'Light Clay', 'Shell Bell', 'Eviolite', 'Mystic Water', 'Charcoal', 'Miracle Seed',
+  'Black Glasses', 'Sharp Beak', 'Magnet', 'Never-Melt Ice', 'Spell Tag', 'Twisted Spoon', 'Dragon Fang', 'Soft Sand',
+  'Silk Scarf', 'Metal Coat', 'Black Belt', 'Poison Barb', 'Hard Stone', 'Silver Powder', 'Fairy Feather', 'Throat Spray',
+  'Weakness Policy', 'Wide Lens', 'Scope Lens', 'King\'s Rock', 'Quick Claw', 'Bright Powder', 'Muscle Band', 'Wise Glasses',
+  'Chople Berry', 'Colbur Berry', 'Occa Berry', 'Passho Berry', 'Wacan Berry', 'Rindo Berry', 'Yache Berry', 'Shuca Berry',
+  'Coba Berry', 'Payapa Berry', 'Tanga Berry', 'Kasib Berry', 'Haban Berry', 'Babiri Berry', 'Charti Berry', 'Kebia Berry',
+  'Roseli Berry', 'Chilan Berry', 'Mirror Herb', 'Loaded Dice', 'Punching Glove', 'Room Service', 'Red Card', 'Eject Button',
+  'Eject Pack', 'Iron Ball', 'Toxic Orb', 'Flame Orb', 'Damp Rock', 'Heat Rock', 'Smooth Rock', 'Icy Rock', 'Terrain Extender',
+  'Ability Shield', 'Adrenaline Orb', 'Big Root', 'Binding Band', 'Grip Claw', 'Custap Berry', 'Salac Berry', 'Liechi Berry',
+  'Petaya Berry', 'Aguav Berry', 'Figy Berry', 'Iapapa Berry', 'Mago Berry', 'Wiki Berry', 'Leppa Berry', 'Kee Berry', 'Maranga Berry'])
+// How often each Pokémon / item shows up on real Champions teams (public/data/usage.json), 0-1.
+let usage: { species: Record<string, number>; items: Record<string, number>; held: Record<string, Record<string, number>> } = { species: {}, items: {}, held: {} }
+const usageShare = (table: Record<string, number>, id: string) => {
+  const top = Math.max(1, ...Object.values(table))
+  return Math.log1p(table[id] ?? 0) / Math.log1p(top)
+}
+const commonBonus = (name: string) => Math.max(COMMON_ITEMS.has(name) ? 0.03 : 0, 0.05 * usageShare(usage.items, key(name)))
 const itemIdByName = new Map(ITEMS.map((i) => [i.name, i.id]))
 const NATURES = ['Hardy', 'Lonely', 'Brave', 'Adamant', 'Naughty', 'Bold', 'Docile', 'Relaxed', 'Impish', 'Lax', 'Timid', 'Hasty', 'Serious', 'Jolly', 'Naive', 'Modest', 'Mild', 'Quiet', 'Bashful', 'Rash', 'Calm', 'Gentle', 'Sassy', 'Careful', 'Quirky']
 
@@ -105,6 +127,8 @@ interface Candidate {
   fullyEvolved: number
   bst: number
   legal: boolean // in Pokémon Champions
+  popular: number // 0-1, how often it's on real Champions teams
+  sid: string // Showdown id
 }
 
 // Pokémon available in Pokémon Champions (Showdown's champions mod formats-data: every species
@@ -113,7 +137,11 @@ interface Candidate {
 interface Legal { species: Set<string>; items: string[] } // Showdown ids / item names
 let legalList: Promise<Legal> | null = null
 const loadLegal = () =>
-  (legalList ??= fetch(asset('data/champions-legal.json'))
+  (legalList ??= fetch(asset('data/usage.json'))
+    .then((r) => r.json())
+    .then((d) => { usage = { species: d.species ?? {}, items: d.items ?? {}, held: d.held ?? {} } })
+    .catch(() => {})
+    .then(() => fetch(asset('data/champions-legal.json')))
     .then((r) => r.json())
     .then((d: { species: string[]; items: string[] }) => {
       const items = new Set(d.items)
@@ -122,6 +150,15 @@ const loadLegal = () =>
     .catch(() => ({ species: new Set<string>(), items: ITEM_NAMES })))
 
 const REGIONAL_WORD: Record<string, string> = { Alolan: 'Alola', Galarian: 'Galar', Hisuian: 'Hisui', Paldean: 'Paldea' }
+
+let holders: Map<number, number> | null = null
+/** How many Champions Pokémon have each ability. */
+function abilityHolders(cands: Candidate[]) {
+  if (holders) return holders
+  holders = new Map()
+  for (const c of cands) if (c.legal) for (const a of c.abilities) holders.set(a, (holders.get(a) ?? 0) + 1)
+  return holders
+}
 
 let candidateList: Candidate[] | null = null
 function candidatesFrom(data: ScanData, legal: Set<string>): Candidate[] {
@@ -147,7 +184,7 @@ function candidatesFrom(data: ScanData, legal: Set<string>): Candidate[] {
       if (/-male$/.test(id)) aliases.add(`${p.species} Male`).add(`${p.species} M`)
       if (/-female$/.test(id)) aliases.add(`${p.species} Female`).add(`${p.species} F`)
     }
-    candidateList.push({ id, aliases: [...aliases], abilities, learn: new Set(learn), fullyEvolved, bst, legal: !legal.size || legal.has(key(name)) })
+    candidateList.push({ id, aliases: [...aliases], abilities, learn: new Set(learn), fullyEvolved, bst, legal: !legal.size || legal.has(key(name)), popular: usageShare(usage.species, key(name)), sid: key(name) })
   }
   return candidateList
 }
@@ -200,9 +237,15 @@ const STONES = ITEMS.filter((i) => i.mega?.length)
 
 function identify(data: ScanData, legal: Legal, box: Box): SheetMon {
   const [pokemonRow = '', secondRow = '', abilityRow = '', itemRow = '', ...moveRows] = box
-  const nature = best(secondRow, NATURES, 0.7)?.name ?? ''
+  // Players sometimes write the ability and the nature in each other's rows. Only then (the
+  // nature row doesn't read as a nature but does as an ability, better than the ability row)
+  // swap them.
+  const abilitySim = (t: string) => best(t, data.abilities, 0)?.score ?? 0
+  const swapped = !best(secondRow, NATURES, 0.7) && abilitySim(secondRow) >= 0.6 && abilitySim(secondRow) > abilitySim(abilityRow) && !!best(abilityRow, NATURES, 0.55)
+  const traitRows = swapped ? secondRow : abilityRow
+  const nature = best(swapped ? abilityRow : secondRow, NATURES, 0.7)?.name ?? ''
   // Items from the Champions item list; anything else only when written out clearly.
-  const itemMatch = best(itemRow, legal.items, 0.66) ?? best(itemRow, ITEM_NAMES, 0.9)
+  const itemMatch = best(itemRow, legal.items, 0.66, commonBonus) ?? best(itemRow, ITEM_NAMES, 0.9)
   let item = itemMatch ? itemIdByName.get(itemMatch.name) ?? '' : ''
 
   // "Mega Raichu Y" is written as Raichu holding its stone.
@@ -215,7 +258,7 @@ function identify(data: ScanData, legal: Legal, box: Box): SheetMon {
   // Soft evidence: every ability/move/stone the writing could be, with how close it is. Each
   // candidate is scored on the closest one it can actually have, so a rough handwritten read
   // ("Maeonblont") still counts for the Pokémon that learns Moonblast.
-  const abilityHits = matches(abilityRow, data.abilities)
+  const abilityHits = matches(traitRows, data.abilities)
   const abilityTop = bestOf(abilityHits)
   const moveHits = moveRows.map((m) => matches(m, data.moves))
   const plainItem = itemMatch && !getItem(item)?.mega && itemMatch.score >= 0.85 // e.g. Leftovers: not a stone
@@ -225,9 +268,27 @@ function identify(data: ScanData, legal: Legal, box: Box): SheetMon {
       const sv = simAny(itemRow, st.name)
       if (sv >= 0.5) for (const [from] of st.mega!) { const id = resolvePokemon(from); stoneHits.set(id, Math.max(stoneHits.get(id) ?? 0, sv)) }
     }
+  // "…ite Y" / "…ite X": a lone X or Y at the end narrows it to the few X/Y stones (Charizardite,
+  // Mewtwonite, Raichunite) even when the rest is a scrawl. Each counts as a fair stone read (the
+  // closest, if clearly closest, a bit more); the ability and moves pick between them.
+  if (!plainItem)
+    for (const r of readings(itemRow)) {
+      const m = r.match(/^(.*[A-Za-z].*?)\s+([XY])(?:\s+\W{1,2})*\s*$/)
+      if (!m) continue
+      const xy = STONES.filter((st) => st.name.endsWith(` ${m[2]}`))
+        .map((st) => ({ st, s: sim(m[1], st.name.slice(0, -2)) }))
+        .sort((a, b) => b.s - a.s)
+      xy.forEach(({ st, s }, i) => {
+        const sv = i === 0 && (xy.length === 1 || s - xy[1].s >= 0.05) ? 0.68 : 0.62
+        for (const [from] of st.mega!) { const id = resolvePokemon(from); stoneHits.set(id, Math.max(stoneHits.get(id) ?? 0, sv)) }
+      })
+    }
   const stoneTop = Math.max(0, ...stoneHits.values())
 
   const cands = candidatesFrom(data, legal.species)
+  // An ability few Pokémon have (Drizzle, Good as Gold, Emergency Exit) all but names the Pokémon.
+  const rarity = (i: number) => { const n = abilityHolders(cands).get(i) ?? 0; return n <= 2 ? 2 : n <= 5 ? 1.5 : 1 }
+  const topAbility = [...abilityHits].reduce((a, b) => (b[1] > a[1] ? b : a), [-1, 0])[0]
   const nameSims = cands.map((c) => (named ? Math.max(...c.aliases.map((a) => simAny(nameText, a))) : 0))
   // A clear name counts for a lot; a garbled one (handwriting) only a little.
   const nameWeight = Math.max(0, ...nameSims) >= 0.7 ? 18 : 8
@@ -236,9 +297,12 @@ function identify(data: ScanData, legal: Legal, box: Box): SheetMon {
     let score = named ? nameWeight * (nameSim - 0.55) : 0
     if (exact && c.id === exact) score += 10
     if (!c.legal) score -= 5
+    // Popular Pokémon are more likely: decides between rough reads that fit two about equally.
+    score += 2.5 * c.popular
     if (abilityTop) {
-      const own = bestOf(abilityHits, (i) => c.abilities.includes(i))
-      score += own ? 10 * (own - 0.5) : -(abilityTop >= 0.8 ? 8 : abilityTop >= 0.6 ? 3 : 0)
+      let own = 0, ownIdx = -1
+      for (const [i, sv] of abilityHits) if (sv > own && c.abilities.includes(i)) [own, ownIdx] = [sv, i]
+      score += own ? 10 * (own - 0.5) * (own >= 0.6 ? rarity(ownIdx) : 1) : -(abilityTop >= 0.8 ? 8 * rarity(topAbility) : abilityTop >= 0.6 ? 3 : 0)
     }
     for (const hits of moveHits) {
       const top = bestOf(hits)
@@ -252,8 +316,15 @@ function identify(data: ScanData, legal: Legal, box: Box): SheetMon {
       score += own ? 24 * (own - 0.5) : -(stoneTop >= 0.8 ? 12 : stoneTop >= 0.7 ? 4 : 0)
     }
     const tie = c.fullyEvolved * 0.8 + c.bst / 1000 // tournament Pokémon are usually fully evolved
-    return { id: c.id, score, total: score + tie, nameSim, learn: c.learn, abilities: c.abilities }
+    return { id: c.id, sid: c.sid, score, total: score + tie, nameSim, learn: c.learn, abilities: c.abilities }
   }).sort((a, b) => b.total - a.total)
+  // The item reads as a Mega Stone: its Pokémon wins a near tie (popularity alone mustn't put
+  // Sneasler over the Gengar holding Gengarite).
+  const stoneOwners = itemMatch && itemMatch.score >= 0.75 ? getItem(item)?.mega?.map(([from]) => resolvePokemon(from)) ?? [] : []
+  if (stoneOwners.length && scored[0] && !stoneOwners.includes(scored[0].id)) {
+    const oi = scored.findIndex((x) => stoneOwners.includes(x.id))
+    if (oi > 0 && scored[0].score - scored[oi].score < 3) scored.unshift(...scored.splice(oi, 1))
+  }
 
   const top = scored[0]
   const twinsOf = (id: string) => Object.values(GENDERED).find((pair) => pair.includes(id))
@@ -302,11 +373,49 @@ function identify(data: ScanData, legal: Legal, box: Box): SheetMon {
     const stones = STONES.filter((i) => i.mega!.some(([from]) => resolvePokemon(from) === top.id)).map((i) => i.name)
     const stone = best(itemRow, stones, 0.45)
     if (stone && stone.score >= (itemMatch?.score ?? 0) - 0.1) item = itemIdByName.get(stone.name) ?? ''
-    else if (!item) item = itemIdByName.get(best(itemRow, legal.items, 0.62)?.name ?? '') ?? ''
+    else if (!item) item = itemIdByName.get(best(itemRow, legal.items, 0.62, commonBonus)?.name ?? '') ?? ''
   }
 
   const alternatives = scored.filter((s) => s.id !== pokemon && s.score > -10).slice(0, 3).map((s) => s.id)
-  return { written: readings(pokemonRow)[0] ?? '', ability, item, itemWritten: readings(itemRow)[0] ?? '', moves, pokemon, alternatives, confident: confident && (!!item || !key(itemRow)), note }
+  // An unclear item read, now that the Pokémon is known: lean on what that Pokémon actually holds
+  // on real teams ("SY 4ras Berry" on Incineroar: Sitrus). Only rough reads; a clear one stands.
+  const held = pokemon ? usage.held[top.sid] ?? {} : {}
+  const heldTotal = Object.values(held).reduce((a, b) => a + b, 0)
+  const curSim = item ? simAny(itemRow, getItem(item)?.name ?? '') : 0
+  if (heldTotal >= 3 && readings(itemRow).length && curSim < 0.8) {
+    const rank = (n: string) => simAny(itemRow, n) + commonBonus(n) + (0.15 * (held[key(n)] ?? 0)) / heldTotal
+    let pickName = '', pickRank = item ? rank(getItem(item)?.name ?? '') : 0
+    for (const n of legal.items) {
+      if (simAny(itemRow, n) < 0.45) continue
+      const r = rank(n)
+      if (r > pickRank + 0.02) [pickName, pickRank] = [n, r]
+    }
+    if (pickName) item = itemIdByName.get(pickName) ?? item
+  }
+
+  // Only a Pokémon that Mega Evolves with it holds a Mega Stone: anything else gets the closest
+  // other item instead.
+  const stoneFits = (name: string) => {
+    const mega = ITEMS.find((i) => i.name === name)?.mega
+    return !mega || (!!pokemon && mega.some(([from]) => resolvePokemon(from) === top.id))
+  }
+  if (pokemon && item && !stoneFits(getItem(item)?.name ?? '')) {
+    const held2 = (n: string) => (heldTotal >= 3 ? (0.15 * (held[key(n)] ?? 0)) / heldTotal : 0)
+    const pick = best(itemRow, legal.items.filter(stoneFits), 0.6, (n) => commonBonus(n) + held2(n))
+    item = pick ? itemIdByName.get(pick.name) ?? '' : ''
+  }
+
+  // The item is only sure when it reads clearly better than every other item it could be
+  // ("Garchompe 2": Garchompite or Garchompite Z? "lr sy Seed": Grassy or Misty?). A blank item
+  // row is checked too: nearly every team gives every Pokémon an item.
+  const itemName = getItem(item)?.name ?? ''
+  let itemSure = !!item
+  if (item) {
+    const mine = simAny(itemRow, itemName)
+    const rival = Math.max(0, ...legal.items.filter((n) => n !== itemName).map((n) => simAny(itemRow, n)))
+    itemSure = mine >= 0.92 || mine - rival >= 0.08
+  }
+  return { written: readings(pokemonRow)[0] ?? '', ability, item, itemWritten: readings(itemRow)[0] ?? '', moves, pokemon, alternatives, confident: confident && itemSure, note }
 }
 
 /** "Arcanine Hisuian Form" -> "Arcanine [Hisuian Form]" for the RK9 form reader. */
@@ -351,12 +460,34 @@ function groupBoxes(labels: Label[], pageWidth: number): Label[][] {
   const walk = (column: Label[], pitch: number) => {
     const boxes: Label[][] = []
     let last: Label | null = null
-    for (const l of [...column].sort((a, b) => a.y - b.y)) {
+    for (let l of [...column].sort((a, b) => a.y - b.y)) {
+      // A misread number ("Move 2" read as "Move 4") right under the last label isn't a new box:
+      // boxes are at least ~2 rows apart. Number it from its position instead.
+      if (last && pitch && l.row <= last.row && last.row < 7 && l.y - last.y < 1.5 * pitch) {
+        const row = last.row + Math.max(1, Math.round((l.y - last.y) / pitch))
+        if (row <= 7) l = { ...l, row }
+      }
       const jump = last && pitch && l.y - last.y > (l.row - last.row + 1.6) * pitch
       if (!last || l.row <= last.row || jump) boxes.push([])
       boxes[boxes.length - 1].push(l)
       last = l
     }
+    // The form has three boxes per column: join pieces of one box that were split apart (the
+    // closest pair whose rows follow on), or a seventh "box" would push a real one off the end.
+    while (pitch && boxes.length > 3) {
+      let bi = -1, bg = Infinity
+      for (let i = 0; i + 1 < boxes.length; i++) {
+        const a = boxes[i], b = boxes[i + 1], la = a[a.length - 1], fb = b[0]
+        if (fb.row <= la.row) continue
+        const gap = Math.abs(fb.y - la.y - (fb.row - la.row) * pitch)
+        if (gap < bg) [bi, bg] = [i, gap]
+      }
+      if (bi < 0 || bg > 1.5 * pitch) break
+      boxes.splice(bi, 2, [...boxes[bi], ...boxes[bi + 1]])
+    }
+    // Still more than three: part of another sheet in the photo (above or below this one). The
+    // form's boxes are next to each other, so drop whichever end box has fewer labels.
+    while (boxes.length > 3) boxes.splice(boxes[0].length < boxes[boxes.length - 1].length ? 0 : boxes.length - 1, 1)
     return boxes
   }
   // Row spacing from neighbouring labels in the same box, then group again with it.
@@ -489,6 +620,43 @@ async function imageCanvas(file: File) {
   return c
 }
 
+/** The picture turned clockwise by `turns` quarter turns. */
+function quarterTurn(src: HTMLCanvasElement, turns: number) {
+  turns = ((turns % 4) + 4) % 4
+  if (!turns) return src
+  const c = document.createElement('canvas')
+  ;[c.width, c.height] = turns % 2 ? [src.height, src.width] : [src.width, src.height]
+  const ctx = c.getContext('2d')!
+  ctx.translate(c.width / 2, c.height / 2)
+  ctx.rotate((turns * Math.PI) / 2)
+  ctx.drawImage(src, -src.width / 2, -src.height / 2)
+  return c
+}
+
+/**
+ * Do the lines of text run up and down? Rows of text make the dark-pixel count change sharply
+ * from one pixel row to the next (text line, gap, text line); across them it changes smoothly.
+ */
+function looksSideways(src: HTMLCanvasElement) {
+  const scale = 400 / Math.max(src.width, src.height)
+  const w = Math.max(1, Math.round(src.width * scale)), h = Math.max(1, Math.round(src.height * scale))
+  const c = document.createElement('canvas')
+  c.width = w
+  c.height = h
+  const ctx = c.getContext('2d', { willReadFrequently: true })!
+  ctx.drawImage(src, 0, 0, w, h)
+  const px = ctx.getImageData(0, 0, w, h).data
+  const lum = new Float32Array(w * h)
+  for (let i = 0; i < w * h; i++) lum[i] = px[i * 4] * 0.3 + px[i * 4 + 1] * 0.59 + px[i * 4 + 2] * 0.11
+  const paper = median(Array.from({ length: 2000 }, (_, i) => lum[Math.floor((i * w * h) / 2000)]))
+  const rows = new Float32Array(h), cols = new Float32Array(w)
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (lum[y * w + x] < paper * 0.7) { rows[y]++; cols[x]++ }
+  const jumpiness = (p: Float32Array) => { let d = 0, t = 0; for (let i = 1; i < p.length; i++) { d += Math.abs(p[i] - p[i - 1]); t += p[i] } return t ? d / t : 0 }
+  const r = jumpiness(rows), k = jumpiness(cols)
+  sheetDebug.sideways = [Math.round(r * 100) / 100, Math.round(k * 100) / 100]
+  return k > r * 1.25
+}
+
 const letters = (t: string) => t.normalize('NFD').replace(/[^A-Za-z0-9]/g, '').toLowerCase()
 const near = (a: string, b: string) => distance(a, b) <= (b.length >= 6 ? 2 : b.length >= 4 ? 1 : 0)
 const HEADER_WORDS = /^(video|game|team|list|must|listed|all|exactly)$/
@@ -534,8 +702,9 @@ function darkMap(src: HTMLCanvasElement) {
 function columnCover(map: ReturnType<typeof darkMap>, x: number, y0: number, y1: number) {
   let hit = 0, n = 0
   for (let y = Math.max(0, Math.round(y0)); y < Math.min(map.h, Math.round(y1)); y++, n++) {
+    // Up to 2px either side: a rule in a photo is rarely perfectly upright.
     const i = y * map.w + x
-    if (map.dark[i] || map.dark[i - 1] || map.dark[i + 1]) hit++
+    if (map.dark[i] || map.dark[i - 1] || map.dark[i + 1] || map.dark[i - 2] || map.dark[i + 2]) hit++
   }
   return n ? hit / n : 0
 }
@@ -546,7 +715,9 @@ function ruleAfter(map: ReturnType<typeof darkMap>, x: number, xMax: number, y: 
     if (columnCover(map, cx, y - 0.3 * pitch, y + 0.3 * pitch) < 0.85) continue
     // Rules are thin; a scribbled-out word is a wide dark blob.
     if (columnCover(map, cx + Math.round(0.3 * pitch), y - 0.3 * pitch, y + 0.3 * pitch) > 0.6) continue
-    if (columnCover(map, cx, y - 1.3 * pitch, y - 0.7 * pitch) > 0.8 || columnCover(map, cx, y + 0.7 * pitch, y + 1.3 * pitch) > 0.8) return cx
+    // A rule runs on unbroken through the next row up or down (box edge, stats column); a tall
+    // pen stroke in big handwriting ("l", "f") stops at the row's edge.
+    if (columnCover(map, cx, y - 1.5 * pitch, y + 0.3 * pitch) > 0.85 || columnCover(map, cx, y - 0.3 * pitch, y + 1.5 * pitch) > 0.85) return cx
   }
   return xMax
 }
@@ -569,9 +740,78 @@ function stretch(c: HTMLCanvasElement) {
   return c
 }
 
+/**
+ * White out a box edge left at either end of a cut-out row: a dark column running most of the
+ * strip's height (removeRules only takes lines longer than the strip is tall). Left in, a column
+ * of these edges down the stacked rows makes the recognition read the faint text as junk.
+ */
+function eraseEdges(c: HTMLCanvasElement) {
+  const { width: w, height: h } = c
+  const ctx = c.getContext('2d', { willReadFrequently: true })!
+  const img = ctx.getImageData(0, 0, w, h)
+  const px = img.data
+  const lum = (i: number) => px[i * 4] * 0.3 + px[i * 4 + 1] * 0.59 + px[i * 4 + 2] * 0.11
+  const paper = median(Array.from({ length: 500 }, (_, i) => lum(Math.floor((i * w * h) / 500))))
+  const cover = (x: number) => { let n = 0; for (let y = 0; y < h; y++) if (lum(y * w + x) < paper * 0.7) n++; return n / h }
+  const reach = Math.min(Math.round(h * 0.6), Math.floor(w / 4))
+  const wipe = (x: number) => { for (let y = 0; y < h; y++) { const i = (y * w + x) * 4; px[i] = px[i + 1] = px[i + 2] = 255 } }
+  let hit = false
+  for (const side of [1, -1]) {
+    for (let k = 0; k < reach; k++) {
+      const x = side > 0 ? w - 1 - k : k
+      if (cover(x) < 0.55) continue
+      hit = true
+      for (let d = -2; d <= 2; d++) if (x + d >= 0 && x + d < w) wipe(x + d)
+    }
+  }
+  if (hit) ctx.putImageData(img, 0, 0)
+  return c
+}
+
+/**
+ * White out table lines that cross a cut-out row at a slant (a photo taken at an angle): straight
+ * lines, nearly level, running most of the way across. removeRules only takes level lines; slanted
+ * ones left in run through the writing and make the recognition put words in the wrong row.
+ */
+function eraseSlantedRules(c: HTMLCanvasElement) {
+  const { width: w, height: h } = c
+  if (w < h * 3) return c
+  const ctx = c.getContext('2d', { willReadFrequently: true })!
+  const img = ctx.getImageData(0, 0, w, h)
+  const px = img.data
+  const dark = new Uint8Array(w * h)
+  for (let i = 0; i < w * h; i++) dark[i] = px[i * 4] < 128 ? 1 : 0
+  const at = (x: number, y: number) => (y >= 0 && y < h ? dark[y * w + x] | (y > 0 ? dark[(y - 1) * w + x] : 0) | (y + 1 < h ? dark[(y + 1) * w + x] : 0) : 0)
+  let changed = false
+  for (let n = 0; n < 3; n++) {
+    let best = { cover: 0, y0: 0, slope: 0 }
+    for (let si = -12; si <= 12; si++) {
+      const slope = si * 0.005
+      for (let y0 = -Math.round(Math.abs(slope) * w); y0 < h + Math.abs(slope) * w; y0++) {
+        let hit = 0
+        for (let x = 0; x < w; x += 2) hit += at(x, Math.round(y0 + slope * x))
+        const cover = hit / Math.ceil(w / 2)
+        if (cover > best.cover) best = { cover, y0, slope }
+      }
+    }
+    if (best.cover < 0.6) break
+    // A rule is thin: just above and below it is mostly paper. A long word isn't.
+    const band = (dy: number) => { let hit = 0; for (let x = 0; x < w; x += 2) hit += at(x, Math.round(best.y0 + dy + best.slope * x)); return hit / Math.ceil(w / 2) }
+    if (Math.max(band(-5), band(5)) > 0.35) break
+    for (let x = 0; x < w; x++) {
+      const yc = Math.round(best.y0 + best.slope * x)
+      for (let y = yc - 2; y <= yc + 2; y++) if (y >= 0 && y < h) { dark[y * w + x] = 0; const i = (y * w + x) * 4; px[i] = px[i + 1] = px[i + 2] = 255 }
+    }
+    changed = true
+  }
+  if (changed) ctx.putImageData(img, 0, 0)
+  return c
+}
+
 /** One written line as black on white, ~80px tall, with ruled lines removed. */
 function lineImage(page: HTMLCanvasElement, x0: number, y0: number, x1: number, y1: number, height = 80) {
-  const piece = stretch(removeRules(crop(page, x0, y0, x1, y1), (y1 - y0) * 0.4))
+  // Contrast first: faint grey table lines in a photo only count as lines once they're dark.
+  const piece = stretch(eraseEdges(eraseSlantedRules(removeRules(stretch(crop(page, x0, y0, x1, y1)), (y1 - y0) * 0.4))))
   const scale = height / piece.height
   const out = document.createElement('canvas')
   out.width = Math.max(1, Math.round(piece.width * scale))
@@ -581,7 +821,27 @@ function lineImage(page: HTMLCanvasElement, x0: number, y0: number, x1: number, 
   ctx.fillRect(0, 0, out.width, out.height)
   ctx.imageSmoothingQuality = 'high'
   ctx.drawImage(piece, 0, 0, out.width, out.height)
-  return out
+  return thicken(out)
+}
+
+/** Strokes 1px bolder (darkest neighbour): thin pen handwriting reads noticeably better. */
+function thicken(c: HTMLCanvasElement) {
+  const { width: w, height: h } = c
+  const ctx = c.getContext('2d', { willReadFrequently: true })!
+  const img = ctx.getImageData(0, 0, w, h)
+  const px = img.data
+  const src = new Uint8Array(w * h)
+  for (let i = 0; i < w * h; i++) src[i] = px[i * 4]
+  for (let y = 0; y < h; y++)
+    for (let x = 0; x < w; x++) {
+      let m = 255
+      for (let yy = Math.max(0, y - 1); yy <= Math.min(h - 1, y + 1); yy++)
+        for (let xx = Math.max(0, x - 1); xx <= Math.min(w - 1, x + 1); xx++) m = Math.min(m, src[yy * w + xx])
+      const i = (y * w + x) * 4
+      px[i] = px[i + 1] = px[i + 2] = m
+    }
+  ctx.putImageData(img, 0, 0)
+  return c
 }
 
 /**
@@ -609,7 +869,8 @@ async function readStrips(worker: Worker, page: HTMLCanvasElement, strips: { x0:
 }
 
 // "¥" is how a printed "Y" often comes out ("Charizardite ¥").
-const clean = (t: string) => t.replace(/¥/g, 'Y').replace(/[|_—=~]+/g, ' ').replace(/\s+/g, ' ').trim()
+// Stand-alone numbers are the staff page's stats column read along with the row ("Hurricane 105").
+const clean = (t: string) => t.replace(/¥/g, 'Y').replace(/[|_—=~]+/g, ' ').replace(/(^|\s)[[(]?\d{2,3}[\])]?(?=\s|$)/g, ' ').replace(/\s+/g, ' ').trim()
 
 async function pictureText(src: HTMLCanvasElement, readable: (row: number, text: string) => boolean, onProgress?: (msg: string) => void): Promise<RawSheet> {
   onProgress?.('Loading text recognition (first time takes a moment)…')
@@ -618,9 +879,25 @@ async function pictureText(src: HTMLCanvasElement, readable: (row: number, text:
   try {
     onProgress?.('Finding the team list boxes…')
     for (const k of Object.keys(sheetDebug)) if (k !== 'keepStrips') delete sheetDebug[k]
-    const page = enhance(straighten(src))
+    // Sideways photos: turn the way the text lines run, and if the form's labels still can't be
+    // found, try the other ways round (upside down, the other quarter turn).
+    let turns = looksSideways(src) ? 3 : 0
+    let page = enhance(straighten(quarterTurn(src, turns)))
     await worker.setParameters({ tessedit_pageseg_mode: PSM.SPARSE_TEXT })
     let { lines } = await ocr(worker, page)
+    if (findLabels(lines).length < 12 && !otsLayout(lines.flatMap((l) => l.words), page.width)) {
+      let found = findLabels(lines).length
+      for (const extra of [2, 1, 3]) {
+        const t = (turns + extra) % 4
+        onProgress?.('Turning the picture round…')
+        const p2 = enhance(straighten(quarterTurn(src, t)))
+        const again = await ocr(worker, p2)
+        const n = findLabels(again.lines).length, isOts = !!otsLayout(again.lines.flatMap((l) => l.words), p2.width)
+        if (n > found || isOts) [page, lines, turns, found] = [p2, again.lines, t, isOts ? 99 : n]
+        if (found >= 12) break
+      }
+    }
+    sheetDebug.turns = turns
     // A Regionals / International sheet (language tables) instead of the paper form?
     const ots = (ls: typeof lines) => otsLayout(ls.flatMap((l) => l.words), page.width)
     const readOts = async (layout: OtsLayout) => {
@@ -687,17 +964,22 @@ async function pictureText(src: HTMLCanvasElement, readable: (row: number, text:
         const x1 = ruleAfter(map, x0 + pitch, limit, y, pitch) - 3
         return { x0, x1, y }
       })
-      await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_BLOCK })
-      const box = await readStrips(worker, page, strips, pitch)
-      // Anything the block read missed gets a second try on its own.
-      // The key rows that came back as nothing recognisable get a second read on their own:
-      // reading one line at a time is slower but steadier than the stacked read.
-      for (const r of [0, 2, 3]) {
-        if (readable(r, box[r])) continue
-        const again = await read(strips[r].x0, strips[r].y, strips[r].x1)
-        if (again && again !== box[r]) box[r] = box[r] ? again + ALT + box[r] : again
+      if (strips.some((st) => !Number.isFinite(st.x0 + st.x1 + st.y))) { out.push(Array(8).fill('')); continue }
+      // One box that can't be read (e.g. cut off at the photo's edge) mustn't lose the others.
+      try {
+        await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_BLOCK })
+        const box = await readStrips(worker, page, strips, pitch)
+        // The key rows that came back as nothing recognisable get a second read on their own:
+        // reading one line at a time is slower but steadier than the stacked read.
+        for (const r of [0, 2, 3]) {
+          if (readable(r, box[r])) continue
+          const again = await read(strips[r].x0, strips[r].y, strips[r].x1)
+          if (again && again !== box[r]) box[r] = box[r] ? again + ALT + box[r] : again
+        }
+        out.push(box)
+      } catch {
+        out.push(Array(8).fill(''))
       }
-      out.push(box)
     }
 
     // "Player Name:" line (often handwritten, so only a hint for matching players).
@@ -871,7 +1153,7 @@ export async function readTeamSheets(file: File, onProgress?: (msg: string) => v
     if (!exact && !mons.some((m) => m.pokemon)) {
       throw new Error('Couldn’t read this team list: none of the Pokémon could be made out. Try a sharper, straight-on photo or scan of one sheet, or the PDF if you have it.')
     }
-    return { player: raw.player.trim(), mons, exact }
+    return { player: exact ? raw.player.trim() : plausibleName(raw.player), mons, exact }
   }
   // Does a row's text already match a real name (so a second read isn't needed)?
   const lists: Record<number, string[]> = { 0: data.species.map(([n]: [string, ...unknown[]]) => n.replace(/-/g, ' ')), 2: data.abilities, 3: legal.items }
@@ -901,6 +1183,28 @@ export async function readTeamSheets(file: File, onProgress?: (msg: string) => v
   }
   if (!sheets.length) throw new Error('Couldn’t find a team list in that file.')
   return sheets
+}
+
+const FORM_WORDS = /\b(page|pages|event|staff|tournament|document|organi[sz]er|submit|player|name|trainer|battle|division|profile|switch)\b/i
+
+/**
+ * A player name read from a picture, or "" when it's clearly not a name: stray marks and ruled
+ * lines read as letters ("e g h s h w 2 111 hw"), or the form's own printed words. Short bits
+ * stuck on the end ("Avi Margolis i]") are dropped.
+ */
+export function plausibleName(raw: string): string {
+  const tokens = raw.trim().split(/\s+/).filter(Boolean)
+  if (!tokens.length || FORM_WORDS.test(raw)) return ''
+  const junk = tokens.filter((t) => t.length <= 2 || /[^\p{L}'.-]/u.test(t)).length
+  if (junk > tokens.length / 2) return ''
+  const words = tokens.map((t) => t.replace(/^[^\p{L}]+|[^\p{L}]+$/gu, '')).filter(Boolean)
+  while (words.length > 1 && words[words.length - 1].length <= 2) words.pop()
+  while (words.length > 1 && words[0].length <= 1) words.shift()
+  if (!words.length || words.length > 4) return ''
+  if (words.some((w) => /[^\p{L}'.-]/u.test(w))) return ''
+  if (!words.some((w) => w.length >= 3)) return ''
+  if (words.some((w) => w.length >= 4 && !/[aeiouyàáâäèéêëìíîïòóôöùúûü]/i.test(w))) return ''
+  return words.join(' ')
 }
 
 /** The first team list in a file. */
