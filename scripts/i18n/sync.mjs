@@ -45,9 +45,11 @@ const AREAS = {
   dialog: 'Dialogs', limitless: 'Limitless', tdf: 'TOM file (.tdf)', pokepaste: 'Pokepaste / Showdown', teamSheet: 'Team lists', screenshot: 'Team screenshot', standingsPhoto: 'Standings photo', day2: 'Event Results tab', error: 'Error messages', results: 'Results link', rk9: 'RK9', day2Event: 'Event Results kinds', notImage: 'Image check', ocrLoading: 'Text recognition', format: 'Battle formats', type: 'Pokémon types', facts: 'Facts line under the title', eventType: 'Event types', sportsPage: 'Sports Page',
 }
 const camel = (s) => s.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase())
+// Graphics areas that share a name with a website area but are a different place.
+const GFX_AREAS = { bracket: 'Bracket', usage: 'Usage', vsResult: 'VS Result (match)', eras: 'Era looks (Game Boy, Pokédex, trading card)', editorial: 'Editorial' }
 const area = (k) => {
   const [, a, b] = k.split('.')
-  const name = AREAS[a] ?? camel(a)
+  const name = (k.startsWith('gfx.') && GFX_AREAS[a]) || AREAS[a] || camel(a)
   return a === 'import' && b ? `${name} · ${AREAS[b] ?? camel(b)}` : name
 }
 const TYPE = { ui: 'Website', gfx: 'Graphic', term: 'Official term (website + graphics)' }

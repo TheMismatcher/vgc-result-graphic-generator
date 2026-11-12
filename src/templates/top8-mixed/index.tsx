@@ -6,6 +6,7 @@ import { FitText, Logo, MonSprite, PlayerPhoto, CpBadge } from '../shared/parts'
 import { cardColor, ordinal } from '../shared/format'
 import { LoudBackground } from '../shared/LoudBackground'
 import './top8-mixed.css'
+import { gt } from '../../i18n'
 
 // Two looks: alternating blue/red cards, or white cards. 1st place is gold in both. `loud`: the Comic Book background.
 export const makeTop8Mixed = (white: boolean, theme?: Theme, loud = false): StandingsTemplate => ({
@@ -40,8 +41,8 @@ export const makeTop8Mixed = (white: boolean, theme?: Theme, loud = false): Stan
         <header className="m8-header">
           <Logo size={160} />
           <div className="m8-heading">
-            <div className="m8-tag">Top {Math.max(data.players.length, 1)}</div>
-            <FitText className="dmv-title" text={data.tournament.name || 'Tournament'} max={62} width={800} />
+            <div className="m8-tag">{gt('gfx.common.topN', { count: Math.max(data.players.length, 1) })}</div>
+            <FitText className="dmv-title" text={data.tournament.name || gt('gfx.common.tournament')} max={62} width={800} />
             <Facts data={data} className="m8-facts" split={theme?.splitFacts} />
           </div>
         </header>
@@ -55,7 +56,7 @@ export const makeTop8Mixed = (white: boolean, theme?: Theme, loud = false): Stan
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="photo-cp" />}
               </div>
               <div className="m8-info">
-                <FitText className="m8-name" text={p.name || 'Player'} max={30} width={196} min={16} />
+                <FitText className="m8-name" text={p.name || gt('gfx.common.player')} max={30} width={196} min={16} />
                 <div className="m8-sub">{[p.record, p.social].filter(Boolean).join('  ·  ')}</div>
                 <div className={`m8-team ${tall ? 'tall' : ''}`}>
                   {p.team.map((m, j) => (
@@ -76,7 +77,7 @@ export const makeTop8Mixed = (white: boolean, theme?: Theme, loud = false): Stan
                   {data.cp && <CpBadge points={data.cp(i + 5)} className="tc-cp" />}
                 </div>
                 <div className="m8-row-player">
-                  <FitText className="dmv-title" text={p.name || 'Player'} max={rowH > 94 ? 36 : 30} width={300} min={18} />
+                  <FitText className="dmv-title" text={p.name || gt('gfx.common.player')} max={rowH > 94 ? 36 : 30} width={300} min={18} />
                   <div className="m8-row-sub">{[p.record, p.social].filter(Boolean).join('  ·  ')}</div>
                 </div>
                 <div className="m8-row-team">

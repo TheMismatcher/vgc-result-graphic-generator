@@ -2,6 +2,7 @@ import type { StandingsTemplate } from '../types'
 import { FitText, Logo, MonSprite, CpBadge } from '../shared/parts'
 import { eventFacts, fillClass } from '../shared/format'
 import './arena.css'
+import { gt } from '../../i18n'
 
 // A sleek esports-style design: dark base, glass rows, outlined place numbers.
 // Three background options share the same layout.
@@ -26,8 +27,8 @@ const makeArena = (bg: Background): StandingsTemplate => ({
 
       <header className="ar-header">
         <div className="ar-heading">
-          <div className="ar-kicker">Top {Math.max(data.players.length, 1)} Standings</div>
-          <FitText className="ar-title" text={data.tournament.name || 'Tournament'} max={66} width={780} />
+          <div className="ar-kicker">{gt('gfx.arena.kicker', { count: Math.max(data.players.length, 1) })}</div>
+          <FitText className="ar-title" text={data.tournament.name || gt('gfx.common.tournament')} max={66} width={780} />
           <div className="ar-underline" />
           <div className="ar-facts">{eventFacts(data).join('   /   ')}</div>
         </div>
@@ -39,7 +40,7 @@ const makeArena = (bg: Background): StandingsTemplate => ({
           <div key={p.uid} className={`ar-row ${i === 0 ? 'first' : ''}`}>
             <div className="ar-place">{i + 1}</div>
             <div className="ar-player">
-              <FitText className="ar-name" text={p.name || 'Player'} max={few ? 54 : 36} width={few ? 420 : 300} min={18} />
+              <FitText className="ar-name" text={p.name || gt('gfx.common.player')} max={few ? 54 : 36} width={few ? 420 : 300} min={18} />
               <div className="ar-subrow">
                 <div className="ar-sub">{[p.record, p.social].filter(Boolean).join('  ·  ')}</div>
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="ar-cp" />}

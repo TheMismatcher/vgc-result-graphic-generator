@@ -9,6 +9,7 @@ import { getItem, getPokemon } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { useBrand } from '../../brand'
 import './editorial.css'
+import { gt } from '../../i18n'
 
 type Mood = 'paper' | 'night'
 const MOOD_NAMES: Record<Mood, string> = { paper: 'Paper', night: 'Night' }
@@ -17,7 +18,7 @@ const two = (n: number) => String(n).padStart(2, '0')
 
 /** "League Cup · October 17, 2026 · 22 Players" without the (long) format name. */
 const factsLine = (d: { typeLabel: string; dateLabel: string; playerCount: number }) =>
-  [d.typeLabel, d.dateLabel, d.playerCount ? `${d.playerCount} Players` : ''].filter(Boolean)
+  [d.typeLabel, d.dateLabel, d.playerCount ? gt('gfx.facts.players', { count: d.playerCount }) : ''].filter(Boolean)
 
 const makeTopCut = (mood: Mood): StandingsTemplate => ({
   id: `editorial-top-cut-${mood}`,
@@ -36,10 +37,10 @@ const makeTopCut = (mood: Mood): StandingsTemplate => ({
       <div className={`dmv ed ed-${mood} ${fillClass(data.players.length)}`} style={{ width: 1080, height: 1350 }}>
         <header className="ed-head">
           <div className="ed-kicker-row">
-            <div className="ed-kicker">Final Standings</div>
+            <div className="ed-kicker">{gt('gfx.editorial.finalStandings')}</div>
             <Logo size={92} style={{ border: 'none' }} />
           </div>
-          <FitText className="ed-title" text={data.tournament.name || 'Tournament'} max={92} width={1000} weight={900} italic={false} />
+          <FitText className="ed-title" text={data.tournament.name || gt('gfx.common.tournament')} max={92} width={1000} weight={900} italic={false} />
           <div className="ed-facts">
             {factsLine(data).map((f, i) => (
               <span key={f}>
@@ -57,10 +58,10 @@ const makeTopCut = (mood: Mood): StandingsTemplate => ({
             <div className="ed-winner-num">01</div>
             <div className="ed-winner-body">
               <div className="ed-winner-label">
-                Champion
+                {gt('gfx.common.champion')}
                 {data.cp && <CpBadge points={data.cp(1)} className="ed-cp" />}
               </div>
-              <FitText className="ed-winner-name" text={first.name || 'Player'} max={60} width={560} min={28} weight={900} italic={false} />
+              <FitText className="ed-winner-name" text={first.name || gt('gfx.common.player')} max={60} width={560} min={28} weight={900} italic={false} />
               <div className="ed-sub">{[first.record, first.social].filter(Boolean).join('   ·   ')}</div>
             </div>
             <div className="ed-winner-team">
@@ -76,7 +77,7 @@ const makeTopCut = (mood: Mood): StandingsTemplate => ({
             <div key={p.uid} className="ed-row">
               <div className="ed-num">{two(i + 2)}</div>
               <div className="ed-player">
-                <FitText className="ed-name" text={p.name || 'Player'} max={few ? 48 : 36} width={few ? 400 : 330} min={20} weight={800} italic={false} />
+                <FitText className="ed-name" text={p.name || gt('gfx.common.player')} max={few ? 48 : 36} width={few ? 400 : 330} min={20} weight={800} italic={false} />
                 <div className="ed-sub">
                   {[p.record, p.social].filter(Boolean).join('   ·   ')}
                   {data.cp && <CpBadge points={data.cp(i + 2)} className="ed-cp small" />}
@@ -115,14 +116,14 @@ const makeChampion = (mood: Mood): StandingsTemplate => ({
       <div className={`dmv ed edc ed-${mood}`} style={{ width: 1080, height: 1080 }}>
         <aside className="edc-band">
           <Logo size={150} style={{ border: 'none' }} />
-          <div className="edc-vertical">Champion</div>
+          <div className="edc-vertical">{gt('gfx.common.champion')}</div>
         </aside>
 
         <div className="edc-main">
           <div className="ed-kicker">{[data.typeLabel, data.dateLabel].filter(Boolean).join('  ·  ')}</div>
-          <FitText className="edc-event" text={data.tournament.name || 'Tournament'} max={40} width={700} min={20} weight={800} italic={false} />
+          <FitText className="edc-event" text={data.tournament.name || gt('gfx.common.tournament')} max={40} width={700} min={20} weight={800} italic={false} />
           <div className="ed-rule thin" />
-          <FitText className="edc-name" text={winner?.name || 'Player'} max={104} width={720} min={40} weight={900} italic={false} />
+          <FitText className="edc-name" text={winner?.name || gt('gfx.common.player')} max={104} width={720} min={40} weight={900} italic={false} />
           <div className="edc-sub">
             <span>{[winner?.record, winner?.social].filter(Boolean).join('   ·   ')}</span>
             {data.cp && <CpBadge points={data.cp(1)} className="ed-cp" />}
@@ -138,7 +139,7 @@ const makeChampion = (mood: Mood): StandingsTemplate => ({
             ))}
           </div>
 
-          <div className="edc-format">{[data.playerCount ? `${data.playerCount} Players` : '', data.formatLabel].filter(Boolean).join('   ·   ')}</div>
+          <div className="edc-format">{[data.playerCount ? gt('gfx.facts.players', { count: data.playerCount }) : '', data.formatLabel].filter(Boolean).join('   ·   ')}</div>
         </div>
       </div>
     )

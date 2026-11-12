@@ -5,6 +5,7 @@ import { FitText, Logo, MonSprite, CpBadge, usePokemonSrc } from '../shared/part
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { LoudBackground } from '../shared/LoudBackground'
 import './bracket.css'
+import { gt, type GfxKey } from '../../i18n'
 
 const W = 1080
 const H = 1350
@@ -14,7 +15,7 @@ const LEFT = 40
 const GAP = 36 // space between columns, where the bracket lines go
 const LINE = 6
 
-const ROUND_NAMES: Record<number, string> = { 8: 'Quarterfinals', 4: 'Semifinals', 2: 'Finals' }
+const ROUND_NAMES: Record<number, GfxKey> = { 8: 'gfx.bracket.quarterfinals', 4: 'gfx.bracket.semifinals', 2: 'gfx.bracket.finals' }
 
 function BracketMon({ id, size }: { id: string; size: number }) {
   const src = usePokemonSrc(id, size)
@@ -28,7 +29,7 @@ function Entry({ entry, width, height, state, cp }: { entry: BracketEntry; width
   return (
     <div className={`br-entry dmv-panel ${state}`} style={{ width, height }}>
       {!!cp && <CpBadge points={cp} className="br-cp" />}
-      <FitText className="br-name" text={entry.name || 'TBD'} max={26} width={width - 30 - (cp ? 84 : 0)} min={14} />
+      <FitText className="br-name" text={entry.name || gt('gfx.bracket.tbd')} max={26} width={width - 30 - (cp ? 84 : 0)} min={14} />
       {team.length > 0 && (
         <div className="br-team">
           {team.map((m, i) => (
@@ -92,21 +93,21 @@ export const makeBracket = (loud = false, theme?: Theme, bigChampion = true): St
         <header className="br-header">
           <Logo size={160} />
           <div className="br-heading">
-            <div className="br-tag">Top Cut</div>
-            <FitText className="dmv-title" text={data.tournament.name || 'Tournament'} max={60} width={800} />
+            <div className="br-tag">{gt('gfx.common.topCut')}</div>
+            <FitText className="dmv-title" text={data.tournament.name || gt('gfx.common.tournament')} max={60} width={800} />
             <Facts data={data} className="br-facts" split={theme?.splitFacts} />
           </div>
         </header>
 
-        {!R && <div className="br-empty">Set up the bracket under “Top cut bracket” on the Standings tab, or import from Limitless.</div>}
+        {!R && <div className="br-empty">{gt('gfx.bracket.empty')}</div>}
 
         {rounds.map((ms, r) => (
           <div key={`label-${r}`} className="br-label" style={{ left: colX(r), width: colW, top: TOP - 52 }}>
-            {ROUND_NAMES[ms.length * 2] ?? `Round ${r + 1}`}
+            {ROUND_NAMES[ms.length * 2] ? gt(ROUND_NAMES[ms.length * 2]) : gt('gfx.bracket.roundN', { n: r + 1 })}
           </div>
         ))}
         {R > 0 && !bigChampion && (
-          <div className="br-label" style={{ left: colX(R), width: colW, top: TOP - 52 }}>Champion</div>
+          <div className="br-label" style={{ left: colX(R), width: colW, top: TOP - 52 }}>{gt('gfx.common.champion')}</div>
         )}
 
         {rounds.map((ms, r) =>
@@ -126,9 +127,9 @@ export const makeBracket = (loud = false, theme?: Theme, bigChampion = true): St
                       className="br-champ dmv-panel"
                       style={{ left: x, top: side === 0 ? c - inner / 2 : c + inner / 2, width: colW, transform: side === 0 ? 'translateY(-100%)' : undefined }}
                     >
-                      <div className="br-champ-label">★ Champion ★</div>
+                      <div className="br-champ-label">{gt('gfx.bracket.championStar')}</div>
                       {data.cp && <CpBadge points={data.cp(1)} style={{ marginTop: 6 }} />}
-                      <FitText className="dmv-title br-champ-name" text={e.name || 'TBD'} max={38} width={colW - 30} min={16} />
+                      <FitText className="dmv-title br-champ-name" text={e.name || gt('gfx.bracket.tbd')} max={38} width={colW - 30} min={16} />
                       <div className="br-champ-team">
                         {(e.player?.team ?? []).map((mon, k) => (
                           <MonSprite key={k} mon={mon} size={Math.floor((colW - 44) / 3)} showTera={data.format.tera} />
@@ -151,9 +152,9 @@ export const makeBracket = (loud = false, theme?: Theme, bigChampion = true): St
 
         {R > 0 && !bigChampion && (
           <div className={`br-champ dmv-panel ${champ ? '' : 'open'}`} style={{ left: colX(R), top: champCenter, width: colW, transform: 'translateY(-50%)' }}>
-            <div className="br-champ-label">★ Champion ★</div>
+            <div className="br-champ-label">{gt('gfx.bracket.championStar')}</div>
             {data.cp && champ && <CpBadge points={data.cp(1)} style={{ marginTop: 6 }} />}
-            <FitText className="dmv-title br-champ-name" text={champ?.name || 'TBD'} max={34} width={colW - 30} min={16} />
+            <FitText className="dmv-title br-champ-name" text={champ?.name || gt('gfx.bracket.tbd')} max={34} width={colW - 30} min={16} />
             <div className="br-champ-team">
               {(champ?.player?.team ?? []).map((m, i) => (
                 <MonSprite key={i} mon={m} size={Math.floor((colW - 44) / 3)} showTera={data.format.tera} />

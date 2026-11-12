@@ -3,6 +3,7 @@ import { FitText, Logo, MonSprite, CpBadge } from '../shared/parts'
 import { LoudBackground } from '../shared/LoudBackground'
 import { eventFacts, fillClass, isMid, ordinal } from '../shared/format'
 import './top-cut.css'
+import { gt } from '../../i18n'
 
 // Header variants: a "clean" single line of text, or a slanted caption banner (dark or white).
 const HEADER_NAMES = { clean: 'Clean Header', banner: 'Banner Header', 'banner-white': 'White Banner Header' }
@@ -34,7 +35,7 @@ const makeTopCut = (header: 'clean' | 'banner' | 'banner-white', loud = false): 
       <header className="tc-header">
         <Logo size={190} />
         <div className="tc-heading">
-          <FitText className="dmv-title" text={data.tournament.name || 'Tournament'} max={72} width={760} />
+          <FitText className="dmv-title" text={data.tournament.name || gt('gfx.common.tournament')} max={72} width={760} />
           {header === 'banner' || header === 'banner-white' ? (
             <>
               {/* A slanted caption bar, broadcast style (dark or white). */}
@@ -83,7 +84,7 @@ const makeTopCut = (header: 'clean' | 'banner' | 'banner-white', loud = false): 
               {data.cp && <CpBadge points={data.cp(i + 1)} className="tc-cp" />}
             </div>
             <div className="tc-player">
-              <FitText className="dmv-title" text={p.name || 'Player'} max={few ? 60 : mid ? 46 : 40} width={few ? 440 : 290} min={22} />
+              <FitText className="dmv-title" text={p.name || gt('gfx.common.player')} max={few ? 60 : mid ? 46 : 40} width={few ? 440 : 290} min={22} />
               <div className="tc-sub">{[p.record, p.social].filter(Boolean).join('  ·  ')}</div>
             </div>
             <div className="tc-team">

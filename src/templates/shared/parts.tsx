@@ -9,6 +9,7 @@ import { displayPokemon, useDisplay } from '../../lib/display'
 import { useFxSrc } from './monEffect'
 import './brand.css'
 import './cp.css'
+import { gt } from '../../i18n'
 
 /** Which Pokémon pictures a layout draws: HOME 3D renders (default) or the pixel sprites. */
 export type SpriteKind = 'render' | 'pixel'
@@ -171,7 +172,7 @@ export function CpBadge({ points, className = '', style }: { points: number; cla
   if (!points) return null
   return (
     <div className={`dmv-cp ${className}`} style={style}>
-      +{points} CP
+      {gt('gfx.common.cpEarned', { cp: points })}
     </div>
   )
 }

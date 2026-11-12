@@ -9,6 +9,7 @@ import { getItem, getPokemon } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { LocationHead, LocationRows, seededRand } from './index'
 import './more.css'
+import { gt } from '../../i18n'
 
 const base = { kind: 'standings' as const, width: 1080, height: 1350, maxPlayers: 8 }
 
@@ -121,16 +122,16 @@ export const Pokedex: StandingsTemplate = {
         <div className="dx-led y" />
         <div className="dx-led g" />
         <div className="dx-top-text">
-          <FitText className="dx-title" text={data.tournament.name || 'Tournament'} max={46} width={700} min={22} weight={900} italic={false} />
+          <FitText className="dx-title" text={data.tournament.name || gt('gfx.common.tournament')} max={46} width={700} min={22} weight={900} italic={false} />
           <FitText className="dx-facts" text={eventFacts(data).join('  •  ')} max={18} width={700} min={11} weight={700} italic={false} />
         </div>
       </div>
       <div className="dx-screen">
         {data.players.map((p, i) => (
           <div key={p.uid} className={`dx-entry ${i === 0 ? 'first' : ''}`}>
-            <div className="dx-no">No.{String(i + 1).padStart(3, '0')}</div>
+            <div className="dx-no">{gt('gfx.eras.dexNo', { n: String(i + 1).padStart(3, '0') })}</div>
             <div className="dx-player">
-              <FitText className="dx-name" text={p.name || 'Player'} max={few ? 42 : 30} width={few ? 360 : 290} min={14} weight={900} italic={false} />
+              <FitText className="dx-name" text={p.name || gt('gfx.common.player')} max={few ? 42 : 30} width={few ? 360 : 290} min={14} weight={900} italic={false} />
               <div className="dx-sub">
                 {[p.record, p.social].filter(Boolean).join('  ·  ')}
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="dx-cp" />}
@@ -167,10 +168,10 @@ export const PokedexChampion: StandingsTemplate = {
     const team = w?.team ?? []
     const ace = team.find((m) => m.pokemon)
     const rows: [string, string][] = [
-      ['REC', w?.record || '—'],
-      ['SOC', w?.social || '—'],
-      ['FLD', data.playerCount ? `${data.playerCount} players` : '—'],
-      ['FMT', data.formatLabel || '—'],
+      [gt('gfx.eras.rec'), w?.record || '—'],
+      [gt('gfx.eras.soc'), w?.social || '—'],
+      [gt('gfx.eras.fld'), data.playerCount ? gt('gfx.eras.players', { count: data.playerCount }) : '—'],
+      [gt('gfx.eras.fmt'), data.formatLabel || '—'],
     ]
     return (
       <div className="dmv dx dxc" style={{ width: 1080, height: 1350 }}>
@@ -180,14 +181,14 @@ export const PokedexChampion: StandingsTemplate = {
           <div className="dx-led y" />
           <div className="dx-led g" />
           <div className="dx-top-text">
-            <FitText className="dx-title" text={data.tournament.name || 'Tournament'} max={46} width={700} min={22} weight={900} italic={false} />
+            <FitText className="dx-title" text={data.tournament.name || gt('gfx.common.tournament')} max={46} width={700} min={22} weight={900} italic={false} />
             <FitText className="dx-facts" text={eventFacts(data).join('  •  ')} max={18} width={700} min={11} weight={700} italic={false} />
           </div>
         </div>
         <div className="dx-screen dxc-screen">
           <div className="dxc-head">
-            <span className="dx-no">No.001</span>
-            <span className="dxc-cat">Champion Trainer</span>
+            <span className="dx-no">{gt('gfx.eras.dexNo', { n: '001' })}</span>
+            <span className="dxc-cat">{gt('gfx.eras.championTrainer')}</span>
             {data.cp && <CpBadge points={data.cp(1)} className="dx-cp" />}
           </div>
           <div className="dxc-main">
@@ -195,7 +196,7 @@ export const PokedexChampion: StandingsTemplate = {
               {ace && <MonSprite mon={ace} size={370} showTera={data.format.tera} />}
             </div>
             <div className="dxc-data">
-              <FitText className="dxc-name" text={w?.name || 'Player'} max={54} width={420} min={22} weight={900} italic={false} />
+              <FitText className="dxc-name" text={w?.name || gt('gfx.common.player')} max={54} width={420} min={22} weight={900} italic={false} />
               <div className="dxc-rows">
                 {rows.map(([k, v]) => (
                   <div key={k} className="dxc-row">
@@ -207,8 +208,12 @@ export const PokedexChampion: StandingsTemplate = {
             </div>
           </div>
           <div className="dxc-text">
-            {w?.name || 'This trainer'} took first place at {data.tournament.name || 'the tournament'}
-            {data.dateLabel ? ` on ${data.dateLabel}` : ''}, finishing {w?.record || 'undefeated'} with this party.
+            {gt(data.dateLabel ? 'gfx.eras.dexText' : 'gfx.eras.dexTextNoDate', {
+              name: w?.name || gt('gfx.eras.thisTrainer'),
+              tournament: data.tournament.name || gt('gfx.eras.theTournament'),
+              date: data.dateLabel,
+              record: w?.record || gt('gfx.eras.undefeated'),
+            })}
           </div>
           <div className="dxc-party">
             {team.map((m, i) =>
@@ -250,17 +255,17 @@ export const TradingCard: StandingsTemplate = {
       <div className="dmv tcg" style={{ width: 1080, height: 1350 }}>
         <div className="tcg-card">
           <div className="tcg-top">
-            <span className="tcg-stage">Champion</span>
-            <FitText className="tcg-name" text={w?.name || 'Player'} max={60} width={640} min={26} weight={900} italic={false} />
+            <span className="tcg-stage">{gt('gfx.common.champion')}</span>
+            <FitText className="tcg-name" text={w?.name || gt('gfx.common.player')} max={60} width={640} min={26} weight={900} italic={false} />
             <span className="tcg-hp">
-              <small>REC</small>
+              <small>{gt('gfx.eras.rec')}</small>
               {w?.record || '—'}
             </span>
           </div>
           <div className="tcg-art">
             <div className="tcg-holo" />
             {ace && <MonSprite mon={ace} size={540} showTera={data.format.tera} style={{ position: 'relative' }} />}
-            {data.cp && <span className="tcg-cp">+{data.cp(1)} CP</span>}
+            {data.cp && <span className="tcg-cp">{gt('gfx.common.cpEarned', { cp: data.cp(1) })}</span>}
           </div>
           <div className="tcg-info">{[data.tournament.name, data.typeLabel, data.dateLabel].filter(Boolean).join('  ·  ')}</div>
           <div className="tcg-moves">
@@ -277,7 +282,7 @@ export const TradingCard: StandingsTemplate = {
           <div className="tcg-foot">
             <span>{w?.social || data.formatLabel}</span>
             <span className="tcg-star">★</span>
-            <span>{data.playerCount ? `${data.playerCount} players` : ''}</span>
+            <span>{data.playerCount ? gt('gfx.eras.players', { count: data.playerCount }) : ''}</span>
           </div>
         </div>
       </div>

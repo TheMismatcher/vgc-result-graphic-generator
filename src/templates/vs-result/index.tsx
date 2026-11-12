@@ -5,6 +5,7 @@ import { useBrand } from '../../brand'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import type { SideTheme } from '../themes/side'
 import './vs-result.css'
+import { gt } from '../../i18n'
 
 // `loud`: the Comic Book background (blue and red halves, one per player).
 export const makeVsResult = (theme?: SideTheme, loud = false): MatchTemplate => ({
@@ -36,7 +37,7 @@ export const makeVsResult = (theme?: SideTheme, loud = false): MatchTemplate => 
             <div className="vs-rule" />
             {/* Round and set length on one line, the (long) format name under it. No bubbles. */}
             <div className="vs-meta">
-              {[data.round, data.bestOf > 1 ? `Best of ${data.bestOf}${data.gamesPlayed ? ` · ${data.gamesPlayed} games` : ''}` : '']
+              {[data.round, data.bestOf > 1 ? (data.gamesPlayed ? gt('gfx.vsResult.bestOfGames', { bestOf: data.bestOf, games: data.gamesPlayed }) : gt('gfx.vsResult.bestOf', { bestOf: data.bestOf })) : '']
                 .filter(Boolean)
                 .map((f, i) => (
                   <span key={f}>
@@ -51,11 +52,11 @@ export const makeVsResult = (theme?: SideTheme, loud = false): MatchTemplate => 
 
         <div className="vs-names">
           <div className="vs-plate blue dmv-panel">
-            <FitText className="dmv-title" text={p1.name || 'Player 1'} max={44} width={330} min={20} />
+            <FitText className="dmv-title" text={p1.name || gt('gfx.common.playerN', { n: 1 })} max={44} width={330} min={20} />
           </div>
-          <div className="vs-word dmv-title">VS</div>
+          <div className="vs-word dmv-title">{gt('gfx.vsResult.vs')}</div>
           <div className="vs-plate red dmv-panel">
-            <FitText className="dmv-title" text={p2.name || 'Player 2'} max={44} width={330} min={20} />
+            <FitText className="dmv-title" text={p2.name || gt('gfx.common.playerN', { n: 2 })} max={44} width={330} min={20} />
           </div>
         </div>
 
@@ -71,7 +72,7 @@ export const makeVsResult = (theme?: SideTheme, loud = false): MatchTemplate => 
         ))}
 
         <div className="vs-banner">
-          <FitText className="dmv-title" text={winnerName ? `${winnerName} wins` : data.round || 'Match result'} max={88} width={880} min={36} />
+          <FitText className="dmv-title" text={winnerName ? gt('gfx.vsResult.wins', { name: winnerName }) : data.round || gt('gfx.vsResult.matchResult')} max={88} width={880} min={36} />
         </div>
       </div>
     )

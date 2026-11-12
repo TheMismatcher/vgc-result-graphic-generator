@@ -5,6 +5,7 @@ import { LoudBackground } from '../shared/LoudBackground'
 import { getPokemon, sprites } from '../../data/dex'
 import type { SideTheme } from '../themes/side'
 import './usage.css'
+import { gt } from '../../i18n'
 
 // `loud`: the Comic Book background.
 export const makeUsage = (theme?: SideTheme, loud = false): UsageTemplate => ({
@@ -31,13 +32,13 @@ export const makeUsage = (theme?: SideTheme, loud = false): UsageTemplate => ({
       <header className="us-header">
         <Logo size={170} />
         <div className="us-heading">
-          <div className="dmv-title" style={{ fontSize: 84 }}>Top Usage</div>
+          <div className="dmv-title" style={{ fontSize: 84 }}>{gt('gfx.usage.title')}</div>
           <FitText className="us-event" text={data.tournament.name} max={34} width={790} />
           {/* Every fact has a dot in front; the dot that starts each line is clipped off (see CSS),
               so a wrapped line never starts or ends with a stray dot. */}
           <div className="us-facts">
             <div className="us-facts-wrap">
-              {[...eventFacts(data), data.totalTeams ? `${data.totalTeams} teams counted` : ''].filter(Boolean).map((f) => (
+              {[...eventFacts(data), data.totalTeams ? gt('gfx.usage.teamsCounted', { count: data.totalTeams }) : ''].filter(Boolean).map((f) => (
                 <span key={f} className="us-facts-item">
                   <span className="us-dot">·</span>
                   {f}
@@ -51,7 +52,7 @@ export const makeUsage = (theme?: SideTheme, loud = false): UsageTemplate => ({
       <main className="us-grid">
         {data.entries.map((e, i) => (
           <div key={e.pokemon} className="us-card dmv-panel">
-            <div className="us-rank">#{i + 1}</div>
+            <div className="us-rank">{gt('gfx.usage.rank', { n: i + 1 })}</div>
             <img className="us-render" src={sprites.render(e.pokemon)} alt="" />
             <div className="us-name">{getPokemon(e.pokemon)?.name}</div>
             <div className="us-bar">

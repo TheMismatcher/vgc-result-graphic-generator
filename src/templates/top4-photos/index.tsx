@@ -5,6 +5,7 @@ import { FitText, Logo, MonSprite, PlayerPhoto, CpBadge } from '../shared/parts'
 import { ordinal } from '../shared/format'
 import { LoudBackground } from '../shared/LoudBackground'
 import './top4-photos.css'
+import { gt } from '../../i18n'
 
 export const makeTop4Photos = (loud = false, theme?: Theme): StandingsTemplate => ({
   id: theme ? `${theme.id}-top4-photos` : loud ? 'dmv-top4-photos-loud' : 'dmv-top4-photos',
@@ -28,8 +29,8 @@ export const makeTop4Photos = (loud = false, theme?: Theme): StandingsTemplate =
       <header className="p4-header">
         <Logo size={150} />
         <div className="p4-heading">
-          <div className="p4-tag">Top {Math.max(data.players.length, 1)}</div>
-          <FitText className="dmv-title" text={data.tournament.name || 'Tournament'} max={58} width={810} />
+          <div className="p4-tag">{gt('gfx.common.topN', { count: Math.max(data.players.length, 1) })}</div>
+          <FitText className="dmv-title" text={data.tournament.name || gt('gfx.common.tournament')} max={58} width={810} />
           <Facts data={data} className="p4-facts" split={theme?.splitFacts} />
         </div>
       </header>
@@ -42,7 +43,7 @@ export const makeTop4Photos = (loud = false, theme?: Theme): StandingsTemplate =
               <div className="p4-place">{ordinal(i + 1)}</div>
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="photo-cp" />}
               <div className="p4-plate">
-                <FitText className="p4-name" text={p.name || 'Player'} max={32} width={360} min={18} />
+                <FitText className="p4-name" text={p.name || gt('gfx.common.player')} max={32} width={360} min={18} />
               </div>
             </div>
             <div className="p4-bottom">

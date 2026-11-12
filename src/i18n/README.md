@@ -93,6 +93,11 @@ npm run i18n:check -- src/pages/UsagePage.tsx   # every finding in one file
 npm run i18n:check -- --update                  # after converting files: drop the clean ones from pending.json
 ```
 
+`npm run render-diff` (or `-- <commit>`) draws every template's HTML from the last commit and from the
+working folder with two test tournaments and lists any template whose text or markup changed, any it
+couldn't draw, and any graphics string the test data never drew. Use it after any change that should
+leave the graphics as they are (like moving text into the catalog). It compares markup, not pixels.
+
 Review mode: open the site with `?ids` (e.g. `http://localhost:5173/?ids`) and every string shows its
 key after it, on the website and on the graphics, so text on screen can be matched to its sheet row.
 

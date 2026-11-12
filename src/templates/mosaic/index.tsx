@@ -10,6 +10,7 @@ import { sprites } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { useBrand } from '../../brand'
 import './mosaic.css'
+import { gt } from '../../i18n'
 
 const W = 1080
 const H = 1350
@@ -229,7 +230,7 @@ const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'se
         <header className="mz-head">
           <Logo size={130} />
           <div className="mz-head-text">
-            <FitText className="mz-title" text={data.tournament.name || 'Tournament'} max={58} width={680} italic={false} weight={900} />
+            <FitText className="mz-title" text={data.tournament.name || gt('gfx.common.tournament')} max={58} width={680} italic={false} weight={900} />
             <FitText className="mz-facts" text={eventFacts(data).filter((f) => f !== data.formatLabel).join('  •  ')} max={24} width={680} min={16} weight={800} italic={false} />
             {data.formatLabel && <FitText className="mz-format" text={data.formatLabel} max={18} width={680} min={13} weight={700} italic={false} uppercase={false} />}
           </div>
@@ -243,7 +244,7 @@ const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'se
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="mz-cp" />}
               </div>
               <div className="mz-player">
-                <FitText className="mz-name" text={p.name || 'Player'} max={few ? 48 : 32} width={few ? 360 : 280} min={16} weight={900} italic={false} />
+                <FitText className="mz-name" text={p.name || gt('gfx.common.player')} max={few ? 48 : 32} width={few ? 360 : 280} min={16} weight={900} italic={false} />
                 <div className="mz-sub">{[p.record, p.social].filter(Boolean).join('  ·  ')}</div>
               </div>
               <div className="mz-team">

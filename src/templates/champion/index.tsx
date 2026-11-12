@@ -6,6 +6,7 @@ import { getPokemon, getItem } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { LoudBackground } from '../shared/LoudBackground'
 import './champion.css'
+import { gt } from '../../i18n'
 
 // `photo`: Champion + Photo — the winner's photo as a tall portrait on the left, name and team (2 x 3) beside it.
 export const makeChampion = (loud = false, theme?: Theme, photo = false): StandingsTemplate => ({
@@ -19,7 +20,7 @@ export const makeChampion = (loud = false, theme?: Theme, photo = false): Standi
   Component: ({ data }) => {
     const { showMegas } = useDisplay()
     const winner = data.players[0]
-    const name = winner?.name || 'Player'
+    const name = winner?.name || gt('gfx.common.player')
     return (
       <div className={`dmv ch ${photo ? 'ch-withphoto' : ''} ${loud ? 'loud' : ''} ${theme ? `themed ${theme.className}` : ''}`} style={{ width: 1080, height: 1080 }}>
         {theme ? <theme.Background data={data} width={1080} height={1080} /> : loud ? (
@@ -32,7 +33,7 @@ export const makeChampion = (loud = false, theme?: Theme, photo = false): Standi
         )}
 
         <div className="ch-banner">
-          <div className="dmv-title ch-label">Champion</div>
+          <div className="dmv-title ch-label">{gt('gfx.common.champion')}</div>
         </div>
         <Logo size={170} style={{ position: 'absolute', top: 36, right: 40 }} />
 

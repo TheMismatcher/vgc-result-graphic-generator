@@ -10,6 +10,7 @@ import { eventFacts, ordinal, fillClass } from '../shared/format'
 import { sprites } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import './eras.css'
+import { gt } from '../../i18n'
 
 const facts = (d: Parameters<StandingsTemplate['Component']>[0]['data']) => eventFacts(d).filter((f) => f !== d.formatLabel)
 
@@ -28,7 +29,7 @@ export const KantoGameBoy: StandingsTemplate = {
     return (
       <div className={`dmv gb ${fillClass(data.players.length)}`} style={{ width: 1080, height: 1350 }}>
         <div className="gb-box gb-head">
-          <FitText className="gb-title" text={data.tournament.name || 'Tournament'} max={44} width={940} min={20} weight={400} italic={false} family="'Press Start 2P'" />
+          <FitText className="gb-title" text={data.tournament.name || gt('gfx.common.tournament')} max={44} width={940} min={20} weight={400} italic={false} family="'Press Start 2P'" />
           <div className="gb-facts">{facts(data).join(' / ').toUpperCase()}</div>
           {data.formatLabel && <div className="gb-facts dim">{data.formatLabel.toUpperCase()}</div>}
         </div>
@@ -39,9 +40,9 @@ export const KantoGameBoy: StandingsTemplate = {
               <span className="gb-cursor">{i === 0 ? '▶' : ''}</span>
               <span className="gb-place">{ordinal(i + 1).toUpperCase()}</span>
               <div className="gb-player">
-                <FitText className="gb-name" text={p.name || 'Player'} max={few ? 32 : 24} width={few ? 400 : 360} min={12} weight={400} italic={false} family="'Press Start 2P'" />
+                <FitText className="gb-name" text={p.name || gt('gfx.common.player')} max={few ? 32 : 24} width={few ? 400 : 360} min={12} weight={400} italic={false} family="'Press Start 2P'" />
                 <div className="gb-rec">
-                  {p.record && `W/L ${p.record}`}
+                  {p.record && gt('gfx.eras.winLoss', { record: p.record })}
                   {data.cp && <CpBadge points={data.cp(i + 1)} className="gb-cp" />}
                 </div>
               </div>
@@ -55,7 +56,7 @@ export const KantoGameBoy: StandingsTemplate = {
         </div>
 
         <div className="gb-box gb-foot">
-          <span>{data.players[0]?.name ? `${data.players[0].name.toUpperCase()} is the CHAMPION!` : 'A new CHAMPION!'}</span>
+          <span>{data.players[0]?.name ? gt('gfx.eras.championLine', { name: data.players[0].name.toUpperCase() }) : gt('gfx.eras.newChampion')}</span>
           <span className="gb-blink">▼</span>
         </div>
       </div>
@@ -79,7 +80,7 @@ export const Unova: StandingsTemplate = {
       <div className="uv-band a" />
       <div className="uv-band b" />
       <header className="uv-head">
-        <FitText className="uv-title" text={data.tournament.name || 'Tournament'} max={74} width={780} min={30} weight={900} italic={false} />
+        <FitText className="uv-title" text={data.tournament.name || gt('gfx.common.tournament')} max={74} width={780} min={30} weight={900} italic={false} />
         <div className="uv-facts">{facts(data).join('   /   ')}</div>
         {data.formatLabel && <div className="uv-format">{data.formatLabel}</div>}
         <Logo size={140} style={{ position: 'absolute', right: 0, top: 0, border: '6px solid #fff', background: '#000' }} />
@@ -89,7 +90,7 @@ export const Unova: StandingsTemplate = {
           <div key={p.uid} className={`uv-row ${i % 2 ? 'dark' : 'light'}`}>
             <div className="uv-place">{i + 1}</div>
             <div className="uv-player">
-              <FitText className="uv-name" text={p.name || 'Player'} max={few ? 50 : 34} width={few ? 400 : 320} min={16} weight={900} italic={false} />
+              <FitText className="uv-name" text={p.name || gt('gfx.common.player')} max={few ? 50 : 34} width={few ? 400 : 320} min={16} weight={900} italic={false} />
               <div className="uv-sub">
                 {[p.record, p.social].filter(Boolean).join('   ')}
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="uv-cp" />}
@@ -140,7 +141,7 @@ export function LocationRows({ data, cls, grow = false }: { data: Data; cls: str
             {data.cp && <CpBadge points={data.cp(i + 1)} className={`${cls}-cp loc-cp`} />}
           </div>
           <div className={`${cls}-player`}>
-            <FitText className={`${cls}-name`} text={p.name || 'Player'} max={few ? 50 : 32} width={few ? 400 : 300} min={16} weight={900} italic={false} />
+            <FitText className={`${cls}-name`} text={p.name || gt('gfx.common.player')} max={few ? 50 : 32} width={few ? 400 : 300} min={16} weight={900} italic={false} />
             <div className={`${cls}-sub`}>
               <span className={`${cls}-subtext`}>{[p.record, p.social].filter(Boolean).join('  ·  ')}</span>
             </div>
@@ -162,7 +163,7 @@ export function LocationHead({ data, cls, kicker, split }: { data: Data; cls: st
       <Logo size={130} />
       <div className={`${cls}-head-text`}>
         {kicker && <div className={`${cls}-kicker`}>{kicker}</div>}
-        <FitText className={`${cls}-title`} text={data.tournament.name || 'Tournament'} max={58} width={700} min={26} weight={900} italic={false} />
+        <FitText className={`${cls}-title`} text={data.tournament.name || gt('gfx.common.tournament')} max={58} width={700} min={26} weight={900} italic={false} />
         <Facts data={data} className={`${cls}-facts`} sep="  •  " split={split} fit={{ max: split ? 22 : 20, min: 12, width: 700 }} />
       </div>
     </header>

@@ -5,6 +5,7 @@ import { FitText, Logo, MonSprite, PlayerPhoto, CpBadge } from '../shared/parts'
 import { cardColor, ordinal } from '../shared/format'
 import { LoudBackground } from '../shared/LoudBackground'
 import './top8-photos.css'
+import { gt } from '../../i18n'
 
 // Two looks: alternating blue/red cards, or white cards. 1st place is gold in both.
 export const makeTop8Photos = (white: boolean, loud = false, theme?: Theme): StandingsTemplate => ({
@@ -33,8 +34,8 @@ export const makeTop8Photos = (white: boolean, loud = false, theme?: Theme): Sta
       <header className="p8-header">
         <Logo size={170} />
         <div className="p8-heading">
-          <div className="p8-tag">Top {Math.max(data.players.length, 1)}</div>
-          <FitText className="dmv-title" text={data.tournament.name || 'Tournament'} max={64} width={790} />
+          <div className="p8-tag">{gt('gfx.common.topN', { count: Math.max(data.players.length, 1) })}</div>
+          <FitText className="dmv-title" text={data.tournament.name || gt('gfx.common.tournament')} max={64} width={790} />
           <Facts data={data} className="p8-facts" split={theme?.splitFacts} />
         </div>
       </header>
@@ -48,7 +49,7 @@ export const makeTop8Photos = (white: boolean, loud = false, theme?: Theme): Sta
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="photo-cp" />}
             </div>
             <div className="p8-info">
-              <FitText className="p8-name" text={p.name || 'Player'} max={fill ? 34 : 30} width={212} min={16} />
+              <FitText className="p8-name" text={p.name || gt('gfx.common.player')} max={fill ? 34 : 30} width={212} min={16} />
               <div className="p8-sub">{[p.record, p.social].filter(Boolean).join('  ·  ')}</div>
               <div className="p8-team">
                 {p.team.map((m, j) => (

@@ -19,6 +19,7 @@ import './power.css'
 import './terastal.css'
 import './mega.css'
 import './dynamax.css'
+import { gt } from '../../i18n'
 
 type BgProps = { data: StandingsData; width: number; height: number }
 
@@ -370,7 +371,7 @@ function PowerTopCut({ data, cls, Background, emblem, above, font = MONTSERRAT, 
       <header className="pw-head">
         <Logo size={130} />
         <div className="pw-head-text">
-          <FitText className="pw-title" text={data.tournament.name || 'Tournament'} max={60} width={titleWidth} min={26} {...fit} />
+          <FitText className="pw-title" text={data.tournament.name || gt('gfx.common.tournament')} max={60} width={titleWidth} min={26} {...fit} />
           <FitText className="pw-facts" text={eventFacts(data).join('  •  ')} max={20} width={titleWidth} min={12} weight={800} italic={false} />
         </div>
         {emblem}
@@ -383,7 +384,7 @@ function PowerTopCut({ data, cls, Background, emblem, above, font = MONTSERRAT, 
               <span>{ordinal(i + 1)}</span>
             </div>
             <div className="pw-player">
-              <FitText className="pw-name" text={p.name || 'Player'} max={few ? 46 : 32} width={few ? 400 : 300} min={16} {...fit} />
+              <FitText className="pw-name" text={p.name || gt('gfx.common.player')} max={few ? 46 : 32} width={few ? 400 : 300} min={16} {...fit} />
               <div className="pw-sub">
                 {[p.record, p.social].filter(Boolean).join('  ·  ')}
                 {data.cp && <CpBadge points={data.cp(i + 1)} className="pw-cp" />}
