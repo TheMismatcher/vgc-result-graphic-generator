@@ -1,4 +1,5 @@
 import type { Format } from '../types'
+import { gt, type GfxKey, type UiKey } from '../i18n'
 
 export const FORMATS: Format[] = [
   { name: 'VGC 2026 - Regulation M-C', tera: false, items: true },
@@ -12,6 +13,8 @@ export const FORMATS: Format[] = [
   { name: 'Custom Format', tera: true, items: true },
 ]
 
+// `name` is the English kept in saved files and matched by the imports; what people see comes from
+// the catalog (term.eventType.<id>): eventTypeKey() for t() in the website, tournamentTypeName() on graphics.
 export const TOURNAMENT_TYPES = [
   { id: 'grassroots', name: 'Grassroots' },
   { id: 'challenge', name: 'League Challenge' },
@@ -43,5 +46,7 @@ export const TERA_TYPES: { id: string; name: string; color: string }[] = [
 ]
 
 export const formatByName = (name: string) => FORMATS.find((f) => f.name === name) ?? FORMATS[0]
-export const tournamentTypeName = (id: string) => TOURNAMENT_TYPES.find((t) => t.id === id)?.name ?? ''
+export const eventTypeKey = (id: string) => `term.eventType.${id}` as UiKey & GfxKey
+/** The event type as printed on graphics. */
+export const tournamentTypeName = (id: string) => (TOURNAMENT_TYPES.some((t) => t.id === id) ? gt(eventTypeKey(id)) : '')
 export const teraType = (id: string) => TERA_TYPES.find((t) => t.id === id)

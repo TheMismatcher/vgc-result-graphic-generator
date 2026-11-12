@@ -3,11 +3,12 @@ import type { EventInfo, StandingsData } from '../templates/types'
 import { bracketView } from './bracket'
 import { cpEventFor, cpFor } from './cp'
 import { formatByName, tournamentTypeName } from '../data/options'
+import { gt, gtDate } from '../i18n'
 
 export function eventInfo(t: Tournament): EventInfo {
   const format = formatByName(t.format)
   const [y, m, d] = t.date.split('-').map(Number)
-  const dateLabel = y ? new Date(y, m - 1, d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''
+  const dateLabel = y ? gtDate(y, m, d) : ''
   const { masters, seniors, juniors } = t.divisions
   return {
     tournament: t,
@@ -30,6 +31,6 @@ export function standingsData(state: AppState, maxPlayers: number): StandingsDat
     players: state.players.slice(0, maxPlayers),
     bracket: bracketView(state.bracket, state.players),
     cp: state.settings.showCP ? (place) => cpFor(place, players, kind) : null,
-    cpEventLabel: kind === 'cup' ? 'League Cup' : 'League Challenge',
+    cpEventLabel: gt(kind === 'cup' ? 'term.eventType.cup' : 'term.eventType.challenge'),
   }
 }

@@ -1,0 +1,23 @@
+{
+  "ui.branding.colorPicker": "Screen-reader label for the color swatch. {color} is one of the three color names above it.",
+  "ui.branding.colorHex": "Screen-reader label for the hex code box. {color} is one of the three color names.",
+  "ui.branding.deleteConfirm": "{name} is the user's brand name; {builtIn} is the built-in brand (DMV VGC).",
+  "ui.branding.namePlaceholder": "Example only; the brand name itself is not translated.",
+  "ui.branding.taglinePlaceholder": "Example only.",
+  "term.eventType.grassroots": "Official Play! Pokémon event type. Use the official Spanish name. Shown in the website and on graphics.",
+  "term.eventType.challenge": "Official Play! Pokémon event type. Use the official Spanish name. Shown in the website and on graphics.",
+  "term.eventType.cup": "Official Play! Pokémon event type. Use the official Spanish name. Shown in the website and on graphics.",
+  "term.eventType.regional": "Official Play! Pokémon event type. Use the official Spanish name. Shown in the website and on graphics.",
+  "term.eventType.international": "Official Play! Pokémon event type. Use the official Spanish name. Shown in the website and on graphics.",
+  "gfx.common.cpEarned": "CP = Championship Points. {cp} is a number.",
+  "gfx.facts.players": "Player count in the small facts line under a graphic's title (type · date · format · players).",
+  "gfx.sportsPage.headline": "Newspaper headline, printed in capitals. {lastName} is the winner's last name; {event} is the event type (e.g. League Cup) or 'the event'.",
+  "gfx.sportsPage.deck": "Sub-headline when there is no record. {winner} is the full name; {tournament} is the tournament name or the word 'tournament'.",
+  "gfx.sportsPage.deckRecord": "Sub-headline. {record} is like 5-1.",
+  "gfx.sportsPage.colPlace": "Column header for placing; very narrow (2–3 letters).",
+  "gfx.sportsPage.colRecord": "Column header for win-loss record; short abbreviation.",
+  "gfx.sportsPage.colCP": "Column header: Championship Points.",
+  "gfx.sportsPage.field": "Box label: how many players entered.",
+  "gfx.sportsPage.follow": "Box label above the winner's social media handle.",
+  "gfx.sportsPage.earned": "Box label above the Championship Points the winner earned."
+}

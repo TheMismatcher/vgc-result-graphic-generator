@@ -9,7 +9,10 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "data": "node scripts/build-data.mjs",
-    "names": "node scripts/build-names.mjs"
+    "names": "node scripts/build-names.mjs",
+    "i18n:check": "node scripts/i18n/check.mjs",
+    "i18n:sync": "node scripts/i18n/sync.mjs",
+    "i18n:apply": "node scripts/i18n/apply.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

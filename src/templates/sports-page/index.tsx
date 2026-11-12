@@ -12,10 +12,11 @@ import { getPokemon } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import { useBrand } from '../../brand'
 import './sports-page.css'
+import { gt } from '../../i18n'
 
 const lastName = (name: string) => {
   const parts = name.trim().split(/\s+/)
-  return parts[parts.length - 1] || 'Player'
+  return parts[parts.length - 1] || gt('gfx.common.player')
 }
 
 const SportsPage: StandingsTemplate = {
@@ -30,9 +31,10 @@ const SportsPage: StandingsTemplate = {
     const brand = useBrand()
     const { showMegas } = useDisplay()
     const [first, ...rest] = data.players
-    const winner = first?.name || 'Player Name'
-    const headline = `${lastName(winner)} wins ${data.typeLabel || 'the event'}`.toUpperCase()
-    const deck = `${winner}${first?.record ? ` goes ${first.record}` : ''} to take the ${data.tournament.name || 'tournament'}`
+    const winner = first?.name || gt('gfx.common.playerName')
+    const headline = gt('gfx.sportsPage.headline', { lastName: lastName(winner), event: data.typeLabel || gt('gfx.sportsPage.theEvent') }).toUpperCase()
+    const tournament = data.tournament.name || gt('gfx.sportsPage.tournament')
+    const deck = first?.record ? gt('gfx.sportsPage.deckRecord', { winner, record: first.record, tournament }) : gt('gfx.sportsPage.deck', { winner, tournament })
     // Four players or fewer: box-score rows grow to fill the page, teams as a 3 x 2 grid.
     const few = data.players.length <= 4
 
@@ -47,7 +49,7 @@ const SportsPage: StandingsTemplate = {
         </svg>
 
         <header className="sp-mast">
-          <span>{brand.name} · Results</span>
+          <span>{gt('gfx.sportsPage.masthead', { brand: brand.name })}</span>
           <Logo size={64} style={{ border: '3px solid #1b1a17' }} />
           <span>{data.dateLabel}</span>
         </header>
@@ -68,17 +70,17 @@ const SportsPage: StandingsTemplate = {
             ))}
           </div>
           <aside className="sp-side">
-            <div className="sp-stamp">Final</div>
+            <div className="sp-stamp">{gt('gfx.sportsPage.final')}</div>
             <dl>
               {data.playerCount > 0 && (
                 <>
-                  <dt>Field</dt>
-                  <dd>{data.playerCount} players</dd>
+                  <dt>{gt('gfx.sportsPage.field')}</dt>
+                  <dd>{gt('gfx.sportsPage.fieldPlayers', { count: data.playerCount })}</dd>
                 </>
               )}
               {first?.social && (
                 <>
-                  <dt>Follow</dt>
+                  <dt>{gt('gfx.sportsPage.follow')}</dt>
                   <dd>
                     <FitText text={first.social} max={22} width={160} min={13} weight={700} italic={false} uppercase={false} />
                   </dd>
@@ -86,8 +88,8 @@ const SportsPage: StandingsTemplate = {
               )}
               {data.cp && (
                 <>
-                  <dt>Earned</dt>
-                  <dd>+{data.cp(1)} CP</dd>
+                  <dt>{gt('gfx.sportsPage.earned')}</dt>
+                  <dd>{gt('gfx.common.cpEarned', { cp: data.cp(1) })}</dd>
                 </>
               )}
             </dl>
@@ -97,11 +99,11 @@ const SportsPage: StandingsTemplate = {
         <table className="sp-box">
           <thead>
             <tr>
-              <th>Pl</th>
-              <th>Player</th>
-              <th>Rec</th>
-              {data.cp && <th className="sp-cp-col">CP</th>}
-              <th>Team</th>
+              <th>{gt('gfx.sportsPage.colPlace')}</th>
+              <th>{gt('gfx.sportsPage.colPlayer')}</th>
+              <th>{gt('gfx.sportsPage.colRecord')}</th>
+              {data.cp && <th className="sp-cp-col">{gt('gfx.sportsPage.colCP')}</th>}
+              <th>{gt('gfx.sportsPage.colTeam')}</th>
             </tr>
           </thead>
           <tbody>
@@ -109,7 +111,7 @@ const SportsPage: StandingsTemplate = {
               <tr key={p.uid}>
                 <td className="sp-pl">{i + 2}</td>
                 <td className="sp-name">
-                  <FitText text={p.name || 'Player'} max={few ? 44 : 32} width={330} min={18} weight={700} italic={false} family="Oswald" />
+                  <FitText text={p.name || gt('gfx.common.player')} max={few ? 44 : 32} width={330} min={18} weight={700} italic={false} family="Oswald" />
                   {p.social && <span className="sp-handle">{p.social}</span>}
                 </td>
                 <td className="sp-rec">{p.record}</td>

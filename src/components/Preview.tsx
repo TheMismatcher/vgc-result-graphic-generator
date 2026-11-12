@@ -12,6 +12,7 @@ import type { BackdropPhoto, Player } from '../types'
 import { PhotoFrameContext, photoFrame } from '../templates/shared/parts'
 import { useDialog } from './Dialog'
 import { Button, Card } from './ui'
+import { styleName, templateDescription } from '../i18n/templates'
 
 /** Shows a fixed-size graphic scaled down to fit its container. */
 export function Scaled({ width, height, maxWidth, children, nodeRef, fitViewport = false,}: { width: number; height: number; maxWidth?: number; children: ReactNode; nodeRef?: React.Ref<HTMLDivElement>; fitViewport?: boolean; }) {
@@ -505,7 +506,7 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
             // Otherwise it opens in the first style that has the layout (in the saved Solid / Glass look).
             const other = own ? undefined : templates.find((x) => x.layout === id && !x.variantOf && !x.retired)
             const t = own ?? (other && prefer(other))
-            const opensAs = other && (other.variantOf ?? other.style)
+            const opensAs = other && styleName(other.variantOf ?? other.style ?? '')
             return (
               <button
                 key={id}
@@ -513,7 +514,7 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
                 role="radio"
                 aria-checked={current.layout === id}
                 disabled={!t}
-                title={opensAs ? `${currentStyle} doesn't have ${label} yet, so it opens as ${opensAs}` : undefined}
+                title={opensAs ? `${styleName(currentStyle ?? '')} doesn't have ${label} yet, so it opens as ${opensAs}` : undefined}
                 onClick={() => t && onSelect(t.id)}
                 className={`rounded-lg border-2 px-3 py-1.5 text-sm font-semibold transition ${
                   current.layout === id
@@ -530,8 +531,8 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
           })}
         </div>
         <p className="mt-1 text-xs text-slate-500">
-          {current.description}
-          {STANDINGS_LAYOUTS.some(({ id }) => !find(current.style!, id)) && <> Dashed layouts aren't made for {currentStyle} yet and open in another style.</>}
+          {templateDescription(current)}
+          {STANDINGS_LAYOUTS.some(({ id }) => !find(current.style!, id)) && <> Dashed layouts aren't made for {styleName(currentStyle ?? '')} yet and open in another style.</>}
         </p>
       </div>}
       <div>
@@ -562,7 +563,7 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
               <button
                 key={style}
                 type="button"
-                title={own ? undefined : `${style} isn't made for this layout yet, so it opens as ${STANDINGS_LAYOUTS.find((l) => l.id === target.layout)?.label ?? 'its own layout'}`}
+                title={own ? undefined : `${styleName(style)} isn't made for this layout yet, so it opens as ${STANDINGS_LAYOUTS.find((l) => l.id === target.layout)?.label ?? 'its own layout'}`}
                 onClick={() => onSelect(target.id)}
                 className={`rounded-xl border-2 p-1.5 text-left transition ${style === currentStyle ? 'border-[#b3121b] bg-red-50' : retired ? 'border-amber-400 bg-amber-50 hover:border-amber-600' : own ? 'border-slate-200 hover:border-slate-400' : 'border-dashed border-slate-300 hover:border-slate-500'}`}
               >
@@ -574,7 +575,7 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
                     {versions > 1 && <span className="rounded bg-slate-900/80 px-1 text-[10px] font-semibold leading-4 text-white shadow">{versions}</span>}
                   </div>
                 </div>
-                <div className="text-xs font-semibold leading-tight text-slate-900">{style}</div>
+                <div className="text-xs font-semibold leading-tight text-slate-900">{styleName(style)}</div>
                 {layouts && <div className="text-[11px] text-slate-500">{own ? (count === 1 ? '1 layout' : `${count} layouts`) : `Opens as ${STANDINGS_LAYOUTS.find((l) => l.id === target.layout)?.label ?? 'its own layout'}`}</div>}
               </button>
             )

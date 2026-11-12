@@ -32,3 +32,6 @@ dist-ssr
 tdf test data
 # Netlify CLI local state
 .netlify
+
+# String catalog script output (review sheet rows)
+scripts/i18n/out/
