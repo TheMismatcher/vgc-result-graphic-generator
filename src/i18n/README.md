@@ -87,7 +87,7 @@ or could be read two ways. Keep it to one or two sentences.
 ## Checking
 
 ```bash
-npm run i18n:check            # fails on raw text in files that are already converted
+npm run i18n:check            # fails on raw text typed into the code (also runs as part of npm run lint)
 npm run i18n:check -- --list  # what's left, per file
 npm run i18n:check -- src/pages/UsagePage.tsx   # every finding in one file
 npm run i18n:check -- --update                  # after converting files: drop the clean ones from pending.json
@@ -123,7 +123,13 @@ Done by Claude with the Google Sheets connector (no credentials in this repo):
 
 1. `npm run i18n:sync` → `scripts/i18n/out/rows.json`.
 2. Read the sheet's Strings tab. For each row in rows.json:
-   - not in the sheet → append it with Status `New` (or `Cut?` if `retired` is true) and today's date in Added;
+   - not in the sheet → append it after the last filled row, as the 10 columns A–J: `id`, `where`,
+     `type`, `english`, "" (Your edit), `New` (or `Cut?` if `retired` is true), `note` (plus
+     " Max N characters." when `maxLength` is set), "" (Spanish), today's date as `'2026-11-12` (the
+     apostrophe keeps it text), `files`. Put an apostrophe in front of any value that starts with
+     `+`, `=`, `-` or `@`, or the sheet reads it as a formula and shows `#ERROR!`. Read the new rows
+     back to check. Rows past 1000 need the Strings formatting (wrap, plain-text D/E/H, the Status
+     dropdown, the filter range) extended first;
    - in the sheet, "English (in the app)" differs → update it; if its Status was `Approved` and the
      new English isn't the reviewer's own edit being applied, set Status `Changed`;
    - "Where", "Notes", "Code" → refresh.
