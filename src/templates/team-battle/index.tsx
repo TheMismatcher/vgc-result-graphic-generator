@@ -12,7 +12,7 @@ const ROWS_TOP = 330
 const ROWS_BOTTOM = 1196
 const GAP = 10
 
-function TeamLogo({ name, logo, size }: { name: string; logo: string; size: number }) {
+export function TeamLogo({ name, logo, size }: { name: string; logo: string; size: number }) {
   const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('') || '?'
   return logo ? (
     <img className="tb-logo" src={logo} alt={name} style={{ width: size, height: size }} />

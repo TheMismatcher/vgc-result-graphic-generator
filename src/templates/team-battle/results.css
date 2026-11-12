@@ -1,7 +1,7 @@
 /*
  * Team Battle Win / Loss on the themed styles (from the posting team's side, on the left).
  * .tb-mood sits over the style's background; the Victory / Final tag, banner and your team's cards
- * take the result's colours. Trial styles: Mosaic, Editorial Night, Route 119 (all maps).
+ * take the result's colours. Trial styles: Mosaic, Route 119 (all maps). Editorial / Arena have own designs (designs/).
  */
 .themed .tb-mood {
   position: absolute;
@@ -78,66 +78,6 @@
 }
 .themed.theme-mosaic.tb-loss .tb-banner {
   background: #2b2f3c;
-}
-
-/* ---------------- Editorial Night ---------------- */
-
-/* Win: the page goes gold: a full-bleed gold rule up top, gold band, gold marks on your sets. */
-.themed.theme-editorial.tb-win .tb-mood {
-  background:
-    linear-gradient(180deg, var(--yellow) 0 12px, transparent 12px),
-    radial-gradient(ellipse 80% 30% at 50% 0%, color-mix(in srgb, var(--yellow) 18%, transparent), transparent);
-}
-.themed.theme-editorial.tb-win .tb-result-tag {
-  top: 26px;
-  border: 0;
-  padding: 4px 30px;
-  background: var(--yellow);
-  color: #111;
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: 0.32em;
-}
-.themed.theme-editorial.tb-win .tb-card.left.won {
-  box-shadow: inset 8px 0 0 var(--yellow);
-  background: color-mix(in srgb, var(--yellow) 10%, transparent);
-}
-.themed.theme-editorial.tb-win .tb-banner {
-  background: var(--yellow);
-}
-.themed.theme-editorial.tb-win .tb-banner .dmv-title {
-  color: #111;
-}
-
-/* Loss: no accent colour left on the page; a hairline "Final" and a quiet band. */
-.themed.theme-editorial.ed-night.tb-loss {
-  --accent: #c9ccd6;
-}
-.themed.theme-editorial.tb-loss .tb-mood {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1) 40%, rgba(0, 0, 0, 0.45));
-}
-.themed.theme-editorial.tb-loss .tb-result-tag {
-  top: 26px;
-  border: 2px solid var(--hair);
-  padding: 4px 30px;
-  background: transparent;
-  color: var(--muted);
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: 0.32em;
-}
-.themed.theme-editorial.tb-loss .tb-card.left.won {
-  box-shadow: inset 8px 0 0 var(--blue);
-}
-.themed.theme-editorial.tb-loss .tb-card.lost {
-  opacity: 0.6;
-}
-.themed.theme-editorial.tb-loss .tb-banner {
-  background: #1d2438;
-  box-shadow: inset 0 0 0 2px var(--hair);
-}
-.themed.theme-editorial.tb-loss .tb-banner .dmv-title {
-  color: var(--fg);
 }
 
 /* ---------------- Map styles: Route 119, Sinnoh Snow, Spear Pillar ---------------- */
@@ -245,13 +185,12 @@
   box-shadow: 6px 6px 0 var(--ink);
 }
 
-/* Win: a gold sunburst blasting from the top, gold tag, your team's winning cards in gold. */
+/* Win: a gold glow from the top (the background's own sunburst stays the only rays), gold tag, your team's winning cards in gold. */
 .loud.tb-win .tb-loud-bg {
   filter: saturate(1.15) brightness(1.06);
 }
 .loud.tb-win .tb-mood {
   background:
-    repeating-conic-gradient(from 0deg at 50% 6%, rgba(255, 255, 255, 0.26) 0 4deg, transparent 4deg 11deg),
     radial-gradient(ellipse 75% 34% at 50% 0%, color-mix(in srgb, var(--yellow) 85%, transparent) 0%, transparent 100%);
 }
 .loud.tb-win .tb-result-tag {

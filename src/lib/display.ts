@@ -21,7 +21,7 @@ export interface Display {
 }
 
 // map: Route 119 opens on the bridge; styles without that map open on their first one (Sinnoh Snow: Lake Acuity).
-export const DEFAULT_LOOKS: Looks = { panels: 'glass', card: 'classic', champion: 'hall', map: 'bridge', book: 'scarlet', sprites: 'render', result: 'neutral', snowfall: 'game', scene: 'climax' }
+export const DEFAULT_LOOKS: Looks = { panels: 'glass', card: 'classic', champion: 'hall', map: 'bridge', book: 'scarlet', sprites: 'render', colors: 'standard', result: 'neutral', snowfall: 'game', scene: 'climax' }
 
 export const DisplayContext = createContext<Display>({
   showMegas: false,

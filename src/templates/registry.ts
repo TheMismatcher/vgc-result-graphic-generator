@@ -10,7 +10,12 @@ import Usage, { UsageLoud } from './usage'
 import Bracket, { BracketLoud } from './bracket'
 import { ArenaGrid, ArenaSpotlight, ArenaSunset } from './arena'
 import VsResult, { VsResultLoud } from './vs-result'
-import { TeamBattlePoster, VsResultPoster } from './comic-ref'
+import { TeamBattlePoster, TeamBattlePosterLoss, TeamBattlePosterWin, VsResultPoster, withPosterFlip } from './comic-ref'
+import { makeEditorialResult } from './team-battle/designs/editorial'
+import { makeArenaResult } from './team-battle/designs/arena'
+import { makeGhostResult } from './team-battle/designs/ghost'
+import { makeBookResult } from './team-battle/designs/book'
+import { makeMegaResult } from './team-battle/designs/mega'
 import Day2Clean from './day2/clean'
 import { Day2ArenaGrid, Day2ArenaSpotlight, Day2ArenaSunset, Day2CardClassic, Day2CardModern, Day2ComicBook, Day2Classic } from './day2/styles'
 import { RegionalMosaic, RegionalMosaicContrast } from './day2/mosaic'
@@ -82,7 +87,6 @@ const ALL: BrandColour[] = ['main', 'second', 'highlight']
 export const BRAND_COLOURS: Record<string, BrandColour[]> = {
   Classic: ALL,
   'Comic Book': ALL,
-  'Comic Book Flipped': ALL,
   'Comic Book Poster': ALL,
   'Classic (White team background)': ALL,
   'Custom Glass': ALL,
@@ -99,17 +103,20 @@ export const BRAND_COLOURS: Record<string, BrandColour[]> = {
   'Classic · Loss': ['second'],
 }
 
+const flipEntry = ([t, l]: [StandingsTemplate, StandingsLayout]) => [withLoudFlip(t), l] as [StandingsTemplate, StandingsLayout]
 const COMIC_BOOK: [StandingsTemplate, StandingsLayout][] = [[TopCutLoud, 'topcut'], [Top8PhotosLoud, 'top8photos'], [Top8MixedLoud, 'top8mixed'], [Top4PhotosLoud, 'top4photos'], [ChampionLoud, 'champion'], [ChampionLoudPhoto, 'championphoto'], [BracketLoud, 'bracket'], [WideRowsLoud, 'widerows'], [WideSpotlightLoud, 'widespot'], [WideColumnsLoud, 'widecols'], [WideColumnsPlainLoud, 'widecolsplain']]
+
+const COMIC_BOOK_PIXEL = COMIC_BOOK.map(([t, l]) => [withPixelSprites(t), l] as [StandingsTemplate, StandingsLayout])
 
 export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Classic', [[TopCutClean, 'topcut'], [Top8Photos, 'top8photos'], [Top8Mixed, 'top8mixed'], [Top4Photos, 'top4photos'], [Champion, 'champion'], [ChampionPhoto, 'championphoto'], [Bracket, 'bracket'], [WideRows, 'widerows'], [WideSpotlight, 'widespot'], [WideColumns, 'widecols'], [WideColumnsPlain, 'widecolsplain']]),
-  // Comic Book with the HOME 3D renders (the card) or the pixel sprites.
+  // Comic Book: HOME 3D renders or pixel sprites (Sprites switch), original or flipped red/blue background (Colors switch).
   ...versions('Comic Book', [
-    ['Comic Book', { sprites: 'render' }, COMIC_BOOK],
-    ['Comic Book Pixel', { sprites: 'pixel' }, COMIC_BOOK.map(([t, l]) => [withPixelSprites(t), l] as [StandingsTemplate, StandingsLayout])],
+    ['Comic Book', { sprites: 'render', colors: 'standard' }, COMIC_BOOK],
+    ['Comic Book Pixel', { sprites: 'pixel', colors: 'standard' }, COMIC_BOOK_PIXEL],
+    ['Comic Book Flipped', { sprites: 'render', colors: 'flipped' }, COMIC_BOOK.map(flipEntry)],
+    ['Comic Book Pixel Flipped', { sprites: 'pixel', colors: 'flipped' }, COMIC_BOOK_PIXEL.map(flipEntry)],
   ]),
-  // Comparison trial (Nov 10): every Comic Book layout with red and blue swapped on the background.
-  ...tag('Comic Book Flipped', COMIC_BOOK.map(([t, l]) => [withLoudFlip(t), l] as [StandingsTemplate, StandingsLayout])),
   // Classic (White team background), formerly "White" = Classic with white cards; retired Nov 11. Top 4 Photos, Champion,
   // Champion + Photo and Bracket are already white cards on the Classic background, so it has its own copy of each (own
   // id, so the picker can tell the two styles apart). Ids unchanged, so saved selections still open.
@@ -206,7 +213,8 @@ const day2 = (style: string, t: Day2Template): Day2Template => ({ ...t, style })
 export const DAY2_TEMPLATES: Day2Template[] = [
   day2('Artist', Day2Clean),
   day2('Classic', Day2Classic),
-  day2('Comic Book', Day2ComicBook),
+  day2('Comic Book', { ...Day2ComicBook, look: { colors: 'standard' } }),
+  { ...withLoudFlip(Day2ComicBook), style: 'Comic Book Flipped', variantOf: 'Comic Book', look: { colors: 'flipped' } },
   day2('Mosaic', RegionalMosaic),
   day2('Mosaic Contrast', RegionalMosaicContrast),
   day2('Editorial Paper', EventEditorialPaper),
@@ -233,27 +241,76 @@ function sideTemplates<T extends Template>(own: [T, string][], themed: (theme: S
   })
   return [...own.map(([t, style]) => ({ ...t, style })), ...list.sort((a, b) => order(a) - order(b))]
 }
-export const USAGE_TEMPLATES: UsageTemplate[] = sideTemplates([[Usage, 'Classic'], [UsageLoud, 'Comic Book']], (t) => makeUsage(t))
-export const MATCH_TEMPLATES: MatchTemplate[] = sideTemplates([[VsResult, 'Classic'], [VsResultLoud, 'Comic Book'], [VsResultPoster, 'Comic Book Poster']], (t) => makeVsResult(t))
+// Comic Book on the side tabs: a twin with red and blue swapped on the background, on the Colors switch.
+function withFlipped<T extends Template>(t: T): T[] {
+  const poster = t.style === 'Comic Book Poster' || t.style?.startsWith('Comic Book Poster · ')
+  if (!poster && t.style !== 'Comic Book' && !t.style?.startsWith('Comic Book · ')) return [t]
+  const family = poster ? 'Comic Book Poster' : 'Comic Book'
+  const flipped = (poster ? withPosterFlip(t as never) : withLoudFlip(t as never)) as T
+  return [
+    { ...t, look: { ...t.look, colors: 'standard' } },
+    { ...flipped, style: t.style!.replace(family, `${family} Flipped`), variantOf: family, look: { ...t.look, colors: 'flipped' } },
+  ]
+}
+export const USAGE_TEMPLATES: UsageTemplate[] = sideTemplates([[Usage, 'Classic'], [UsageLoud, 'Comic Book']], (t) => makeUsage(t)).flatMap(withFlipped)
+export const MATCH_TEMPLATES: MatchTemplate[] = sideTemplates([[VsResult, 'Classic'], [VsResultLoud, 'Comic Book'], [VsResultPoster, 'Comic Book Poster']], (t) => makeVsResult(t)).flatMap(withFlipped)
 // Team Battle Win / Loss (from the posting team's side, on the left) as a Result switch on the style's card.
-// Trial styles: Mosaic, Editorial Night, Route 119, Sinnoh Snow, Spear Pillar.
+// Trial styles: Mosaic, Route 119, Sinnoh Snow, Spear Pillar.
 const RESULT_THEMES = new Set([
-  'mosaic', 'editorial-night',
+  'mosaic',
   'place-route-119', 'place-route-119-glass', 'place-route-119-bridge', 'place-route-119-bridge-glass', 'place-route-120', 'place-route-120-glass',
   'place-route-217', 'place-route-217-glass', 'place-acuity-lakefront', 'place-acuity-lakefront-glass', 'place-snowpoint-full', 'place-snowpoint-full-glass',
   'place-spear-pillar-hall-floor', 'place-spear-pillar-hall-floor-glass', 'place-spear-pillar-cutscene', 'place-spear-pillar-cutscene-glass',
 ])
+const RESULT_DESIGNS: Record<string, (r: 'win' | 'loss', theme: SideTheme) => TeamBattleTemplate> = {
+  'editorial-paper': makeEditorialResult,
+  'editorial-night': makeEditorialResult,
+  'arena-spotlight': makeArenaResult,
+  'arena-grid': makeArenaResult,
+  'arena-sunset': makeArenaResult,
+  'ghost-pixel': makeGhostResult,
+  'art-scarlet-book': makeBookResult,
+  'art-violet-book': makeBookResult,
+  'power-mega': makeMegaResult,
+}
 export const TEAM_BATTLE_TEMPLATES: TeamBattleTemplate[] = sideTemplates(
-  [[TeamBattle, 'Classic'], [TeamBattleLoud, 'Comic Book'], [TeamBattlePoster, 'Comic Book Poster'], [TeamBattleWin, 'Classic · Win'], [TeamBattleLoss, 'Classic · Loss']],
+  [[TeamBattle, 'Classic'], [TeamBattleLoud, 'Comic Book'], [TeamBattlePoster, 'Comic Book Poster']],
   (t) => makeTeamBattle('neutral', false, t),
 ).flatMap((t) => {
-  // Comic Book: Win / Loss on the card's Result switch too.
+  // Classic and Comic Book: Win / Loss on the card's Result switch too.
+  if (t.id === TeamBattle.id)
+    return [
+      { ...t, look: { result: 'neutral' } },
+      { ...TeamBattleWin, style: 'Classic · Win', variantOf: 'Classic', look: { result: 'win' } },
+      { ...TeamBattleLoss, style: 'Classic · Loss', variantOf: 'Classic', look: { result: 'loss' } },
+    ]
+  if (t.id === TeamBattlePoster.id)
+    return [
+      { ...t, look: { result: 'neutral' } },
+      { ...TeamBattlePosterWin, style: 'Comic Book Poster · Win', variantOf: 'Comic Book Poster', look: { result: 'win' } },
+      { ...TeamBattlePosterLoss, style: 'Comic Book Poster · Loss', variantOf: 'Comic Book Poster', look: { result: 'loss' } },
+    ]
   if (t.id === TeamBattleLoud.id)
     return [
       { ...t, look: { result: 'neutral' } },
       { ...TeamBattleLoudWin, style: 'Comic Book · Win', variantOf: 'Comic Book', look: { result: 'win' } },
       { ...TeamBattleLossLoud, style: 'Comic Book · Loss', variantOf: 'Comic Book', look: { result: 'loss' } },
     ]
+  // Own Win / Loss designs, built from the style's design language (not the shared layout repainted).
+  const designed = [...SIDE_THEMES, ...POWER_SIDE_THEMES].find((x) => RESULT_DESIGNS[x.id] && t.id === `${x.id}-dmv-team-battle`)
+  if (designed) {
+    const make = RESULT_DESIGNS[designed.id]
+    return [
+      { ...t, look: { ...t.look, result: 'neutral' } },
+      ...(['win', 'loss'] as const).map((r): TeamBattleTemplate => ({
+        ...make(r, designed),
+        style: `${t.style} · ${r === 'win' ? 'Win' : 'Loss'}`,
+        variantOf: t.variantOf ?? t.style,
+        retired: t.retired,
+        look: { ...t.look, result: r },
+      })),
+    ]
+  }
   const theme = SIDE_THEMES.find((x) => RESULT_THEMES.has(x.id) && t.id === `${x.id}-dmv-team-battle`)
   if (!theme) return [t]
   // The map itself in the game's weather: Hoenn routes under Emerald's harsh sunlight (Win) or rain (Loss); Sinnoh Snow
@@ -293,4 +350,4 @@ export const TEAM_BATTLE_TEMPLATES: TeamBattleTemplate[] = sideTemplates(
       }
     })
   return [{ ...t, look: { ...t.look, result: 'neutral' } }, ...result('win'), ...result('loss')]
-})
+}).flatMap(withFlipped)

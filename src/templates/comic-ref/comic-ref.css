@@ -2,8 +2,16 @@
 .cr {
   background: var(--blue);
   font-family: 'Montserrat', sans-serif;
-  --cr-band: color-mix(in srgb, var(--blue) 45%, #0c3c96);
+  --cr-band: color-mix(in srgb, var(--blue) 45%, var(--cr-deep));
   --cr-sun: color-mix(in srgb, var(--yellow) 55%, #fff);
+  --cr-deep: #0c3c96;
+}
+/* Flipped colours: the poster's blue becomes red and its red becomes blue. */
+.cr.cr-flip {
+  --blue: var(--brand-red, #b3121b);
+  --blue-dark: var(--brand-red-dark, #7f0b12);
+  --red: var(--brand-blue, #6b9cf6);
+  --cr-deep: #5c070d;
 }
 
 /* ---- background ---- */
@@ -17,9 +25,9 @@
 }
 .cr-blue {
   background:
-    radial-gradient(circle, color-mix(in srgb, var(--blue) 55%, #0c3c96) 3px, transparent 3.6px) 0 0 / 16px 16px,
+    radial-gradient(circle, color-mix(in srgb, var(--blue) 55%, var(--cr-deep)) 3px, transparent 3.6px) 0 0 / 16px 16px,
     repeating-linear-gradient(118deg, transparent 0 60px, rgba(12, 60, 150, 0.22) 60px 74px),
-    linear-gradient(160deg, color-mix(in srgb, var(--blue) 75%, #fff) 0%, var(--blue) 50%, color-mix(in srgb, var(--blue) 80%, #0c3c96) 100%);
+    linear-gradient(160deg, color-mix(in srgb, var(--blue) 75%, #fff) 0%, var(--blue) 50%, color-mix(in srgb, var(--blue) 80%, var(--cr-deep)) 100%);
   -webkit-mask-image: none;
 }
 .cr-yellow {
@@ -261,6 +269,7 @@
 .cr-set {
   display: grid;
   grid-template-columns: 1fr 140px 1fr;
+  column-gap: 14px;
   align-items: center;
 }
 .cr-set > .cr-set-name:first-child {
@@ -333,4 +342,99 @@
 }
 .cr-tb .cr-strip-text {
   top: 850px;
+}
+
+/* ---- Team Battle Win / Loss (your team = left) ---- */
+/* Win: yellow WIN! tab with an ink edge. */
+.cr-win .cr-tab {
+  background: var(--yellow);
+  color: var(--ink);
+  filter: drop-shadow(0 7px 0 var(--ink));
+}
+.cr-tab-word {
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+/* A sunburst blasting out behind your logo (ink outline under a yellow star). */
+.cr-burst,
+.cr-burst::after {
+  position: absolute;
+  clip-path: polygon(50% 0, 57% 30%, 80% 6%, 70% 35%, 100% 26%, 76% 48%, 100% 62%, 72% 64%, 86% 92%, 60% 74%, 50% 100%, 42% 74%, 14% 94%, 28% 64%, 0 70%, 24% 50%, 0 30%, 30% 36%, 18% 8%, 43% 30%);
+}
+.cr-burst {
+  /* Centred on the 290px logo, turned so a gap (not a point) faces the first set below. */
+  left: -45px;
+  top: -45px;
+  width: 380px;
+  height: 380px;
+  background: var(--ink);
+  transform: rotate(18deg);
+}
+.cr-burst::after {
+  content: '';
+  inset: 11px;
+  background: repeating-conic-gradient(from 0deg at 50% 50%, var(--cr-sun) 0deg 8deg, var(--yellow) 8deg 16deg);
+}
+.cr-corner .cr-logo {
+  position: relative;
+}
+/* The beaten team's logo knocked sideways. */
+.cr-win .cr-corner.right {
+  transform: rotate(14deg) scale(0.86) translate(14px, -10px);
+}
+/* Your players' set wins under the yellow highlighter. */
+.cr-win .cr-set-name.ours {
+  padding: 0 12px;
+  background: var(--yellow);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: skewX(-8deg);
+}
+.cr-win .cr-set-score .w,
+.cr-loss .cr-set-score .w {
+  color: var(--yellow);
+}
+
+/* Loss: the poster at night. */
+.cr-loss .cr-blue {
+  filter: brightness(0.55) saturate(0.7);
+}
+.cr-loss .cr-yellow {
+  filter: grayscale(1) brightness(0.62) contrast(1.1);
+}
+.cr-loss .cr-streaks {
+  opacity: 0.25;
+}
+/* Comic rain lines across the whole page. */
+.cr-rain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(104deg, transparent 0 46px, rgba(255, 255, 255, 0.2) 46px 49px),
+    repeating-linear-gradient(104deg, transparent 0 81px, rgba(255, 255, 255, 0.12) 81px 83px);
+}
+.cr-loss .cr-board {
+  background: color-mix(in srgb, var(--blue) 45%, #0d1430);
+}
+.cr-loss .cr-week {
+  background: color-mix(in srgb, var(--cr-band) 50%, #0a0f24);
+}
+.cr-loss .cr-tab {
+  background: var(--ink);
+  color: #fff;
+}
+.cr-loss .cr-set-name.ours {
+  color: var(--yellow);
+}
+.cr-loss .cr-strip {
+  background:
+    repeating-linear-gradient(104deg, transparent 0 46px, rgba(255, 255, 255, 0.12) 46px 49px),
+    #1b2033;
+}
+.cr-loss .cr-strip::before {
+  background: #fff;
 }

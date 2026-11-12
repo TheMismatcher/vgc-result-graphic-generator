@@ -1,0 +1,286 @@
+/* Team Battle Win / Loss, Arena: see arena.tsx. */
+.tbx-ar {
+  --tbx-slate: #4a5068;
+  --tbx-cut: polygon(0 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%);
+  --tbx-cut-r: polygon(0 0, 100% 0, 100% 100%, 24px 100%, 0 calc(100% - 24px));
+  color: #fff;
+}
+.tbx-ar-wall,
+.tbx-ar-mood {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Win: gold spotlight beams down from the top. Loss: the lights go down. */
+.tbx-ar.tbx-win .tbx-ar-mood {
+  background:
+    repeating-conic-gradient(from 150deg at 50% -12%, rgba(255, 236, 170, 0.12) 0 5deg, transparent 5deg 15deg),
+    radial-gradient(ellipse 60% 32% at 50% 0%, color-mix(in srgb, var(--yellow) 32%, transparent), transparent 75%);
+  mask-image: linear-gradient(180deg, #000 0%, transparent 62%);
+}
+.tbx-ar.tbx-loss .tbx-ar-wall {
+  filter: saturate(0.2) brightness(0.55);
+}
+.tbx-ar.tbx-loss .tbx-ar-mood {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.25), transparent 40%, rgba(0, 0, 0, 0.35));
+}
+
+/* The Champion layout's slanted banner. */
+.tbx-ar-banner {
+  position: absolute;
+  left: 0;
+  top: 50px;
+  width: 540px;
+  height: 92px;
+  background: linear-gradient(90deg, var(--red), color-mix(in srgb, var(--red) 40%, transparent));
+  clip-path: polygon(0 0, 100% 0, calc(100% - 30px) 100%, 0 100%);
+}
+.tbx-ar.tbx-loss .tbx-ar-banner {
+  background: linear-gradient(90deg, var(--tbx-slate), color-mix(in srgb, var(--tbx-slate) 30%, transparent));
+}
+.tbx-ar-banner-word {
+  padding-left: 50px;
+  font-size: 66px;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 92px;
+  text-transform: uppercase;
+  color: #fff;
+}
+.tbx-ar-kicker {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 164px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  white-space: nowrap;
+}
+.tbx-ar.tbx-loss .tbx-ar-kicker {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Scoreboard: plate | cell | cell | plate. */
+.tbx-ar-board {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 210px;
+  height: 206px;
+  display: flex;
+  gap: 12px;
+}
+.tbx-ar-plate {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 18px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+  border-left: 8px solid var(--red);
+  clip-path: var(--tbx-cut);
+}
+.tbx-ar-plate.right {
+  flex-direction: row-reverse;
+  text-align: right;
+  border-left: 0;
+  border-right: 8px solid var(--blue);
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+  clip-path: var(--tbx-cut-r);
+}
+.tbx-ar.tbx-win .tbx-ar-plate.won {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--yellow) 38%, transparent), rgba(255, 255, 255, 0.05));
+  border-left-color: var(--yellow);
+}
+.tbx-ar.tbx-loss .tbx-ar-plate.left {
+  border-left-color: var(--tbx-slate);
+}
+.tbx-ar .tb-logo {
+  flex: none;
+  border: 4px solid #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+.tbx-ar-plate-text {
+  min-width: 0;
+}
+.tbx-ar-plate-name {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.02;
+  color: #fff;
+  white-space: nowrap;
+}
+.tbx-ar-plate-sub {
+  margin-top: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+}
+.tbx-ar-cell {
+  flex: none;
+  width: 126px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 8px;
+  font-size: 140px;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(8, 10, 22, 0.62);
+  clip-path: polygon(16% 0, 100% 0, 84% 100%, 0 100%);
+}
+.tbx-ar.tbx-win .tbx-ar-cell.won {
+  color: #14151c;
+  background: linear-gradient(180deg, var(--yellow), color-mix(in srgb, var(--yellow) 72%, #a06a00));
+}
+.tbx-ar.tbx-loss .tbx-ar-cell {
+  color: rgba(255, 255, 255, 0.45);
+}
+.tbx-ar.tbx-loss .tbx-ar-cell.won {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Sets: Arena rows. The left edge says who took the set: gold / main colour = yours, second colour = theirs. */
+.tbx-ar-sets {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 452px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tbx-ar-set {
+  display: flex;
+  align-items: center;
+  padding-right: 22px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+  border-left: 8px solid var(--red);
+  clip-path: var(--tbx-cut);
+}
+.tbx-ar-set.theirs {
+  border-left-color: var(--blue);
+}
+.tbx-ar.tbx-win .tbx-ar-set.ours {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--yellow) 34%, transparent), rgba(255, 255, 255, 0.05));
+  border-left-color: var(--yellow);
+}
+.tbx-ar-set-num {
+  flex: none;
+  order: 1;
+  width: 84px;
+  text-align: center;
+  font-size: 62px;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+.tbx-ar.tbx-win .tbx-ar-set.ours .tbx-ar-set-num {
+  color: var(--yellow);
+}
+.tbx-ar-player {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tbx-ar-player.right {
+  align-items: flex-end;
+  text-align: right;
+}
+.tbx-ar-name {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: #fff;
+  white-space: nowrap;
+}
+.tbx-ar-player.lost .tbx-ar-name {
+  color: rgba(255, 255, 255, 0.55);
+}
+.tbx-ar-player.lost .tbx-ar-mons {
+  opacity: 0.72;
+}
+.tbx-ar-mons {
+  display: flex;
+  gap: 2px;
+}
+.tbx-ar-mons.grid {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  gap: 0 10px;
+}
+.tbx-ar-player.right .tbx-ar-mons.grid {
+  justify-content: end;
+}
+.tbx-ar-set-score {
+  flex: none;
+  width: 124px;
+  text-align: center;
+  font-size: 42px;
+  font-weight: 900;
+  font-style: italic;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.45);
+}
+.tbx-ar-set-score .w {
+  color: #fff;
+}
+.tbx-ar.tbx-win .tbx-ar-set.ours .tbx-ar-set-score .w {
+  color: var(--yellow);
+}
+.tbx-ar-dash {
+  margin: 0 4px;
+}
+
+/* The Champion layout's footer bar. */
+.tbx-ar-foot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 128px;
+  padding: 20px 50px 0;
+  background: rgba(8, 10, 22, 0.88);
+  border-top: 4px solid var(--yellow);
+}
+.tbx-ar.tbx-loss .tbx-ar-foot {
+  border-top-color: #8a90a6;
+}
+.tbx-ar-foot-title {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--yellow);
+  white-space: nowrap;
+}
+.tbx-ar.tbx-loss .tbx-ar-foot-title {
+  color: #fff;
+}
+.tbx-ar-foot-facts {
+  margin-top: 8px;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

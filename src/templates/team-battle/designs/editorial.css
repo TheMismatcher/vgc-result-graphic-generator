@@ -1,0 +1,253 @@
+/* Team Battle Win / Loss, Editorial: see editorial.tsx. Win = accent sidebar + champion band; Loss = newsprint. */
+.tbx-ed {
+  --side: 210px;
+  --left: 260px; /* content edge: sidebar + margin */
+  --right: 44px;
+}
+.tbx-ed.tbx-loss {
+  --accent: var(--muted); /* no colour left on the page */
+}
+
+/* The sideways word on the Champion layout's sidebar. */
+.tbx-ed-side {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--side);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent); /* as on the Champion layout: red on Paper, gold on Night */
+}
+.tbx-ed.tbx-loss .tbx-ed-side {
+  background: var(--fg);
+}
+.tbx-ed.ed-night.tbx-loss .tbx-ed-side {
+  background: #1d2438; /* Night: a quiet slate rather than a bright cream bar */
+}
+.tbx-ed.ed-night.tbx-loss .tbx-ed-side-word {
+  color: var(--muted);
+}
+.tbx-ed-side-word {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--bg);
+}
+
+.tbx-ed-main {
+  position: absolute;
+  left: var(--left);
+  right: var(--right);
+  top: 58px;
+}
+.tbx-ed-kicker {
+  white-space: nowrap;
+}
+.tbx-ed-dot {
+  color: var(--fg);
+  opacity: 0.35;
+}
+.tbx-ed-rule {
+  margin-top: 20px;
+}
+
+/* Box score: one line per team. */
+.tbx-ed-box {
+  margin-top: 26px;
+}
+.tbx-ed-line {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  height: 150px;
+  border-bottom: 1px solid var(--line);
+}
+/* Win: your team in the Top Cut's champion band, bleeding from the sidebar to the page edge. */
+.tbx-ed-line.band {
+  border-bottom: 0;
+  color: var(--band-fg);
+}
+.tbx-ed-line.band::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--side) - var(--left));
+  right: calc(-1 * var(--right));
+  background: var(--band);
+}
+.tbx-ed-line > * {
+  position: relative;
+}
+.tbx-ed .tb-logo {
+  flex: none;
+  border: 3px solid var(--fg);
+  background: #fff;
+}
+.tbx-ed-line.band .tb-logo {
+  border-color: var(--band-num);
+}
+.tbx-ed-team {
+  flex: 1;
+  min-width: 0;
+}
+.tbx-ed-team-kicker {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.tbx-ed-line.band .tbx-ed-team-kicker {
+  color: var(--band-num);
+}
+.tbx-ed-team-name {
+  margin-top: 6px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--fg);
+}
+.tbx-ed-team-name.two {
+  line-height: 0.98;
+  white-space: nowrap;
+}
+.tbx-ed-line.band .tbx-ed-team-name {
+  color: var(--band-fg);
+}
+.tbx-ed-num {
+  flex: none;
+  min-width: 110px;
+  text-align: right;
+  font-size: 132px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+}
+.tbx-ed-line.band .tbx-ed-num {
+  color: var(--band-num);
+}
+.tbx-ed.tbx-loss .tbx-ed-line.won .tbx-ed-num {
+  color: var(--fg);
+}
+
+/* The table: column heads over a heavy rule, then one ruled row per set. */
+.tbx-ed-head {
+  display: grid;
+  grid-template-columns: 64px 1fr 112px 1fr;
+  margin-top: 30px;
+  padding-bottom: 10px;
+  border-bottom: 4px solid var(--fg);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.tbx-ed-head > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tbx-ed-head > span:nth-child(3) {
+  text-align: center;
+}
+.tbx-ed-head > span:nth-child(4) {
+  text-align: right;
+}
+.tbx-ed-sets {
+  position: absolute;
+  left: var(--left);
+  right: var(--right);
+}
+.tbx-ed-set {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+}
+.tbx-ed-set-num {
+  flex: none;
+  width: 64px;
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--muted);
+  opacity: 0.6;
+}
+.tbx-ed-set.ours .tbx-ed-set-num {
+  color: var(--accent);
+  opacity: 1;
+}
+.tbx-ed-player {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tbx-ed-player.right {
+  align-items: flex-end;
+  text-align: right;
+}
+.tbx-ed-player-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--fg);
+  white-space: nowrap;
+}
+.tbx-ed-player.lost .tbx-ed-player-name {
+  color: var(--muted);
+}
+.tbx-ed-mons {
+  display: flex;
+  gap: 2px;
+}
+.tbx-ed-mons.grid {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  gap: 0 6px;
+}
+.tbx-ed-player.right .tbx-ed-mons.grid {
+  justify-content: end;
+}
+.tbx-ed-set-score {
+  flex: none;
+  width: 112px;
+  text-align: center;
+  font-size: 40px;
+  font-weight: 900;
+  white-space: nowrap;
+  color: var(--muted);
+}
+.tbx-ed-set-score .w {
+  color: var(--fg);
+}
+.tbx-ed-dash {
+  margin: 0 4px;
+  color: var(--accent);
+}
+
+.tbx-ed-foot {
+  position: absolute;
+  left: var(--left);
+  right: var(--right);
+  top: 1282px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}

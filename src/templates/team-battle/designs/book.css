@@ -1,0 +1,261 @@
+/* Team Battle Win / Loss, Scarlet / Violet Book: see book.tsx. Colours: the --pl-* vars of .pl-scarlet / .pl-violet. */
+.tbx-bk {
+  color: var(--pl-ink);
+}
+.tbx-bk-wall,
+.tbx-bk-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.tbx-bk-shade {
+  background: radial-gradient(ellipse at 50% 45%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.4) 100%);
+}
+.tbx-bk.tbx-loss .tbx-bk-wall {
+  filter: saturate(0.25) brightness(0.55);
+}
+.tbx-bk.tbx-loss .tbx-bk-shade {
+  background: radial-gradient(ellipse at 50% 45%, rgba(0, 0, 0, 0.15) 30%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+/* The framed panel: cloth colour, gold foil rule, thin inner rule. */
+.tbx-bk-panel {
+  background: var(--pl-panel);
+  border: 3px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  box-shadow: var(--pl-inner), var(--pl-drop);
+}
+.tbx-bk.tbx-win .tbx-bk-board,
+.tbx-bk.tbx-win .tbx-bk-set.ours {
+  box-shadow: var(--pl-inner), 0 0 0 2px rgba(0, 0, 0, 0.35), 0 0 26px rgba(243, 214, 73, 0.55);
+}
+
+/* The Champion layout's framed tag. */
+.tbx-bk-tag {
+  position: absolute;
+  left: 44px;
+  top: 44px;
+  padding: 6px 30px 8px;
+  background: var(--pl-a);
+  border: 5px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  box-shadow: var(--pl-drop);
+  font-size: 60px;
+  font-weight: 900;
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: var(--pl-text-shadow);
+}
+.tbx-bk.tbx-loss .tbx-bk-tag {
+  background: var(--pl-dark);
+  color: var(--pl-sub);
+}
+.tbx-bk-kicker {
+  position: absolute;
+  left: 46px;
+  right: 46px;
+  top: 158px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pl-accent);
+  text-shadow: var(--pl-text-shadow);
+  white-space: nowrap;
+}
+
+/* Scoreboard: team | cell | cell | team. */
+.tbx-bk-board {
+  position: absolute;
+  left: 44px;
+  right: 44px;
+  top: 206px;
+  height: 230px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 22px;
+}
+.tbx-bk-team {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.tbx-bk-team.right {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.tbx-bk .tb-logo {
+  flex: none;
+  border: 4px solid var(--pl-line);
+}
+.tbx-bk-team-text {
+  min-width: 0;
+}
+.tbx-bk-team-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: var(--pl-ink);
+  text-shadow: var(--pl-text-shadow);
+  white-space: nowrap;
+}
+.tbx-bk-sub {
+  margin-top: 6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--pl-sub);
+  text-shadow: var(--pl-text-shadow);
+  white-space: nowrap;
+}
+
+/* The Top Cut's place cell. */
+.tbx-bk-cell {
+  flex: none;
+  align-self: stretch;
+  width: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pl-a);
+  border-right: 3px solid var(--pl-line);
+  font-size: 40px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: var(--pl-text-shadow);
+}
+.tbx-bk-cell.b {
+  background: var(--pl-b);
+}
+.tbx-bk-cell.gold {
+  background: var(--pl-first);
+  color: var(--pl-first-ink);
+  text-shadow: none;
+}
+.tbx-bk-cell.big {
+  align-self: center;
+  width: 128px;
+  height: 160px;
+  border: 3px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  box-shadow: var(--pl-inner);
+  font-size: 110px;
+  line-height: 1;
+}
+.tbx-bk.tbx-loss .tbx-bk-cell.big:not(.gold) {
+  background: var(--pl-dark);
+  color: var(--pl-sub);
+}
+
+/* Sets. */
+.tbx-bk-sets {
+  position: absolute;
+  left: 44px;
+  right: 44px;
+  top: 470px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.tbx-bk-set {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-right: 18px;
+}
+.tbx-bk-player {
+  padding: 6px 0;
+}
+.tbx-bk-set > .tbx-bk-cell {
+  order: 1;
+  margin-right: 16px;
+}
+.tbx-bk-player {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tbx-bk-player.right {
+  align-items: flex-end;
+  text-align: right;
+}
+.tbx-bk-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--pl-ink);
+  text-shadow: var(--pl-text-shadow);
+  white-space: nowrap;
+}
+.tbx-bk-player.lost .tbx-bk-name {
+  color: var(--pl-sub);
+  opacity: 0.75;
+}
+.tbx-bk-player.lost .tbx-bk-mons {
+  opacity: 0.7;
+}
+.tbx-bk-mons {
+  display: flex;
+  gap: 2px;
+}
+.tbx-bk-mons.grid {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  gap: 0 8px;
+}
+.tbx-bk-player.right .tbx-bk-mons.grid {
+  justify-content: end;
+}
+.tbx-bk-set-score {
+  flex: none;
+  width: 116px;
+  text-align: center;
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--pl-sub);
+  text-shadow: var(--pl-text-shadow);
+  white-space: nowrap;
+}
+.tbx-bk-set-score .w {
+  color: var(--pl-first);
+}
+
+/* The Champion layout's footer bar. */
+.tbx-bk-foot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 132px;
+  padding: 22px 46px 0;
+  background: var(--pl-panel);
+  border-top: 4px solid var(--pl-line);
+  box-shadow: inset 0 3px 0 rgba(0, 0, 0, 0.35), inset 0 6px 0 rgba(246, 222, 110, 0.6);
+}
+.tbx-bk-foot-title {
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--pl-first);
+  text-shadow: var(--pl-text-shadow);
+  white-space: nowrap;
+}
+.tbx-bk.tbx-loss .tbx-bk-foot-title {
+  color: var(--pl-ink);
+}
+.tbx-bk-foot-facts {
+  margin-top: 8px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--pl-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

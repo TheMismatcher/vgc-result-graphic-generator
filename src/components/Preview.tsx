@@ -357,7 +357,7 @@ export function Preview<T extends Template>({
 }
 
 /** The Preview's switches for styles that come several ways. */
-const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on', map: 'Map', book: 'Book', sprites: 'Sprites', result: 'Result', snowfall: 'Weather', scene: 'Loss scene' }
+const LOOK_LABELS: Record<LookGroup, string> = { panels: 'Panels', card: 'Card', champion: 'Champion on', map: 'Map', book: 'Book', sprites: 'Sprites', colors: 'Colors', result: 'Result', snowfall: 'Weather', scene: 'Loss scene' }
 const OPTION_LABELS: Record<string, string> = {
   neutral: 'Neutral',
   game: 'As in game',
@@ -369,6 +369,8 @@ const OPTION_LABELS: Record<string, string> = {
   loss: 'Loss',
   render: '3D',
   pixel: 'Pixel',
+  standard: 'Original',
+  flipped: 'Flipped',
   hall: 'Hall of Origin',
   sky: 'Cutscene Sky',
   solid: 'Solid',
@@ -554,18 +556,21 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
             const t = target
             const count = inStyle(style).length
             const versions = versionCount(style, target.layout)
+            // With 'Show retired styles' on, retired cards stand out so they're easy to go through.
+            const retired = showRetired && !!inStyle(style).some((x) => x.retired)
             return (
               <button
                 key={style}
                 type="button"
                 title={own ? undefined : `${style} isn't made for this layout yet, so it opens as ${STANDINGS_LAYOUTS.find((l) => l.id === target.layout)?.label ?? 'its own layout'}`}
                 onClick={() => onSelect(target.id)}
-                className={`rounded-xl border-2 p-1.5 text-left transition ${style === currentStyle ? 'border-[#b3121b] bg-red-50' : own ? 'border-slate-200 hover:border-slate-400' : 'border-dashed border-slate-300 hover:border-slate-500'}`}
+                className={`rounded-xl border-2 p-1.5 text-left transition ${style === currentStyle ? 'border-[#b3121b] bg-red-50' : retired ? 'border-amber-400 bg-amber-50 hover:border-amber-600' : own ? 'border-slate-200 hover:border-slate-400' : 'border-dashed border-slate-300 hover:border-slate-500'}`}
               >
                 <div className="picker-thumb pointer-events-none relative mb-1.5 overflow-hidden rounded-md" aria-hidden>
                   <Scaled width={t.width} height={t.height}>{render(t)}</Scaled>
                   <div className="absolute right-1 top-1 flex items-center gap-1">
                     {BRAND_COLOURS[style] && <span className="rounded-full bg-white/90 p-0.5 shadow">{brandDots(BRAND_COLOURS[style])}</span>}
+                    {retired && <span className="rounded bg-amber-500 px-1 text-[10px] font-bold uppercase leading-4 text-white shadow">Retired</span>}
                     {versions > 1 && <span className="rounded bg-slate-900/80 px-1 text-[10px] font-semibold leading-4 text-white shadow">{versions}</span>}
                   </div>
                 </div>

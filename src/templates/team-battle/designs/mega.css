@@ -1,0 +1,279 @@
+/* Team Battle Win / Loss, Mega Evolution: see mega.tsx. Colours: the --pw-* / --mg-* vars of .pw-mega (power/mega.css). */
+.tbx-mg {
+  --tbx-ring: conic-gradient(#b44dff, #ff4fa3, #ffa040, #ff4fa3, #b44dff);
+  --tbx-ring-gold: conic-gradient(#fff4c2, var(--yellow), #ffa040, var(--yellow), #fff4c2);
+  color: var(--pw-ink);
+  font-family: 'Montserrat', sans-serif;
+}
+/* Loss: the Mega Evolution wears off. Borders, pill and rings go grey; your set wins keep the energy. */
+.tbx-mg.tbx-loss {
+  --tbx-dull: linear-gradient(120deg, #9a90b0, #6a6080 50%, #8a80a0);
+  --pw-card: linear-gradient(rgba(22, 16, 30, 0.86), rgba(22, 16, 30, 0.86)) padding-box, var(--tbx-dull) border-box;
+  --pw-card-alt: var(--pw-card);
+  --pw-shadow: 0 0 12px rgba(120, 104, 150, 0.35);
+  --pw-place: linear-gradient(120deg, #8d84a0, #5d5570);
+  --tbx-ring: conic-gradient(#c8c0d8, #6a6080, #c8c0d8, #6a6080, #c8c0d8);
+}
+.tbx-mg-wall {
+  position: absolute;
+  inset: 0;
+}
+.tbx-mg.tbx-loss .tbx-mg-wall {
+  filter: saturate(0.12) brightness(0.55);
+}
+
+/* The Champion layout's energy pill. */
+.tbx-mg-pill {
+  position: absolute;
+  left: 50px;
+  top: 50px;
+  padding: 12px 40px;
+  border-radius: 999px;
+  background: var(--pw-place);
+  box-shadow: var(--pw-shadow);
+  font-size: 56px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.tbx-mg-orb {
+  position: absolute;
+  right: 50px;
+  top: 34px;
+  filter: drop-shadow(0 0 16px rgba(255, 79, 163, 0.8));
+}
+.tbx-mg.tbx-loss .tbx-mg-orb {
+  filter: grayscale(1) brightness(0.55);
+}
+.tbx-mg-kicker {
+  position: absolute;
+  left: 54px;
+  right: 230px;
+  top: 158px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffd0ea;
+  white-space: nowrap;
+}
+.tbx-mg.tbx-loss .tbx-mg-kicker {
+  color: #c8c0d8;
+}
+
+/* Cards: the energy border; gold for the winners. */
+.tbx-mg-card {
+  background: var(--pw-card);
+  border: 3px solid transparent;
+  border-radius: var(--pw-radius);
+  box-shadow: var(--pw-shadow);
+}
+.tbx-mg-card.alt {
+  background: var(--pw-card-alt);
+}
+.tbx-mg.tbx-win .tbx-mg-card.won,
+.tbx-mg.tbx-win .tbx-mg-set.ours {
+  background: var(--pw-card-first);
+  box-shadow: var(--pw-shadow-first);
+}
+.tbx-mg.tbx-loss .tbx-mg-set.ours {
+  background: linear-gradient(rgba(28, 8, 42, 0.86), rgba(28, 8, 42, 0.86)) padding-box, var(--mg-energy) border-box;
+  box-shadow: 0 0 22px rgba(255, 79, 163, 0.45), 0 0 5px rgba(180, 77, 255, 0.7);
+}
+
+/* Scoreboard: team card | score ring | team card. */
+.tbx-mg-board {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 206px;
+  height: 230px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.tbx-mg-team {
+  flex: 1;
+  min-width: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+}
+.tbx-mg .tb-logo {
+  border: 0;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.9), 0 0 18px rgba(255, 79, 163, 0.6);
+}
+.tbx-mg-team-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: #fff;
+  text-shadow: var(--pw-title-shadow);
+  white-space: nowrap;
+}
+.tbx-mg-sub {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--pw-muted);
+  white-space: nowrap;
+}
+
+/* The Top Cut's ring badge. */
+.tbx-mg-ring {
+  flex: none;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(28, 8, 42, 0.95) 0 58%, transparent 59%), var(--tbx-ring);
+  box-shadow: 0 0 16px rgba(255, 79, 163, 0.6);
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+}
+.tbx-mg.tbx-win .tbx-mg-set.ours .tbx-mg-ring,
+.tbx-mg.tbx-win .tbx-mg-ring.big {
+  background: radial-gradient(circle, rgba(46, 20, 34, 0.95) 0 58%, transparent 59%), var(--tbx-ring-gold);
+  color: var(--yellow);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--yellow) 70%, transparent);
+}
+.tbx-mg.tbx-loss .tbx-mg-set.ours .tbx-mg-ring {
+  background: radial-gradient(circle, rgba(28, 8, 42, 0.95) 0 58%, transparent 59%), conic-gradient(#b44dff, #ff4fa3, #ffa040, #ff4fa3, #b44dff);
+}
+.tbx-mg.tbx-loss .tbx-mg-ring {
+  box-shadow: 0 0 10px rgba(120, 104, 150, 0.4);
+}
+.tbx-mg-ring.big {
+  width: 230px;
+  height: 230px;
+  background: radial-gradient(circle, rgba(28, 8, 42, 0.95) 0 66%, transparent 67%), var(--tbx-ring);
+  font-size: 76px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.tbx-mg.tbx-win .tbx-mg-ring.big {
+  background: radial-gradient(circle, rgba(46, 20, 34, 0.95) 0 66%, transparent 67%), var(--tbx-ring-gold);
+  color: #fff;
+  text-shadow: 0 0 18px color-mix(in srgb, var(--yellow) 80%, transparent);
+}
+
+/* Sets. */
+.tbx-mg-sets {
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  top: 462px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.tbx-mg-set {
+  display: flex;
+  align-items: center;
+  padding: 0 22px 0 16px;
+}
+.tbx-mg-set > .tbx-mg-ring {
+  order: 1;
+  margin-right: 18px;
+}
+.tbx-mg-player {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tbx-mg-player.right {
+  align-items: flex-end;
+  text-align: right;
+}
+.tbx-mg-name {
+  font-weight: 700;
+  line-height: 1.1;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+}
+.tbx-mg-player.won .tbx-mg-name {
+  font-weight: 800;
+}
+.tbx-mg-player.lost .tbx-mg-name {
+  color: var(--pw-muted);
+  opacity: 0.7;
+}
+.tbx-mg-player.lost .tbx-mg-mons {
+  opacity: 0.6;
+}
+.tbx-mg-mons {
+  display: flex;
+  gap: 2px;
+}
+.tbx-mg-mons.grid {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  gap: 0 8px;
+}
+.tbx-mg-player.right .tbx-mg-mons.grid {
+  justify-content: end;
+}
+.tbx-mg-set-score {
+  flex: none;
+  width: 112px;
+  text-align: center;
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--pw-muted);
+  white-space: nowrap;
+}
+.tbx-mg-set-score .w {
+  color: #fff;
+  text-shadow: var(--pw-title-shadow);
+}
+.tbx-mg.tbx-win .tbx-mg-set.ours .tbx-mg-set-score .w {
+  color: var(--yellow);
+}
+
+/* The Champion layout's footer bar. */
+.tbx-mg-foot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 128px;
+  padding: 22px 50px 0;
+  background: rgba(28, 8, 42, 0.86);
+  border-top: 2px solid var(--pw-accent);
+}
+.tbx-mg.tbx-loss .tbx-mg-foot {
+  background: rgba(20, 16, 28, 0.9);
+  border-top-color: #9a90b0;
+}
+.tbx-mg-foot-title {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: #fff;
+  text-shadow: var(--pw-title-shadow);
+  white-space: nowrap;
+}
+.tbx-mg.tbx-loss .tbx-mg-foot-title {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+.tbx-mg-foot-facts {
+  margin-top: 8px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--pw-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

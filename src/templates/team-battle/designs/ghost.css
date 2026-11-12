@@ -1,0 +1,179 @@
+/* Team Battle Win / Loss, Ghost Pixels: see ghost.tsx. Windows / slots / text box from wide/designs/ghost.css. */
+.tbx-gp {
+  color: #f3ebff;
+}
+/* Loss: fading to black from the bottom up, like blacking out. */
+.tbx-gp-fade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(4, 2, 8, 0.35), rgba(4, 2, 8, 0.6) 55%, rgba(4, 2, 8, 0.88));
+}
+
+.tbx-gp-head {
+  position: absolute;
+  left: 44px;
+  right: 52px;
+  top: 40px;
+  height: 330px;
+}
+.tbx-gp-head .wg-bar {
+  height: 54px;
+  justify-content: space-between;
+}
+.tbx-gp-bar-facts {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  color: #e6dcff;
+  text-shadow: 2px 2px 0 #0c090d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tbx-gp-head.first .tbx-gp-bar-facts {
+  color: #5c3e96;
+  text-shadow: none;
+}
+.tbx-gp-board {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+.tbx-gp-team {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.tbx-gp .tb-logo {
+  border: 4px solid var(--gp-line);
+  border-radius: 0;
+  box-shadow: 4px 4px 0 var(--gp-purple);
+}
+.tbx-gp-team-name {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: #fff;
+  text-shadow: 3px 3px 0 var(--gp-purple);
+  white-space: nowrap;
+}
+.tbx-gp-score {
+  flex: none;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 84px;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 6px 6px 0 var(--gp-purple), 6px 6px 0 #0c090d;
+  padding: 0 10px;
+}
+
+/* Sets: one window per set, the pixel number cell on the left (white = your player won it). */
+.tbx-gp-sets {
+  position: absolute;
+  left: 44px;
+  right: 52px;
+  top: 418px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.tbx-gp-set {
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+  padding-right: 14px;
+}
+.tbx-gp-num {
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  width: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 14px;
+  background: var(--gp-glass);
+  border-right: 4px solid var(--gp-line);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 28px;
+  color: #fff;
+  text-shadow: 2px 2px 0 #0c090d;
+}
+.tbx-gp-set.ours .tbx-gp-num {
+  background: #fff;
+  color: #0c090d;
+  text-shadow: none;
+}
+.tbx-gp-player {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.tbx-gp-player.right {
+  align-items: flex-end;
+  text-align: right;
+}
+.tbx-gp-name {
+  white-space: nowrap;
+}
+.tbx-gp-player.lost .tbx-gp-name {
+  color: #a898c8;
+}
+.tbx-gp-player.lost .tbx-gp-slots {
+  opacity: 0.6;
+}
+.tbx-gp-slots {
+  display: flex;
+  gap: 5px;
+}
+.tbx-gp-slots.grid {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  gap: 6px;
+}
+.tbx-gp-player.right .tbx-gp-slots.grid {
+  justify-content: end;
+}
+.tbx-gp-slots .wg-slot {
+  flex: none;
+}
+.tbx-gp-set-score {
+  flex: none;
+  width: 112px;
+  text-align: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 26px;
+  color: #fff;
+  text-shadow: 3px 3px 0 var(--gp-purple);
+}
+
+/* The game text box. */
+.tbx-gp-text {
+  position: absolute;
+  left: 44px;
+  right: 52px;
+  top: 1128px;
+  height: 178px;
+  margin: 0;
+  padding: 30px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  font-family: 'Press Start 2P', monospace;
+  line-height: 1.5;
+  color: #0c090d;
+  box-shadow: inset 0 0 0 4px var(--gp-line), 8px 8px 0 4px rgba(92, 62, 150, 0.95);
+}
+.tbx-gp-text .wg-cursor {
+  right: 26px;
+  bottom: 18px;
+}
