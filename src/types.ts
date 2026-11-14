@@ -31,6 +31,8 @@ export interface Tournament {
   format: string // Format name
   customFormat: string
   divisions: { masters: number | ''; seniors: number | ''; juniors: number | '' }
+  headline?: string // Sports Page: own headline; empty = the automatic "<LASTNAME> WINS <TYPE>"
+  deck?: string // Sports Page: own subheadline (the line under the headline); empty = automatic
 }
 
 export interface UsageEntry {

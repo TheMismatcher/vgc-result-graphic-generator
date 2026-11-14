@@ -69,6 +69,11 @@
   font-weight: 600;
   line-height: 1.2;
   color: var(--grey);
+  /* Never more than two lines (font size shrinks for long text in index.tsx; this is the backstop). */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 /* Lead: the winner's team, plus a side box with the stamp and facts */

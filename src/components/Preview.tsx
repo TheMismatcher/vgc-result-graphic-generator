@@ -61,6 +61,7 @@ export function Preview<T extends Template>({
   allowCP = false,
   showTemplates=true,
   photos,
+  controls,
 }: {
   templates: T[]
   selectedId: string
@@ -70,6 +71,7 @@ export function Preview<T extends Template>({
   allowCP?: boolean // show the "Show CP earned" option (standings graphics only)
   showTemplates?: boolean //show on all but standings by default
   photos?: { players: Player[]; onChange: (uid: string, patch: Partial<Player>) => void } // drag / zoom player photos in the preview
+  controls?: ReactNode // extra settings for the selected style (e.g. Sports Page headline), under the switches
 }) {
   const template = templates.find((t) => t.id === selectedId) ?? templates[0]
   const node = useRef<HTMLDivElement>(null)
@@ -280,6 +282,8 @@ export function Preview<T extends Template>({
           </div>
         </div>
       ))}
+
+      {controls}
 
       {custom && <BackdropControls glass={template.look?.panels !== 'solid'} />}
 

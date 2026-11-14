@@ -11,7 +11,8 @@ import { TdfUpload } from '../components/tdfUpload'
 import { StandingsPhotoImport } from '../components/StandingsPhotoImport'
 import { BracketEditor } from '../components/BracketEditor'
 import { BulkTeamSheetImport } from '../components/BulkTeamSheetImport'
-import { Button, Card } from '../components/ui'
+import { Button, Card, Field, Input } from '../components/ui'
+import { autoDeck, autoHeadline } from '../templates/sports-page'
 import { Box, Tab, Tabs } from '@mui/material'
 import React, { type ReactNode } from 'react'
 import type { StandingsTemplate } from '../templates/types'
@@ -68,6 +69,20 @@ export function StandingsPage({
   }
 
   const event = eventInfo(state.tournament)
+  const setTournament = (patch: Partial<AppState['tournament']>) => setState((s) => ({ ...s, tournament: { ...s.tournament, ...patch } }))
+  // Sports Page: the headline and subheadline can be the user's own; the boxes show the automatic text until typed in.
+  const sportsData = template.style === 'Sports Page' ? standingsData(state, template.maxPlayers) : null
+  const sportsControls = sportsData && (
+    <div className="space-y-2 rounded-xl border border-slate-200 p-3">
+      <Field label={t('ui.preview.sportsHeadline')}>
+        <Input value={state.tournament.headline ?? ''} placeholder={autoHeadline(sportsData)} onChange={(e) => setTournament({ headline: e.target.value || undefined })} />
+      </Field>
+      <Field label={t('ui.preview.sportsDeck')}>
+        <Input value={state.tournament.deck ?? ''} placeholder={autoDeck(sportsData)} onChange={(e) => setTournament({ deck: e.target.value || undefined })} />
+      </Field>
+      <p className="text-xs text-slate-500">{t('ui.preview.sportsTextHint')}</p>
+    </div>
+  )
   const setPlayers = (fn: (players: Player[]) => Player[]) => setState((s) => ({ ...s, players: fn(s.players) }))
   const move = (i: number, dir: -1 | 1) =>
     setPlayers((ps) => {
@@ -181,6 +196,7 @@ export function StandingsPage({
           render={render}
           allowCP
           showTemplates={false}
+          controls={sportsControls}
           photos={{ players: state.players, onChange: (uid, patch) => setPlayers((ps) => ps.map((p) => (p.uid === uid ? { ...p, ...patch } : p))) }}
         />
       </div>
