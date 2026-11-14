@@ -77,6 +77,15 @@
   .tag { flex: none; width: 78px; display: flex; align-items: center; justify-content: center; background: var(--tag); color: var(--tag-ink); font-size: 34px; font-weight: 900; }
   .head-text { flex: 1; min-width: 0; padding: 18px 18px 14px; }
   h2 { margin: 0; font-size: 26px; font-weight: 900; text-transform: uppercase; line-height: 1.02; letter-spacing: -.01em; }
+  /* An event's own logo on its card, on a white tile like the wall's. */
+  .head-logo { flex: none; align-self: center; width: 124px; height: 124px; margin: 12px 14px 4px 0; padding: 4px; border-radius: 16px; background: #fff; box-shadow: 0 4px 0 rgba(20, 24, 40, .14); }
+  .head-logo img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  /* Narrow screens: no room beside the title, so the logo gets its own row under it. */
+  @media (max-width: 520px) {
+    .head:has(.head-logo) { flex-wrap: wrap; }
+    .head:has(.head-logo) .head-text { flex-basis: calc(100% - 78px); }
+    .head-logo { width: 150px; height: 150px; margin: 14px auto 2px; }
+  }
   .kicker { margin-top: 6px; font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: color-mix(in srgb, var(--red) 85%, #000); }
   .body { flex: 1; display: flex; flex-direction: column; padding: 4px 18px 20px; }
   .body p { margin: 8px 0 0; font-size: 15px; line-height: 1.55; color: var(--muted); }
@@ -183,6 +192,8 @@
         <div class="tag">2</div>
         <!-- i18n-ignore: event name -->
         <div class="head-text"><h2 data-i18n-ignore>DMV Invitational</h2><div class="kicker" data-i18n="ui.home.invitational.kicker">Qualification standings</div></div>
+        <!-- i18n-ignore: event logo -->
+        <div class="head-logo"><img src="brand/dmv-invitational-logo.png" width="360" height="360" alt="DMV VGC Invitational" data-i18n-ignore /></div>
       </div>
       <div class="body">
         <p data-i18n="ui.home.invitational.description">Points standings for the DMV Invitational, a major tournament at the end of the year for DMV players you qualify for based solely off your performance in DMV locals.</p>
