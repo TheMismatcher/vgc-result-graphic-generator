@@ -472,7 +472,7 @@
   "ui.home.calendar.kicker": "Home page: small line under the Calendar card title; printed in capitals.",
   "ui.home.calendar.description": "Home page: Calendar card text (the calendar isn't built yet).",
   "ui.home.calendar.soon": "Home page: label on the Calendar card until it's built; printed in capitals.",
-  "ui.home.kofi.title": "Home page: heading of the Ko-fi (donations) panel under the cards. Mismatched is the site's name.",
+  "ui.home.kofi.title": "Home page: heading of the Ko-fi (donations) panel under the cards. Mismatched.gg is the site's name (its web address), kept as written.",
   "ui.home.kofi.text": "Home page: text in the Ko-fi (donations) panel. Ko-fi is the tipping website (a name, not translated).",
   "ui.home.kofi.go": "Home page: button that opens Mismatched's Ko-fi page; printed in capitals.",
   "ui.home.footer.legal": "Home page: small print at the bottom. Company names stay as written."
