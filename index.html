@@ -2,9 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="./brand/logo.png" />
+    <script>
+      // Served from a sub-folder (mismatched.gg/graphics): without a trailing slash, the relative file
+      // paths below would point at the site root and 404, so add the slash first.
+      if (!location.pathname.endsWith('/') && !/\.[a-z0-9]+$/i.test(location.pathname)) location.replace(location.pathname + '/' + location.search + location.hash)
+    </script>
+    <link rel="icon" type="image/svg+xml" href="./brand/mismatched-icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DMV VGC Standings Generator</title>
+    <title>Mismatched · Standings Generator</title>
   </head>
   <body>
     <div id="root"></div>

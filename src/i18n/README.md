@@ -17,6 +17,7 @@ the English is frozen.**
 | `scripts/i18n/check.mjs` | `npm run i18n:check`: finds text typed straight into the code. |
 | `scripts/i18n/pending.json` | Files not moved into the catalog yet (the check doesn't fail on those). |
 | `scripts/i18n/sync.mjs` | `npm run i18n:sync`: updates templates.en.json, writes `scripts/i18n/out/rows.json` for the sheet. |
+| `scripts/i18n/home.mjs` | `npm run i18n:home`: writes the catalog's English into the mismatched.gg home page (`home/index.html`, keys `ui.home.*` plus any other key it shows); `-- --check` (part of `npm run lint`) fails if it's out of date or has text with no key. |
 | `scripts/i18n/apply.mjs` | `npm run i18n:apply -- edits.json`: writes reviewed wording into the catalog. |
 
 ## Using it in code
@@ -67,7 +68,8 @@ dialog.confirm(t('ui.branding.deleteConfirm', { name, builtIn: DMV_BRAND.name })
 `<kind>.<area>.<name>`, camelCase names, e.g. `ui.branding.resetColors`, `gfx.sportsPage.colRecord`.
 
 - kind: `ui` (website), `gfx` (graphics), `term` (official terms, both).
-- area for `ui`: the tab or component: `common` (reused everywhere: Remove, Delete, Loading…), `app`,
+- area for `ui`: `home` for the mismatched.gg home page (`home/index.html`, a plain HTML page: elements carry
+  `data-i18n="key"`, see scripts/i18n/home.mjs), otherwise the tab or component: `common` (reused everywhere: Remove, Delete, Loading…), `app`,
   `standings`, `usage`, `replay`, `teamBattle`, `eventResults`, `branding`, `preview`, `picker`,
   `player`, `bracket`, `tournament`, `import.limitless` / `import.rk9` / `import.tdf` /
   `import.teamSheet` / `import.screenshot` / `import.standingsPhoto` / `import.pokepaste` /

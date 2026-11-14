@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mismatched</title>
+<meta name="description" data-i18n-content="ui.home.metaDescription" content="VGC tools from Mismatched: tournament graphics, DMV Invitational standings and more." />
+<meta property="og:title" content="Mismatched" />
+<meta property="og:description" data-i18n-content="ui.home.metaDescription" content="VGC tools from Mismatched: tournament graphics, DMV Invitational standings and more." />
+<link rel="icon" type="image/svg+xml" href="brand/mismatched-icon.svg" />
+<!--
+  mismatched.gg home page, in the generator's Mosaic style (src/templates/mosaic, themes/mosaic.css, default
+  "Tinted Semi + Drop Shadow"): a wall of rounded white tiles over a red-to-blue gradient, each holding a
+  Pokémon as a one-colour silhouette tinted along the gradient; soft white cards with tinted place tags.
+
+  TEXT: every visible string is a ui.home.* key in the generator's catalog (src/i18n/en.json, notes in
+  notes.json, reviewed in the same sheet). Elements carry the key in data-i18n (or data-i18n-alt /
+  data-i18n-content for attributes); the English between the tags and the strings block below are written
+  by `npm run i18n:home` from the catalog, so edit en.json and run that, never the English here.
+  `?ids` shows each string's key, like the generator.
+
+  The wall's Pokémon are a fixed list (MONS below, files in sprites/), and the tile layout comes from a fixed
+  seed, so the page looks the same on every visit. The Invitational card reads the top of the standings
+  live from the same Google Sheet as the standings page. generator-preview.jpg: Comic Book Top Cut with
+  the generator's sample tournament.
+-->
+<style>
+  @font-face { font-family: 'Montserrat'; font-weight: 700; src: url(fonts/montserrat-latin-700-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 800; src: url(fonts/montserrat-latin-800-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 900; src: url(fonts/montserrat-latin-900-normal.woff2) format('woff2'); }
+
+  /* Generator's built-in palette (brand.ts): main red, second blue, highlight yellow. */
+  :root {
+    --red: #b3121b; --blue: #6b9cf6; --blue-dark: #1f4fa3; --yellow: #ffd34e;
+    --card: rgba(255, 255, 255, .9);
+    --ink: #1f2330; --muted: #5b6070;
+    --shadow: 0 8px 0 rgba(20, 24, 40, .22), 0 16px 30px rgba(20, 24, 40, .28);
+    --tag-red: color-mix(in srgb, var(--red) 75%, #fff);
+    --tag-blue: color-mix(in srgb, var(--blue-dark) 70%, #fff);
+    --tag-yellow: color-mix(in srgb, var(--yellow) 85%, #fff);
+    --kofi: #29abe0;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--blue); }
+  body { margin: 0; position: relative; min-height: 100vh; overflow-x: hidden; font-family: 'Montserrat', system-ui, sans-serif; font-weight: 700; color: var(--ink);
+    background: linear-gradient(135deg, var(--red), var(--blue)); }
+  a { color: inherit; }
+  .i18n-id { font-size: .7em; font-weight: 700; color: #b3121b; background: #fff3a8; border-radius: 4px; padding: 0 3px; text-transform: none; letter-spacing: 0; }
+
+  /* ---------- The tile wall ---------- */
+  .wall { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  .tile { position: absolute; display: flex; align-items: center; justify-content: center; border-radius: 16px; background: rgba(255, 255, 255, .9); }
+  .tile i { display: block; opacity: .55;
+    -webkit-mask: var(--mon) center / contain no-repeat; mask: var(--mon) center / contain no-repeat; }
+
+  .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* ---------- Header plate ---------- */
+  .hero { padding: 54px 16px 34px; display: flex; justify-content: center; }
+  .plate { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 26px 40px 22px; border-radius: 28px; background: var(--card); box-shadow: var(--shadow); text-align: center; }
+  .plate img { display: block; width: min(440px, 72vw); height: auto; }
+  .tagline { font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; color: color-mix(in srgb, var(--red) 85%, #000); }
+
+  /* ---------- Cards ---------- */
+  main { width: 100%; max-width: 1120px; margin: 0 auto; padding: 10px 16px 0; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
+  .card.wide { grid-column: 1 / -1; }
+  @media (max-width: 860px) { main { grid-template-columns: minmax(0, 1fr); max-width: 580px; } }
+  .card { display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; text-decoration: none; background: var(--card); box-shadow: var(--shadow);
+    transition: transform .15s ease, box-shadow .15s ease; }
+  a.card:hover, a.card:focus-visible { transform: translateY(-4px); box-shadow: 0 12px 0 rgba(20, 24, 40, .22), 0 22px 36px rgba(20, 24, 40, .3); outline: none; }
+  .card.yellow { --tag: var(--tag-yellow); --tag-ink: var(--ink); background: color-mix(in srgb, var(--yellow) 28%, var(--card)); }
+  .card.blue { --tag: var(--tag-blue); --tag-ink: #fff; background: color-mix(in srgb, var(--blue) 14%, var(--card)); }
+  .card.red { --tag: var(--tag-red); --tag-ink: #fff; background: color-mix(in srgb, var(--red) 10%, var(--card)); }
+
+  /* Card head: a tinted place box on the left (Mosaic's 1st / 2nd), title beside it. */
+  .head { display: flex; align-items: stretch; }
+  .tag { flex: none; width: 78px; display: flex; align-items: center; justify-content: center; background: var(--tag); color: var(--tag-ink); font-size: 34px; font-weight: 900; }
+  .head-text { flex: 1; min-width: 0; padding: 18px 18px 14px; }
+  h2 { margin: 0; font-size: 26px; font-weight: 900; text-transform: uppercase; line-height: 1.02; letter-spacing: -.01em; }
+  .kicker { margin-top: 6px; font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: color-mix(in srgb, var(--red) 85%, #000); }
+  .body { flex: 1; display: flex; flex-direction: column; padding: 4px 18px 20px; }
+  .body p { margin: 8px 0 0; font-size: 15px; line-height: 1.55; color: var(--muted); }
+  .fill { flex: 1; }
+
+  /* Graphics card: text on the left, the example graphic on the right. */
+  .split { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 8px 32px; align-items: start; padding-right: 26px; margin-top: -60px; }
+  .split .body { padding-top: 64px; }
+  .card.wide .body p { font-size: 16.5px; }
+  .card.wide .head { position: relative; z-index: 1; width: calc(100% - 308px); }
+  .split .body { padding-bottom: 22px; height: 100%; }
+  .shot { margin: 4px 0 22px; padding: 8px; border-radius: 18px; background: #fff; box-shadow: var(--shadow); transform: rotate(2deg); }
+  .shot img { display: block; width: 100%; height: auto; border-radius: 12px; }
+  @media (max-width: 860px) {
+    .split { grid-template-columns: minmax(0, 1fr); padding-right: 0; margin-top: 0; }
+    .split .body { padding-top: 4px; }
+    .card.wide .head { width: auto; }
+    .shot { order: -1; justify-self: center; width: min(300px, 78%); margin: 14px 0 0; }
+  }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .chips span { padding: 6px 12px; border-radius: 10px; background: rgba(255, 255, 255, .85); box-shadow: 0 3px 0 rgba(20, 24, 40, .12); font-size: 13px; font-weight: 800; }
+  .go { margin-top: 20px; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 14px; text-decoration: none;
+    background: var(--tag); color: var(--tag-ink); box-shadow: 0 5px 0 rgba(20, 24, 40, .2); font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: .02em; }
+  .go::after { content: '→'; transition: transform .15s ease; }
+  a.card:hover .go::after, a.go:hover::after { transform: translateX(4px); }
+
+  /* Invitational preview: mini Mosaic Top Cut rows. */
+  .live { display: flex; align-items: center; gap: 8px; margin: 16px 0 10px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .live i { width: 9px; height: 9px; border-radius: 50%; background: #22b45f; box-shadow: 0 0 0 3px rgba(34, 180, 95, .2); }
+  .live.off i { background: #9aa3b5; box-shadow: none; }
+  ol.rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  ol.rows li { display: flex; align-items: center; height: 48px; border-radius: 12px; overflow: hidden; background: color-mix(in srgb, var(--red) 10%, #fff); box-shadow: 0 4px 0 rgba(20, 24, 40, .14); }
+  ol.rows li:nth-child(even) { background: color-mix(in srgb, var(--blue) 14%, #fff); }
+  ol.rows li:first-child { background: color-mix(in srgb, var(--yellow) 28%, #fff); }
+  ol.rows .r { flex: none; width: 54px; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--tag-red); color: #fff; font-size: 18px; font-weight: 900; }
+  ol.rows li:nth-child(even) .r { background: var(--tag-blue); }
+  ol.rows li:first-child .r { background: var(--tag-yellow); color: var(--ink); }
+  ol.rows .n { flex: 1; min-width: 0; padding: 0 10px 0 12px; font-size: 17px; font-weight: 900; text-transform: uppercase; white-space: nowrap; overflow: hidden; }
+  ol.rows .p { flex: none; margin-right: 12px; font-size: 16px; font-weight: 900; color: color-mix(in srgb, var(--red) 85%, #000); }
+  ol.rows .p small { font-size: 10px; margin-left: 3px; color: var(--muted); }
+  ol.rows.skeleton .n::before { content: ''; display: block; height: 12px; width: 70%; border-radius: 6px; background: rgba(31, 35, 48, .12); }
+  .cutnote { margin-top: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .fit-squeeze { display: inline-block; transform-origin: left center; }
+
+  .soon { margin: 22px auto 4px; padding: 10px 20px; border-radius: 14px; background: var(--tag-yellow); color: var(--ink); box-shadow: 0 5px 0 rgba(20, 24, 40, .2);
+    font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; }
+
+  /* Ko-fi panel */
+  .kofi { width: calc(100% - 32px); max-width: 1088px; margin: 24px auto 0; display: flex; align-items: center; gap: 18px 24px; flex-wrap: wrap; padding: 18px 22px;
+    border-radius: 22px; background: var(--card); box-shadow: var(--shadow); }
+  .kofi-cup { flex: none; width: 54px; height: 54px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: var(--kofi); }
+  .kofi-cup svg { width: 30px; height: 30px; }
+  .kofi-text { flex: 1 1 320px; min-width: 0; }
+  .kofi h2 { font-size: 20px; }
+  .kofi p { margin: 4px 0 0; font-size: 15px; color: var(--muted); }
+  .kofi .go { --tag: var(--kofi); --tag-ink: #fff; margin: 0; }
+
+  footer { margin: 28px auto 20px; width: calc(100% - 32px); max-width: 760px; padding: 14px 22px; border-radius: 18px; background: var(--card); box-shadow: 0 6px 0 rgba(20, 24, 40, .18);
+    text-align: center; font-size: 12px; line-height: 1.6; color: var(--muted); }
+  footer p { margin: 0; }
+
+  @media (max-width: 700px) {
+    .hero { padding-top: 32px; }
+    .plate { padding: 20px 22px 18px; }
+    .tagline { font-size: 13px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .card, .go::after { transition: none; } a.card:hover { transform: none; } }
+</style>
+</head>
+<body>
+<div class="wall" id="wall" aria-hidden="true"></div>
+
+<div class="page">
+  <header class="hero">
+    <div class="plate">
+      <!-- i18n-ignore: brand name -->
+      <img src="brand/mismatched-logo.svg" alt="Mismatched" width="531" height="132" data-i18n-ignore />
+      <div class="tagline" data-i18n="ui.home.tagline">VGC tools for players and organizers</div>
+    </div>
+  </header>
+
+  <main>
+    <a class="card yellow wide" id="graphicsCard" href="/graphics/">
+      <div class="head">
+        <div class="tag">1</div>
+        <div class="head-text"><h2 data-i18n="ui.home.graphics.title">Graphics Generator</h2><div class="kicker" data-i18n="ui.home.graphics.kicker">Tournament graphics</div></div>
+      </div>
+      <div class="split">
+        <div class="body">
+          <p data-i18n="ui.home.graphics.description">The Ultimate VGC Graphics Generator. Many different templates from top cut to brackets, and you can auto fill standings and player teams from all kinds of things, including pictures of a monitor with standings, a .tdf file, a picture of a teamsheet, or even a screenshot of the team in Champions!</p>
+          <div class="chips">
+            <span data-i18n="ui.app.tab.standings">Standings</span><span data-i18n="ui.app.tab.usage">Usage</span><span data-i18n="ui.app.tab.replay">Replay</span><span data-i18n="ui.app.tab.teamBattle">Team Battle</span><span data-i18n="ui.app.tab.day2">Event Results</span>
+          </div>
+          <div class="fill"></div>
+          <span class="go" data-i18n="ui.home.graphics.go">Make graphics</span>
+        </div>
+        <div class="shot"><img src="generator-preview.jpg" width="600" height="750" loading="lazy" data-i18n-alt="ui.home.graphics.previewAlt" alt="Example graphic: a Top Cut in the Comic Book style, made with the sample tournament" /></div>
+      </div>
+    </a>
+
+    <a class="card blue" id="invitationalCard" href="/dmv-invitational">
+      <div class="head">
+        <div class="tag">2</div>
+        <!-- i18n-ignore: event name -->
+        <div class="head-text"><h2 data-i18n-ignore>DMV Invitational</h2><div class="kicker" data-i18n="ui.home.invitational.kicker">Qualification standings</div></div>
+      </div>
+      <div class="body">
+        <p data-i18n="ui.home.invitational.description">Points standings for the DMV Invitational, a major tournament at the end of the year for DMV players you qualify for based solely off your performance in DMV locals.</p>
+        <div class="live off" id="live"><i></i><span id="liveText" data-i18n="ui.home.invitational.loading">Loading the standings…</span></div>
+        <ol class="rows skeleton" id="top">
+          <li><span class="r">1</span><span class="n"></span></li><li><span class="r">2</span><span class="n"></span></li>
+          <li><span class="r">3</span><span class="n"></span></li><li><span class="r">4</span><span class="n"></span></li>
+          <li><span class="r">5</span><span class="n"></span></li>
+        </ol>
+        <div class="cutnote" id="cutnote"></div>
+        <div class="fill"></div>
+        <span class="go" data-i18n="ui.home.invitational.go">Full standings</span>
+      </div>
+    </a>
+
+    <div class="card red">
+      <div class="head">
+        <div class="tag">3</div>
+        <div class="head-text"><h2 data-i18n="ui.home.calendar.title">Calendar</h2><div class="kicker" data-i18n="ui.home.calendar.kicker">Local VGC Events</div></div>
+      </div>
+      <div class="body">
+        <p data-i18n="ui.home.calendar.description">View all upcoming locals from your state or a group of states, and sync them to your own calendar or add them to your Discord.</p>
+        <div class="fill"></div>
+        <div class="soon" data-i18n="ui.home.calendar.soon">Coming soon</div>
+        <div class="fill"></div>
+      </div>
+    </div>
+  </main>
+
+  <section class="kofi">
+    <div class="kofi-cup" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M10 11.2c-.9-1-2.6-.4-2.6 1 0 1.3 2.6 3 2.6 3s2.6-1.7 2.6-3c0-1.4-1.7-2-2.6-1z" fill="#fff" stroke="none"/></svg>
+    </div>
+    <div class="kofi-text">
+      <h2 data-i18n="ui.home.kofi.title">Support Mismatched</h2>
+      <p data-i18n="ui.home.kofi.text">All tools here were made for free for the community, and we are paying all hosting costs ourselves! Tips or monthly support help us keep these tools live and update them and add more tools in the future.</p>
+    </div>
+    <a class="go" id="kofiLink" href="#" target="_blank" rel="noopener noreferrer" data-i18n="ui.home.kofi.go">Support on Ko-fi</a>
+  </section>
+
+  <footer>
+    <p data-i18n="ui.home.footer.legal">Pokémon and all related names © Nintendo / Creatures Inc. / GAME FREAK inc. / The Pokémon Company. Mismatched is a non-commercial fan site, not affiliated with or endorsed by them.</p>
+  </footer>
+</div>
+
+<!-- The page's strings from the generator's catalog (src/i18n/en.json). Written by `npm run i18n:home`. -->
+<script type="application/json" id="i18n-en">{"ui.app.tab.day2":"Event Results","ui.app.tab.replay":"Replay","ui.app.tab.standings":"Standings","ui.app.tab.teamBattle":"Team Battle","ui.app.tab.usage":"Usage","ui.home.calendar.description":"View all upcoming locals from your state or a group of states, and sync them to your own calendar or add them to your Discord.","ui.home.calendar.kicker":"Local VGC Events","ui.home.calendar.soon":"Coming soon","ui.home.calendar.title":"Calendar","ui.home.footer.legal":"Pokémon and all related names © Nintendo / Creatures Inc. / GAME FREAK inc. / The Pokémon Company. Mismatched is a non-commercial fan site, not affiliated with or endorsed by them.","ui.home.graphics.description":"The Ultimate VGC Graphics Generator. Many different templates from top cut to brackets, and you can auto fill standings and player teams from all kinds of things, including pictures of a monitor with standings, a .tdf file, a picture of a teamsheet, or even a screenshot of the team in Champions!","ui.home.graphics.go":"Make graphics","ui.home.graphics.kicker":"Tournament graphics","ui.home.graphics.previewAlt":"Example graphic: a Top Cut in the Comic Book style, made with the sample tournament","ui.home.graphics.title":"Graphics Generator","ui.home.invitational.cut":"Top {cut} earn invites","ui.home.invitational.description":"Points standings for the DMV Invitational, a major tournament at the end of the year for DMV players you qualify for based solely off your performance in DMV locals.","ui.home.invitational.go":"Full standings","ui.home.invitational.kicker":"Qualification standings","ui.home.invitational.live":"Live · {count, plural, one {# player} other {# players}} with points","ui.home.invitational.loading":"Loading the standings…","ui.home.invitational.points":"PTS","ui.home.invitational.unavailable":"Live standings on the full page","ui.home.kofi.go":"Support on Ko-fi","ui.home.kofi.text":"All tools here were made for free for the community, and we are paying all hosting costs ourselves! Tips or monthly support help us keep these tools live and update them and add more tools in the future.","ui.home.kofi.title":"Support Mismatched","ui.home.metaDescription":"VGC tools from Mismatched: tournament graphics, DMV Invitational standings and more.","ui.home.tagline":"VGC tools for players and organizers"}</script>
+<script>
+// Where each link goes on mismatched.gg.
+const LINKS = {
+  graphics: '/graphics/',
+  invitational: '/dmv-invitational', // no trailing slash: the standings page's file paths (dmv-invitational/logo.png…) expect it
+  kofi: '', // TODO: Mismatched's Ko-fi page (https://ko-fi.com/…)
+}
+const SHOW = 5 // players in the preview
+const CUT = 24 // invites go to the straight top 24 (same as the standings page)
+const SHEET = '1AU9-WKInTo0NjTB-QKeEJ2GujIVTiomm7AUoppnXeKc'
+const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?tqx=out:csv&sheet=Invitational&range=C8:E200&t=${Date.now()}`
+
+// The wall's Pokémon: a fixed list (HOME renders in sprites/, copied from the generator's public/sprites/home).
+const MONS = ['incineroar', 'rillaboom', 'flutter-mane', 'amoonguss', 'urshifu-rapid-strike', 'kingambit', 'dragonite', 'gholdengo',
+  'pikachu', 'charizard-mega-y', 'garchomp', 'landorus-therian', 'calyrex-shadow', 'miraidon', 'koraidon', 'farigiraf', 'whimsicott',
+  'sneasler', 'dragapult', 'gengar-mega', 'sinistcha', 'archaludon', 'pelipper', 'basculegion-male', 'indeedee-female',
+  'ursaluna-bloodmoon', 'raging-bolt', 'iron-hands', 'chi-yu', 'kyogre', 'groudon-primal', 'rayquaza-mega', 'gallade', 'hatterene',
+  'gardevoir', 'tyranitar', 'smeargle', 'salamence', 'milotic', 'cresselia']
+const SEED = 'mismatched.gg' // fixes the tile layout and the order of the Pokémon
+const RED = '#b3121b', BLUE = '#6b9cf6'
+
+const $ = (id) => document.getElementById(id)
+$('graphicsCard').href = LINKS.graphics
+$('invitationalCard').href = LINKS.invitational
+if (LINKS.kofi) $('kofiLink').href = LINKS.kofi
+
+// ---------- Text (same catalog, language setting and ?ids review mode as the generator) ----------
+// Only English for now; other languages will load i18n/<lang>.json written by `npm run i18n:home`.
+const LANGS = ['en']
+const lang = (() => { try { const v = localStorage.getItem('dmv-ui-lang'); return LANGS.includes(v) ? v : 'en' } catch { return 'en' } })()
+const STRINGS = JSON.parse($('i18n-en').textContent)
+const showIds = (() => { try { return new URLSearchParams(location.search).has('ids') || localStorage.getItem('dmv-i18n-ids') === '1' } catch { return false } })()
+const plural = new Intl.PluralRules(lang)
+/** A catalog string with {placeholders} and {count, plural, one {…} other {…}} filled in. */
+function t(key, vars = {}) {
+  let text = STRINGS[key] ?? key
+  text = text.replace(/\{(\w+),\s*plural,((?:\s*(?:=\d+|\w+)\s*\{[^{}]*\})+)\s*\}/g, (_, name, body) => {
+    const n = Number(vars[name]), options = {}
+    for (const [, k, v] of body.matchAll(/(=\d+|\w+)\s*\{([^{}]*)\}/g)) options[k] = v
+    return (options[`=${n}`] ?? options[plural.select(n)] ?? options.other ?? '').replace(/#/g, n.toLocaleString(lang))
+  })
+  text = text.replace(/\{(\w+)\}/g, (m, name) => (name in vars ? String(vars[name]) : m))
+  return showIds ? `${text} [${key}]` : text
+}
+/** 1st, 2nd, 3rd (the generator's gtOrdinal). */
+const ordinal = (n) => { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]) }
+// The English is already in the page; only another language or ?ids needs the page rewritten.
+if (lang !== 'en' || showIds) {
+  document.querySelectorAll('[data-i18n]').forEach((el) => (el.textContent = t(el.dataset.i18n)))
+  document.querySelectorAll('[data-i18n-alt]').forEach((el) => (el.alt = t(el.dataset.i18nAlt)))
+  document.querySelectorAll('[data-i18n-content]').forEach((el) => (el.content = t(el.dataset.i18nContent)))
+}
+document.documentElement.lang = lang
+
+// ---------- The tile wall ----------
+/** Small seeded random generator (same as the generator's Mosaic), so the wall never changes. */
+function seeded(text) {
+  let a = 0
+  for (const ch of text) a = (Math.imul(a ^ ch.charCodeAt(0), 2654435761) + 1) | 0
+  return () => {
+    a = (a + 0x6d2b79f5) | 0
+    let t = Math.imul(a ^ (a >>> 15), 1 | a)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+/** Mosaic Squares packing: staggered 2×2 tiles first, then 1×1 tiles fill every gap. */
+function layout(cols, rows) {
+  const rand = seeded(SEED)
+  const used = Array.from({ length: rows }, () => Array(cols).fill(false))
+  const free = (x, y) => x + 2 <= cols && y + 2 <= rows && !used[y][x] && !used[y][x + 1] && !used[y + 1][x] && !used[y + 1][x + 1]
+  const big = []
+  const bigCount = Math.round((18 * cols * rows) / 180) // the graphic's density: 18 big tiles on 12 × 15
+  for (let tries = 0; tries < 600 * Math.max(1, bigCount / 18) && big.length < bigCount; tries++) {
+    const x = Math.floor(rand() * (cols - 1)), y = Math.floor(rand() * (rows - 1))
+    if (!free(x, y)) continue
+    if (big.some((b) => (b.y === y && Math.abs(b.x - x) <= 3) || (b.x === x && Math.abs(b.y - y) <= 3))) continue
+    used[y][x] = used[y][x + 1] = used[y + 1][x] = used[y + 1][x + 1] = true
+    big.push({ x, y, s: 2 })
+  }
+  const tiles = [...big]
+  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) if (!used[y][x]) tiles.push({ x, y, s: 1 })
+  return tiles.sort((a, b) => a.y - b.y || a.x - b.x)
+}
+
+const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16))
+const mix = (a, b, t) => { const [x, y] = [hex(a), hex(b)]; return `rgb(${x.map((v, i) => Math.round(v + (y[i] - v) * t)).join(',')})` }
+
+function drawWall() {
+  const wall = $('wall')
+  const W = document.documentElement.clientWidth
+  const H = document.body.scrollHeight
+  const cell = W <= 700 ? 74 : 90, gap = 8
+  const cols = Math.ceil(W / cell), rows = Math.ceil(H / cell) + 1
+  const left = Math.round((W - cols * cell) / 2) // centre the grid; part tiles fall evenly off both edges
+  // Pokémon order shuffled once by the seed, then repeated.
+  const rand = seeded(SEED + '|mons')
+  const mons = MONS.map((m) => [rand(), m]).sort((a, b) => a[0] - b[0]).map(([, m]) => m)
+  wall.innerHTML = layout(cols, rows).map((t, i) => {
+    const size = t.s * cell - gap
+    const art = t.s * cell - gap - 14
+    const color = mix(RED, BLUE, (t.x + t.y) / (cols + rows - 2))
+    return `<div class="tile" style="left:${left + t.x * cell + gap / 2}px;top:${t.y * cell + gap / 2}px;width:${size}px;height:${size}px">` +
+      `<i style="width:${art}px;height:${art}px;background:${color};--mon:url(sprites/${mons[i % mons.length]}.png)"></i></div>`
+  }).join('')
+}
+
+// ---------- Fitting names ----------
+// Shrink text until it fits its box on one line (the generator's FitText); still too long at the
+// smallest size: squeeze it sideways instead of cutting it off.
+function fit(el, max, min) {
+  el.textContent = el.textContent
+  let size = max
+  el.style.fontSize = size + 'px'
+  while (el.scrollWidth > el.clientWidth && size > min) el.style.fontSize = --size + 'px'
+  if (el.scrollWidth > el.clientWidth) {
+    const cs = getComputedStyle(el)
+    const room = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+    const span = document.createElement('span')
+    span.className = 'fit-squeeze'
+    span.textContent = el.textContent
+    el.textContent = ''
+    el.appendChild(span)
+    span.style.transform = `scaleX(${Math.max(0.6, room / span.offsetWidth)})`
+  }
+}
+// One name size for every row (the smallest that fitted, not below 14px); longer names get squeezed.
+function fitNames() {
+  const names = [...document.querySelectorAll('ol.rows:not(.skeleton) .n')]
+  if (!names.length) return
+  names.forEach((n) => fit(n, 17, 14))
+  const even = Math.min(...names.map((n) => parseFloat(n.style.fontSize)))
+  names.forEach((n) => fit(n, even, even))
+}
+
+let lastW = 0
+function relayout(force) {
+  fitNames()
+  const w = document.documentElement.clientWidth
+  if (force || w !== lastW) { lastW = w; drawWall() }
+}
+document.fonts.ready.then(() => relayout(true))
+addEventListener('resize', () => relayout(false))
+
+// ---------- Live top of the Invitational standings ----------
+// Minimal CSV reader for the sheet export (quoted fields, commas inside quotes).
+function parseCsv(text) {
+  const rows = []
+  let row = [], cell = '', q = false
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i]
+    if (q) { if (c === '"' && text[i + 1] === '"') { cell += '"'; i++ } else if (c === '"') q = false; else cell += c }
+    else if (c === '"') q = true
+    else if (c === ',') { row.push(cell); cell = '' }
+    else if (c === '\n') { row.push(cell); rows.push(row); row = []; cell = '' }
+    else if (c !== '\r') cell += c
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row) }
+  return rows
+}
+const escapeHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
+
+async function load() {
+  try {
+    const res = await fetch(csvUrl)
+    if (!res.ok) throw new Error(res.status)
+    const players = parseCsv(await res.text()).slice(1)
+      .map(([rank, name, points]) => ({ rank: Number(rank), name: (name || '').trim(), points: Number(points) }))
+      .filter((p) => p.name && p.rank)
+    if (!players.length) throw new Error('empty')
+    $('top').classList.remove('skeleton')
+    $('top').innerHTML = players.slice(0, SHOW)
+      .map((p) => `<li><span class="r">${ordinal(p.rank)}</span><span class="n">${escapeHtml(p.name)}</span><span class="p">${p.points}<small>${escapeHtml(t('ui.home.invitational.points'))}</small></span></li>`).join('')
+    $('live').classList.remove('off')
+    $('liveText').textContent = t('ui.home.invitational.live', { count: players.length })
+    $('cutnote').textContent = t('ui.home.invitational.cut', { cut: CUT })
+  } catch {
+    // No preview (offline, sheet unreachable): the card still links to the full page.
+    $('top').style.display = 'none'
+    $('liveText').textContent = t('ui.home.invitational.unavailable')
+  }
+  await document.fonts.ready
+  relayout(true) // the card height may have changed, so the wall may need more rows
+}
+load()
+</script>
+</body>
+</html>

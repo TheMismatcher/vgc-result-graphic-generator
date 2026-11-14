@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { t, type UiKey } from './i18n'
-import { BrandContext, resolveBrand } from './brand'
+import { asset, BrandContext, resolveBrand } from './brand'
 import { BackdropContext, DEFAULT_OPACITY } from './lib/backdrop'
 import { DEFAULT_LOOKS, DisplayContext, type Display } from './lib/display'
 import { cpEventFor } from './lib/cp'
@@ -77,14 +77,14 @@ export default function App() {
     <div className="min-h-screen bg-slate-100">
       <header id="app-header" className="bg-[#111]">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-4 py-3">
-          {brand.banner ? (
-            <img src={brand.banner} alt={brand.name} className="h-14 w-auto rounded-md sm:h-16" />
-          ) : (
-            brand.logo && <img src={brand.logo} alt="" className="h-14 w-14 rounded-full bg-white object-cover sm:h-16 sm:w-16" />
-          )}
+          {/* The site's own header: always Mismatched, whatever brand the graphics use. i18n-ignore: brand name */}
+          <a href="/" className="shrink-0 rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+            {/* i18n-ignore: brand name */}
+            <img src={asset('brand/mismatched-logo.svg')} alt="Mismatched" className="h-9 w-auto sm:h-11" />
+          </a>
           <div className="mr-auto">
             <h1 className="text-xl font-black italic uppercase tracking-tight text-white sm:text-2xl">{t('ui.app.title')}</h1>
-            <p className="text-sm text-slate-400">{[brand.name, brand.tagline].filter(Boolean).join(' · ')}</p>
+            <p className="text-sm text-slate-400">{t('ui.app.subtitle')}</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => saveTournamentFile(state)} title={t('ui.app.saveFileTitle')}>

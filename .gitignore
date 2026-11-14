@@ -35,3 +35,6 @@ tdf test data
 
 # String catalog script output (review sheet rows)
 scripts/i18n/out/
+
+# Vite cache (the home page preview server)
+.vite

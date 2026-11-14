@@ -31,10 +31,11 @@ const walk = (p) => {
   for (const f of fs.readdirSync(p)) {
     const abs = path.join(p, f)
     if (fs.statSync(abs).isDirectory()) walk(abs)
-    else if (/\.(tsx?|mjs)$/.test(f) && !abs.includes(`${path.sep}i18n${path.sep}`)) sources.push([path.relative(ROOT, abs), fs.readFileSync(abs, 'utf8')])
+    else if (/\.(tsx?|mjs|html)$/.test(f) && !abs.includes(`${path.sep}i18n${path.sep}`)) sources.push([path.relative(ROOT, abs), fs.readFileSync(abs, 'utf8')])
   }
 }
 walk(path.join(ROOT, 'src'))
+walk(path.join(ROOT, 'home')) // the mismatched.gg home page uses the same catalog (scripts/i18n/home.mjs)
 const filesUsing = (k) => sources.filter(([, text]) => text.includes(`'${k}'`) || text.includes(`"${k}"`)).map(([f]) => f)
 
 // Friendly names for the second part of a key. Anything not listed is shown as written.
@@ -42,7 +43,7 @@ const AREAS = {
   common: 'Shared (many places)', app: 'Top of the page / tabs', standings: 'Standings tab', usage: 'Usage tab', replay: 'Replay tab',
   teamBattle: 'Team Battle tab', eventResults: 'Event Results tab', branding: 'Branding tab', preview: 'Preview (every tab)',
   picker: 'Style picker (every tab)', player: 'Player editor', bracket: 'Bracket editor', tournament: 'Event details form', import: 'Imports',
-  dialog: 'Dialogs', limitless: 'Limitless', tdf: 'TOM file (.tdf)', pokepaste: 'Pokepaste / Showdown', teamSheet: 'Team lists', screenshot: 'Team screenshot', standingsPhoto: 'Standings photo', day2: 'Event Results tab', error: 'Error messages', results: 'Results link', rk9: 'RK9', day2Event: 'Event Results kinds', notImage: 'Image check', ocrLoading: 'Text recognition', format: 'Battle formats', type: 'Pokémon types', facts: 'Facts line under the title', eventType: 'Event types', sportsPage: 'Sports Page',
+  dialog: 'Dialogs', limitless: 'Limitless', tdf: 'TOM file (.tdf)', pokepaste: 'Pokepaste / Showdown', teamSheet: 'Team lists', screenshot: 'Team screenshot', standingsPhoto: 'Standings photo', day2: 'Event Results tab', error: 'Error messages', results: 'Results link', rk9: 'RK9', day2Event: 'Event Results kinds', notImage: 'Image check', ocrLoading: 'Text recognition', format: 'Battle formats', type: 'Pokémon types', facts: 'Facts line under the title', eventType: 'Event types', sportsPage: 'Sports Page', home: 'Home page (mismatched.gg)',
 }
 const camel = (s) => s.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase())
 // Graphics areas that share a name with a website area but are a different place.

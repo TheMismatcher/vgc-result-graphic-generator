@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16 -16 531 132" role="img" aria-label="Mismatched">
+  <!-- PLACEHOLDER Mismatched wordmark (Nicholas is designing the real one), drawn from his sketch.
+       All strokes read "Mismatched"; the blue strokes (on top) alone read "nicholas":
+       M = blue /\/ (N) + red \ · i · s: top bowl = c · m: tall first stem + first arch = h · a: bowl = o ·
+       t: stem = l · c + lower h stem = a · raised e over capital D: e curve + D bowl = s. -->
+  
+  <g fill="none" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#ff3b3b">
+      <path transform="translate(0,0)" d="M48,2 L64,100"/><path transform="translate(98,0)" d="M18,72.5 A16,13.75 0 1 1 10,98.2"/><path transform="translate(151,0)" d="M29,69 C29,57 37,52 43.5,52 C50,52 58,57 58,69 V100"/><path transform="translate(226,0)" d="M50,46 V100"/><path transform="translate(300,0)" d="M1,47 H33"/><path transform="translate(351,0)" d="M54,0 V45"/><path transform="translate(351,0)" d="M54,62 C54,50 62,45 69.5,45 C77,45 85,50 85,62 V100"/><path transform="translate(453,0)" d="M4,19 H40"/><path transform="translate(453,0)" d="M40,19 A18,18 0 0 0 22,1"/><path transform="translate(453,0)" d="M2,52 V100"/><path transform="translate(453,0)" d="M2,52 H22"/><path transform="translate(453,0)" d="M22,100 H2"/>
+    </g>
+    <g stroke="#4d7dff">
+      <path transform="translate(0,0)" d="M0,100 L14,2 L31,96 L48,2"/><path transform="translate(81,0)" d="M0,47 V100"/><path transform="translate(98,0)" d="M26,46.8 A16,13.75 0 1 0 18,72.5"/><path transform="translate(151,0)" d="M0,0 V100"/><path transform="translate(151,0)" d="M0,69 C0,57 8,52 14.5,52 C21,52 29,57 29,69 V100"/><path transform="translate(226,0)" d="M24,45 C36,45 46,57 46,72.5 C46,88 36,100 24,100 C12,100 2,88 2,72.5 C2,57 12,45 24,45 Z"/><path transform="translate(300,0)" d="M17,2 V100"/><path transform="translate(351,0)" d="M40,54 C36,48 30,45 23,45 C10,45 0,57 0,72.5 C0,88 10,100 23,100 C30,100 36,97 40,91"/><path transform="translate(351,0)" d="M54,45 V100"/><path transform="translate(453,0)" d="M22,1 A18,18 0 0 0 22,37"/><path transform="translate(453,0)" d="M22,52 A24,24 0 0 1 22,100"/>
+      <g fill="#4d7dff" stroke="none"><g transform="translate(81,0)"><circle cx="0" cy="25" r="6.5"/></g></g>
+    </g>
+  </g>
+</svg>

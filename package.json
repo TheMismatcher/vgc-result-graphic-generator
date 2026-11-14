@@ -6,13 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "oxlint && node scripts/i18n/check.mjs",
+    "lint": "oxlint && node scripts/i18n/check.mjs && node scripts/i18n/home.mjs --check",
     "preview": "vite preview",
     "data": "node scripts/build-data.mjs",
     "names": "node scripts/build-names.mjs",
     "i18n:check": "node scripts/i18n/check.mjs",
     "i18n:sync": "node scripts/i18n/sync.mjs",
     "i18n:apply": "node scripts/i18n/apply.mjs",
+    "i18n:home": "node scripts/i18n/home.mjs",
     "render-diff": "node scripts/i18n/render-diff.mjs"
   },
   "dependencies": {
