@@ -30,7 +30,6 @@
   "ui.app.loadSampleMessage": "Shown in a question dialog before loading the sample tournament. 'Load sample' is the name of the button.",
   "ui.app.startOverMessage": "Shown in a question dialog before clearing everything. 'Start over' is the name of the button.",
   "ui.app.ownDataPrompt": "{message} is the sentence above (Load sample / Start over explanation); it is followed by a blank line and this question.",
-  "ui.app.tab.botConfig": "Tab-style link that opens the bot's settings page in a new tab. Printed in capitals.",
   "ui.app.tab.standings": "Tab name; printed in capitals. Also listed on the home page's Graphics Generator card.",
   "ui.app.tab.usage": "Tab name; printed in capitals. Pokémon usage statistics. Also listed on the home page's Graphics Generator card.",
   "ui.app.tab.replay": "Tab name; printed in capitals. Also listed on the home page's Graphics Generator card.",

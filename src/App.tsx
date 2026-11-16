@@ -128,22 +128,6 @@ export default function App() {
               {t(tabItem.label)}
             </button>
           ))}
-          <a
-            href="/dmv-invitational"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0 whitespace-nowrap rounded-t-lg px-3 py-2 text-sm font-bold uppercase tracking-wide text-slate-400 hover:text-white sm:px-5"
-          >
-            {/* i18n-ignore: event name */}
-            DMV Invitational
-          </a>
-          <a
-            href="https://bot.mismatched.gg"
-            rel="noopener noreferrer"
-            className="shrink-0 whitespace-nowrap rounded-t-lg px-3 py-2 text-sm font-bold uppercase tracking-wide text-slate-400 hover:text-white sm:px-5"
-          >
-            {t('ui.app.tab.botConfig')}
-          </a>
         </nav>
       </header>
 

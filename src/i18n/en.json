@@ -59,7 +59,6 @@
   "ui.app.tab.teamBattle": "Team Battle",
   "ui.app.tab.day2": "Event Results",
   "ui.app.tab.branding": "Branding",
-  "ui.app.tab.botConfig": "Bot Configuration",
   "ui.app.storageFull": "Couldn't save your work in this browser (storage is full). Everything still works, but it will be lost on refresh. Removing some player photos frees space.",
   "ui.app.saveFile": "Save file",
   "ui.app.saveFileTitle": "Save this tournament to a file",
