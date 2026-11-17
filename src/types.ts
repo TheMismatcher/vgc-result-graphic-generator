@@ -17,6 +17,7 @@ export interface Player {
   photoX?: number // horizontal framing, 0 = left, 100 = right (default 50)
   photoZoom?: number // 1 = just fills its box; larger zooms in
   photoFit?: boolean // show the whole photo (no crop); the style's empty-photo background shows around it
+  cardEnergy?: string // Trading Card: the card's own energy (colour + type up top); unset = from the lead Pokémon
   wins?: number
   losses?: number
   ties?: number

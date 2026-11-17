@@ -13,6 +13,7 @@ import { BracketEditor } from '../components/BracketEditor'
 import { BulkTeamSheetImport } from '../components/BulkTeamSheetImport'
 import { Button, Card, Field, Input } from '../components/ui'
 import { autoDeck, autoHeadline } from '../templates/sports-page'
+import { CardColorField } from '../components/CardColorField'
 import { Box, Tab, Tabs } from '@mui/material'
 import React, { type ReactNode } from 'react'
 import type { StandingsTemplate } from '../templates/types'
@@ -84,6 +85,11 @@ export function StandingsPage({
     </div>
   )
   const setPlayers = (fn: (players: Player[]) => Player[]) => setState((s) => ({ ...s, players: fn(s.players) }))
+  // Trading Card: the winner's card colour (Auto = their lead Pokémon's type).
+  const winner = state.players[0]
+  const cardControls = template.look?.card && winner && (
+    <CardColorField player={winner} card={template.look.card} onChange={(cardEnergy) => setPlayers((ps) => ps.map((p) => (p.uid === winner.uid ? { ...p, cardEnergy } : p)))} />
+  )
   const move = (i: number, dir: -1 | 1) =>
     setPlayers((ps) => {
       const next = ps.slice()
@@ -196,7 +202,7 @@ export function StandingsPage({
           render={render}
           allowCP
           showTemplates={false}
-          controls={sportsControls}
+          controls={sportsControls || cardControls}
           photos={{ players: state.players, onChange: (uid, patch) => setPlayers((ps) => ps.map((p) => (p.uid === uid ? { ...p, ...patch } : p))) }}
         />
       </div>

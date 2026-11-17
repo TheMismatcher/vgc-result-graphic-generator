@@ -8,6 +8,7 @@ import { newPlayer } from '../lib/state'
 import { loadResults, parseResultsLink, type ResultEntry } from '../lib/results'
 import { fetchRecord, fetchRoster, fetchTeam, fullName, rk9Id, type RosterEntry } from '../lib/rk9'
 import { PhotoField, PlayerEditor } from '../components/PlayerEditor'
+import { CardColorField } from '../components/CardColorField'
 import { Preview } from '../components/Preview'
 import { Button, Card, Field, Input, Select } from '../components/ui'
 import { useDialog } from '../components/Dialog'
@@ -129,6 +130,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
   }
 
   const selected = day2.players.find((p) => p.uid === day2.selected) ?? day2.players[0]
+  const template = DAY2_TEMPLATES.find((x) => x.id === state.templates.day2) ?? DAY2_TEMPLATES[0]
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
@@ -343,6 +345,10 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
             onSelect={(id) => setState((s) => ({ ...s, templates: { ...s.templates, day2: id } }))}
             filenameBase={`${day2.event} ${selected.name}`}
             photos={{ players: day2.players, onChange: (uid, patch) => setPlayers((ps) => ps.map((x) => (x.uid === uid ? { ...x, ...patch } : x))) }}
+            controls={template.look?.card && (
+              // Trading Card: this player's card colour (Auto = their lead Pokémon's type).
+              <CardColorField player={selected} card={template.look.card} onChange={(cardEnergy) => setPlayers((ps) => ps.map((x) => (x.uid === selected.uid ? { ...x, cardEnergy } : x)))} />
+            )}
             render={(t) => <t.Component data={{ event: day2.event, caption: day2.caption, player: selected, format, hue: day2.hue, colors: day2.colors, kind }} />}
           />
         ) : (

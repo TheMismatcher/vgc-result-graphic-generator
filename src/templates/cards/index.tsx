@@ -4,12 +4,13 @@
 //   gold species strip, attacks with energy costs, weakness / resistance / retreat cost, flavour box.
 // - Modern: Scarlet & Violet (2023) Sprigatito 013/198: silver border, BASIC tab, HP + type at top right,
 //   silver-framed art, silver info strip, attacks, weakness / resistance / retreat bar, regulation mark.
-// The champion is the card: their ace's type picks the energy (and frame colour), the team are the attacks
+// The champion is the card: their ace's type picks the energy (and frame colour) unless the player has their
+// own (Player.cardEnergy, set in the Preview), the team are the attacks
 // (energy cost = each Pokémon's types, the held item in the damage column). Energy symbols are the official
 // TCG ones (cards/energy/*.png); types come from src/data/types.json (built by `npm run data`).
 
 import type { CSSProperties } from 'react'
-import type { Mon } from '../../types'
+import type { Mon, Player } from '../../types'
 import type { StandingsData, StandingsTemplate } from '../types'
 import { FitText, PlayerPhoto } from '../shared/parts'
 import { getItem, getPokemon, sprites } from '../../data/dex'
@@ -32,10 +33,17 @@ import '@fontsource/cabin/700-italic.css'
 import './cards.css'
 import { gt } from '../../i18n'
 
-type Energy = 'grass' | 'fire' | 'water' | 'lightning' | 'psychic' | 'fighting' | 'darkness' | 'metal' | 'dragon' | 'fairy' | 'colorless'
-type Era = 'classic' | 'modern'
+export type Energy = 'grass' | 'fire' | 'water' | 'lightning' | 'psychic' | 'fighting' | 'darkness' | 'metal' | 'dragon' | 'fairy' | 'colorless'
+export type Era = 'classic' | 'modern'
 
-const ICON: Record<Energy, string> = { grass, fire, water, lightning, psychic, fighting, darkness, metal, dragon, fairy, colorless }
+export const ICON: Record<Energy, string> = { grass, fire, water, lightning, psychic, fighting, darkness, metal, dragon, fairy, colorless }
+
+// The energies each era's card can be coloured in (the Preview's card colour choices). Base Set has no
+// Dragon or Fairy card (both are Colorless); Scarlet & Violet has no Fairy (it's Psychic).
+export const ERA_ENERGIES: Record<Era, Energy[]> = {
+  classic: ['grass', 'fire', 'water', 'lightning', 'psychic', 'fighting', 'darkness', 'metal', 'colorless'],
+  modern: ['grass', 'fire', 'water', 'lightning', 'psychic', 'fighting', 'darkness', 'metal', 'dragon', 'colorless'],
+}
 
 // Game type → TCG energy. Base Set had seven energies: Poison / Bug were Grass, Ghost Psychic, Dragon and
 // Fairy Colorless (Dark / Steel came in Neo). Scarlet & Violet: Poison is Darkness, Fairy Psychic, Dragon its own.
@@ -63,6 +71,14 @@ const typesOf = (id: string) => (TYPES as Record<string, string[]>)[id] ?? []
 const energiesOf = (id: string, era: Era) => [...new Set(typesOf(id).map((t) => ERA_TYPES[era][t] ?? 'colorless'))]
 /** The card's own energy: the ace's first coloured one (Fire/Flying is Fire), else Colorless. */
 const cardEnergy = (id: string, era: Era): Energy => energiesOf(id, era).find((e) => e !== 'colorless') ?? 'colorless'
+/** The energy the player's card gets on its own: from their lead (first) Pokémon. */
+export const autoEnergy = (player: Player | undefined, era: Era, showMegas: boolean): Energy => {
+  const lead = player?.team.find((m) => m.pokemon)
+  return lead ? cardEnergy(displayPokemon(lead, showMegas), era) : 'colorless'
+}
+/** The player's own card energy when it exists on this era's cards, else undefined (= automatic). */
+export const chosenEnergy = (player: Player | undefined, era: Era): Energy | undefined =>
+  ERA_ENERGIES[era].find((e) => e === player?.cardEnergy)
 
 const Icon = ({ e, size, style }: { e: Energy; size: number; style?: CSSProperties }) => <img className="tc-energy" src={ICON[e]} width={size} height={size} alt={e} style={style} />
 
@@ -93,7 +109,7 @@ function useCard(data: StandingsData, era: Era): CardInfo {
       return { mon: m, id, name: getPokemon(id)?.name ?? '', item: getItem(m.item)?.name ?? '', itemSrc: m.item ? sprites.item(m.item) : '' }
     })
   const ace = team[0]
-  const energy = ace ? cardEnergy(ace.id, era) : 'colorless'
+  const energy = chosenEnergy(w, era) ?? (ace ? cardEnergy(ace.id, era) : 'colorless')
   return {
     name: w?.name || gt('gfx.common.player'),
     record: w?.record || '',
