@@ -12,7 +12,7 @@
 import type { CSSProperties } from 'react'
 import type { Mon, Player } from '../../types'
 import type { StandingsData, StandingsTemplate } from '../types'
-import { FitText, PlayerPhoto } from '../shared/parts'
+import { FitBlock, FitText, PlayerPhoto } from '../shared/parts'
 import { getItem, getPokemon, sprites } from '../../data/dex'
 import { displayPokemon, useDisplay } from '../../lib/display'
 import TYPES from '../../data/types.json'
@@ -135,6 +135,11 @@ function Classic({ data, photo, role = 'champion' }: { data: StandingsData; phot
   const c = useCard(data, 'classic')
   const roleName = roleLabel(role)
   const cp = data.cp?.(1)
+  const flavor = gt('gfx.tradingCard.flavor', {
+    facts: c.facts || gt('gfx.tradingCard.defaultFacts'),
+    format: data.formatLabel ? gt('gfx.tradingCard.flavorFormat', { format: data.formatLabel }) : '',
+    cp: cp ? gt('gfx.tradingCard.flavorCpClassic', { cp }) : '',
+  })
   return (
     <div className="dmv tcard tc-classic" style={{ width: W, height: H }}>
       <div className={`tc-card en-${c.energy}`}>
@@ -189,14 +194,11 @@ function Classic({ data, photo, role = 'champion' }: { data: StandingsData; phot
               <Icon e="colorless" size={38} />
             </div>
           </div>
-          <div className="cc-flavor">
-            {gt('gfx.tradingCard.flavor', {
-              facts: c.facts || gt('gfx.tradingCard.defaultFacts'),
-              format: data.formatLabel ? gt('gfx.tradingCard.flavorFormat', { format: data.formatLabel }) : '',
-              cp: cp ? gt('gfx.tradingCard.flavorCpClassic', { cp }) : '',
-            })}
+          {/* The event line: a long event name shrinks the font rather than being cut off. */}
+          <FitBlock className="cc-flavor" fitKey={flavor}>
+            {flavor}
             <span className="cc-lv">#1</span>
-          </div>
+          </FitBlock>
           <div className="cc-foot">
             <span>{c.social ? gt('gfx.tradingCard.illus', { social: c.social }) : ''}</span>
             <span className="cc-copy">©{yearOf(data)} {data.tournament.name || 'VGC' /* i18n-ignore: brand fallback */}</span>
@@ -214,6 +216,11 @@ function Modern({ data, photo, role = 'champion' }: { data: StandingsData; photo
   const c = useCard(data, 'modern')
   const roleName = roleLabel(role)
   const cp = data.cp?.(1)
+  const flavor = gt('gfx.tradingCard.flavor', {
+    facts: c.facts || gt('gfx.tradingCard.defaultFacts'),
+    format: data.formatLabel ? gt('gfx.tradingCard.flavorFormat', { format: data.formatLabel }) : '',
+    cp: cp ? gt('gfx.tradingCard.flavorCpModern', { cp }) : '',
+  })
   const reg = /Regulation\s+([A-Z])/i.exec(data.formatLabel)?.[1]?.toUpperCase() ?? 'G'
   return (
     <div className="dmv tcard tc-modern" style={{ width: W, height: H }}>
@@ -286,13 +293,10 @@ function Modern({ data, photo, role = 'champion' }: { data: StandingsData; photo
               {pad(1, 3)}/{pad(c.players || 1, 3)} <i>★</i>
             </span>
           </div>
-          <div className="sv-flavor">
-            {gt('gfx.tradingCard.flavor', {
-              facts: c.facts || gt('gfx.tradingCard.defaultFacts'),
-              format: data.formatLabel ? gt('gfx.tradingCard.flavorFormat', { format: data.formatLabel }) : '',
-              cp: cp ? gt('gfx.tradingCard.flavorCpModern', { cp }) : '',
-            })}
-          </div>
+          {/* The event line: a long event name shrinks the font rather than being cut off. */}
+          <FitBlock className="sv-flavor" fitKey={flavor}>
+            {flavor}
+          </FitBlock>
           <div className="sv-copy">©{yearOf(data)} {data.tournament.name || 'VGC' /* i18n-ignore: brand fallback */}</div>
         </div>
       </div>

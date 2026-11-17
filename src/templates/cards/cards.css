@@ -254,7 +254,8 @@
 .cc-foot {
   left: 10px;
   right: 10px;
-  top: 1176px;
+  top: 1172px; /* with line-height 1.1 the row ends at the frame’s bottom edge (1192px), which clips it */
+  line-height: 1.1;
   display: flex;
   align-items: baseline;
   gap: 18px;
@@ -264,6 +265,7 @@
 }
 .cc-copy {
   flex: 1;
+  min-width: 0; /* lets a long event name end in … instead of pushing the card number off */
   text-align: center;
   font-weight: 500;
   overflow: hidden;
@@ -489,7 +491,11 @@
   left: 0;
   right: 0;
   bottom: 4px;
+  padding: 0 40px; /* a long event name ends in … inside the card's rounded corners */
   text-align: center;
   font-size: 13px;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

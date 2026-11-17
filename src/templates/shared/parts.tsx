@@ -1,6 +1,6 @@
 // Small building blocks reused across templates.
 
-import { createContext, useContext, useEffect, useState, type CSSProperties, type JSX } from 'react'
+import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type JSX, type ReactNode } from 'react'
 import type { Mon, Player } from '../../types'
 import { getItem, getPokemon, sprites } from '../../data/dex'
 import { teraType } from '../../data/options'
@@ -198,6 +198,34 @@ export function useFontsReady() {
   useEffect(() => {
     document.fonts.ready.then(() => setReady(true))
   }, [])
+}
+
+/**
+ * Wrapping text in a fixed box (its CSS sets the box, the font and any max-height + overflow): when the
+ * text would run past the box, the font steps down until it fits, never below `min`. Text that already
+ * fits keeps the CSS size (no inline style). `fitKey`: the text, so it re-fits when that changes.
+ */
+export function FitBlock({ fitKey, min = 12, className = '', children }: { fitKey: string; min?: number; className?: string; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [size, setSize] = useState<number | undefined>()
+  const [fonts, setFonts] = useState(document.fonts.status === 'loaded')
+  useEffect(() => {
+    document.fonts.ready.then(() => setFonts(true))
+  }, [])
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    el.style.fontSize = ''
+    const base = parseFloat(getComputedStyle(el).fontSize)
+    let s = base
+    while (el.scrollHeight > el.clientHeight + 1 && s > min) el.style.fontSize = `${--s}px`
+    setSize(s < base ? s : undefined)
+  }, [fitKey, min, fonts])
+  return (
+    <div ref={ref} className={className} style={size ? { fontSize: size } : undefined}>
+      {children}
+    </div>
+  )
 }
 
 /**
