@@ -23,7 +23,7 @@
   "ui.branding.exportAll": "Export brands",
   "ui.branding.import": "Import brands",
   "ui.branding.name": "Name",
-  "ui.branding.namePlaceholder": "e.g. Richmond VGC",
+  "ui.branding.namePlaceholder": "e.g. Mismatched VGC",
   "ui.branding.tagline": "Tagline (optional)",
   "ui.branding.taglinePlaceholder": "e.g. Weekly Locals",
   "ui.branding.logo": "Logo",
@@ -77,7 +77,7 @@
 
   "ui.tournament.title": "Tournament",
   "ui.tournament.name": "Tournament name",
-  "ui.tournament.namePlaceholder": "e.g. DMV October League Cup",
+  "ui.tournament.namePlaceholder": "e.g. DMV Nicholas Celebration Cup",
   "ui.tournament.type": "Type",
   "ui.tournament.date": "Date",
   "ui.tournament.format": "Format",
@@ -113,7 +113,6 @@
   "ui.import.limitless.link": "Tournament link",
   "ui.import.limitless.linkPlaceholder": "https://play.limitlesstcg.com/tournament/…",
   "ui.import.limitless.importing": "Importing…",
-
   "ui.import.tdf.intro": "Parses standings from a .tdf (XML) file for events run via TOM. All data is processed locally and not retained.",
   "ui.import.tdf.fileSelection": "File Selection",
   "ui.import.tdf.selectFile": "Select File",
@@ -143,6 +142,7 @@
   "ui.player.addPhoto": "Add photo",
   "ui.player.photoHint": "Used by the photo templates",
   "ui.player.framing": "Framing",
+
   "ui.import.pokepaste.unmatched": "Imported, but couldn't match: {names}. Pick those by hand.",
   "ui.import.pokepaste.placeholder": "https://pokepast.es/… or paste a Showdown team export",
   "ui.import.pokepaste.importTeam": "Import team",
@@ -214,6 +214,7 @@
   "ui.import.screenshot.movesRead": "Moves read: {moves}",
 
   "ui.common.close": "Close",
+
   "ui.preview.imageAlt": "Your graphic",
   "ui.preview.saveHint": "Tap Save Image in the share menu, or press and hold the image and tap Save to Photos.",
   "ui.preview.saveToPhotos": "Save to Photos",
@@ -285,6 +286,7 @@
   "ui.preview.option.snowpoint": "Snowpoint",
   "ui.preview.option.scarlet": "Scarlet",
   "ui.preview.option.violet": "Violet",
+
   "ui.picker.layoutHeading": "1. Layout",
   "ui.picker.layoutLabel": "Layout",
   "ui.picker.layout.topcut": "Top Cut",
@@ -338,6 +340,7 @@
   "ui.usage.teamsCounted": "Teams counted",
   "ui.usage.countLabel": "Count",
   "ui.usage.addPokemon": "+ Add Pokémon",
+
   "ui.replay.heading": "Showdown replay",
   "ui.replay.intro": "Paste a replay link. For a best-of-3, paste the <b>last game of the set</b> (Game 2 or 3): it has the final record, so the earlier games aren’t needed. An earlier game only gives the score up to that point.",
   "ui.replay.linkPlaceholder": "https://replay.pokemonshowdown.com/gen9championsvgc2026regmcbo3-…",
@@ -411,6 +414,7 @@
   "term.day2Event.internationals": "Internationals",
   "term.day2Event.special": "Special Events",
   "term.day2Event.worlds": "Worlds",
+
   "ui.day2.example.regionals": "e.g. 2027 Louisville Regionals",
   "ui.day2.example.play": "e.g. 2027 Play! Pokémon Event",
   "ui.day2.example.internationals": "e.g. 2027 North America Internationals",
@@ -478,9 +482,11 @@
   "ui.error.notImage": "That file is not an image.",
   "ui.error.imageEmpty": "Image was empty.",
   "ui.error.cantCopyImage": "This browser can’t copy images. Use Download PNG instead.",
+
   "ui.branding.notBrandsFile": "That file isn't a brands file.",
   "ui.branding.notBrandsFileExport": "That file isn't a brands file (save one with “Export brands”).",
   "ui.branding.noBrandsFound": "No brands found in that file.",
+
   "ui.app.fileUnreadable": "That file isn’t a saved tournament (it couldn’t be read).",
   "ui.app.fileNotFromHere": "That file isn’t a tournament saved from this generator.",
   "ui.app.fileTooNew": "That file was saved by a newer version of the generator. Update and try again.",
@@ -510,6 +516,7 @@
   "ui.home.kofi.text": "All tools here were made for free for the community, and we are paying all hosting costs ourselves! Tips or monthly support help us keep these tools live, update them, and add more tools in the future!",
   "ui.home.kofi.go": "Support on Ko-fi",
   "ui.home.footer.legal": "Pokémon and all related names © Nintendo / Creatures Inc. / GAME FREAK inc. / The Pokémon Company. Mismatched.gg is a non-commercial fan site, not affiliated with or endorsed by them.",
+
   "ui.import.notImage": "That file isn’t an image.",
   "ui.import.ocrLoading": "Loading text recognition (first time takes a moment)…",
   "ui.import.limitless.loadError": "Couldn't load that tournament from Limitless. Check the link.",
@@ -555,9 +562,11 @@
   "ui.import.teamSheet.genderMissing": "Gender not written",
   "ui.import.teamSheet.male": "Male",
   "ui.import.teamSheet.female": "Female",
+
   "ui.teamBattle.notReplay": "That isn’t a Showdown replay link.",
   "ui.teamBattle.setNotFinished": "Set isn’t finished in this replay ({score1}–{score2}); paste the last game of the set.",
   "ui.teamBattle.noTeamSheets": "No team sheets in this replay, so items are missing.",
+
   "term.format.reg2026MC": "VGC 2026 - Regulation M-C",
   "term.format.reg2026MB": "VGC 2026 - Regulation M-B",
   "term.format.reg2026MA": "VGC 2026 - Regulation M-A",
@@ -567,6 +576,7 @@
   "term.format.reg2024G": "VGC 2024 - Regulation G",
   "term.format.reg2025F": "VGC 2025 - Regulation F",
   "term.format.custom": "Custom Format",
+
   "term.type.normal": "Normal",
   "term.type.fire": "Fire",
   "term.type.water": "Water",
@@ -596,6 +606,7 @@
   "gfx.common.player": "Player",
   "gfx.common.playerName": "Player Name",
   "gfx.common.cpEarned": "+{cp} CP",
+
   "gfx.facts.players": "{count, plural, one {# Player} other {# Players}}",
 
   "gfx.common.tournament": "Tournament",
@@ -603,7 +614,9 @@
   "gfx.common.topN": "Top {count}",
   "gfx.common.champion": "Champion",
   "gfx.common.topCut": "Top Cut",
+
   "gfx.arena.kicker": "Top {count} Standings",
+
   "gfx.bracket.tbd": "TBD",
   "gfx.bracket.quarterfinals": "Quarterfinals",
   "gfx.bracket.semifinals": "Semifinals",
@@ -611,7 +624,9 @@
   "gfx.bracket.roundN": "Round {n}",
   "gfx.bracket.championStar": "★ Champion ★",
   "gfx.bracket.empty": "Set up the bracket under “Top cut bracket” on the Standings tab, or import from Limitless.",
+
   "gfx.editorial.finalStandings": "Final Standings",
+
   "gfx.eras.dexNo": "No.{n}",
   "gfx.eras.championTrainer": "Champion Trainer",
   "gfx.eras.winLoss": "W/L {record}",
@@ -627,9 +642,11 @@
   "gfx.eras.thisTrainer": "This trainer",
   "gfx.eras.theTournament": "the tournament",
   "gfx.eras.undefeated": "undefeated",
+
   "gfx.usage.title": "Top Usage",
   "gfx.usage.teamsCounted": "{count, plural, one {# team} other {# teams}} counted",
   "gfx.usage.rank": "#{n}",
+
   "gfx.vsResult.bestOf": "Best of {bestOf}",
   "gfx.vsResult.bestOfGames": "Best of {bestOf} · {games, plural, one {# game} other {# games}}",
   "gfx.vsResult.vs": "VS",
@@ -654,6 +671,7 @@
   "gfx.tradingCard.championOf": "Champion of the {type}",
   "gfx.tradingCard.roleAt": "{role} at the {type}",
   "gfx.tradingCard.players": "Players: {count}",
+
   "gfx.teamBattle.title": "Team Battle",
   "gfx.teamBattle.victory": "Victory",
   "gfx.teamBattle.final": "Final",
@@ -673,10 +691,12 @@
   "gfx.teamBattle.won": "{team} won {score1}-{score2}!",
   "gfx.teamBattle.blackedOut": "{team} blacked out!",
   "gfx.teamBattle.finalScore": "Final score {score1}-{score2}.",
+
   "gfx.comicRef.vs": "VS",
   "gfx.comicRef.win": "WIN!",
   "gfx.comicRef.final": "FINAL",
   "gfx.comicRef.winsLine": "Wins",
+
   "gfx.day2.record": "Record",
   "gfx.day2.recordN": "Record {record}",
   "gfx.day2.title.regionals": "Regional Championships",
@@ -684,6 +704,7 @@
   "gfx.day2.title.internationals": "International Championships",
   "gfx.day2.title.special": "Special Championships",
   "gfx.day2.title.worlds": "World Championships",
+
   "gfx.wide.results": "Results",
   "gfx.wide.theTopN": "The Top {count}",
   "gfx.wide.winnerBurst": "Winner!",
