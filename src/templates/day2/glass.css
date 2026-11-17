@@ -1,0 +1,181 @@
+/* Event Results (Custom Glass): Standings' Custom Glass Champion + Photo at 1644 x 1644. Colours and opacity
+   come from the --pl-* variables of .pl-custom (places.css); every panel is the same glass as on Standings. */
+.d2g {
+  color: var(--pl-ink);
+  overflow: hidden;
+}
+
+/* White type straight on the photo: hard dark shadow plus a soft glow, as on the Standings Custom Glass titles. */
+.d2g-title {
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 6px 6px 0 var(--pl-dark), 0 0 30px rgba(0, 0, 0, 0.55);
+}
+
+/* The caption where the CHAMPION tab is: main brand colour, running off the left edge. */
+.d2g-tab {
+  position: absolute;
+  top: 76px;
+  left: -40px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  padding: 0 70px 0 116px;
+  background: var(--pl-a);
+  border: 7px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  box-shadow: var(--pl-drop);
+  box-sizing: border-box;
+}
+.d2g-tab .d2g-title {
+  text-shadow: 5px 5px 0 rgba(0, 0, 0, 0.35);
+}
+
+.d2g-badge {
+  position: absolute;
+  top: 40px;
+  left: 1190px;
+  width: 410px;
+  height: 370px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.55));
+}
+
+/* Name centred in its band, so a long name that shrinks doesn't leave a gap under it. */
+.d2g-name {
+  position: absolute;
+  top: 250px;
+  left: 70px;
+  width: 1100px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+}
+.d2g-sub {
+  position: absolute;
+  top: 412px;
+  left: 70px;
+  max-width: 1080px;
+  padding: 8px 30px;
+  font-size: 40px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--pl-sub);
+  background: var(--pl-panel);
+  border: 6px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  text-shadow: var(--pl-text-shadow);
+  box-sizing: border-box;
+}
+
+/* Portrait on the left, team (2 x 3) on the right, both from 530 to 1440. */
+.d2g-photo,
+.d2g-card,
+.d2g-footer {
+  background: var(--pl-panel);
+  border: 7px solid var(--pl-line);
+  border-radius: var(--pl-radius);
+  box-shadow: var(--pl-inner), var(--pl-drop);
+  box-sizing: border-box;
+}
+.d2g-photo {
+  position: absolute;
+  top: 530px;
+  left: 70px;
+  width: 620px;
+  height: 910px;
+  overflow: hidden;
+  padding: 0;
+}
+.d2g-photo > .dmv-photo {
+  border-radius: 0;
+}
+.d2g .dmv-photo-empty {
+  background: var(--pl-photo);
+}
+.d2g .dmv-photo-empty span {
+  -webkit-text-stroke: 0;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.d2g-team {
+  position: absolute;
+  top: 530px;
+  left: 730px;
+  width: 844px;
+  height: 910px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 26px;
+}
+.d2g-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0 12px 6px;
+}
+.d2g-card.ace {
+  border-color: var(--pl-first);
+}
+.d2g-mon {
+  margin-top: 2px;
+  max-width: 100%;
+  font-size: 32px;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--pl-ink);
+  text-shadow: var(--pl-text-shadow);
+}
+.d2g-item {
+  margin-top: 4px;
+  font-size: 25px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--pl-sub);
+  text-shadow: var(--pl-text-shadow);
+}
+
+/* Event name and facts, edge to edge along the bottom like the Champion footer. */
+.d2g-footer {
+  position: absolute;
+  left: -7px;
+  right: -7px;
+  bottom: -7px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 70px 6px;
+  border-radius: 0;
+  color: var(--pl-sub);
+  white-space: nowrap;
+}
+.d2g-event {
+  font-size: 46px;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: var(--pl-ink);
+  text-shadow: var(--pl-text-shadow);
+}
+.d2g-facts {
+  font-size: 32px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: var(--pl-text-shadow);
+}

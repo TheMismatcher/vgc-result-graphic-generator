@@ -137,7 +137,7 @@ export function PlayerEditor({
 }
 
 /** Upload a player photo (for photo templates) and adjust how it's framed. */
-function PhotoField({ player, onChange }: { player: Player; onChange: (p: Player) => void }) {
+export function PhotoField({ player, onChange }: { player: Player; onChange: (p: Player) => void }) {
   const [busy, setBusy] = useState(false)
   const dialog = useDialog()
   const y = player.photoY ?? 30

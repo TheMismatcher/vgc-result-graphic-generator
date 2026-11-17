@@ -128,6 +128,15 @@ export default function App() {
               {t(tabItem.label)}
             </button>
           ))}
+          <a
+            href="https://x.com/TheMismatcher"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-1.5 ml-auto inline-flex shrink-0 items-center gap-2 self-center whitespace-nowrap rounded-lg border border-white/25 px-3 py-1.5 text-sm font-bold text-slate-200 hover:bg-white hover:text-slate-900"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5 fill-current"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" /></svg>
+            {t('ui.app.follow')}
+          </a>
         </nav>
       </header>
 

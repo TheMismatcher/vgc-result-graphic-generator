@@ -114,7 +114,8 @@ Google Sheet **"DMV graphics maker: text review"**
   Style description; new rows go at the bottom. D, E and H are formatted as plain text.
   - Status: `New` (not reviewed) → `Approved` (as in "English (in the app)", or as in "Your edit").
     `Changed` = the app's English changed after it was approved; `Removed` = no longer in the app;
-    `Cut?` = only on retired styles (still reviewed). Later: `Translated`, `Spanish out of date`.
+    `Cut?` = only on retired styles (set automatically; approve or Cut); `Cut` = Nicholas wants this text
+    out of the app (see "Cut rows" below). Later: `Translated`, `Spanish out of date`.
 - **Glossary**: VGC / Pokémon terms and how to handle them in Spanish.
 - **Do not translate**: names and words that stay as they are.
 - **How to review**: the instructions Nicholas follows.
@@ -144,6 +145,14 @@ Done by Claude with the Google Sheets connector (no credentials in this repo):
    It warns when the placeholders change (the code must pass them).
 3. `npx tsc -b`, render-check every touched graphic (long text can overflow), then sync the sheet so
    "English (in the app)" matches.
+
+### Cut rows
+
+Status `Cut` means the text should leave the app. For a Standings description (`desc.*`), set its value
+to "" with `npm run i18n:apply` (an empty description shows nothing under the layout buttons). For a
+style name, the style itself is being removed: ask Nicholas before retiring or deleting it. For any
+other string, remove what shows it from the code (and the key from en.json). Then run `npm run
+i18n:sync`, check, and set the row to `Removed`.
 
 ## Adding Spanish (later, once the English is frozen)
 

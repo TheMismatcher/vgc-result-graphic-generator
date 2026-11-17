@@ -7,7 +7,7 @@ import { eventInfo } from '../lib/event'
 import { newPlayer } from '../lib/state'
 import { loadResults, parseResultsLink, type ResultEntry } from '../lib/results'
 import { fetchRecord, fetchRoster, fetchTeam, fullName, rk9Id, type RosterEntry } from '../lib/rk9'
-import { PlayerEditor } from '../components/PlayerEditor'
+import { PhotoField, PlayerEditor } from '../components/PlayerEditor'
 import { Preview } from '../components/Preview'
 import { Button, Card, Field, Input, Select } from '../components/ui'
 import { useDialog } from '../components/Dialog'
@@ -329,12 +329,20 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
             ))}
           </div>
         )}
+        {selected && (
+          // The photo for the player being previewed, next to the graphic (it's also in their card on the left).
+          <Card className="space-y-2">
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">{selected.name ? t('ui.day2.photoFor', { name: selected.name }) : t('ui.day2.photo')}</h3>
+            <PhotoField player={selected} onChange={(np) => setPlayers((ps) => ps.map((x) => (x.uid === np.uid ? np : x)))} />
+          </Card>
+        )}
         {selected ? (
           <Preview
             templates={DAY2_TEMPLATES}
             selectedId={state.templates.day2}
             onSelect={(id) => setState((s) => ({ ...s, templates: { ...s.templates, day2: id } }))}
             filenameBase={`${day2.event} ${selected.name}`}
+            photos={{ players: day2.players, onChange: (uid, patch) => setPlayers((ps) => ps.map((x) => (x.uid === uid ? { ...x, ...patch } : x))) }}
             render={(t) => <t.Component data={{ event: day2.event, caption: day2.caption, player: selected, format, hue: day2.hue, colors: day2.colors, kind }} />}
           />
         ) : (

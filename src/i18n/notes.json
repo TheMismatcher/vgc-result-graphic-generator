@@ -30,6 +30,7 @@
   "ui.app.loadSampleMessage": "Shown in a question dialog before loading the sample tournament. 'Load sample' is the name of the button.",
   "ui.app.startOverMessage": "Shown in a question dialog before clearing everything. 'Start over' is the name of the button.",
   "ui.app.ownDataPrompt": "{message} is the sentence above (Load sample / Start over explanation); it is followed by a blank line and this question.",
+  "ui.app.follow": "Link at the right end of the tab row (with the X logo) that opens TheMismatcher's X (Twitter) profile in a new tab. @TheMismatcher is the account handle: keep it as is.",
   "ui.app.tab.standings": "Tab name; printed in capitals. Also listed on the home page's Graphics Generator card.",
   "ui.app.tab.usage": "Tab name; printed in capitals. Pokémon usage statistics. Also listed on the home page's Graphics Generator card.",
   "ui.app.tab.replay": "Tab name; printed in capitals. Also listed on the home page's Graphics Generator card.",
@@ -451,6 +452,7 @@
   "gfx.comicRef.winsLine": "Second line of the yellow WINS strip on the Comic Book Poster (Replay) when the winner's name is too long for one line: line 1 is the name, line 2 is this word. Short names use \"{name} wins\" on one line instead.",
   "ui.home.metaDescription": "Home page (mismatched.gg): the description search engines and link previews show. Not visible on the page.",
   "ui.home.tagline": "Home page: line under the Mismatched logo at the top; printed in capitals.",
+  "ui.home.follow": "Home page: button under the tagline that opens TheMismatcher's X (Twitter) profile. @TheMismatcher is the account handle: keep it as is.",
   "ui.home.graphics.title": "Home page: title of the card that links to the graphics generator; printed in capitals.",
   "ui.home.graphics.kicker": "Home page: small line under the Graphics Generator card title; printed in capitals.",
   "ui.home.graphics.description": "Home page: Graphics Generator card text. Champions = the game Pokémon Champions; .tdf = the TOM tournament file.",
@@ -469,10 +471,13 @@
   "ui.home.invitational.go": "Home page: button on the DMV Invitational card; printed in capitals.",
   "ui.home.calendar.title": "Home page: title of the Calendar card; printed in capitals.",
   "ui.home.calendar.kicker": "Home page: small line under the Calendar card title; printed in capitals.",
-  "ui.home.calendar.description": "Home page: Calendar card text (the calendar isn't built yet).",
-  "ui.home.calendar.soon": "Home page: label on the Calendar card until it's built; printed in capitals.",
+  "ui.home.calendar.description": "Home page: Calendar card text, above the calendar image.",
+  "ui.home.calendar.live": "Home page: label next to the green dot on the Calendar card (the calendar image below it updates on its own); printed in capitals.",
+  "ui.home.calendar.go": "Home page: button on the Calendar card that opens the calendar bot's setup page; printed in capitals.",
   "ui.home.kofi.title": "Home page: heading of the Ko-fi (donations) panel under the cards. Mismatched.gg is the site's name (its web address), kept as written.",
   "ui.home.kofi.text": "Home page: text in the Ko-fi (donations) panel. Ko-fi is the tipping website (a name, not translated).",
   "ui.home.kofi.go": "Home page: button that opens Mismatched's Ko-fi page; printed in capitals.",
-  "ui.home.footer.legal": "Home page: small print at the bottom. Company names stay as written."
+  "ui.home.footer.legal": "Home page: small print at the bottom. Company names stay as written.",
+  "ui.day2.photoFor": "Heading above the photo upload next to the Event Results preview. {name} is the player shown in the preview. Shown in capitals.",
+  "ui.day2.photo": "Same heading when the player has no name. Shown in capitals."
 }

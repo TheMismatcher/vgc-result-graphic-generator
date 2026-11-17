@@ -60,6 +60,12 @@
   .plate { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 26px 40px 22px; border-radius: 28px; background: var(--card); box-shadow: var(--shadow); text-align: center; }
   .plate img { display: block; width: min(440px, 72vw); height: auto; }
   .tagline { font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; color: color-mix(in srgb, var(--red) 85%, #000); }
+  /* Follow the creator on X: a small black pill under the tagline. */
+  .follow { display: inline-flex; align-items: center; gap: 9px; padding: 9px 16px; border-radius: 999px; background: #111; color: #fff; font-size: 14px; font-weight: 800;
+    text-decoration: none; transition: transform .15s ease; }
+  .follow svg { width: 15px; height: 15px; fill: currentColor; }
+  .follow:hover { transform: translateY(-2px); }
+  .follow:focus-visible { outline: 2px solid var(--blue-dark); outline-offset: 3px; }
 
   /* ---------- Cards ---------- */
   main { width: 100%; max-width: 1120px; margin: 0 auto; padding: 10px 16px 0; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
@@ -163,8 +169,12 @@
   <header class="hero">
     <div class="plate">
       <!-- i18n-ignore: brand name -->
-      <img src="brand/mismatched-logo.svg" alt="Mismatched" width="531" height="132" data-i18n-ignore />
+      <img src="brand/mismatched-logo.svg" alt="Mismatched" width="646" height="136" data-i18n-ignore />
       <div class="tagline" data-i18n="ui.home.tagline">VGC tools for players and organizers</div>
+      <a class="follow" href="https://x.com/TheMismatcher" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" /></svg>
+        <span data-i18n="ui.home.follow">Follow @TheMismatcher on X</span>
+      </a>
     </div>
   </header>
 
@@ -217,7 +227,7 @@
         </div>
       <div class="body">
         <p data-i18n="ui.home.calendar.description">View all upcoming locals from your state or a group of states, and sync them to your own calendar and/or add them to your Discord.</p>
-        <div class="live on"><i></i><span>Live</span></div>
+        <div class="live on"><i></i><span data-i18n="ui.home.calendar.live">Live</span></div>
         <img id="calendarImage"/>
         <div class="fill"></div>
         <div class="go" data-i18n="ui.home.calendar.go">Add and Configure</div>
@@ -244,7 +254,7 @@
 </div>
 
 <!-- The page's strings from the generator's catalog (src/i18n/en.json). Written by `npm run i18n:home`. -->
-<script type="application/json" id="i18n-en">{"ui.app.tab.day2":"Event Results","ui.app.tab.replay":"Replay","ui.app.tab.standings":"Standings","ui.app.tab.teamBattle":"Team Battle","ui.app.tab.usage":"Usage","ui.home.calendar.description":"View all upcoming locals from your state or a group of states, and sync them to your own calendar or add them to your Discord.","ui.home.calendar.kicker":"Local VGC Events","ui.home.calendar.go":"Add and Configure","ui.home.calendar.title":"Calendar","ui.home.footer.legal":"Pokémon and all related names © Nintendo / Creatures Inc. / GAME FREAK inc. / The Pokémon Company. Mismatched.gg is a non-commercial fan site, not affiliated with or endorsed by them.","ui.home.graphics.description":"The Ultimate VGC Graphics Generator. Many different templates from top cut to brackets, and you can auto fill standings and player teams from all kinds of things, including pictures of a monitor with standings, a .tdf file, a picture of a teamsheet, or even a screenshot of the team in Champions!","ui.home.graphics.go":"Make graphics","ui.home.graphics.kicker":"Tournament graphics","ui.home.graphics.previewAlt":"Example graphic: a Top Cut in the Comic Book style, made with the sample tournament","ui.home.graphics.title":"Graphics Generator","ui.home.invitational.cut":"Top {cut} earn invites","ui.home.invitational.description":"Points standings for the DMV Invitational, a major tournament at the end of the year for DMV players you qualify for based solely off your performance in DMV locals.","ui.home.invitational.go":"Full standings","ui.home.invitational.kicker":"Qualification standings","ui.home.invitational.live":"Live · {count, plural, one {# player} other {# players}} with points","ui.home.invitational.loading":"Loading the standings…","ui.home.invitational.points":"PTS","ui.home.invitational.unavailable":"Live standings on the full page","ui.home.kofi.go":"Support on Ko-fi","ui.home.kofi.text":"All tools here were made for free for the community, and we are paying all hosting costs ourselves! Tips or monthly support help us keep these tools live, update them, and add more tools in the future!","ui.home.kofi.title":"Support Mismatched.gg","ui.home.metaDescription":"VGC tools from Mismatched.gg: tournament graphics, DMV Invitational standings and more.","ui.home.tagline":"VGC tools for players and organizers"}</script>
+<script type="application/json" id="i18n-en">{"ui.app.tab.day2":"Event Results","ui.app.tab.replay":"Replay","ui.app.tab.standings":"Standings","ui.app.tab.teamBattle":"Team Battle","ui.app.tab.usage":"Usage","ui.home.calendar.description":"View all upcoming locals from your state or a group of states, and sync them to your own calendar and/or add them to your Discord.","ui.home.calendar.go":"Add and Configure","ui.home.calendar.kicker":"Local VGC Events","ui.home.calendar.live":"Live","ui.home.calendar.title":"Calendar","ui.home.follow":"Follow @TheMismatcher on X","ui.home.footer.legal":"Pokémon and all related names © Nintendo / Creatures Inc. / GAME FREAK inc. / The Pokémon Company. Mismatched.gg is a non-commercial fan site, not affiliated with or endorsed by them.","ui.home.graphics.description":"The Ultimate VGC Graphics Generator. Many different templates from top cut to brackets, and you can auto fill standings and player teams from all kinds of things, including pictures of a monitor with standings, a .tdf file, a picture of a teamsheet, or even a screenshot of the team in Champions!","ui.home.graphics.go":"Make graphics","ui.home.graphics.kicker":"Tournament graphics","ui.home.graphics.previewAlt":"Example graphic: a Top Cut in the Comic Book style, made with the sample tournament","ui.home.graphics.title":"Graphics Generator","ui.home.invitational.cut":"Top {cut} earn invites","ui.home.invitational.description":"Points standings for the DMV Invitational, a major tournament at the end of the year for DMV players you qualify for based solely off your performance in DMV locals.","ui.home.invitational.go":"Full standings","ui.home.invitational.kicker":"Qualification standings","ui.home.invitational.live":"Live · {count, plural, one {# player} other {# players}} with points","ui.home.invitational.loading":"Loading the standings…","ui.home.invitational.points":"PTS","ui.home.invitational.unavailable":"Live standings on the full page","ui.home.kofi.go":"Support on Ko-fi","ui.home.kofi.text":"All tools here were made for free for the community, and we are paying all hosting costs ourselves! Tips or monthly support help us keep these tools live, update them, and add more tools in the future!","ui.home.kofi.title":"Support Mismatched.gg","ui.home.metaDescription":"VGC tools from Mismatched.gg: tournament graphics, DMV Invitational standings and more.","ui.home.tagline":"VGC tools for players and organizers"}</script>
 <script>
 
 calImgSource = 'https://vgc-projects-data-bucket.sfo3.cdn.digitaloceanspaces.com/dynamic-assets/dmv_calendar.png'

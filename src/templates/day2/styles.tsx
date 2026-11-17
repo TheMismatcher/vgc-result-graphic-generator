@@ -8,6 +8,7 @@ import { FitText, MonSprite, PlayerPhoto } from '../shared/parts'
 import { TradingCardClassicRole, TradingCardModernRole } from '../cards'
 import { eventFor } from './events'
 import { ArenaProfile, ComicCover } from './designs'
+import { BackdropImage } from '../../lib/backdrop'
 import { formatByName } from '../../data/options'
 import './day2.css'
 import './styles.css'
@@ -53,7 +54,7 @@ function Layout({ data, root, back }: { data: Day2Data; root: string; back: Reac
       </div>
       {data.caption.trim() && (
         <div className="d2s-caption" style={box(110, 1383, 700, 117)}>
-          <FitText className="d2s-caption-text" text={data.caption} max={56} width={620} min={20} italic={false} weight={800} />
+          <FitText className="d2s-caption-text" text={data.caption} max={56} width={620} min={20} />
         </div>
       )}
 
@@ -115,6 +116,33 @@ const arena = (bg: 'spotlight' | 'grid' | 'sunset', style: string): Day2Template
 export const Day2ArenaSpotlight = arena('spotlight', 'Arena Spotlight')
 export const Day2ArenaGrid = arena('grid', 'Arena Grid')
 export const Day2ArenaSunset = arena('sunset', 'Arena Sunset')
+
+// ---- Custom Glass: the user's own photo behind see-through (or white) panels in the branding colours ----
+const customGlass = (light: boolean): Day2Template => ({
+  ...common,
+  id: light ? 'custom-glass-light-day2' : 'custom-glass-day2',
+  name: `Event Results (Custom Glass${light ? ' Light' : ''})`,
+  description: light
+    ? 'One player at a big event over your own photo, in white panels edged in your branding colors.'
+    : 'One player at a big event over your own photo, in see-through glass panels in your branding colors.',
+  style: light ? 'Custom Glass Light' : 'Custom Glass',
+  look: { panels: light ? 'solid' : 'glass' },
+  ...(light ? { variantOf: 'Custom Glass' } : {}),
+  Component: ({ data }) => (
+    <Layout
+      data={data}
+      root={`d2s-custom pl-custom pl-art ${light ? 'light' : ''}`}
+      back={
+        <>
+          <BackdropImage width={SIZE} height={SIZE} />
+          <div className="d2s-custom-shade" />
+        </>
+      }
+    />
+  ),
+})
+export const Day2CustomGlass = customGlass(false)
+export const Day2CustomLight = customGlass(true)
 
 // ---- Trading Card: the player as a card (their photo as the art, their team as the attacks) on a play mat ----
 /** The standings data a card needs, from the Event Results data: the event is the "tournament", the player is the champion. */

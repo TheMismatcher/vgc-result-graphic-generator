@@ -18,6 +18,7 @@ import { makeBookResult } from './team-battle/designs/book'
 import { makeMegaResult } from './team-battle/designs/mega'
 import Day2Clean from './day2/clean'
 import { Day2ArenaGrid, Day2ArenaSpotlight, Day2ArenaSunset, Day2CardClassic, Day2CardModern, Day2ComicBook, Day2Classic } from './day2/styles'
+import { Day2CustomGlass, Day2CustomLight } from './day2/glass'
 import { RegionalMosaic, RegionalMosaicContrast } from './day2/mosaic'
 import { EventEditorialNight, EventEditorialPaper } from './day2/editorial'
 import TeamBattle, { TeamBattleLoss, TeamBattleLossLoud, TeamBattleLoud, TeamBattleLoudWin, TeamBattleWin } from './team-battle'
@@ -145,21 +146,6 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...tag('Arena Spotlight', [[ArenaSpotlight, 'topcut'], ...ArenaSpotlightLayouts]),
   ...tag('Arena Grid', [[ArenaGrid, 'topcut'], ...ArenaGridLayouts]),
   ...tag('Arena Sunset', [[ArenaSunset, 'topcut'], ...ArenaSunsetLayouts]),
-  ...retire('Battle Tower', [[BattleTower, 'topcut']]),
-  ...retire('Glimwood Tangle (Old)', [[Glimwood, 'topcut']]),
-  ...tag('Glimwood Tangle', [[GlimwoodOfficial, 'topcut'], ...PLACE_LAYOUTS['Glimwood Tangle']]),
-  ...retire('Route 201', [[Route201, 'topcut']]),
-  ...glassPair('Route 201 Official', Route201Tiles, Route201TilesGlass),
-  // Sinnoh Snow: Lake Acuity (first, the default), Route 217 or Snowpoint City, Solid or Glass panels.
-  ...versions('Sinnoh Snow', [
-    ['Sinnoh Snow', { map: 'acuity', panels: 'solid' }, [[AcuityLakefront, 'topcut'], ...PLACE_LAYOUTS['Lake Acuity']]],
-    ['Lake Acuity Glass', { map: 'acuity', panels: 'glass' }, [[AcuityLakefrontGlass, 'topcut'], ...PLACE_LAYOUTS['Lake Acuity Glass']]],
-    ['Route 217', { map: 'route217', panels: 'solid' }, [[Route217, 'topcut'], ...PLACE_LAYOUTS['Route 217']]],
-    ['Route 217 Glass', { map: 'route217', panels: 'glass' }, [[Route217Glass, 'topcut'], ...PLACE_LAYOUTS['Route 217 Glass']]],
-    ['Snowpoint Full Map', { map: 'snowpoint', panels: 'solid' }, [[SnowpointFull, 'topcut'], ...PLACE_LAYOUTS['Snowpoint Full Map']]],
-    ['Snowpoint Full Map Glass', { map: 'snowpoint', panels: 'glass' }, [[SnowpointFullGlass, 'topcut'], ...PLACE_LAYOUTS['Snowpoint Full Map Glass']]],
-  ]),
-  ...retire('Mt. Coronet', [[MtCoronet, 'topcut']]),
   ...retire('Spear Pillar Hall of Origin', [[SpearPillarHall, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Hall of Origin']]),
   // Spear Pillar: the champion on the Hall of Origin's floor or in the cutscene sky, Solid or Glass panels.
   ...versions('Spear Pillar', [
@@ -169,6 +155,28 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
     ['Spear Pillar Cutscene Sky Glass', { champion: 'sky', panels: 'glass' }, [[SpearPillarCutsceneGlass, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Cutscene Sky Glass']]],
   ]),
   ...retire('Spear Pillar Concept Art', [[SpearPillarArt, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Concept Art']]),
+  ...retire('Ghost', [[Ghost, 'topcut']]),
+  ...retire('Ghost Pixel', [[GhostPixel, 'topcut']]),
+  ...retire('Ghost Pixel Dense', [[GhostPixelDense, 'topcut']]),
+  ...retire('Ghost Pixel Glass', [[GhostPixelGlass, 'topcut']]),
+  ...retire('Ghost Pixel Glass Team Box', [[GhostPixelGlassTeam, 'topcut']]),
+  ...tag('Ghost Pixels', [[GhostPixelGlassLine, 'topcut'], ...GhostPixelLayouts]),
+  // Trading Card: the champion's card (Champion), or with their photo as the card art (Champion + Photo).
+  ...versions('Trading Card', [
+    ['Trading Card', { card: 'classic' }, [[TradingCardClassic, 'champion'], [TradingCardClassicPhoto, 'championphoto']]],
+    ['Trading Card Modern', { card: 'modern' }, [[TradingCardModern, 'champion'], [TradingCardModernPhoto, 'championphoto']]],
+  ]),
+  ...retire('Trading Card (Old)', [[TradingCard, 'champion']]),
+  ...tag('Pokédex', [[Pokedex, 'topcut'], [PokedexChampion, 'champion']]),
+  // Sinnoh Snow: Lake Acuity (first, the default), Route 217 or Snowpoint City, Solid or Glass panels.
+  ...versions('Sinnoh Snow', [
+    ['Sinnoh Snow', { map: 'acuity', panels: 'solid' }, [[AcuityLakefront, 'topcut'], ...PLACE_LAYOUTS['Lake Acuity']]],
+    ['Lake Acuity Glass', { map: 'acuity', panels: 'glass' }, [[AcuityLakefrontGlass, 'topcut'], ...PLACE_LAYOUTS['Lake Acuity Glass']]],
+    ['Route 217', { map: 'route217', panels: 'solid' }, [[Route217, 'topcut'], ...PLACE_LAYOUTS['Route 217']]],
+    ['Route 217 Glass', { map: 'route217', panels: 'glass' }, [[Route217Glass, 'topcut'], ...PLACE_LAYOUTS['Route 217 Glass']]],
+    ['Snowpoint Full Map', { map: 'snowpoint', panels: 'solid' }, [[SnowpointFull, 'topcut'], ...PLACE_LAYOUTS['Snowpoint Full Map']]],
+    ['Snowpoint Full Map Glass', { map: 'snowpoint', panels: 'glass' }, [[SnowpointFullGlass, 'topcut'], ...PLACE_LAYOUTS['Snowpoint Full Map Glass']]],
+  ]),
   // Route 119: the bridge (first, the default), the waterfall or Route 120, Solid or Glass panels.
   ...versions('Route 119', [
     ['Route 119', { map: 'bridge', panels: 'solid' }, [[Route119Bridge, 'topcut'], ...PLACE_LAYOUTS['Route 119 Bridge']]],
@@ -178,22 +186,15 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
     ['Route 120', { map: 'route120', panels: 'solid' }, [[Route120, 'topcut'], ...PLACE_LAYOUTS['Route 120']]],
     ['Route 120 Glass', { map: 'route120', panels: 'glass' }, [[Route120Glass, 'topcut'], ...PLACE_LAYOUTS['Route 120 Glass']]],
   ]),
-  ...retire('Ghost', [[Ghost, 'topcut']]),
-  ...retire('Ghost Pixel', [[GhostPixel, 'topcut']]),
-  ...retire('Ghost Pixel Dense', [[GhostPixelDense, 'topcut']]),
-  ...retire('Ghost Pixel Glass', [[GhostPixelGlass, 'topcut']]),
-  ...retire('Ghost Pixel Glass Team Box', [[GhostPixelGlassTeam, 'topcut']]),
-  ...tag('Ghost Pixels', [[GhostPixelGlassLine, 'topcut'], ...GhostPixelLayouts]),
+  ...retire('Battle Tower', [[BattleTower, 'topcut']]),
+  ...retire('Glimwood Tangle (Old)', [[Glimwood, 'topcut']]),
+  ...tag('Glimwood Tangle', [[GlimwoodOfficial, 'topcut'], ...PLACE_LAYOUTS['Glimwood Tangle']]),
+  ...retire('Route 201', [[Route201, 'topcut']]),
+  ...glassPair('Route 201 Official', Route201Tiles, Route201TilesGlass),
+  ...retire('Mt. Coronet', [[MtCoronet, 'topcut']]),
   ...retire('Kanto Game Boy', [[KantoGameBoy, 'topcut']]),
   ...retire('Hoenn Gen 3', [[Hoenn, 'topcut']]),
   ...tag('Unova', [[Unova, 'topcut']]),
-  ...tag('Pokédex', [[Pokedex, 'topcut'], [PokedexChampion, 'champion']]),
-  // Trading Card: the champion's card (Champion), or with their photo as the card art (Champion + Photo).
-  ...versions('Trading Card', [
-    ['Trading Card', { card: 'classic' }, [[TradingCardClassic, 'champion'], [TradingCardClassicPhoto, 'championphoto']]],
-    ['Trading Card Modern', { card: 'modern' }, [[TradingCardModern, 'champion'], [TradingCardModernPhoto, 'championphoto']]],
-  ]),
-  ...retire('Trading Card (Old)', [[TradingCard, 'champion']]),
   // Scarlet/Violet Book: either cover.
   ...versions('Scarlet/Violet Book', [
     ['Scarlet/Violet Book', { book: 'scarlet' }, [[ScarletBook, 'topcut'], ...PLACE_LAYOUTS['Scarlet Book']]],
@@ -211,7 +212,7 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
 // Event Results: styles in the Standings picker (style cards, no layouts). First = the default.
 const day2 = (style: string, t: Day2Template): Day2Template => ({ ...t, style })
 export const DAY2_TEMPLATES: Day2Template[] = [
-  day2('Artist', Day2Clean),
+  day2('Stream', Day2Clean),
   day2('Classic', Day2Classic),
   day2('Comic Book', { ...Day2ComicBook, look: { colors: 'standard' } }),
   { ...withLoudFlip(Day2ComicBook), style: 'Comic Book Flipped', variantOf: 'Comic Book', look: { colors: 'flipped' } },
@@ -222,6 +223,8 @@ export const DAY2_TEMPLATES: Day2Template[] = [
   day2('Arena Spotlight', Day2ArenaSpotlight),
   day2('Arena Grid', Day2ArenaGrid),
   day2('Arena Sunset', Day2ArenaSunset),
+  day2('Custom Glass', Day2CustomGlass),
+  { ...Day2CustomLight, style: 'Custom Glass Light' },
   Day2CardClassic,
   Day2CardModern,
 ]

@@ -73,6 +73,8 @@
 }
 .d2s-classic .d2s-caption-text {
   color: var(--ink);
+  font-weight: 900; /* Classic's title face, like the name and event bars */
+  font-style: italic;
 }
 .d2s-classic .d2s-panel {
   background: var(--blue-dark);
@@ -88,6 +90,50 @@
 }
 .d2s-classic .d2s-logo {
   filter: drop-shadow(8px 8px 0 var(--ink));
+}
+
+/* ---------------- Custom Glass (the --pl-* variables come from .pl-custom in places.css) ---------------- */
+.d2s-custom-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.32));
+}
+.d2s-custom .d2s-event,
+.d2s-custom .d2s-name,
+.d2s-custom .d2s-record,
+.d2s-custom .d2s-caption,
+.d2s-custom .d2s-photo,
+.d2s-custom .d2s-panel {
+  background: var(--pl-panel);
+  border: 4px solid var(--pl-line);
+  box-shadow: var(--pl-inner), var(--pl-drop);
+  border-radius: var(--pl-radius);
+  box-sizing: border-box;
+}
+.d2s-custom .d2s-photo {
+  background: var(--pl-photo);
+}
+.d2s-custom .d2s-event-text,
+.d2s-custom .d2s-name-text,
+.d2s-custom .d2s-caption-text {
+  color: var(--pl-ink);
+  text-shadow: var(--pl-text-shadow);
+}
+.d2s-custom .d2s-record-text {
+  color: var(--pl-accent);
+  text-shadow: var(--pl-text-shadow);
+}
+.d2s-custom .d2s-cell {
+  background: color-mix(in srgb, var(--pl-ink) 14%, transparent);
+  border: 3px solid var(--pl-line);
+  box-sizing: border-box;
+}
+.d2s-custom .d2s-cell.ace {
+  background: color-mix(in srgb, var(--pl-first) 35%, transparent);
+  border-color: var(--pl-first);
+}
+.d2s-custom .d2s-logo {
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.6));
 }
 
 /* ---------------- Trading Card ---------------- */
