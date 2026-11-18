@@ -75,6 +75,26 @@
 .themed.theme-mosaic .dmv-panel.first {
   background: color-mix(in srgb, var(--yellow) 28%, var(--mz-card));
 }
+/* Top 4 Photos and Champion cards carry no colour class (Classic keeps them white), so Mosaic tints them
+   here: Top 4 in Top 8 Photos' checkerboard (gold 1st, then red / blue), Champion's team as a red / blue
+   checkerboard on both the 3 x 2 and the 2 x 3 grid. */
+.themed.theme-mosaic .p4-card:nth-child(2),
+.themed.theme-mosaic .p4-card:nth-child(3),
+.themed.theme-mosaic .ch-card:nth-child(odd),
+.themed.theme-mosaic.ch-withphoto .ch-card:nth-child(4n + 1),
+.themed.theme-mosaic.ch-withphoto .ch-card:nth-child(4n) {
+  background: color-mix(in srgb, var(--red) 10%, var(--mz-card));
+}
+.themed.theme-mosaic .p4-card:nth-child(4),
+.themed.theme-mosaic .ch-card:nth-child(even),
+.themed.theme-mosaic.ch-withphoto .ch-card:nth-child(4n + 2),
+.themed.theme-mosaic.ch-withphoto .ch-card:nth-child(4n + 3) {
+  background: color-mix(in srgb, var(--blue) 14%, var(--mz-card));
+}
+.themed.theme-mosaic .p4-card:nth-child(2) .p4-place,
+.themed.theme-mosaic .p4-card:nth-child(3) .p4-place {
+  background: color-mix(in srgb, var(--red) 75%, #fff);
+}
 .themed.theme-mosaic .p8-sub,
 .themed.theme-mosaic .p4-sub,
 .themed.theme-mosaic .m8-sub,
@@ -154,7 +174,7 @@
   text-shadow: 0 2px 12px rgba(255, 255, 255, 0.9);
 }
 .themed.theme-mosaic .ch-sub {
-  background: var(--mz-card);
+  background: color-mix(in srgb, var(--yellow) 28%, var(--mz-card));
   border: 0;
   box-shadow: none;
 }
@@ -171,7 +191,7 @@
   font-style: normal;
 }
 .themed.theme-mosaic .ch-footer {
-  background: var(--mz-card);
+  background: color-mix(in srgb, var(--yellow) 28%, var(--mz-card));
   color: var(--mz-ink);
   border: 0;
   box-shadow: var(--mz-shadow);
