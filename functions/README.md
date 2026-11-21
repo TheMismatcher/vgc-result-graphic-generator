@@ -1,17 +1,18 @@
-# Pass-through function (RK9 + Pokédata)
+# Pass-through function (RK9, Pokédata, Reportworm)
 
 The Event Results tab reads rosters, team lists and pairings from RK9 (rk9.gg) and standings from
-Pokédata (pokedata.ovh). Neither site lets other websites read its pages, so the app asks this
-function for them instead:
+Pokédata (pokedata.ovh) and Reportworm (standings.reportworm.com). None of them lets other websites
+read its pages, so the app asks this function for them instead:
 
 ```
 GET /api/proxy/fetch?site=rk9&path=/roster/<event-id>
 GET /api/proxy/fetch?site=pokedata&path=/standingsVGC/<id>/masters/<id>_Masters.json
+GET /api/proxy/fetch?site=reportworm&path=/api/v1/<season>/<event-code>
 ```
 
 - Code: `packages/proxy/fetch/index.js` (Node 18, no dependencies).
-- It only fetches RK9 roster / pairings / tournament / public team list pages and Pokédata
-  standings JSON, GET only. Anything else gets a 400.
+- It only fetches RK9 roster / pairings / tournament / public team list pages, Pokédata
+  standings JSON and Reportworm event JSON, GET only. Anything else gets a 400.
 - Replies are gzipped + base64 (`gz64:…`; the app unpacks them in `src/lib/proxy.ts`) because
   DigitalOcean Functions can't return more than 1 MB and big RK9 rosters are over 2 MB of HTML.
 - Locally, `npm run dev` / `npm run preview` run this same file at the same URL (vite.config.ts),
@@ -52,7 +53,7 @@ the result is `https://<site>/api/proxy/fetch` reaching the function.)
 
 **Check it worked:** opening
 `https://<site>/api/proxy/fetch?site=rk9&path=/roster/LA001-jHlXupaysix7HO` should show text
-starting with `gz64:`. Then try an RK9 link and a Pokédata link on the Event Results tab.
+starting with `gz64:`. Then try an RK9 link, a Pokédata link and a Reportworm link on the Event Results tab.
 
 ### If it ends up at a different address
 

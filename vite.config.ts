@@ -4,7 +4,7 @@ import { createRequire } from 'node:module'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { defineConfig, type Plugin } from 'vite'
 
-// RK9 and Pokédata don't let other websites read their pages, so the app asks our own pass-through
+// RK9, Pokédata and Reportworm don't let other websites read their pages, so the app asks our own pass-through
 // at /api/proxy/fetch. In production that's a DigitalOcean Function (functions/README.md); here
 // the dev/preview server runs the same function file, so both behave the same.
 const require = createRequire(import.meta.url)

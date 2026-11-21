@@ -1,4 +1,4 @@
-// RK9 and Pokédata don't let other websites read their pages, so the app asks our own pass-through
+// RK9, Pokédata and Reportworm don't let other websites read their pages, so the app asks our own pass-through
 // for them: functions/packages/proxy/fetch (a DigitalOcean Function in production, run by the Vite
 // server locally). It sends pages gzipped + base64 ("gz64:…") to stay under DigitalOcean's 1 MB
 // limit; this unpacks them.
@@ -8,9 +8,9 @@
 
 const BASE: string = import.meta.env.VITE_PROXY_URL || '/api/proxy/fetch'
 
-export type ProxySite = 'rk9' | 'pokedata'
+export type ProxySite = 'rk9' | 'pokedata' | 'reportworm'
 
-/** Fetch a page from RK9 or Pokédata. `path` is the site's path, e.g. "/roster/LO002-…". */
+/** Fetch a page from RK9, Pokédata or Reportworm. `path` is the site's path, e.g. "/roster/LO002-…". */
 export async function proxyGet(site: ProxySite, path: string): Promise<{ ok: boolean; status: number; body: string }> {
   const res = await fetch(`${BASE}?site=${site}&path=${encodeURIComponent(path)}`)
   if (!res.ok) return { ok: false, status: res.status, body: '' }

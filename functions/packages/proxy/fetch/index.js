@@ -1,8 +1,10 @@
-// Pass-through for the two sites the Event Results tab reads but that don't let other websites
-// read their pages: RK9 (rosters, team lists, pairings) and Pokédata (standings JSON).
+// Pass-through for the sites the Event Results tab reads but that don't let other websites read
+// their pages: RK9 (rosters, team lists, pairings), Pokédata (standings JSON) and Reportworm
+// (standings + teams JSON).
 //
 //   GET /api/proxy/fetch?site=rk9&path=/roster/LO002-drfp6esCSpyU3s
 //   GET /api/proxy/fetch?site=pokedata&path=/standingsVGC/0000123/masters/0000123_Masters.json
+//   GET /api/proxy/fetch?site=reportworm&path=/api/v1/2027/laic
 //
 // Runs as a DigitalOcean Function in production (see functions/README.md) and inside the Vite
 // dev server locally (vite.config.ts), so both use this same code.
@@ -11,7 +13,7 @@
 // DigitalOcean Functions can't return more than 1 MB, and big RK9 rosters are over 2 MB of HTML
 // (about 75 KB gzipped).
 //
-// Only these two sites and only the page shapes the app uses are allowed, so this can't be used
+// Only these sites and only the page shapes the app uses are allowed, so this can't be used
 // to fetch anything else.
 
 const zlib = require('zlib')
@@ -25,6 +27,11 @@ const SITES = {
   pokedata: {
     origin: 'https://pokedata.ovh',
     path: /^\/standingsVGC\/\d{7}\/(masters|seniors|juniors)\/\d{7}_(Masters|Seniors|Juniors)\.json$/,
+    query: /^$/,
+  },
+  reportworm: {
+    origin: 'https://standings.reportworm.com',
+    path: /^\/api\/v1\/\d{4}\/[a-z0-9_-]{1,40}$/,
     query: /^$/,
   },
 }
