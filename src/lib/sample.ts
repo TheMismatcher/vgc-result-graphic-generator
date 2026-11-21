@@ -23,11 +23,11 @@ const TEAMS: Mon[][] = [
   t(['sableye', 'roseli-berry'], ['charizard', 'charizardite-y'], ['venusaur', 'focus-sash'], ['primarina', 'leftovers'], ['gholdengo', 'life-orb'], ['raichu', 'raichunite-y']),
   // Marlee Warwick's team (Tyrantrum is shiny in her list; the maker has no shiny sprites).
   t(['leafeon', 'life-orb'], ['rampardos', 'choice-scarf'], ['tyrantrum', 'delphoxite'], ['omastar', 'assault-vest'], ['empoleon', 'sitrus-berry'], ['walking-wake', 'booster-energy']),
-  // Cynthia's first Champion battle in Brilliant Diamond / Shining Pearl, with her held items (Serebii); her Gastrodon is East Sea.
-  t(['spiritomb', 'sitrus-berry'], ['roserade', 'expert-belt'], ['gastrodon-east', 'leftovers'], ['lucario', 'wise-glasses'], ['milotic', 'flame-orb'], ['garchomp', 'yache-berry']),
+  // Justin Tang's 2023 Fort Wayne Regional-winning team (Regulation C; Reportworm standings, 2023/fort-wayne).
+  t(['dragapult', 'choice-band'], ['amoonguss', 'sitrus-berry'], ['chien-pao', 'focus-sash'], ['arcanine', 'safety-goggles'], ['flutter-mane', 'booster-energy'], ['palafin-zero', 'mystic-water']),
 ]
 
-const NAMES = ['Nicholas Rubingh', 'Wolfe Glick', 'Darius Helmick', 'Ash Ketchum', 'Tovah Weiss', 'Adri', 'Marlee Warwick', 'Cynthia Shirona']
+const NAMES = ['Nicholas Rubingh', 'Wolfe Glick', 'Darius Helmick', 'Ash Ketchum', 'Tovah Weiss', 'Adri', 'Marlee Warwick', 'Justin Tang']
 const RECORDS = ['8-1', '7-2', '7-1', '6-2', '6-2', '5-3', '5-3', '5-3']
 
 export const sampleState = (): AppState => {
@@ -44,7 +44,7 @@ export const sampleState = (): AppState => {
       uid: crypto.randomUUID(),
       name: NAMES[i],
       record: RECORDS[i],
-      social: ['@nicholasrubingh', '@WolfeyGlick', '@HootieVGC', '', '@ProfessorTovah', '@.adri_dcdm', 'pterrific'][i] ?? '',
+      social: ['@nicholasrubingh', '@WolfeyGlick', '@HootieVGC', '', '@ProfessorTovah', '@.adri_dcdm', 'pterrific', '@unironicpanda'][i] ?? '',
       team,
     })),
   }
