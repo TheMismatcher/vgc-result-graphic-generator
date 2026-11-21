@@ -19,7 +19,10 @@ Plain static files, no build step. It lives in this repo so it shares the genera
   page is out of date or has text with no key. `?ids` shows each string's key. See
   `scripts/i18n/home.mjs`.
 - **Tile wall:** a fixed list of Pokémon (`MONS`, HOME renders in `sprites/`, copied from
-  `public/sprites/home`) and a fixed seed, so it looks the same on every visit.
+  `public/sprites/home`) and a fixed seed, so it looks the same on every visit. The page draws vector
+  outlines from `wall.svg`, not the PNGs: after adding or changing a sprite, run `npm run home:wall`.
+  (CSS masks with the PNGs cost Safari / iPhone about 50 MB; the outlines about 9 MB.) The wall is
+  built once and only rebuilt when its number of rows (in blocks of 8) or columns changes.
 - `brand/` holds copies of the placeholder logo from `public/brand/`; replace both when the real logo
   is ready.
 - Settings at the top of the script: `LINKS`, `SHOW` (players in the preview), `CUT`, `SHEET`, `MONS`, `SEED`.

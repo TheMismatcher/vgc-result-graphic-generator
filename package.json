@@ -14,6 +14,7 @@
     "i18n:sync": "node scripts/i18n/sync.mjs",
     "i18n:apply": "node scripts/i18n/apply.mjs",
     "i18n:home": "node scripts/i18n/home.mjs",
+    "home:wall": "node scripts/home-wall.mjs",
     "render-diff": "node scripts/i18n/render-diff.mjs"
   },
   "dependencies": {
