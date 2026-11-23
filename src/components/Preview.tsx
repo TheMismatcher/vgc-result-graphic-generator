@@ -410,6 +410,10 @@ const OPTION_LABELS: Record<string, UiKey> = {
   route217: 'ui.preview.option.route217',
   acuity: 'ui.preview.option.acuity',
   snowpoint: 'ui.preview.option.snowpoint',
+  // Ecruteak City
+  bellchime: 'ui.preview.option.bellchime',
+  ecruteak: 'ui.preview.option.ecruteak',
+  tintower: 'ui.preview.option.tintower',
   scarlet: 'ui.preview.option.scarlet',
   violet: 'ui.preview.option.violet',
 }

@@ -9,7 +9,7 @@ import { makeWide } from '../wide'
 import spearSkyTall from '../places/spear-pillar-sky-dp-tall.png'
 import giratinaPortal from '../places/spear-pillar-giratina-portal-pt.png'
 import giratinaOut from '../places/spear-pillar-giratina-pt.png'
-import { MapWall, R119_BRIDGE, R119_TOP, R120, R201, SPEAR, SPEAR_ART, HALL, SNOWPOINT_FULL, R217, ACUITY, GLIMWOOD, TERA, MAX_RAID, SCARLET_BOOK_COVER, VIOLET_BOOK_COVER, SCARLET_BOOK_SQUARE, VIOLET_BOOK_SQUARE } from '../places'
+import { MapWall, R119_BRIDGE, R119_TOP, R120, R201, SPEAR, SPEAR_ART, HALL, SNOWPOINT_FULL, R217, ACUITY, BELLCHIME, BELLCHIME_SQUARE, ECRUTEAK, ECRUTEAK_SQUARE, TIN_TOWER, TIN_TOWER_SQUARE, BELLCHIME_WIDE, ECRUTEAK_WIDE, TIN_TOWER_WIDE, GLIMWOOD, TERA, MAX_RAID, SCARLET_BOOK_COVER, VIOLET_BOOK_COVER, SCARLET_BOOK_SQUARE, VIOLET_BOOK_SQUARE } from '../places'
 import { makeTop4Photos } from '../top4-photos'
 import { makeTop8Mixed } from '../top8-mixed'
 import { makeTop8Photos } from '../top8-photos'
@@ -28,6 +28,8 @@ export interface Place {
   crop: Crop
   /** Used instead of `crop` when the frame is square (Champion). */
   square?: Crop
+  /** Used instead of `crop` when the frame is landscape (the Wide layouts, Usage / Replay / Team Battle). */
+  wide?: Crop
   /** Custom Glass: the user's photo instead of a map. */
   custom?: boolean
 }
@@ -52,6 +54,12 @@ export const PLACES: Place[] = [
   { id: 'place-acuity-lakefront', style: 'Lake Acuity', className: 'theme-place pl-snow', crop: ACUITY },
   { id: 'place-route-217-glass', style: 'Route 217 Glass', className: 'theme-place pl-snow glass', crop: R217 },
   { id: 'place-acuity-lakefront-glass', style: 'Lake Acuity Glass', className: 'theme-place pl-snow glass', crop: ACUITY },
+  { id: 'place-ecruteak-bellchime', style: 'Ecruteak City', className: 'theme-place pl-johto', crop: BELLCHIME, square: BELLCHIME_SQUARE, wide: BELLCHIME_WIDE },
+  { id: 'place-ecruteak-bellchime-glass', style: 'Ecruteak City Glass', className: 'theme-place pl-johto glass', crop: BELLCHIME, square: BELLCHIME_SQUARE, wide: BELLCHIME_WIDE },
+  { id: 'place-ecruteak-town', style: 'Ecruteak Town', className: 'theme-place pl-johto', crop: ECRUTEAK, square: ECRUTEAK_SQUARE, wide: ECRUTEAK_WIDE },
+  { id: 'place-ecruteak-town-glass', style: 'Ecruteak Town Glass', className: 'theme-place pl-johto glass', crop: ECRUTEAK, square: ECRUTEAK_SQUARE, wide: ECRUTEAK_WIDE },
+  { id: 'place-tin-tower-summit', style: 'Tin Tower Summit', className: 'theme-place pl-johto', crop: TIN_TOWER, square: TIN_TOWER_SQUARE, wide: TIN_TOWER_WIDE },
+  { id: 'place-tin-tower-summit-glass', style: 'Tin Tower Summit Glass', className: 'theme-place pl-johto glass', crop: TIN_TOWER, square: TIN_TOWER_SQUARE, wide: TIN_TOWER_WIDE },
   { id: 'place-route-119', style: 'Route 119', className: 'theme-place pl-hoenn', crop: R119_TOP },
   { id: 'place-route-119-glass', style: 'Route 119 Glass', className: 'theme-place pl-hoenn glass', crop: R119_TOP },
   { id: 'place-route-119-bridge', style: 'Route 119 Bridge', className: 'theme-place pl-hoenn', crop: R119_BRIDGE },
@@ -69,7 +77,7 @@ const Wall = ({ place, width, height }: { place: Place; width: number; height: n
   </div>
 )
 
-const cropFor = (p: Place, width: number, height: number) => (width === height && p.square ? p.square : p.crop)
+const cropFor = (p: Place, width: number, height: number) => (width === height && p.square ? p.square : width > height && p.wide ? p.wide : p.crop)
 
 const theme = (p: Place): Theme => ({
   id: p.id,
@@ -114,7 +122,7 @@ export const PLACE_SIDE_THEMES: SideTheme[] = PLACES.map((p) => ({
 export function placeSideThemeInWeather(id: string, weather: Weather): SideTheme | undefined {
   const p = PLACES.find((x) => x.id === id)
   if (!p || p.custom || p.crop.smooth) return undefined
-  const place = { ...p, crop: { ...p.crop, weather }, square: p.square && { ...p.square, weather } }
+  const place = { ...p, crop: { ...p.crop, weather }, square: p.square && { ...p.square, weather }, wide: p.wide && { ...p.wide, weather } }
   return { id: p.id, style: p.style, className: p.className, Wall: ({ width, height }) => <Wall place={place} width={width} height={height} /> }
 }
 

@@ -19,6 +19,9 @@
 //   half-buried trainers are painted out with tile-aligned copies of the snow around them (the Ice Rock stays).
 //   Snowpoint Full Map: the whole town (temple to docks) widened to 4:5 with the map's own tiles: the right edge
 //   repeats each row's last 32px (forest, harbour wall, sea), the left gets the 32px forest tile (snowpoint-full-pt.png).
+// - Ecruteak City (HeartGold / SoulSilver, Bulbagarden map rips): Bellchime Trail, the red and gold autumn wood
+//   between the Dance Theater and the foot of Tin Tower (Bell Tower in HGSS); the whole of Ecruteak with the autumn
+//   wood across the top; and Tin Tower's summit (blue roof, golden spire) where Ho-Oh lands.
 // - Custom Glass: the user's own photo (uploaded and dragged into place on the Preview) behind dark glass
 //   panels whose lines and place numbers use the Branding tab's colours (.pl-custom).
 
@@ -34,6 +37,9 @@ import spearPillarArt from './spear-pillar-bdsp-art.jpg'
 import snowpointFull from './snowpoint-full-pt.png'
 import route217 from './route-217-pt.png'
 import lakeAcuity from './lake-acuity-pt.png'
+import bellchimeTrail from './bellchime-trail-hgss.png'
+import ecruteakCity from './ecruteak-city-hgss.png'
+import tinTowerSummit from './bell-tower-summit-hgss.png'
 import glimwood from './glimwood-tangle-swsh.jpg'
 import teraStellar from './terastal-stellar-sv.jpg'
 import maxRaid from './max-raid-battle-art.jpg'
@@ -126,6 +132,21 @@ export const SNOWPOINT_FULL: Crop = { src: snowpointFull, sx: 0, sy: 86, sw: 691
 export const R217: Crop = { src: route217, sx: 0, sy: 0, sw: 528 }
 // Lake Acuity (752x612) at full height, centred on Uxie's cavern island; square frames take the middle (sy 60).
 export const ACUITY: Crop = { src: lakeAcuity, sx: 105, sy: 60, sw: 490 }
+// Bellchime Trail (640x320): the east end at full height, the autumn wood and the path up to Tin Tower's door
+// (4:5 = 256 wide); square frames take 320 so the Dance Theater's corner shows too.
+export const BELLCHIME: Crop = { src: bellchimeTrail, sx: 384, sy: 0, sw: 256 }
+export const BELLCHIME_SQUARE: Crop = { src: bellchimeTrail, sx: 320, sy: 0, sw: 320 }
+// Wide frames (16:9): as much of the trail as the map's height allows (568 wide), keeping Tin Tower on the right.
+export const BELLCHIME_WIDE: Crop = { src: bellchimeTrail, sx: 72, sy: 0, sw: 568 }
+// Ecruteak City (1032x785) at full height, centred on the town: the Burned Tower, the Dance Theater and the autumn
+// wood across the top, the Gym and the Pokémon Center below; square frames take the middle.
+export const ECRUTEAK: Crop = { src: ecruteakCity, sx: 202, sy: 0, sw: 628 }
+export const ECRUTEAK_SQUARE: Crop = { src: ecruteakCity, sx: 124, sy: 0, sw: 785 }
+export const ECRUTEAK_WIDE: Crop = { src: ecruteakCity, sx: 0, sy: 0, sw: 1032 }
+// Tin Tower's summit (448x574): sky, spire and roof at 4:5 from the top; square frames start lower, on the spire.
+export const TIN_TOWER: Crop = { src: tinTowerSummit, sx: 0, sy: 0, sw: 448 }
+export const TIN_TOWER_SQUARE: Crop = { src: tinTowerSummit, sx: 0, sy: 40, sw: 448 }
+export const TIN_TOWER_WIDE: Crop = { src: tinTowerSummit, sx: 0, sy: 0, sw: 448 }
 // Official art: each crop is the 4:5 window over the art's focal point (they're scaled up smoothly).
 // Frame from the official 24-hour 'Pokémon Live Camera' stream (Oct 2019); the window skips a Pokémon at the far right.
 export const GLIMWOOD: Crop = { src: glimwood, sx: 720, sy: 2, sw: 659, smooth: true }
@@ -183,6 +204,12 @@ export const Route217Glass = makePlace('place-route-217-glass', 'Top Cut (Route 
 export const AcuityLakefrontGlass = makePlace('place-acuity-lakefront-glass', 'Top Cut (Lake Acuity Glass)', 'Lake Acuity’s map with see-through navy panels so the lake and Uxie’s island show.', ACUITY, 'pl-snow', 'pl-art glass')
 export const SnowpointFull = makePlace('place-snowpoint-full', 'Top Cut (Snowpoint Full Map)', 'All of Platinum’s Snowpoint City, from the temple to the docks and the icy sea, with the forest carried out to the edges.', SNOWPOINT_FULL, 'pl-snow', 'pl-art')
 export const SnowpointFullGlass = makePlace('place-snowpoint-full-glass', 'Top Cut (Snowpoint Full Map Glass)', 'All of Snowpoint City from the temple to the docks, with see-through navy panels.', SNOWPOINT_FULL, 'pl-snow', 'pl-art glass')
+export const EcruteakBellchime = makePlace('place-ecruteak-bellchime', 'Top Cut (Ecruteak City)', 'HeartGold / SoulSilver’s Bellchime Trail: the red and gold autumn wood leading to the foot of Tin Tower.', BELLCHIME, 'pl-johto', 'pl-art')
+export const EcruteakBellchimeGlass = makePlace('place-ecruteak-bellchime-glass', 'Top Cut (Ecruteak City Glass)', 'Bellchime Trail’s autumn wood with see-through lacquer panels so more of the leaves show.', BELLCHIME, 'pl-johto', 'pl-art glass')
+export const EcruteakTown = makePlace('place-ecruteak-town', 'Top Cut (Ecruteak Town)', 'HeartGold / SoulSilver’s Ecruteak City map: the Burned Tower and the Dance Theater under the autumn wood.', ECRUTEAK, 'pl-johto', 'pl-art')
+export const EcruteakTownGlass = makePlace('place-ecruteak-town-glass', 'Top Cut (Ecruteak Town Glass)', 'The Ecruteak City map with see-through lacquer panels.', ECRUTEAK, 'pl-johto', 'pl-art glass')
+export const TinTowerSummit = makePlace('place-tin-tower-summit', 'Top Cut (Tin Tower Summit)', 'The top of Tin Tower in HeartGold / SoulSilver: the blue roof and golden spire where Ho-Oh lands.', TIN_TOWER, 'pl-johto', 'pl-art')
+export const TinTowerSummitGlass = makePlace('place-tin-tower-summit-glass', 'Top Cut (Tin Tower Summit Glass)', 'Tin Tower’s roof and golden spire with see-through lacquer panels.', TIN_TOWER, 'pl-johto', 'pl-art glass')
 
 const makeCustom = (light: boolean): StandingsTemplate => ({
   id: light ? 'custom-glass-light' : 'custom-glass',

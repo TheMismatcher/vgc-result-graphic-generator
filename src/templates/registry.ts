@@ -37,7 +37,7 @@ import { EditorialNightLayouts, EditorialPaperLayouts } from './themes/editorial
 import { BattleTower, Ghost, Hoenn, MtCoronet, Pokedex, PokedexChampion, TradingCard } from './eras/more'
 import { GhostPixel, GhostPixelDense, GhostPixelGlass, GhostPixelGlassTeam, GhostPixelGlassLine } from './eras/ghostpixel'
 import { Glimwood, KantoGameBoy, Route201, Unova } from './eras'
-import { DynamaxOfficial, GlimwoodOfficial, SnowpointFull, SnowpointFullGlass, Route217, Route217Glass, AcuityLakefront, AcuityLakefrontGlass, ScarletBook, VioletBook, TerastalOfficial, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillarArt, SpearPillarHall, SpearPillarHallChampion, SpearPillarHallChampionGlass, SpearPillarCutscene, SpearPillarCutsceneGlass, CustomGlass, CustomLight } from './places'
+import { DynamaxOfficial, GlimwoodOfficial, SnowpointFull, SnowpointFullGlass, Route217, Route217Glass, AcuityLakefront, AcuityLakefrontGlass, EcruteakBellchime, EcruteakBellchimeGlass, EcruteakTown, EcruteakTownGlass, TinTowerSummit, TinTowerSummitGlass, ScarletBook, VioletBook, TerastalOfficial, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillarArt, SpearPillarHall, SpearPillarHallChampion, SpearPillarHallChampionGlass, SpearPillarCutscene, SpearPillarCutsceneGlass, CustomGlass, CustomLight } from './places'
 import { PLACE_LAYOUTS, placeSideThemeInWeather, spearPillarResultTheme } from './themes/places'
 import { DynamaxCloud, DynamaxCloudLayouts, FX_SIDE_THEMES, sideFx, TeraRaidDen, TeraRaidDenLayouts, TeraRaidDenPrism, TeraRaidDenPrismLayouts } from './power/recreated'
 import { MosaicGradient, MosaicSquaresGradient, MosaicTintGlass, MosaicTintGlassShadow, MosaicTintSemiShadow, MosaicTintSolid, MosaicTintSolidShadow } from './mosaic'
@@ -176,6 +176,16 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
     ['Route 217 Glass', { map: 'route217', panels: 'glass' }, [[Route217Glass, 'topcut'], ...PLACE_LAYOUTS['Route 217 Glass']]],
     ['Snowpoint Full Map', { map: 'snowpoint', panels: 'solid' }, [[SnowpointFull, 'topcut'], ...PLACE_LAYOUTS['Snowpoint Full Map']]],
     ['Snowpoint Full Map Glass', { map: 'snowpoint', panels: 'glass' }, [[SnowpointFullGlass, 'topcut'], ...PLACE_LAYOUTS['Snowpoint Full Map Glass']]],
+  ]),
+  // Ecruteak City (HeartGold / SoulSilver): Bellchime Trail's autumn wood (first, the default), the town or
+  // Tin Tower's summit, Solid or Glass panels.
+  ...versions('Ecruteak City', [
+    ['Ecruteak City', { map: 'bellchime', panels: 'solid' }, [[EcruteakBellchime, 'topcut'], ...PLACE_LAYOUTS['Ecruteak City']]],
+    ['Ecruteak City Glass', { map: 'bellchime', panels: 'glass' }, [[EcruteakBellchimeGlass, 'topcut'], ...PLACE_LAYOUTS['Ecruteak City Glass']]],
+    ['Ecruteak Town', { map: 'ecruteak', panels: 'solid' }, [[EcruteakTown, 'topcut'], ...PLACE_LAYOUTS['Ecruteak Town']]],
+    ['Ecruteak Town Glass', { map: 'ecruteak', panels: 'glass' }, [[EcruteakTownGlass, 'topcut'], ...PLACE_LAYOUTS['Ecruteak Town Glass']]],
+    ['Tin Tower Summit', { map: 'tintower', panels: 'solid' }, [[TinTowerSummit, 'topcut'], ...PLACE_LAYOUTS['Tin Tower Summit']]],
+    ['Tin Tower Summit Glass', { map: 'tintower', panels: 'glass' }, [[TinTowerSummitGlass, 'topcut'], ...PLACE_LAYOUTS['Tin Tower Summit Glass']]],
   ]),
   // Route 119: the bridge (first, the default), the waterfall or Route 120, Solid or Glass panels.
   ...versions('Route 119', [

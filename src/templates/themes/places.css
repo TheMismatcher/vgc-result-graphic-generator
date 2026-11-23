@@ -264,6 +264,9 @@
 .themed.theme-place.pl-snow.glass .br-entry {
   background: rgba(20, 30, 52, 0.88);
 }
+.themed.theme-place.pl-johto.glass .br-entry {
+  background: rgba(48, 16, 10, 0.88);
+}
 .themed.theme-place.pl-hoenn.glass .br-entry {
   background: rgba(16, 36, 22, 0.88);
 }
@@ -312,6 +315,11 @@
   font-style: normal;
   -webkit-text-stroke: 0;
   text-shadow: 2px 2px 0 var(--pl-dark), 0 0 10px rgba(0, 0, 0, 0.6);
+}
+/* Light (solid) panels: the Usage cards are light too, so their rank and name are dark (they were white on white). */
+.themed.theme-place:is(.pl-hoenn, .pl-sinnoh, .pl-snow, .pl-johto, .pl-custom.light):not(.glass) :is(.us-rank, .us-name) {
+  color: var(--pl-ink);
+  text-shadow: none;
 }
 .themed.theme-place .us-bar {
   border: 4px solid var(--pl-line);

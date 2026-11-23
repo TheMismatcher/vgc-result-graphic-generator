@@ -120,14 +120,16 @@
   background: var(--pl-dark);
 }
 
-/* Hoenn / Sinnoh Snow solid (white) panels: dark player names (the shared place rule writes them white for the glass panels). */
+/* Hoenn / Sinnoh Snow / Ecruteak solid (light) panels: dark player names (the shared place rule writes them white for the glass panels). */
 .themed.theme-place.pl-hoenn.tb:not(.glass) .tb-player,
-.themed.theme-place.pl-snow.tb:not(.glass) .tb-player {
+.themed.theme-place.pl-snow.tb:not(.glass) .tb-player,
+.themed.theme-place.pl-johto.tb:not(.glass) .tb-player {
   color: var(--pl-ink);
   text-shadow: none;
 }
 .themed.theme-place.pl-hoenn.tb-loss:not(.glass) .tb-card.left.won .tb-player,
-.themed.theme-place.pl-snow.tb-loss:not(.glass) .tb-card.left.won .tb-player {
+.themed.theme-place.pl-snow.tb-loss:not(.glass) .tb-card.left.won .tb-player,
+.themed.theme-place.pl-johto.tb-loss:not(.glass) .tb-card.left.won .tb-player {
   color: #fff;
   text-shadow: 2px 2px 0 var(--pl-dark);
 }

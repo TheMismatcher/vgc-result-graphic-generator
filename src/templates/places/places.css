@@ -472,6 +472,40 @@
 .pl-snow.pl-art .pl-row.first {
   border-color: var(--pl-line);
 }
+/* Ecruteak City, Tin Tower (HeartGold / SoulSilver): colours taken from the maps. Warm paper panels framed in the
+   Dance Theater's dark lacquer wood with a gold-leaf inner line; places in autumn-leaf red and Tin Tower's slate
+   roof blue; the winner in the spire's gold. Glass: see-through lacquer with gold lines. */
+.pl-johto {
+  --pl-panel: rgba(255, 249, 238, 0.94);
+  --pl-line: #601810;
+  --pl-inner: inset 0 0 0 3px #f0c038;
+  --pl-ink: #2a1410;
+  --pl-sub: #6b4636;
+  --pl-accent: #c03020;
+  --pl-a: #484868;
+  --pl-b: #c03020; /* even rows, so 2nd is red, then blue, red... */
+  --pl-first: #f8d860;
+  --pl-first-ink: #2a1410;
+  --pl-radius: 18px;
+  --pl-drop: 0 8px 0 rgba(42, 20, 16, 0.35);
+  --pl-text-shadow: none;
+  --pl-dark: #2a1410;
+  --pl-photo: linear-gradient(160deg, #f0c038, #c03020);
+}
+.pl-johto.glass {
+  --pl-panel: rgba(48, 16, 10, 0.62);
+  --pl-line: rgba(240, 192, 56, 0.9);
+  --pl-inner: inset 0 0 0 0 transparent;
+  --pl-ink: #fff;
+  --pl-sub: #fde3c0;
+  --pl-accent: #f0c038;
+  --pl-drop: 0 8px 0 rgba(48, 16, 10, 0.45);
+  --pl-text-shadow: 2px 2px 0 rgba(48, 16, 10, 0.9);
+  --pl-photo: linear-gradient(160deg, rgba(192, 48, 32, 0.75), rgba(48, 16, 10, 0.85));
+}
+.pl-johto .pl-shade {
+  background: linear-gradient(180deg, rgba(42, 20, 16, 0.3), rgba(42, 20, 16, 0) 30%);
+}
 /* Scarlet / Violet Book: the straightened official book covers. Panels in the cover's own cloth colour,
    edged with its gold foil (a thick rule and a thin inner rule, like the frame printed on the cover). */
 .pl-scarlet {
