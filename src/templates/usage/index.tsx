@@ -38,7 +38,7 @@ export const makeUsage = (theme?: SideTheme, loud = false): UsageTemplate => ({
               so a wrapped line never starts or ends with a stray dot. */}
           <div className="us-facts">
             <div className="us-facts-wrap">
-              {[...eventFacts(data), data.totalTeams ? gt('gfx.usage.teamsCounted', { count: data.totalTeams }) : ''].filter(Boolean).map((f) => (
+              {[...eventFacts(data), data.divisionsLine, data.totalTeams ? gt('gfx.usage.teamsCounted', { count: data.totalTeams }) : ''].filter(Boolean).map((f) => (
                 <span key={f} className="us-facts-item">
                   <span className="us-dot">·</span>
                   {f}

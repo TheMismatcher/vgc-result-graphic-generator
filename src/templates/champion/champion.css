@@ -94,6 +94,10 @@
   font-weight: 700;
   white-space: nowrap;
 }
+/* With the division breakdown: a third line, so the band grows (upwards; it's pinned to the bottom). */
+.ch-footer.three {
+  height: 122px;
+}
 .ch-event {
   font-size: 26px;
   font-weight: 900;

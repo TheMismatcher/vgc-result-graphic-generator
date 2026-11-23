@@ -1,5 +1,5 @@
 // Brands people make on the Branding tab (name, tagline, logo, colors), kept in this browser so
-// they can switch between them. Stored apart from the tournament, so "Start over", "Load sample"
+// they can switch between them. Stored apart from the tournament, so "Clear Data", "Load sample"
 // and opening a tournament file never touch them. A brands file moves them to another device.
 
 import { useEffect, useRef, useState } from 'react'

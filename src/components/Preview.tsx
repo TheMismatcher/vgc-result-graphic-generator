@@ -585,6 +585,7 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
           })}
         </div>
         <p className="mt-1 text-xs text-slate-500">
+          {current.layout === 'topcut' && !current.retired && <>{t('ui.picker.topCutNote')}{' '}</>}
           {templateDescription(current)}
           {STANDINGS_LAYOUTS.some(({ id }) => !find(current.style!, id)) && <>{' '}{t('ui.picker.dashedNote', { style: styleName(currentStyle ?? '') })}</>}
         </p>

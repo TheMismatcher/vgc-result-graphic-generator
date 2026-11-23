@@ -29,7 +29,7 @@ function Ticker({ data }: { data: StandingsData }) {
   return (
     <footer className="wa-ticker">
       {type && <div className="wa-ticker-tag">{type}</div>}
-      <div className="wa-ticker-text">{[...rest, data.formatLabel].filter(Boolean).join('   /   ')}</div>
+      <div className="wa-ticker-text">{[...rest, data.divisionsLine, data.formatLabel].filter(Boolean).join('   /   ')}</div>
     </footer>
   )
 }

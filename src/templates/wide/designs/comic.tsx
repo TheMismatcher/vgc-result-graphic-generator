@@ -41,6 +41,7 @@ function Head({ data, burst }: { data: StandingsData; burst: string }) {
       <div className="wc-head-text">
         <FitText className="dmv-title wc-title" text={data.tournament.name || gt('gfx.common.tournament')} max={92} width={1180} min={40} />
         <div className="wc-caption wc-facts">{[...factsOf(data), data.formatLabel].filter(Boolean).join('  •  ')}</div>
+        {data.divisionsLine && <div className="wc-caption wc-facts wc-divisions">{data.divisionsLine}</div>}
       </div>
       <Burst text={burst} size={190} className="wc-head-burst" />
     </header>

@@ -61,9 +61,10 @@ export const makeChampion = (loud = false, theme?: Theme, photo = false): Standi
           ))}
         </div>
 
-        <footer className="ch-footer">
+        <footer className={`ch-footer${data.divisionsLine ? ' three' : ''}`}>
           <span className="ch-event">{data.tournament.name}</span>
           <span>{eventFacts(data).join('  ·  ')}</span>
+          {data.divisionsLine && <span>{data.divisionsLine}</span>}
         </footer>
       </div>
     )

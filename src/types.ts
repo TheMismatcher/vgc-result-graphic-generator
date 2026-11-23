@@ -32,6 +32,7 @@ export interface Tournament {
   format: string // Format name
   customFormat: string
   divisions: { masters: number | ''; seniors: number | ''; juniors: number | '' }
+  showDivisions?: boolean // graphics show each division's count (48 Masters, 6 Seniors, 4 Juniors) instead of the total
   headline?: string // Sports Page: own headline; empty = the automatic "<LASTNAME> WINS <TYPE>"
   deck?: string // Sports Page: own subheadline (the line under the headline); empty = automatic
 }

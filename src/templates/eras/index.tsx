@@ -31,6 +31,7 @@ export const KantoGameBoy: StandingsTemplate = {
         <div className="gb-box gb-head">
           <FitText className="gb-title" text={data.tournament.name || gt('gfx.common.tournament')} max={44} width={940} min={20} weight={400} italic={false} family="'Press Start 2P'" />
           <div className="gb-facts">{facts(data).join(' / ').toUpperCase()}</div>
+          {data.divisionsLine && <div className="gb-facts">{data.divisionsLine.toUpperCase()}</div>}
           {data.formatLabel && <div className="gb-facts dim">{data.formatLabel.toUpperCase()}</div>}
         </div>
 

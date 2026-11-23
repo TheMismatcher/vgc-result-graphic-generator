@@ -25,7 +25,7 @@ function Head({ data, tag, cols = 8 }: { data: StandingsData; tag: string; cols?
   const title = data.tournament.name || gt('gfx.common.tournament')
   const facts = factsOf(data).join('  •  ')
   const side = 56 + (logo ? 174 : 0) + IN * 2 // padding, logo + gap, tile inset
-  const need = side + Math.max(textWidth(title.toUpperCase(), '900 58px Montserrat') * 1.08, textWidth(facts.toUpperCase(), '800 20px Montserrat'), textWidth(data.formatLabel ?? '', '700 17px Montserrat'))
+  const need = side + Math.max(textWidth(title.toUpperCase(), '900 58px Montserrat') * 1.08, textWidth(facts.toUpperCase(), '800 20px Montserrat'), textWidth(data.formatLabel ?? '', '700 17px Montserrat'), textWidth(data.divisionsLine.toUpperCase(), '800 20px Montserrat'))
   const c = Math.min(cols, Math.max(5, Math.ceil(need / T)))
   return (
     <header className="wm-head" style={at(0, 0, c, 2)}>
@@ -34,6 +34,7 @@ function Head({ data, tag, cols = 8 }: { data: StandingsData; tag: string; cols?
         <div className="wm-tag">{tag}</div>
         <FitText className="wm-title" text={title} max={58} width={c * T - side} min={24} weight={900} italic={false} />
         <div className="wm-facts">{facts}</div>
+        {data.divisionsLine && <div className="wm-facts">{data.divisionsLine}</div>}
         {data.formatLabel && <div className="wm-format">{data.formatLabel}</div>}
       </div>
     </header>

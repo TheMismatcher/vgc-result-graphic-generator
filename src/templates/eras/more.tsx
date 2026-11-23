@@ -79,6 +79,7 @@ export const Pokedex: StandingsTemplate = {
         <div className="dx-top-text">
           <FitText className="dx-title" text={data.tournament.name || gt('gfx.common.tournament')} max={46} width={700} min={22} weight={900} italic={false} />
           <FitText className="dx-facts" text={eventFacts(data).join('  •  ')} max={18} width={700} min={11} weight={700} italic={false} />
+          {data.divisionsLine && <FitText className="dx-facts" text={data.divisionsLine} max={18} width={700} min={11} weight={700} italic={false} />}
         </div>
       </div>
       <div className="dx-screen">
@@ -125,7 +126,7 @@ export const PokedexChampion: StandingsTemplate = {
     const rows: [string, string][] = [
       [gt('gfx.eras.rec'), w?.record || '—'],
       [gt('gfx.eras.soc'), w?.social || '—'],
-      [gt('gfx.eras.fld'), data.playerCount ? gt('gfx.eras.players', { count: data.playerCount }) : '—'],
+      [gt('gfx.eras.fld'), data.divisionsLine ? data.playerLines.join('\n') : data.playerCount ? gt('gfx.eras.players', { count: data.playerCount }) : '—'],
       [gt('gfx.eras.fmt'), data.formatLabel || '—'],
     ]
     return (
@@ -138,6 +139,7 @@ export const PokedexChampion: StandingsTemplate = {
           <div className="dx-top-text">
             <FitText className="dx-title" text={data.tournament.name || gt('gfx.common.tournament')} max={46} width={700} min={22} weight={900} italic={false} />
             <FitText className="dx-facts" text={eventFacts(data).join('  •  ')} max={18} width={700} min={11} weight={700} italic={false} />
+            {data.divisionsLine && <FitText className="dx-facts" text={data.divisionsLine} max={18} width={700} min={11} weight={700} italic={false} />}
           </div>
         </div>
         <div className="dx-screen dxc-screen">
@@ -156,7 +158,7 @@ export const PokedexChampion: StandingsTemplate = {
                 {rows.map(([k, v]) => (
                   <div key={k} className="dxc-row">
                     <span className="dxc-key">{k}</span>
-                    <span className="dxc-val">{v}</span>
+                    <span className={`dxc-val${v.includes('\n') ? ' stack' : ''}`}>{v}</span>
                   </div>
                 ))}
               </div>

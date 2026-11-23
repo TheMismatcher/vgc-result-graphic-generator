@@ -116,3 +116,5 @@ export function gtOrdinal(n: number) {
 
 /** A number on a graphic with the language's separators (1,234 / 1.234). */
 export const gtNumber = (n: number) => n.toLocaleString(LOCALES[gfxLang])
+/** "a, b, c" in the graphics' language (a list of counts, like 48 Masters, 6 Seniors, 4 Juniors). */
+export const gtList = (items: string[]) => new Intl.ListFormat(LOCALES[gfxLang], { type: 'unit', style: 'short' }).format(items)

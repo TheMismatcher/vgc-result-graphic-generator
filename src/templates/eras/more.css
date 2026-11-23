@@ -423,6 +423,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* FLD with the division breakdown on: one division per line. */
+.dxc-val.stack {
+  white-space: pre;
+  line-height: 1.25;
+}
 .dxc-text {
   padding: 14px 18px;
   font-size: 22px;

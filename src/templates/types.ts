@@ -14,6 +14,14 @@ export interface EventInfo {
   typeLabel: string // e.g. "League Cup"
   dateLabel: string // e.g. "October 9, 2026"
   playerCount: number // 0 if not entered
+  /** The player count as the graphics write it: one total ("58 Players"), or one entry per division when
+   *  the tournament's "Show division breakdown" is on ("48 Masters", "6 Seniors", "4 Juniors"). Empty if none. */
+  playerLines: string[]
+  /** The total for the facts line ("58 Players"); empty when there's no count or the divisions are shown instead. */
+  playersLabel: string
+  /** "Show division breakdown" on: the divisions as one phrase ("48 Masters, 6 Seniors, 4 Juniors"), drawn on its
+   *  own line under the facts (it's too long to share their line). Empty otherwise. */
+  divisionsLine: string
 }
 
 export interface BracketEntry {

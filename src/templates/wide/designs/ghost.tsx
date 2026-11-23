@@ -17,7 +17,7 @@ function Head({ data, kicker }: { data: StandingsData; kicker: string }) {
         <FitText className="wg-title" text={data.tournament.name || gt('gfx.common.tournament')} max={70} width={1100} min={30} italic={false} />
       </div>
       <div className="wg-head-facts">
-        {[...factsOf(data), data.formatLabel].filter(Boolean).map((f) => (
+        {[...factsOf(data), data.divisionsLine, data.formatLabel].filter(Boolean).map((f) => (
           <div key={f}>{f}</div>
         ))}
       </div>

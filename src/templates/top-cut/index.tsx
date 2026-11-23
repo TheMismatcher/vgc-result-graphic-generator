@@ -41,8 +41,8 @@ const makeTopCut = (header: 'clean' | 'banner' | 'banner-white', loud = false): 
               {/* A slanted caption bar, broadcast style (dark or white). */}
               <div className={`tc-banner ${header === 'banner-white' ? 'white' : ''}`}>
                 <div className="tc-banner-text">
-                  {eventFacts(data)
-                    .filter((f) => f !== data.formatLabel)
+                  {[...eventFacts(data), data.divisionsLine]
+                    .filter((f) => f && f !== data.formatLabel)
                     .map((f, i) => (
                       <span key={f}>
                         {i > 0 && <span className="tc-slash">/</span>}
@@ -60,8 +60,8 @@ const makeTopCut = (header: 'clean' | 'banner' | 'banner-white', loud = false): 
                   Every fact has a dot in front, and the dot that starts each line is clipped off (see CSS). */}
               <div className="tc-facts-line">
                 <div className="tc-facts-wrap">
-                  {eventFacts(data)
-                    .filter((f) => f !== data.formatLabel)
+                  {[...eventFacts(data), data.divisionsLine]
+                    .filter((f) => f && f !== data.formatLabel)
                     .map((f) => (
                       <div key={f} className="tc-facts-line-item">
                         <span className="tc-dot">•</span>

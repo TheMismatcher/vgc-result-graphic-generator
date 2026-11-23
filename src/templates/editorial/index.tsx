@@ -17,8 +17,8 @@ const MOOD_NAMES: Record<Mood, string> = { paper: 'Paper', night: 'Night' }
 const two = (n: number) => String(n).padStart(2, '0')
 
 /** "League Cup · October 17, 2026 · 22 Players" without the (long) format name. */
-const factsLine = (d: { typeLabel: string; dateLabel: string; playerCount: number }) =>
-  [d.typeLabel, d.dateLabel, d.playerCount ? gt('gfx.facts.players', { count: d.playerCount }) : ''].filter(Boolean)
+const factsLine = (d: { typeLabel: string; dateLabel: string; playersLabel: string }) =>
+  [d.typeLabel, d.dateLabel, d.playersLabel].filter(Boolean)
 
 const makeTopCut = (mood: Mood): StandingsTemplate => ({
   id: `editorial-top-cut-${mood}`,
@@ -49,6 +49,7 @@ const makeTopCut = (mood: Mood): StandingsTemplate => ({
               </span>
             ))}
           </div>
+          {data.divisionsLine && <div className="ed-facts">{data.divisionsLine}</div>}
           {data.formatLabel && <div className="ed-format">{data.formatLabel}</div>}
           <div className="ed-rule" />
         </header>
@@ -139,7 +140,8 @@ const makeChampion = (mood: Mood): StandingsTemplate => ({
             ))}
           </div>
 
-          <div className="edc-format">{[data.playerCount ? gt('gfx.facts.players', { count: data.playerCount }) : '', data.formatLabel].filter(Boolean).join('   ·   ')}</div>
+          {data.divisionsLine && <div className="edc-format">{data.divisionsLine}</div>}
+          <div className="edc-format">{[data.playersLabel, data.formatLabel].filter(Boolean).join('   ·   ')}</div>
         </div>
       </div>
     )

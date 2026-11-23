@@ -232,6 +232,7 @@ const makeMosaic = (gradient: boolean, squares = false, cardTint?: 'glass' | 'se
           <div className="mz-head-text">
             <FitText className="mz-title" text={data.tournament.name || gt('gfx.common.tournament')} max={58} width={680} italic={false} weight={900} />
             <FitText className="mz-facts" text={eventFacts(data).filter((f) => f !== data.formatLabel).join('  •  ')} max={24} width={680} min={16} weight={800} italic={false} />
+            {data.divisionsLine && <FitText className="mz-facts" text={data.divisionsLine} max={24} width={680} min={16} weight={800} italic={false} />}
             {data.formatLabel && <FitText className="mz-format" text={data.formatLabel} max={18} width={680} min={13} weight={700} italic={false} uppercase={false} />}
           </div>
         </header>

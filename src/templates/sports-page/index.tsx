@@ -2,6 +2,7 @@
 // the winner, a box-score table for the rest of the top cut, newsprint texture and the brand red
 // as the spot ink (slightly off-register on the headline, like a cheap print run).
 
+import { Fragment } from 'react'
 import { fillClass } from '../shared/format'
 import '@fontsource/anton/400.css'
 import '@fontsource/oswald/500.css'
@@ -135,7 +136,11 @@ const SportsPage: StandingsTemplate = {
               {data.playerCount > 0 && (
                 <>
                   <dt>{gt('gfx.sportsPage.field')}</dt>
-                  <dd>{gt('gfx.sportsPage.fieldPlayers', { count: data.playerCount })}</dd>
+                  <dd>
+                    {data.tournament.showDivisions
+                      ? data.playerLines.map((line, i) => <Fragment key={i}>{i > 0 && <br />}{line}</Fragment>)
+                      : gt('gfx.sportsPage.fieldPlayers', { count: data.playerCount })}
+                  </dd>
                 </>
               )}
               {first?.social && (

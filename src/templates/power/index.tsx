@@ -373,6 +373,7 @@ function PowerTopCut({ data, cls, Background, emblem, above, font = MONTSERRAT, 
         <div className="pw-head-text">
           <FitText className="pw-title" text={data.tournament.name || gt('gfx.common.tournament')} max={60} width={titleWidth} min={26} {...fit} />
           <FitText className="pw-facts" text={eventFacts(data).join('  •  ')} max={20} width={titleWidth} min={12} weight={800} italic={false} />
+          {data.divisionsLine && <FitText className="pw-facts" text={data.divisionsLine} max={20} width={titleWidth} min={12} weight={800} italic={false} />}
         </div>
         {emblem}
       </header>

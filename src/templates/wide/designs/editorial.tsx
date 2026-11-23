@@ -25,6 +25,7 @@ function Masthead({ data, kicker }: { data: StandingsData; kicker: string }) {
           ))}
           {data.formatLabel && <span className="we-format">{data.formatLabel}</span>}
         </div>
+        {data.divisionsLine && <div className="we-facts">{data.divisionsLine}</div>}
       </div>
       <Logo size={120} style={{ border: 'none', boxShadow: 'none' }} />
     </header>

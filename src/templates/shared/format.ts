@@ -1,9 +1,9 @@
 import type { EventInfo } from '../types'
-import { gt, gtOrdinal } from '../../i18n'
+import { gtOrdinal } from '../../i18n'
 
 /** The small facts under a title: type, date, format, player count. */
 export function eventFacts(e: EventInfo) {
-  return [e.typeLabel, e.dateLabel, e.formatLabel, e.playerCount ? gt('gfx.facts.players', { count: e.playerCount }) : ''].filter(Boolean)
+  return [e.typeLabel, e.dateLabel, e.formatLabel, e.playersLabel].filter(Boolean)
 }
 
 /** 1st, 2nd, 3rd… in the graphics' language. */

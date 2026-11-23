@@ -2,6 +2,7 @@ import type { Tournament } from '../types'
 import { FORMATS, TOURNAMENT_TYPES, eventTypeKey, formatName } from '../data/options'
 import { Card, Field, Input, Select } from './ui'
 import { t, type UiKey } from '../i18n'
+import { eventInfo } from '../lib/event'
 
 const DIVISION_LABELS: Record<'masters' | 'seniors' | 'juniors', UiKey> = {
   masters: 'ui.tournament.division.masters',
@@ -13,6 +14,9 @@ export function TournamentForm({ value, onChange }: { value: Tournament; onChang
   const set = <K extends keyof Tournament>(key: K, v: Tournament[K]) => onChange({ ...value, [key]: v })
   const setDivision = (key: keyof Tournament['divisions'], v: string) =>
     set('divisions', { ...value.divisions, [key]: v === '' ? '' : Math.max(0, Number(v)) })
+  // How the graphics write the player count either way, for the hint under the checkbox.
+  const total = eventInfo({ ...value, showDivisions: false }).playersLabel
+  const split = eventInfo({ ...value, showDivisions: true }).divisionsLine
 
   return (
     <Card>
@@ -49,6 +53,13 @@ export function TournamentForm({ value, onChange }: { value: Tournament; onChang
               <Input type="number" min={0} inputMode="numeric" placeholder="0" value={value.divisions[d]} onChange={(e) => setDivision(d, e.target.value)} />
             </Field>
           ))}
+        </div>
+        <div className="sm:col-span-2">
+          <label className="flex items-center gap-2 text-sm text-slate-700">
+            <input type="checkbox" checked={!!value.showDivisions} onChange={(e) => set('showDivisions', e.target.checked)} />
+            {t('ui.tournament.showDivisions')}
+          </label>
+          {total && split !== total && <p className="mt-1 text-xs text-slate-500">{t('ui.tournament.showDivisionsHint', { total, example: split })}</p>}
         </div>
       </div>
     </Card>

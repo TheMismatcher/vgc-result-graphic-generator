@@ -31,6 +31,7 @@ const makeArena = (bg: Background): StandingsTemplate => ({
           <FitText className="ar-title" text={data.tournament.name || gt('gfx.common.tournament')} max={66} width={780} />
           <div className="ar-underline" />
           <div className="ar-facts">{eventFacts(data).join('   /   ')}</div>
+          {data.divisionsLine && <div className="ar-facts">{data.divisionsLine}</div>}
         </div>
         <Logo size={150} />
       </header>
