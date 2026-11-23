@@ -10,6 +10,11 @@ each tool.
   shows the live top 5, read from the same Google Sheet as the standings page.
 - **Calendar**: coming soon, not a link yet.
 - **Ko-fi** panel: set `LINKS.kofi` at the top of the script in `index.html`.
+- **Credits** (`credits/index.html`, at `/credits/`, linked from the footer): the people, data and art
+  sources, libraries and fonts, and how to reach Nicholas and Tovah on Discord. Its paths are absolute (`/fonts`,
+  `/brand`…) because DigitalOcean serves it at `/credits` without the trailing slash.
+- **`site.js`**, shared by both pages: the text helpers (`t()`, language, `?ids`) and the tile wall (`MONS`, `SEED`,
+  `drawWall()`).
 
 Plain static files, no build step. It lives in this repo so it shares the generator's string catalog.
 
@@ -25,7 +30,7 @@ Plain static files, no build step. It lives in this repo so it shares the genera
   built once and only rebuilt when its number of rows (in blocks of 8) or columns changes.
 - `brand/` holds copies of the placeholder logo from `public/brand/`; replace both when the real logo
   is ready.
-- Settings at the top of the script: `LINKS`, `SHOW` (players in the preview), `CUT`, `SHEET`, `MONS`, `SEED`.
+- Settings at the top of the script: `LINKS`, `SHOW` (players in the preview), `CUT`, `SHEET`; the wall's `MONS` and `SEED` are in `site.js`.
 
 ## Hosting (DigitalOcean App Platform)
 

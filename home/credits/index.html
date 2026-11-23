@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title data-i18n="ui.credits.pageTitle">Credits · Mismatched</title>
+<meta name="description" data-i18n-content="ui.credits.metaDescription" content="The people, data, and tools behind Mismatched.gg, and how to reach us with bug reports, feedback, suggestions, or new templates to add." />
+<meta property="og:title" data-i18n-content="ui.credits.pageTitle" content="Credits · Mismatched" />
+<meta property="og:description" data-i18n-content="ui.credits.metaDescription" content="The people, data, and tools behind Mismatched.gg, and how to reach us with bug reports, feedback, suggestions, or new templates to add." />
+<link rel="icon" type="image/svg+xml" href="/brand/mismatched-icon.svg" />
+<!--
+  mismatched.gg/credits: who made the site, where its data and art come from, what it's built with, and how to
+  reach Nicholas and Tovah. Same Mosaic look as the home page (../index.html): tile wall over the red-to-blue
+  gradient, white cards with tinted place tags.
+
+  PATHS are absolute (/fonts, /brand, /site.js, /wall.svg): DigitalOcean serves this page at /credits without a
+  trailing slash, where relative paths would point at the wrong folder. Links to it use /credits/.
+
+  TEXT: every visible string is a ui.credits.* key in the generator's catalog (src/i18n/en.json, notes in
+  notes.json, reviewed in the same sheet); `npm run i18n:home` writes the English in. People's names, handles
+  and the names of sites, libraries and fonts stay as written (data-i18n-ignore).
+-->
+<style>
+  @font-face { font-family: 'Montserrat'; font-weight: 700; src: url(/fonts/montserrat-latin-700-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 800; src: url(/fonts/montserrat-latin-800-normal.woff2) format('woff2'); }
+  @font-face { font-family: 'Montserrat'; font-weight: 900; src: url(/fonts/montserrat-latin-900-normal.woff2) format('woff2'); }
+
+  /* Same palette as the home page (the generator's built-in brand). */
+  :root {
+    --red: #b3121b; --blue: #6b9cf6; --blue-dark: #1f4fa3; --yellow: #ffd34e;
+    --card: rgba(255, 255, 255, .9);
+    --ink: #1f2330; --muted: #5b6070;
+    --shadow: 0 8px 0 rgba(20, 24, 40, .22), 0 16px 30px rgba(20, 24, 40, .28);
+    --tag-red: color-mix(in srgb, var(--red) 75%, #fff);
+    --tag-blue: color-mix(in srgb, var(--blue-dark) 70%, #fff);
+    --tag-yellow: color-mix(in srgb, var(--yellow) 85%, #fff);
+    --discord: #5865f2;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--blue); }
+  body { margin: 0; position: relative; min-height: 100vh; overflow-x: hidden; font-family: 'Montserrat', system-ui, sans-serif; font-weight: 700; color: var(--ink);
+    background: linear-gradient(135deg, var(--red), var(--blue)); }
+  a { color: inherit; }
+
+  /* ---------- The tile wall (drawn by site.js) ---------- */
+  .wall { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  .wall-grid { position: absolute; top: 0; left: 50%; }
+  .tile { position: absolute; padding: 7px; border-radius: 16px; background: rgba(255, 255, 255, .9); }
+  .tile svg { display: block; width: 100%; height: 100%; fill: currentColor; fill-opacity: .55; }
+
+  .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* ---------- Header plate: logo (back home), page title ---------- */
+  .hero { padding: 54px 16px 34px; display: flex; justify-content: center; }
+  .plate { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 24px 40px 22px; border-radius: 28px; background: var(--card); box-shadow: var(--shadow); text-align: center; }
+  .plate img { display: block; width: min(340px, 64vw); height: auto; }
+  h1 { margin: 0; font-size: 40px; font-weight: 900; text-transform: uppercase; letter-spacing: .01em; line-height: 1; color: color-mix(in srgb, var(--red) 85%, #000); }
+  .home { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; background: var(--ink); color: #fff; text-decoration: none;
+    font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; transition: transform .15s ease; }
+  .home::before { content: '←'; }
+  .home:hover { transform: translateY(-2px); }
+
+  /* ---------- Cards ---------- */
+  main { width: 100%; max-width: 1120px; margin: 0 auto; padding: 10px 16px 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+  .wide { grid-column: 1 / -1; }
+  @media (max-width: 860px) { main { grid-template-columns: minmax(0, 1fr); max-width: 580px; } }
+  .card { border-radius: 22px; overflow: hidden; background: var(--card); box-shadow: var(--shadow); }
+  .card.yellow { --tag: var(--tag-yellow); --tag-ink: var(--ink); background: color-mix(in srgb, var(--yellow) 28%, var(--card)); }
+  .card.blue { --tag: var(--tag-blue); --tag-ink: #fff; background: color-mix(in srgb, var(--blue) 14%, var(--card)); }
+  .card.red { --tag: var(--tag-red); --tag-ink: #fff; background: color-mix(in srgb, var(--red) 10%, var(--card)); }
+  .head { display: flex; align-items: stretch; }
+  .tag { flex: none; width: 78px; display: flex; align-items: center; justify-content: center; background: var(--tag); color: var(--tag-ink); font-size: 34px; font-weight: 900; }
+  .head-text { flex: 1; min-width: 0; padding: 18px 18px 14px; }
+  h2 { margin: 0; font-size: 26px; font-weight: 900; text-transform: uppercase; line-height: 1.02; letter-spacing: -.01em; }
+  .kicker { margin-top: 6px; font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: color-mix(in srgb, var(--red) 85%, #000); }
+  .body { padding: 6px 18px 20px; }
+
+  /* People: one white row each, initial in a tinted box (Mosaic's place tags, alternating like its rows). */
+  .people { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 860px) { .people { grid-template-columns: minmax(0, 1fr); } }
+  .person { display: flex; border-radius: 14px; overflow: hidden; background: rgba(255, 255, 255, .92); box-shadow: 0 4px 0 rgba(20, 24, 40, .14); }
+  .initial { flex: none; width: 58px; display: flex; align-items: center; justify-content: center; background: var(--tag-red); color: #fff; font-size: 28px; font-weight: 900; }
+  .person:nth-child(even) .initial { background: var(--tag-blue); }
+  /* Two columns: a checkerboard (red/blue swap each row), so neither column turns into one solid colour. */
+  @media (min-width: 861px) {
+    .person:nth-child(4n) .initial { background: var(--tag-red); }
+    .person:nth-child(4n+3) .initial { background: var(--tag-blue); }
+  }
+  /* The two people who made the site (Nicholas, Tovah) share the yellow 1st-place tag. */
+  .person.lead .initial { background: var(--tag-yellow); color: var(--ink); }
+  .pinfo { flex: 1; min-width: 0; padding: 12px 14px 14px; }
+  h3 { margin: 0; font-size: 20px; font-weight: 900; text-transform: uppercase; line-height: 1.1; }
+  .pinfo p { margin: 5px 0 0; font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+  .handles { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .handle { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 800; text-decoration: none; color: #fff; background: #111; }
+  .handle svg { flex: none; width: 13px; height: 13px; fill: currentColor; }
+  .handle.discord { background: var(--discord); }
+  a.handle { transition: transform .15s ease; }
+  a.handle:hover { transform: translateY(-2px); }
+
+  /* Contact panel: like the home page's Ko-fi panel, in Discord blue. */
+  .contact { display: flex; align-items: center; gap: 16px 22px; flex-wrap: wrap; padding: 18px 22px; border-radius: 22px; background: var(--card); box-shadow: var(--shadow); }
+  .contact-icon { flex: none; width: 54px; height: 54px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: var(--discord); color: #fff; }
+  .contact-icon svg { width: 32px; height: 32px; fill: currentColor; }
+  .contact-text { flex: 1 1 300px; min-width: 0; }
+  .contact h2 { font-size: 20px; }
+  .contact p { margin: 4px 0 0; font-size: 15px; color: var(--muted); }
+  .contact .handles { margin: 0; gap: 10px; }
+  .contact .handle { padding: 9px 16px; font-size: 15px; }
+  .contact .handle svg { width: 17px; height: 17px; }
+  .contact .handle b { font-weight: 900; }
+  .contact .handle span { opacity: .85; }
+
+  /* Sources and tools: name (a link) over what it gives the site. */
+  .list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .list li { padding: 10px 14px; border-radius: 12px; background: rgba(255, 255, 255, .92); box-shadow: 0 3px 0 rgba(20, 24, 40, .12); }
+  .list .name { display: block; font-size: 15px; font-weight: 900; text-decoration: none; }
+  .list a.name:hover { text-decoration: underline; }
+  .list .what { display: block; margin-top: 2px; font-size: 13.5px; line-height: 1.45; color: var(--muted); }
+
+  footer { margin: 28px auto 20px; width: calc(100% - 32px); max-width: 760px; padding: 14px 22px; border-radius: 18px; background: var(--card); box-shadow: 0 6px 0 rgba(20, 24, 40, .18);
+    text-align: center; font-size: 12px; line-height: 1.6; color: var(--muted); }
+  footer p { margin: 0; }
+
+  @media (max-width: 700px) {
+    .hero { padding-top: 32px; }
+    .plate { padding: 20px 22px 18px; }
+    h1 { font-size: 32px; }
+  }
+  @media (max-width: 520px) {
+    .tag { width: 64px; font-size: 28px; }
+    h2 { font-size: 22px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .home, a.handle { transition: none; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></symbol>
+  <symbol id="i-discord" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+</svg>
+<div class="wall" id="wall" aria-hidden="true"></div>
+
+<div class="page">
+  <header class="hero">
+    <div class="plate">
+      <!-- i18n-ignore: brand name -->
+      <a href="/"><img src="/brand/mismatched-logo.svg" alt="Mismatched" width="646" height="136" data-i18n-ignore /></a>
+      <h1 data-i18n="ui.credits.title">Credits</h1>
+      <a class="home" href="/" data-i18n="ui.credits.home">Home</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="card yellow wide">
+      <div class="head">
+        <div class="tag">1</div>
+        <div class="head-text"><h2 data-i18n="ui.credits.people.title">People</h2><div class="kicker" data-i18n="ui.credits.people.kicker">Who made Mismatched.gg</div></div>
+      </div>
+      <div class="body">
+        <ul class="people">
+          <li class="person lead">
+            <div class="initial" aria-hidden="true" data-i18n-ignore>N</div>
+            <div class="pinfo">
+              <h3 data-i18n-ignore>Nicholas Rubingh</h3>
+              <p data-i18n="ui.credits.people.nicholas">Made the Mismatched.gg Homepage, the Graphics Generator, and Invitational Standings Page. Organizes the DMV Invitational.</p>
+              <div class="handles">
+                <a class="handle" href="https://x.com/TheMismatcher" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-x"/></svg><span data-i18n-ignore>@TheMismatcher</span></a>
+                <span class="handle discord"><svg aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n-ignore>themismatcher</span></span>
+              </div>
+            </div>
+          </li>
+          <li class="person lead">
+            <div class="initial" aria-hidden="true" data-i18n-ignore>T</div>
+            <div class="pinfo">
+              <h3 data-i18n-ignore>Tovah</h3>
+              <p data-i18n="ui.credits.people.tovah">Built the Calendar bot, and worked on the site as a whole, with feedback and code edits for all parts.</p>
+              <div class="handles">
+                <span class="handle discord"><svg aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n-ignore>tovah.</span></span>
+              </div>
+            </div>
+          </li>
+          <li class="person">
+            <div class="initial" aria-hidden="true" data-i18n-ignore>M</div>
+            <div class="pinfo">
+              <h3 data-i18n-ignore>Marlee</h3>
+              <p data-i18n="ui.credits.people.marlee">Created the Classic, Comic Book, and Comic Book Poster templates, which served as the first templates and inspired many of the others.</p>
+              <div class="handles">
+                <span class="handle discord"><svg aria-hidden="true"><use href="#i-discord"/></svg><span data-i18n-ignore>pterrific</span></span>
+              </div>
+            </div>
+          </li>
+          <li class="person">
+            <div class="initial" aria-hidden="true" data-i18n-ignore>A</div>
+            <div class="pinfo">
+              <h3 data-i18n-ignore>Adri</h3>
+              <p data-i18n="ui.credits.people.adri">Created the Stream Event Results template, the basis for every Event Results template, and gave feedback on other templates. Created the DMV Falinks logo.</p>
+              <div class="handles">
+                <a class="handle" href="https://x.com/adri_dcdm" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-x"/></svg><span data-i18n-ignore>@adri_dcdm</span></a>
+              </div>
+            </div>
+          </li>
+          <li class="person">
+            <div class="initial" aria-hidden="true" data-i18n-ignore>T</div>
+            <div class="pinfo">
+              <h3 data-i18n-ignore>Twilite</h3>
+              <p data-i18n="ui.credits.people.twilite">Came up with the idea for the DMV Invitational and organizes it with Nicholas.</p>
+              <div class="handles">
+                <a class="handle" href="https://x.com/Twilite0" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-x"/></svg><span data-i18n-ignore>@Twilite0</span></a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="contact wide">
+      <div class="contact-icon" aria-hidden="true"><svg><use href="#i-discord"/></svg></div>
+      <div class="contact-text">
+        <h2 data-i18n="ui.credits.contact.title">Feedback or ideas?</h2>
+        <p data-i18n="ui.credits.contact.text">Message Nicholas or Tovah on Discord with any glitches, feedback, or suggestions, or if you created a template or brand you would like added.</p>
+      </div>
+      <div class="handles">
+        <span class="handle discord"><svg aria-hidden="true"><use href="#i-discord"/></svg><b data-i18n-ignore>Nicholas</b><span data-i18n-ignore>themismatcher</span></span>
+        <span class="handle discord"><svg aria-hidden="true"><use href="#i-discord"/></svg><b data-i18n-ignore>Tovah</b><span data-i18n-ignore>tovah.</span></span>
+      </div>
+    </section>
+
+    <section class="card blue">
+      <div class="head">
+        <div class="tag">2</div>
+        <div class="head-text"><h2 data-i18n="ui.credits.sources.title">Data and Sprites</h2><div class="kicker" data-i18n="ui.credits.sources.kicker">Where the assets and data come from</div></div>
+      </div>
+      <div class="body">
+        <ul class="list">
+          <li><a class="name" href="https://pokeapi.co" target="_blank" rel="noopener noreferrer" data-i18n-ignore>PokeAPI</a><span class="what" data-i18n="ui.credits.sources.pokeapi">Pokémon and item data, sprites, and the Pokémon HOME pictures on graphics and on the Mosaic style template and the home page</span></li>
+          <li><a class="name" href="https://www.smogon.com/forums/threads/sword-shield-sprite-project.3647722/" target="_blank" rel="noopener noreferrer" data-i18n-ignore>Smogon Sprite Project</a><span class="what" data-i18n="ui.credits.sources.smogon">Pixel sprites for Pokémon from Gen 6 on, created and contributed by fans. Currently used in the retired pixel style.</span></li>
+          <li><a class="name" href="https://archives.bulbagarden.net" target="_blank" rel="noopener noreferrer" data-i18n-ignore>Bulbagarden Archives</a><span class="what" data-i18n="ui.credits.sources.bulbagarden">Item icons</span></li>
+          <li><a class="name" href="https://pokemonshowdown.com" target="_blank" rel="noopener noreferrer" data-i18n-ignore>Pokémon Showdown</a><span class="what" data-i18n="ui.credits.sources.showdown">Battle replays to import for the Replay and Team Battle tabs, backup item icons, and the move and ability legality lists that help recognize Pokémon when importing team screenshots</span></li>
+          <li><a class="name" href="https://play.limitlesstcg.com" target="_blank" rel="noopener noreferrer" data-i18n-ignore>Limitless</a><span class="what" data-i18n="ui.credits.sources.limitless">Auto import standings, teams, brackets, and usage</span></li>
+          <li><a class="name" href="https://rk9.gg" target="_blank" rel="noopener noreferrer" data-i18n-ignore>RK9</a><span class="what" data-i18n="ui.credits.sources.rk9">Used to import data to fill rosters, team lists, and records for Event Results</span></li>
+          <li><a class="name" href="https://pokedata.ovh" target="_blank" rel="noopener noreferrer" data-i18n-ignore>Pokédata</a><span class="what" data-i18n="ui.credits.sources.official">Used to import data for standings from official Regionals and Internationals</span></li>
+          <li><a class="name" href="https://standings.reportworm.com" target="_blank" rel="noopener noreferrer" data-i18n-ignore>Reportworm</a><span class="what" data-i18n="ui.credits.sources.official">Used to import data for standings from official Regionals and Internationals</span></li>
+          <li><a class="name" href="https://pokepast.es" target="_blank" rel="noopener noreferrer" data-i18n-ignore>Pokepaste</a><span class="what" data-i18n="ui.credits.sources.pokepaste">Team imports</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card red">
+      <div class="head">
+        <div class="tag">3</div>
+        <div class="head-text"><h2 data-i18n="ui.credits.tools.title">Built with</h2><div class="kicker" data-i18n="ui.credits.tools.kicker">Free tools used in the backend</div></div>
+      </div>
+      <div class="body">
+        <ul class="list">
+          <li><a class="name" href="https://tesseract.projectnaptha.com" target="_blank" rel="noopener noreferrer" data-i18n-ignore>Tesseract.js</a><span class="what" data-i18n="ui.credits.tools.tesseract">Reads the text in standings photos and team screenshots</span></li>
+          <li><a class="name" href="https://mozilla.github.io/pdf.js/" target="_blank" rel="noopener noreferrer" data-i18n-ignore>PDF.js</a><span class="what" data-i18n="ui.credits.tools.pdfjs">Reads standings PDFs</span></li>
+          <li><a class="name" href="https://github.com/bubkoo/html-to-image" target="_blank" rel="noopener noreferrer" data-i18n-ignore>html-to-image</a><span class="what" data-i18n="ui.credits.tools.htmlToImage">Saves graphics as images</span></li>
+          <li><span class="name" data-i18n-ignore>React · Material UI</span><span class="what" data-i18n="ui.credits.tools.react">The Graphics Generator's pages</span></li>
+          <li><a class="name" href="https://fonts.google.com" target="_blank" rel="noopener noreferrer" data-i18n-ignore>Montserrat · Anton · Cabin · Oswald · Press Start 2P</a><span class="what" data-i18n="ui.credits.tools.fonts">Fonts</span></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p data-i18n="ui.home.footer.legal">Pokémon and all related names © Nintendo / Creatures Inc. / GAME FREAK inc. / The Pokémon Company. Mismatched.gg is a non-commercial fan site, not affiliated with or endorsed by them.</p>
+  </footer>
+</div>
+
+<!-- The page's strings from the generator's catalog (src/i18n/en.json). Written by `npm run i18n:home`. -->
+<script type="application/json" id="i18n-en">{"ui.credits.contact.text":"Message Nicholas or Tovah on Discord with any glitches, feedback, or suggestions, or if you created a template or brand you would like added.","ui.credits.contact.title":"Feedback or ideas?","ui.credits.home":"Home","ui.credits.metaDescription":"The people, data, and tools behind Mismatched.gg, and how to reach us with bug reports, feedback, suggestions, or new templates to add.","ui.credits.pageTitle":"Credits · Mismatched","ui.credits.people.adri":"Created the Stream Event Results template, the basis for every Event Results template, and gave feedback on other templates. Created the DMV Falinks logo.","ui.credits.people.kicker":"Who made Mismatched.gg","ui.credits.people.marlee":"Created the Classic, Comic Book, and Comic Book Poster templates, which served as the first templates and inspired many of the others.","ui.credits.people.nicholas":"Made the Mismatched.gg Homepage, the Graphics Generator, and Invitational Standings Page. Organizes the DMV Invitational.","ui.credits.people.title":"People","ui.credits.people.tovah":"Built the Calendar bot, and worked on the site as a whole, with feedback and code edits for all parts.","ui.credits.people.twilite":"Came up with the idea for the DMV Invitational and organizes it with Nicholas.","ui.credits.sources.bulbagarden":"Item icons","ui.credits.sources.kicker":"Where the assets and data come from","ui.credits.sources.limitless":"Auto import standings, teams, brackets, and usage","ui.credits.sources.official":"Used to import data for standings from official Regionals and Internationals","ui.credits.sources.pokeapi":"Pokémon and item data, sprites, and the Pokémon HOME pictures on graphics and on the Mosaic style template and the home page","ui.credits.sources.pokepaste":"Team imports","ui.credits.sources.rk9":"Used to import data to fill rosters, team lists, and records for Event Results","ui.credits.sources.showdown":"Battle replays to import for the Replay and Team Battle tabs, backup item icons, and the move and ability legality lists that help recognize Pokémon when importing team screenshots","ui.credits.sources.smogon":"Pixel sprites for Pokémon from Gen 6 on, created and contributed by fans. Currently used in the retired pixel style.","ui.credits.sources.title":"Data and Sprites","ui.credits.title":"Credits","ui.credits.tools.fonts":"Fonts","ui.credits.tools.htmlToImage":"Saves graphics as images","ui.credits.tools.kicker":"Free tools used in the backend","ui.credits.tools.pdfjs":"Reads standings PDFs","ui.credits.tools.react":"The Graphics Generator's pages","ui.credits.tools.tesseract":"Reads the text in standings photos and team screenshots","ui.credits.tools.title":"Built with","ui.home.footer.legal":"Pokémon and all related names © Nintendo / Creatures Inc. / GAME FREAK inc. / The Pokémon Company. Mismatched.gg is a non-commercial fan site, not affiliated with or endorsed by them."}</script>
+<script src="/site.js"></script>
+<script>
+new ResizeObserver(drawWall).observe(document.body)
+document.fonts.ready.then(drawWall)
+</script>
+</body>
+</html>
