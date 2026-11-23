@@ -33,10 +33,30 @@ export const GLIMWOOD_BRAND: Brand = {
   colors: { main: '#c23fd6', second: '#2a3a8c', highlight: '#56f0ff' },
 }
 
+// Fire (the Fire type): crimson, ember orange, flame yellow.
+export const FIRE_BRAND: Brand = {
+  name: 'Fire',
+  tagline: '',
+  logo: '',
+  banner: '',
+  colors: { main: '#b3121b', second: '#f15a09', highlight: '#ffd34e' },
+}
+
+// Fairy (the Fairy type, Fire's partner): deep magenta, coral, hot pink.
+export const FAIRY_BRAND: Brand = {
+  name: 'Fairy',
+  tagline: '',
+  logo: '',
+  banner: '',
+  colors: { main: '#b51279', second: '#f76969', highlight: '#ff4dcf' },
+}
+
 /** The built-in looks on the Branding tab, in order. */
 export const BUILT_IN_BRANDS = [
   { id: 'dmv' as const, brand: DMV_BRAND },
   { id: 'glimwood' as const, brand: GLIMWOOD_BRAND },
+  { id: 'fire' as const, brand: FIRE_BRAND },
+  { id: 'fairy' as const, brand: FAIRY_BRAND },
 ]
 
 export const defaultBrandSettings = (): BrandSettings => ({
