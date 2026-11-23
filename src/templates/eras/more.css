@@ -150,34 +150,6 @@
   color: #a9b4d8;
 }
 
-/* ---------- Mt. Coronet / Spear Pillar ---------- */
-.mc {
-  background: linear-gradient(180deg, #120a26 0%, #2a1652 45%, #3d2370 100%);
-  color: #2b2533;
-}
-.mc-head, .mc-row {
-  background: linear-gradient(180deg, #d9d4e2, #b3adc2);
-  border: 4px solid #4a4360;
-  border-radius: 6px;
-  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.5), 0 6px 0 rgba(0, 0, 0, 0.35);
-}
-.mc-head .dmv-logo {
-  border-color: #4a4360;
-}
-.mc-kicker, .mc-facts {
-  color: #5b3fa0;
-}
-.mc-place {
-  background: linear-gradient(180deg, #7b4bd8, #3d2370);
-  color: #f2e6ff;
-}
-.mc-row.first .mc-place {
-  background: linear-gradient(180deg, #ff9be8, #b14bd8);
-}
-.mc-sub {
-  color: #5c5570;
-}
-
 /* ---------- Hoenn (Gen 3) ---------- */
 .h3 {
   background: repeating-linear-gradient(-45deg, #58c8d8 0 36px, #4ab8ca 36px 72px);

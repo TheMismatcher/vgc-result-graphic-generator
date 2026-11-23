@@ -1,4 +1,4 @@
-// More game/location styles: Battle Tower, Mt. Coronet (Spear Pillar), Gen 3 (Hoenn GBA menus),
+// More game/location styles: Battle Tower, Gen 3 (Hoenn GBA menus),
 // a Pokédex, a holo trading card for the champion, and a Ghost (Halloween) seasonal look.
 // Inspired by the games' looks; no game art is used.
 
@@ -40,51 +40,6 @@ export const BattleTower: StandingsTemplate = {
       <LocationRows data={data} cls="bt" />
     </div>
   ),
-}
-
-/** Mt. Coronet / Spear Pillar: ancient stone pillars under a cosmic sky. */
-export const MtCoronet: StandingsTemplate = {
-  ...base,
-  id: 'loc-mt-coronet',
-  name: 'Top Cut (Mt. Coronet)',
-  description: 'Spear Pillar atop Mt. Coronet: stone ruins and pillars under a cosmic purple sky.',
-  Component: ({ data }) => {
-    const rand = seededRand(`coronet|${data.tournament.name}`)
-    const stars = Array.from({ length: 120 }, () => ({ x: rand() * 1080, y: rand() * 1350, r: 0.8 + rand() * 2.4, o: 0.4 + rand() * 0.6 }))
-    return (
-      <div className="dmv mc" style={{ width: 1080, height: 1350 }}>
-        <svg className="mc-scene" width="1080" height="1350" aria-hidden>
-          <defs>
-            <radialGradient id="mc-rift" cx="0.5" cy="0.12" r="0.7">
-              <stop offset="0" stopColor="#ff9be8" stopOpacity="0.55" />
-              <stop offset="0.35" stopColor="#7b4bd8" stopOpacity="0.35" />
-              <stop offset="1" stopColor="#120a26" stopOpacity="0" />
-            </radialGradient>
-            <linearGradient id="mc-stone" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stopColor="#8f8a9e" />
-              <stop offset="0.5" stopColor="#c9c4d4" />
-              <stop offset="1" stopColor="#7c7790" />
-            </linearGradient>
-          </defs>
-          <rect width="1080" height="1350" fill="url(#mc-rift)" />
-          {stars.map((s, i) => (
-            <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="#fff" opacity={s.o} />
-          ))}
-          {/* Pillars: a capital, a shaft and a base each, at both edges. */}
-          {[14, 980].map((x) => (
-            <g key={x} opacity="0.85">
-              <rect x={x - 8} y={250} width={102} height={34} rx={4} fill="url(#mc-stone)" />
-              <rect x={x + 8} y={284} width={70} height={980} fill="url(#mc-stone)" />
-              <rect x={x - 8} y={1260} width={102} height={40} rx={4} fill="url(#mc-stone)" />
-            </g>
-          ))}
-          <path d="M0 1300 L1080 1300 L1080 1350 L0 1350 Z" fill="#6d6880" />
-        </svg>
-        <LocationHead data={data} cls="mc" kicker="" />
-        <LocationRows data={data} cls="mc" />
-      </div>
-    )
-  },
 }
 
 /** Gen 3 (Ruby/Sapphire/Emerald): bright GBA menu boxes on Hoenn turquoise stripes. */

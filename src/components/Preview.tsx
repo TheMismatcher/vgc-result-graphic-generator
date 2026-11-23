@@ -266,6 +266,19 @@ export function Preview<T extends Template>({
       {switches.map(({ g, options }) => (
         <div key={g} className="flex items-center gap-3 text-sm text-slate-700">
           <span className="w-24">{t(LOOK_LABELS[g])}</span>
+          {options.length > 3 ? (
+            // Too many to sit side by side: a menu.
+            <select
+              value={template.look![g]}
+              onChange={(e) => flip(g, e.target.value)}
+              aria-label={t(LOOK_LABELS[g])}
+              className="rounded-lg border border-slate-300 bg-white px-3 py-1 font-semibold text-slate-700"
+            >
+              {options.map((v) => (
+                <option key={v} value={v}>{t(OPTION_LABELS[v])}</option>
+              ))}
+            </select>
+          ) : (
           <div className="flex overflow-hidden rounded-lg border border-slate-300" role="radiogroup" aria-label={t(LOOK_LABELS[g])}>
             {options.map((v) => (
               <button
@@ -280,6 +293,7 @@ export function Preview<T extends Template>({
               </button>
             ))}
           </div>
+          )}
         </div>
       ))}
 
@@ -382,7 +396,7 @@ const layoutName = (id: StandingsLayout) => t(LAYOUT_NAMES[id])
 /** The Preview's switches for styles that come several ways. */
 const LOOK_LABELS: Record<LookGroup, UiKey> = {
   panels: 'ui.preview.look.panels', card: 'ui.preview.look.card', champion: 'ui.preview.look.champion', map: 'ui.preview.look.map', book: 'ui.preview.look.book',
-  sprites: 'ui.preview.look.sprites', colors: 'ui.preview.look.colors', result: 'ui.preview.look.result', snowfall: 'ui.preview.look.snowfall', scene: 'ui.preview.look.scene',
+  sprites: 'ui.preview.look.sprites', colors: 'ui.preview.look.colors', result: 'ui.preview.look.result', snowfall: 'ui.preview.look.snowfall', scene: 'ui.preview.look.scene', version: 'ui.preview.look.version',
 }
 const OPTION_LABELS: Record<string, UiKey> = {
   neutral: 'ui.preview.option.neutral',
@@ -416,6 +430,17 @@ const OPTION_LABELS: Record<string, UiKey> = {
   tintower: 'ui.preview.option.tintower',
   scarlet: 'ui.preview.option.scarlet',
   violet: 'ui.preview.option.violet',
+  // Retired styles' earlier versions (Version switch)
+  mosaicGradient: 'ui.preview.option.mosaicGradient',
+  mosaicSquares: 'ui.preview.option.mosaicSquares',
+  mosaicTintGlass: 'ui.preview.option.mosaicTintGlass',
+  mosaicTintSolid: 'ui.preview.option.mosaicTintSolid',
+  mosaicTintGlassShadow: 'ui.preview.option.mosaicTintGlassShadow',
+  mosaicTintSolidShadow: 'ui.preview.option.mosaicTintSolidShadow',
+  ghostPixel: 'ui.preview.option.ghostPixel',
+  ghostPixelDense: 'ui.preview.option.ghostPixelDense',
+  ghostPixelGlass: 'ui.preview.option.ghostPixelGlass',
+  ghostPixelTeamBox: 'ui.preview.option.ghostPixelTeamBox',
 }
 
 /** Custom Glass: upload, zoom, centre and remove the background photo. */

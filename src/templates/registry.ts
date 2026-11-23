@@ -34,10 +34,10 @@ import { ArenaGridLayouts, ArenaSpotlightLayouts, ArenaSunsetLayouts } from './t
 import { MosaicLayouts } from './themes/mosaic'
 import { GhostPixelLayouts } from './themes/ghostpixel'
 import { EditorialNightLayouts, EditorialPaperLayouts } from './themes/editorial'
-import { BattleTower, Ghost, Hoenn, MtCoronet, Pokedex, PokedexChampion, TradingCard } from './eras/more'
+import { BattleTower, Ghost, Hoenn, Pokedex, PokedexChampion, TradingCard } from './eras/more'
 import { GhostPixel, GhostPixelDense, GhostPixelGlass, GhostPixelGlassTeam, GhostPixelGlassLine } from './eras/ghostpixel'
 import { Glimwood, KantoGameBoy, Route201, Unova } from './eras'
-import { DynamaxOfficial, GlimwoodOfficial, SnowpointFull, SnowpointFullGlass, Route217, Route217Glass, AcuityLakefront, AcuityLakefrontGlass, EcruteakBellchime, EcruteakBellchimeGlass, EcruteakTown, EcruteakTownGlass, TinTowerSummit, TinTowerSummitGlass, ScarletBook, VioletBook, TerastalOfficial, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillarArt, SpearPillarHall, SpearPillarHallChampion, SpearPillarHallChampionGlass, SpearPillarCutscene, SpearPillarCutsceneGlass, CustomGlass, CustomLight } from './places'
+import { GlimwoodOfficial, SnowpointFull, SnowpointFullGlass, Route217, Route217Glass, AcuityLakefront, AcuityLakefrontGlass, EcruteakBellchime, EcruteakBellchimeGlass, EcruteakTown, EcruteakTownGlass, TinTowerSummit, TinTowerSummitGlass, ScarletBook, VioletBook, Route201Tiles, Route201TilesGlass, Route119, Route119Bridge, Route119BridgeGlass, Route119Glass, Route120, Route120Glass, SpearPillarArt, SpearPillarHall, SpearPillarHallChampion, SpearPillarHallChampionGlass, SpearPillarCutscene, SpearPillarCutsceneGlass, CustomGlass, CustomLight } from './places'
 import { PLACE_LAYOUTS, placeSideThemeInWeather, spearPillarResultTheme } from './themes/places'
 import { DynamaxCloud, DynamaxCloudLayouts, FX_SIDE_THEMES, sideFx, TeraRaidDen, TeraRaidDenLayouts, TeraRaidDenPrism, TeraRaidDenPrismLayouts } from './power/recreated'
 import { MosaicGradient, MosaicSquaresGradient, MosaicTintGlass, MosaicTintGlassShadow, MosaicTintSemiShadow, MosaicTintSolid, MosaicTintSolidShadow } from './mosaic'
@@ -74,6 +74,7 @@ const retire = (style: string, entries: [StandingsTemplate, StandingsLayout][]) 
 type Version = [name: string, look: Partial<Looks>, entries: [StandingsTemplate, StandingsLayout][]]
 const versions = (style: string, list: Version[]) =>
   list.flatMap(([name, look, entries], i) => tag(name, entries).map((t) => ({ ...t, look, ...(i ? { variantOf: style } : {}) })))
+const retireAll = <T extends StandingsTemplate>(list: T[]) => list.map((t) => ({ ...t, retired: true }))
 const glassPair = (style: string, solid: StandingsTemplate, glass: StandingsTemplate) =>
   versions(style, [
     [style, { panels: 'solid' }, [[solid, 'topcut'], ...PLACE_LAYOUTS[style]]],
@@ -134,12 +135,15 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
     ['Custom Glass Light', { panels: 'solid' }, [[CustomLight, 'topcut'], ...PLACE_LAYOUTS['Custom Glass Light']]],
   ]),
   ...tag('Mosaic', [[MosaicTintSemiShadow, 'topcut'], ...MosaicLayouts]),
-  ...retire('Mosaic (Tinted Glass)', [[MosaicTintGlass, 'topcut']]),
-  ...retire('Mosaic (Tinted Solid)', [[MosaicTintSolid, 'topcut']]),
-  ...retire('Mosaic (Tinted Glass + Shadow)', [[MosaicTintGlassShadow, 'topcut']]),
-  ...retire('Mosaic (Tinted Solid + Shadow)', [[MosaicTintSolidShadow, 'topcut']]),
-  ...retire('Mosaic (Squares Gradient)', [[MosaicSquaresGradient, 'topcut']]),
-  ...retire('Mosaic (Gradient)', [[MosaicGradient, 'topcut']]),
+  // Mosaic's earlier versions: one retired card, picked with the Version switch.
+  ...retireAll(versions('Mosaic (Old)', [
+    ['Mosaic (Old)', { version: 'mosaicGradient' }, [[MosaicGradient, 'topcut']]],
+    ['Mosaic (Squares Gradient)', { version: 'mosaicSquares' }, [[MosaicSquaresGradient, 'topcut']]],
+    ['Mosaic (Tinted Glass)', { version: 'mosaicTintGlass' }, [[MosaicTintGlass, 'topcut']]],
+    ['Mosaic (Tinted Solid)', { version: 'mosaicTintSolid' }, [[MosaicTintSolid, 'topcut']]],
+    ['Mosaic (Tinted Glass + Shadow)', { version: 'mosaicTintGlassShadow' }, [[MosaicTintGlassShadow, 'topcut']]],
+    ['Mosaic (Tinted Solid + Shadow)', { version: 'mosaicTintSolidShadow' }, [[MosaicTintSolidShadow, 'topcut']]],
+  ])),
   ...tag('Editorial Paper', [[EditorialTopCutPaper, 'topcut'], [EditorialChampionPaper, 'champion'], ...EditorialPaperLayouts]),
   ...tag('Editorial Night', [[EditorialTopCutNight, 'topcut'], [EditorialChampionNight, 'champion'], ...EditorialNightLayouts]),
   ...tag('Sports Page', [[SportsPage, 'topcut']]),
@@ -156,10 +160,13 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ]),
   ...retire('Spear Pillar Concept Art', [[SpearPillarArt, 'topcut'], ...PLACE_LAYOUTS['Spear Pillar Concept Art']]),
   ...retire('Ghost', [[Ghost, 'topcut']]),
-  ...retire('Ghost Pixel', [[GhostPixel, 'topcut']]),
-  ...retire('Ghost Pixel Dense', [[GhostPixelDense, 'topcut']]),
-  ...retire('Ghost Pixel Glass', [[GhostPixelGlass, 'topcut']]),
-  ...retire('Ghost Pixel Glass Team Box', [[GhostPixelGlassTeam, 'topcut']]),
+  // Ghost Pixels' earlier versions: one retired card, picked with the Version switch.
+  ...retireAll(versions('Ghost Pixels (Old)', [
+    ['Ghost Pixels (Old)', { version: 'ghostPixel' }, [[GhostPixel, 'topcut']]],
+    ['Ghost Pixel Dense', { version: 'ghostPixelDense' }, [[GhostPixelDense, 'topcut']]],
+    ['Ghost Pixel Glass', { version: 'ghostPixelGlass' }, [[GhostPixelGlass, 'topcut']]],
+    ['Ghost Pixel Glass Team Box', { version: 'ghostPixelTeamBox' }, [[GhostPixelGlassTeam, 'topcut']]],
+  ])),
   ...tag('Ghost Pixels', [[GhostPixelGlassLine, 'topcut'], ...GhostPixelLayouts]),
   // Trading Card: the champion's card (Champion), or with their photo as the card art (Champion + Photo).
   ...versions('Trading Card', [
@@ -200,11 +207,10 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...retire('Glimwood Tangle (Old)', [[Glimwood, 'topcut']]),
   ...tag('Glimwood Tangle', [[GlimwoodOfficial, 'topcut'], ...PLACE_LAYOUTS['Glimwood Tangle']]),
   ...retire('Route 201', [[Route201, 'topcut']]),
-  ...glassPair('Route 201 Official', Route201Tiles, Route201TilesGlass),
-  ...retire('Mt. Coronet', [[MtCoronet, 'topcut']]),
+  ...retireAll(glassPair('Route 201 Official', Route201Tiles, Route201TilesGlass)),
   ...retire('Kanto Game Boy', [[KantoGameBoy, 'topcut']]),
   ...retire('Hoenn Gen 3', [[Hoenn, 'topcut']]),
-  ...tag('Unova', [[Unova, 'topcut']]),
+  ...retire('Unova', [[Unova, 'topcut']]),
   // Scarlet/Violet Book: either cover.
   ...versions('Scarlet/Violet Book', [
     ['Scarlet/Violet Book', { book: 'scarlet' }, [[ScarletBook, 'topcut'], ...PLACE_LAYOUTS['Scarlet Book']]],
@@ -213,11 +219,9 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ...retire('Terastal', [[TerastalTopCut, 'topcut'], ...TerastalLayouts]),
   ...tag('Tera Raid Den', [[TeraRaidDenPrism, 'topcut'], ...TeraRaidDenPrismLayouts]),
   ...retire('Tera Raid Den (Old)', [[TeraRaidDen, 'topcut'], ...TeraRaidDenLayouts]),
-  ...retire('Terastal Official', [[TerastalOfficial, 'topcut'], ...PLACE_LAYOUTS['Terastal Official']]),
   ...tag('Mega Evolution', [[MegaTopCut, 'topcut'], ...MegaLayouts]),
   ...tag('Dynamax', [[DynamaxTopCut, 'topcut'], ...DynamaxLayouts]),
   ...retire('Dynamax Cloud', [[DynamaxCloud, 'topcut'], ...DynamaxCloudLayouts]),
-  ...retire('Dynamax Official', [[DynamaxOfficial, 'topcut'], ...PLACE_LAYOUTS['Dynamax Official']]),
 ]
 // Event Results: styles in the Standings picker (style cards, no layouts). First = the default.
 const day2 = (style: string, t: Day2Template): Day2Template => ({ ...t, style })

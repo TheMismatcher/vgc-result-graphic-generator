@@ -9,7 +9,7 @@ import { makeWide } from '../wide'
 import spearSkyTall from '../places/spear-pillar-sky-dp-tall.png'
 import giratinaPortal from '../places/spear-pillar-giratina-portal-pt.png'
 import giratinaOut from '../places/spear-pillar-giratina-pt.png'
-import { MapWall, R119_BRIDGE, R119_TOP, R120, R201, SPEAR, SPEAR_ART, HALL, SNOWPOINT_FULL, R217, ACUITY, BELLCHIME, BELLCHIME_SQUARE, ECRUTEAK, ECRUTEAK_SQUARE, TIN_TOWER, TIN_TOWER_SQUARE, BELLCHIME_WIDE, ECRUTEAK_WIDE, TIN_TOWER_WIDE, GLIMWOOD, TERA, MAX_RAID, SCARLET_BOOK_COVER, VIOLET_BOOK_COVER, SCARLET_BOOK_SQUARE, VIOLET_BOOK_SQUARE } from '../places'
+import { MapWall, R119_BRIDGE, R119_TOP, R120, R201, SPEAR, SPEAR_ART, HALL, SNOWPOINT_FULL, R217, ACUITY, BELLCHIME, BELLCHIME_SQUARE, ECRUTEAK, ECRUTEAK_SQUARE, TIN_TOWER, TIN_TOWER_SQUARE, BELLCHIME_WIDE, ECRUTEAK_WIDE, TIN_TOWER_WIDE, GLIMWOOD, SCARLET_BOOK_COVER, VIOLET_BOOK_COVER, SCARLET_BOOK_SQUARE, VIOLET_BOOK_SQUARE } from '../places'
 import { makeTop4Photos } from '../top4-photos'
 import { makeTop8Mixed } from '../top8-mixed'
 import { makeTop8Photos } from '../top8-photos'
@@ -42,10 +42,8 @@ export const PLACES: Place[] = [
   { id: 'place-spear-pillar-cutscene-glass', style: 'Spear Pillar Cutscene Sky Glass', className: 'theme-place pl-spear sky glass', crop: SPEAR },
   { id: 'place-spear-pillar-art', style: 'Spear Pillar Concept Art', className: 'theme-place pl-spear glass art', crop: SPEAR_ART },
   { id: 'art-glimwood', style: 'Glimwood Tangle', className: 'theme-place pl-glim', crop: GLIMWOOD },
-  { id: 'art-terastal', style: 'Terastal Official', className: 'theme-place pl-tera', crop: TERA },
   { id: 'art-scarlet-book', style: 'Scarlet Book', className: 'theme-place pl-scarlet pl-book', crop: SCARLET_BOOK_COVER, square: SCARLET_BOOK_SQUARE },
   { id: 'art-violet-book', style: 'Violet Book', className: 'theme-place pl-violet pl-book', crop: VIOLET_BOOK_COVER, square: VIOLET_BOOK_SQUARE },
-  { id: 'art-dynamax', style: 'Dynamax Official', className: 'theme-place pl-dyna', crop: MAX_RAID },
   { id: 'place-route-201', style: 'Route 201 Official', className: 'theme-place pl-sinnoh', crop: R201 },
   { id: 'place-route-201-glass', style: 'Route 201 Official Glass', className: 'theme-place pl-sinnoh glass', crop: R201 },
   { id: 'place-snowpoint-full', style: 'Snowpoint Full Map', className: 'theme-place pl-snow', crop: SNOWPOINT_FULL },

@@ -342,7 +342,7 @@
   text-shadow: 2px 2px 0 rgba(8, 6, 20, 0.6);
 }
 
-/* ---------- Official-art styles (Glimwood Tangle, Terastal, Dynamax) ----------
+/* ---------- Official-art styles (Glimwood Tangle) ----------
    Dark glass over the art, colours picked from each piece. The variables also drive the theme layouts. */
 .pl-glim {
   --pl-panel: rgba(6, 26, 24, 0.68);
@@ -360,40 +360,6 @@
   --pl-text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
   --pl-dark: #06201a;
   --pl-photo: linear-gradient(160deg, rgba(30, 138, 104, 0.7), rgba(6, 26, 24, 0.9));
-}
-.pl-tera {
-  --pl-panel: rgba(10, 12, 34, 0.66);
-  --pl-line: rgba(236, 244, 255, 0.9);
-  --pl-inner: inset 0 0 18px rgba(170, 200, 255, 0.2);
-  --pl-ink: #fff;
-  --pl-sub: #cfdcff;
-  --pl-accent: #aee2ff;
-  --pl-a: #3a62d8;
-  --pl-b: #a33fc0;
-  --pl-first: #ffffff;
-  --pl-first-ink: #141836;
-  --pl-radius: 10px;
-  --pl-drop: 0 0 24px rgba(160, 200, 255, 0.45);
-  --pl-text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
-  --pl-dark: #0a0c22;
-  --pl-photo: linear-gradient(160deg, rgba(58, 98, 216, 0.6), rgba(10, 12, 34, 0.9));
-}
-.pl-dyna {
-  --pl-panel: rgba(34, 6, 28, 0.7);
-  --pl-line: rgba(255, 80, 150, 0.9);
-  --pl-inner: inset 0 0 18px rgba(255, 60, 140, 0.22);
-  --pl-ink: #fff;
-  --pl-sub: #ffc6e0;
-  --pl-accent: #ff7ab6;
-  --pl-a: #d01c5a;
-  --pl-b: #6c22a8;
-  --pl-first: #ff2f5f;
-  --pl-first-ink: #fff;
-  --pl-radius: 8px;
-  --pl-drop: 0 0 26px rgba(255, 40, 120, 0.5);
-  --pl-text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
-  --pl-dark: #22041a;
-  --pl-photo: linear-gradient(160deg, rgba(208, 28, 90, 0.6), rgba(34, 6, 28, 0.9));
 }
 /* Custom Glass: the user's own photo. Dark see-through panels tinted with the brand's second colour;
    place numbers in the brand's main / second colours, the winner and the accents in its highlight. */

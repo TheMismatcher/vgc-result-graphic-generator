@@ -2,9 +2,7 @@
 // - Hoenn routes: Emerald's full Route 119 / Route 120 maps (Bulbapedia map rips), shown at a crisp 2x.
 // - Route 201: Platinum's own tree line (Route 201 map) over its tall-grass tile repeated (built offline
 //   into route-201-pt.png, 360px wide = 3x). Gen 4 overworld maps have no sky.
-// - Official-art styles: Glimwood Tangle (a frame of the official 24-hour Live Camera stream),
-//   Terastal (Scarlet/Violet in-game Stellar Terastallization: the jewel crown over the battle starfield)
-//   and Dynamax (the official Sword/Shield Max Raid Battle key art).
+// - Official-art style: Glimwood Tangle (a frame of the official 24-hour Live Camera stream).
 // - Scarlet / Violet Book: the official book renders (Bulbagarden archives, 2047x2304) with the front cover
 //   perspective-straightened onto a flat rectangle (corner medallions as anchors), cropped to the front board.
 //   The styles use that board widened to exactly 4:5 (1620x2025) by seam insertion: extra width goes
@@ -41,8 +39,6 @@ import bellchimeTrail from './bellchime-trail-hgss.png'
 import ecruteakCity from './ecruteak-city-hgss.png'
 import tinTowerSummit from './bell-tower-summit-hgss.png'
 import glimwood from './glimwood-tangle-swsh.jpg'
-import teraStellar from './terastal-stellar-sv.jpg'
-import maxRaid from './max-raid-battle-art.jpg'
 import scarletBookCover from './scarlet-book-cover-sv.jpg'
 import violetBookCover from './violet-book-cover-sv.jpg'
 import scarletBookSquare from './scarlet-book-square-sv.jpg'
@@ -150,8 +146,6 @@ export const TIN_TOWER_WIDE: Crop = { src: tinTowerSummit, sx: 0, sy: 0, sw: 448
 // Official art: each crop is the 4:5 window over the art's focal point (they're scaled up smoothly).
 // Frame from the official 24-hour 'Pokémon Live Camera' stream (Oct 2019); the window skips a Pokémon at the far right.
 export const GLIMWOOD: Crop = { src: glimwood, sx: 720, sy: 2, sw: 659, smooth: true }
-export const TERA: Crop = { src: teraStellar, sx: 352, sy: 0, sw: 576, smooth: true }
-export const MAX_RAID: Crop = { src: maxRaid, sx: 0, sy: 40, sw: 764, smooth: true }
 // The whole front board at exactly 4:5; sy centres it in square frames (4:5 frames clamp it to 0).
 export const SCARLET_BOOK_COVER: Crop = { src: scarletBookCover, sx: 0, sy: 202, sw: 1620, smooth: true }
 export const VIOLET_BOOK_COVER: Crop = { src: violetBookCover, sx: 0, sy: 202, sw: 1620, smooth: true }
@@ -187,8 +181,6 @@ export const Route120Glass = makePlace('place-route-120-glass', 'Top Cut (Route 
 export const Route201Tiles = makePlace('place-route-201', 'Top Cut (Route 201 Official)', 'Route 201 built from Platinum’s own tiles: the tree line and the tall grass.', R201, 'pl-sinnoh', '')
 export const Route201TilesGlass = makePlace('place-route-201-glass', 'Top Cut (Route 201 Official Glass)', 'Route 201 from Platinum’s own tiles with see-through dark panels.', R201, 'pl-sinnoh', 'glass')
 export const GlimwoodOfficial = makePlace('art-glimwood', 'Top Cut (Glimwood Tangle)', 'Glimwood Tangle from Sword & Shield: the glowing-mushroom forest behind dark green glass.', GLIMWOOD, 'pl-glim', 'pl-art')
-export const TerastalOfficial = makePlace('art-terastal', 'Top Cut (Terastal Official)', 'Scarlet & Violet’s Stellar Terastallization: the jewel crown over the battle starfield, behind dark glass.', TERA, 'pl-tera', 'pl-art')
-export const DynamaxOfficial = makePlace('art-dynamax', 'Top Cut (Dynamax Official)', 'The official Sword & Shield Max Raid Battle artwork behind dark magenta glass.', MAX_RAID, 'pl-dyna', 'pl-art')
 export const SpearPillarHall = makePlace('place-spear-pillar-hall', 'Top Cut (Spear Pillar Hall of Origin)', 'Platinum’s Hall of Origin map with Arceus; the champion stands on the Hall’s glass floor tiles.', HALL, 'pl-spear', 'hoo')
 export const SpearPillarHallChampion = makePlace('place-spear-pillar-hall-floor', 'Top Cut (Spear Pillar Hall Champion)', 'The Spear Pillar map, with only the champion standing on the Hall of Origin’s glass floor tiles.', SPEAR, 'pl-spear', 'hoo')
 export const SpearPillarHallChampionGlass = makePlace('place-spear-pillar-hall-floor-glass', 'Top Cut (Spear Pillar Hall Champion Glass)', 'The Spear Pillar map with see-through panels; the champion stands on the Hall of Origin’s glass floor tiles.', SPEAR, 'pl-spear', 'hoo glass')
