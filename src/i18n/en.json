@@ -508,7 +508,7 @@
   "ui.app.fileNotFromHere": "That file isn’t a tournament saved from this generator.",
   "ui.app.fileTooNew": "That file was saved by a newer version of the generator. Update and try again.",
 
-  "ui.home.metaDescription": "VGC tools from Mismatched.gg: tournament graphics, DMV Invitational standings and more.",
+  "ui.home.metaDescription": "VGC tools from Mismatched.gg! The Ultimate Tournament Graphic Maker, a great Local Calendar Bot, and more.",
   "ui.home.tagline": "VGC tools for players and organizers",
   "ui.home.follow": "Follow @TheMismatcher on X",
   "ui.home.graphics.title": "Graphics Generator",
