@@ -477,7 +477,7 @@
   "gfx.comicRef.winsLine": "Second line of the yellow WINS strip on the Comic Book Poster (Replay) when the winner's name is too long for one line: line 1 is the name, line 2 is this word. Short names use \"{name} wins\" on one line instead.",
   "ui.home.metaDescription": "Home page (mismatched.gg): the description search engines and link previews show. Not visible on the page.",
   "ui.home.tagline": "Home page: line under the Mismatched logo at the top; printed in capitals.",
-  "ui.home.follow": "Home page: black button floating in the bottom-right corner that opens TheMismatcher's X (Twitter) profile. @TheMismatcher is the account handle: keep it as is.",
+  "ui.home.follow": "Home page: black button floating in the bottom-right corner (on phones only the X logo shows; this text is still read by screen readers) that opens TheMismatcher's X (Twitter) profile. @TheMismatcher is the account handle: keep it as is.",
   "ui.home.graphics.title": "Home page: title of the card that links to the graphics generator; printed in capitals.",
   "ui.home.graphics.kicker": "Home page: small line under the Graphics Generator card title; printed in capitals.",
   "ui.home.graphics.description": "Home page: Graphics Generator card text. Champions = the game Pokémon Champions; .tdf = the TOM tournament file.",

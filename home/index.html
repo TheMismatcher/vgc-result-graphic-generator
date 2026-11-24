@@ -64,8 +64,8 @@
   .plate { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 26px 40px 22px; border-radius: 28px; background: var(--card); box-shadow: var(--shadow); text-align: center; }
   .plate img { display: block; width: min(440px, 72vw); height: auto; }
   .tagline { font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; color: color-mix(in srgb, var(--red) 85%, #000); }
-  /* Follow the creator on X: a black pill floating in the bottom-right corner, always on screen (full label on
-     phones too: it's meant to be noticed). */
+  /* Follow the creator on X: a black pill floating in the bottom-right corner, always on screen. On phones it
+     shrinks to a round X button (the label stays for screen readers). */
   .follow { position: fixed; z-index: 10; right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom));
     display: inline-flex; align-items: center; gap: 9px; padding: 11px 18px; border-radius: 999px; background: #111; color: #fff; font-size: 14px; font-weight: 800;
     text-decoration: none; box-shadow: 0 4px 0 rgba(20, 24, 40, .25), 0 10px 24px rgba(20, 24, 40, .3); transition: transform .15s ease; }
@@ -74,8 +74,9 @@
   .follow:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
   .page { padding-bottom: 72px; } /* room to scroll the footer clear of the button */
   @media (max-width: 520px) {
-    .follow { right: max(14px, env(safe-area-inset-right)); bottom: max(14px, env(safe-area-inset-bottom)); padding: 12px 18px; font-size: 15px; }
-    .follow svg { width: 16px; height: 16px; }
+    .follow { width: 48px; height: 48px; padding: 0; justify-content: center; right: max(14px, env(safe-area-inset-right)); bottom: max(14px, env(safe-area-inset-bottom)); }
+    .follow svg { width: 19px; height: 19px; }
+    .follow span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   }
 
   /* ---------- Cards ---------- */
