@@ -216,7 +216,7 @@ export function Preview<T extends Template>({
   }
 
   return (
-    <Card className="space-y-4">
+    <Card className="space-y-4" data-tour="preview">
       {saved && createPortal(
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-black/80 p-4" onClick={closeSaved}>
           <img src={saved.url} alt={t('ui.preview.imageAlt')} className="max-h-[65vh] max-w-full rounded-lg object-contain shadow-lg" onClick={(e) => e.stopPropagation()} />
@@ -236,7 +236,8 @@ export function Preview<T extends Template>({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+      {/* data-tour="options": the feature tour's "Options for each graphic" stop (everything up to the style's own controls). */}
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2" data-tour="options">
         <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
           <input type="checkbox" className="h-4 w-4 accent-[#b3121b]" checked={showMegas} onChange={(e) => setShowMegas(e.target.checked)} />
           {t('ui.preview.showMegas')}
@@ -272,17 +273,17 @@ export function Preview<T extends Template>({
         )}
       </div>
       {template.style?.startsWith('Mosaic') && (
-        <div className="-mt-1 flex items-center gap-3 text-sm text-slate-700">
+        <div className="-mt-1 flex items-center gap-3 text-sm text-slate-700" data-tour="options">
           <Button onClick={shuffleTiles}>{t('ui.preview.shuffleTiles')}</Button>
           <span className="text-xs text-slate-500">{t('ui.preview.shuffleHint')}</span>
         </div>
       )}
       {allowCP && showCP && (
-        <p className="-mt-2 text-xs text-slate-500">{t('ui.preview.cpNote')}</p>
+        <p className="-mt-2 text-xs text-slate-500" data-tour="options">{t('ui.preview.cpNote')}</p>
       )}
 
       {switches.map(({ g, options }) => (
-        <div key={g} className="flex items-center gap-3 text-sm text-slate-700">
+        <div key={g} className="flex items-center gap-3 text-sm text-slate-700" data-tour="options">
           <span className="w-24">{t(LOOK_LABELS[g])}</span>
           {options.length > 3 ? (
             // Too many to sit side by side: a menu.
@@ -590,7 +591,7 @@ export function StylePicker<T extends Template>({ templates: all, current: picke
   )
   return (
     <div className="space-y-4">
-      {layouts && <div>
+      {layouts && <div data-tour="layout">
         <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">{t('ui.picker.layoutHeading')}</h3>
         <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t('ui.picker.layoutLabel')}>
           {STANDINGS_LAYOUTS.map(({ id }) => {
@@ -630,7 +631,8 @@ export function StylePicker<T extends Template>({ templates: all, current: picke
         </p>
       </div>}
       <div>
-        <div className="mb-2 flex items-center justify-between gap-2">
+        {/* data-tour="styles": the tour's style stop = the heading, the dots legend and the first row of cards. */}
+        <div className="mb-2 flex items-center justify-between gap-2" data-tour="styles">
           <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">{layouts ? t('ui.picker.styleHeadingN') : t('ui.picker.styleHeading')}</h3>
           <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-1">
             <label className="flex items-center gap-1.5 text-xs text-slate-600">
@@ -645,12 +647,12 @@ export function StylePicker<T extends Template>({ templates: all, current: picke
             )}
           </div>
         </div>
-        <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-500">
+        <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-500" data-tour="styles">
           <span className="flex items-center gap-1">{brandDots(['main', 'second', 'highlight'])} {t('ui.picker.brandDotsHint')}</span>
           <span className="flex items-center gap-1"><span className="rounded bg-slate-900/80 px-1 font-semibold leading-4 text-white">2</span> {t('ui.picker.versionsHint')}</span>
         </div>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-          {styles.map((style) => {
+          {styles.map((style, i) => {
             // Show the style in the chosen layout; styles without it show (and open as) their fallback layout.
             const own = find(style, current.layout)
             const target = prefer(own ?? fallback(style))
@@ -662,6 +664,7 @@ export function StylePicker<T extends Template>({ templates: all, current: picke
               <button
                 key={style}
                 type="button"
+                data-tour={i < 3 ? 'styles' : undefined}
                 title={own ? undefined : t('ui.picker.styleMissingTitle', { style: styleName(style), layout: target.layout ? layoutName(target.layout) : t('ui.picker.ownLayout') })}
                 onClick={() => onSelect(target.id)}
                 className={`rounded-xl border-2 p-1.5 text-left transition ${style === currentStyle ? 'border-[#b3121b] bg-red-50' : retired ? 'border-amber-400 bg-amber-50 hover:border-amber-600' : own ? 'border-slate-200 hover:border-slate-400' : 'border-dashed border-slate-300 hover:border-slate-500'}`}

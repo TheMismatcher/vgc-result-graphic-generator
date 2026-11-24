@@ -18,6 +18,7 @@ import { Box, Tab, Tabs } from '@mui/material'
 import React, { type ReactNode } from 'react'
 import type { StandingsTemplate } from '../templates/types'
 import { t } from '../i18n'
+import { TOUR_START_EVENT } from '../components/Tour'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -55,6 +56,12 @@ export function StandingsPage({
   // The Data panel's own source tabs (Limitless / TOM File / Photo / PDF); separate from Templates / Data.
   const [sourceTab, setSourceTab] = React.useState(0);
   const [bulkSheets, setBulkSheets] = React.useState(false);
+  // The feature tour points at the layout and style pickers, so it opens the Templates panel.
+  React.useEffect(() => {
+    const show = () => setInputTab(0)
+    window.addEventListener(TOUR_START_EVENT, show)
+    return () => window.removeEventListener(TOUR_START_EVENT, show)
+  }, []);
   const template = STANDINGS_TEMPLATES.find((t) => t.id === state.templates.standings) ?? STANDINGS_TEMPLATES[0];
   const render = (t: StandingsTemplate): ReactNode => <t.Component data={standingsData(state, t.maxPlayers)}></t.Component>;
   const onSelect = (id: string) => setState((s) => ({ ...s, templates: { ...s.templates, standings: id } }));
@@ -103,7 +110,7 @@ export function StandingsPage({
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={inputTab} onChange={handleInputTabChange} aria-label={t('ui.standings.tabsLabel')}>
               <Tab label={t('ui.standings.tabTemplates')} {...a11yProps(0)} />
-              <Tab label={t('ui.standings.tabData')} {...a11yProps(1)} />
+              <Tab label={t('ui.standings.tabData')} {...a11yProps(1)} data-tour="tab-data" />
             </Tabs>
           </Box>
           {/* template pannel */}

@@ -15,6 +15,7 @@ import { Day2Page } from './pages/Day2Page'
 import { TeamBattlePage } from './pages/TeamBattlePage'
 import { Button } from './components/ui'
 import { useDialog } from './components/Dialog'
+import { markTourSeen, Tour, tourSeen, TOUR_START_EVENT } from './components/Tour'
 
 type Tab = 'standings' | 'usage' | 'replay' | 'teamBattle' | 'day2' | 'branding'
 
@@ -37,6 +38,19 @@ export default function App() {
     dialog.notify(t('ui.app.storageFull')),
   )
   const [tab, setTab] = useState<Tab>('standings')
+  // Feature tour: opens by itself on someone's first visit (once per browser), and from "Take the tour".
+  const [touring, setTouring] = useState(false)
+  const startTour = () => {
+    setTab('standings')
+    window.dispatchEvent(new Event(TOUR_START_EVENT))
+    markTourSeen()
+    setTouring(true)
+  }
+  useEffect(() => {
+    if (tourSeen()) return
+    const id = setTimeout(startTour, 600) // after the page has settled, so the first stops measure right
+    return () => clearTimeout(id)
+  }, [])
   const brand = resolveBrand(state.brand)
   const display: Display = {
     showMegas: state.settings.showMegas,
@@ -91,10 +105,10 @@ export default function App() {
             <p className="text-sm text-slate-400">{t('ui.app.subtitle')}</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => saveTournamentFile(state)} title={t('ui.app.saveFileTitle')}>
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => saveTournamentFile(state)} title={t('ui.app.saveFileTitle')} data-tour="file">
               {t('ui.app.saveFile')}
             </Button>
-            <label className="inline-flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm font-semibold text-slate-300 transition hover:bg-white/10 focus-within:ring-2 focus-within:ring-blue-300" title={t('ui.app.openFileTitle')}>
+            <label className="inline-flex cursor-pointer items-center rounded-lg px-3 py-2 text-sm font-semibold text-slate-300 transition hover:bg-white/10 focus-within:ring-2 focus-within:ring-blue-300" title={t('ui.app.openFileTitle')} data-tour="file">
               {t('ui.app.openFile')}
               <input
                 type="file"
@@ -113,11 +127,14 @@ export default function App() {
                 }}
               />
             </label>
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...sampleState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels, templates: state.templates }, t('ui.app.loadSampleMessage'))}>
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...sampleState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels, templates: state.templates }, t('ui.app.loadSampleMessage'))} data-tour="file">
               {t('ui.app.loadSample')}
             </Button>
-            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...initialState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels }, t('ui.app.startOverMessage'))}>
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={() => reset({ ...initialState(), brand: state.brand, backdrop: state.backdrop, customPanels: state.customPanels }, t('ui.app.startOverMessage'))} data-tour="file">
               {t('ui.app.startOver')}
+            </Button>
+            <Button variant="ghost" className="text-slate-300 hover:bg-white/10" onClick={startTour}>
+              {t('ui.tour.open')}
             </Button>
           </div>
         </div>
@@ -126,6 +143,7 @@ export default function App() {
             <button
               key={tabItem.id}
               type="button"
+              data-tour={tabItem.id === 'branding' ? 'tab-branding' : 'tabs'}
               onClick={() => setTab(tabItem.id)}
               className={`shrink-0 whitespace-nowrap rounded-t-lg px-3 py-2 text-sm font-bold uppercase tracking-wide sm:px-5 ${tab === tabItem.id ? 'bg-slate-100 text-slate-900' : 'text-slate-400 hover:text-white'}`}
             >
@@ -152,6 +170,7 @@ export default function App() {
         {tab === 'day2' && <Day2Page state={state} setState={setState} />}
         {tab === 'branding' && <BrandingPage state={state} setState={setState} />}
       </main>
+      <Tour open={touring} onClose={() => setTouring(false)} />
     </div>
     </DisplayContext.Provider>
     </BackdropContext.Provider>
