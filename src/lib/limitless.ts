@@ -56,21 +56,26 @@ export async function importLimitless(id: string, top: number): Promise<Limitles
     return { ...newPlayer(), name: s.name, record: formatRecord(s.record), team }
   })
 
-  // Limitless formats look like "M-C"; match them to "VGC 2026 - Regulation M-C".
-  const format = FORMATS.find((f) => f.name.endsWith(`Regulation ${details.format}`))
   return {
-    tournament: {
-      name: details.name,
-      date: details.date.slice(0, 10),
-      format: format?.name ?? 'Custom Format',
-      customFormat: format ? '' : details.format,
-      divisions: { masters: details.players, seniors: '', juniors: '' },
-    },
+    tournament: tournamentFrom(details),
     players,
     usage: usageFrom(ranked),
     bracket: bracketFromLimitless(pairings, (username) => displayName.get(username) ?? username),
     unmatched: [...new Set(unmatched)],
     missingTeams,
+  }
+}
+
+/** The event details Limitless has: name, date, format and the number of players. */
+function tournamentFrom(details: LimitlessDetails): Partial<Tournament> {
+  // Limitless formats look like "M-C"; match them to "VGC 2026 - Regulation M-C".
+  const format = FORMATS.find((f) => f.name.endsWith(`Regulation ${details.format}`))
+  return {
+    name: details.name,
+    date: details.date.slice(0, 10),
+    format: format?.name ?? 'Custom Format',
+    customFormat: format ? '' : details.format,
+    divisions: { masters: details.players, seniors: '', juniors: '' },
   }
 }
 
@@ -98,10 +103,12 @@ function usageFrom(standings: LimitlessStanding[]) {
   return { entries: usageFromPlayers(teams), totalTeams: teams.length }
 }
 
-/** Usage only: count the whole field, or just the top N. */
+/** Usage: count the whole field, or just the top N; plus the event details the Usage graphic prints. */
 export async function importLimitlessUsage(id: string, countTop: number | null) {
-  const res = await fetch(`${API}/${id}/standings`)
+  const [detailsRes, res] = await Promise.all([fetch(`${API}/${id}/details`), fetch(`${API}/${id}/standings`)])
   if (!res.ok) throw new Error(t('ui.import.limitless.loadError'))
   const ranked = rankedStandings(await res.json())
-  return usageFrom(countTop ? ranked.slice(0, countTop) : ranked)
+  // The details are a bonus: if they don't load, the usage still does.
+  const tournament = detailsRes.ok ? tournamentFrom(await detailsRes.json()) : null
+  return { ...usageFrom(countTop ? ranked.slice(0, countTop) : ranked), tournament }
 }

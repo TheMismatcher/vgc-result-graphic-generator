@@ -35,18 +35,7 @@ export function TournamentForm({ value, onChange }: { value: Tournament; onChang
         <Field label={t('ui.tournament.date')}>
           <Input type="date" value={value.date} onChange={(e) => set('date', e.target.value)} />
         </Field>
-        <Field label={t('ui.tournament.format')} className={value.format === 'Custom Format' ? '' : 'sm:col-span-2'}>
-          <Select value={value.format} onChange={(e) => set('format', e.target.value)}>
-            {FORMATS.map((f) => (
-              <option key={f.name} value={f.name}>{formatName(f.name)}</option>
-            ))}
-          </Select>
-        </Field>
-        {value.format === 'Custom Format' && (
-          <Field label={t('ui.tournament.customFormat')}>
-            <Input value={value.customFormat} onChange={(e) => set('customFormat', e.target.value)} />
-          </Field>
-        )}
+        <FormatField value={value} onChange={onChange} />
         <div className="grid grid-cols-3 gap-3 sm:col-span-2">
           {(['masters', 'seniors', 'juniors'] as const).map((d) => (
             <Field key={d} label={t(DIVISION_LABELS[d])}>
@@ -63,5 +52,44 @@ export function TournamentForm({ value, onChange }: { value: Tournament; onChang
         </div>
       </div>
     </Card>
+  )
+}
+
+/**
+ * The format picker (plus the custom format's name), as grid items for a two-column card. Edits the same
+ * tournament as the Standings tab, so every tab that prints or uses the format can set it without Standings.
+ */
+export function FormatField({ value, onChange }: { value: Tournament; onChange: (t: Tournament) => void }) {
+  const set = <K extends keyof Tournament>(key: K, v: Tournament[K]) => onChange({ ...value, [key]: v })
+  return (
+    <>
+      <Field label={t('ui.tournament.format')} className={value.format === 'Custom Format' ? '' : 'sm:col-span-2'}>
+        <Select value={value.format} onChange={(e) => set('format', e.target.value)}>
+          {FORMATS.map((f) => (
+            <option key={f.name} value={f.name}>{formatName(f.name)}</option>
+          ))}
+        </Select>
+      </Field>
+      {value.format === 'Custom Format' && (
+        <Field label={t('ui.tournament.customFormat')}>
+          <Input value={value.customFormat} onChange={(e) => set('customFormat', e.target.value)} />
+        </Field>
+      )}
+    </>
+  )
+}
+
+/**
+ * Just the tournament name and format, for tabs whose graphics print only those (Replay). Edits the same
+ * tournament as the Standings tab's form, so the two stay in step, and the tab works without Standings.
+ */
+export function EventNameFormat({ value, onChange }: { value: Tournament; onChange: (t: Tournament) => void }) {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <Field label={t('ui.tournament.name')} className="sm:col-span-2">
+        <Input value={value.name} placeholder={t('ui.tournament.namePlaceholder')} onChange={(e) => onChange({ ...value, name: e.target.value })} />
+      </Field>
+      <FormatField value={value} onChange={onChange} />
+    </div>
   )
 }

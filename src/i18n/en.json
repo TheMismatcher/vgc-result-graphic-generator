@@ -389,7 +389,7 @@
   "ui.standings.addPlayer": "+ Add player",
 
   "ui.usage.fromLimitless": "From Limitless",
-  "ui.usage.limitlessIntro": "Counts every public team sheet in the tournament (or just the top N).",
+  "ui.usage.limitlessIntro": "Counts every public team sheet in the tournament (or just the top N), and fills in the event’s name, date, player count and format below.",
   "ui.usage.countTop": "Count top",
   "ui.usage.countTopPlaceholder": "All",
   "ui.usage.counting": "Counting…",
@@ -424,7 +424,7 @@
   "ui.replay.winnerWon": "{name} won",
   "ui.replay.tie": "Tie",
   "ui.replay.resultHeading": "Result",
-  "ui.replay.resultHint": "Filled in from the replay; change anything. Tournament name and format come from the Standings tab.",
+  "ui.replay.resultHint": "Filled in from the replay; change anything. The tournament name and format are the same ones the Standings tab uses.",
   "ui.replay.roundLabel": "Round (optional)",
   "ui.replay.roundPlaceholder": "e.g. Top 8, Winners Finals",
   "ui.replay.playerN": "Player {n}",
@@ -844,7 +844,7 @@
   "gfx.wide.topBurst": "Top {count}!",
   "gfx.wide.no": "No.{n}",
 
-  "gfx.sportsPage.masthead": "{brand} · Results",
+  "gfx.sportsPage.masthead": "Results",
   "gfx.sportsPage.headline": "{lastName} wins {event}",
   "gfx.sportsPage.theEvent": "the event",
   "gfx.sportsPage.deck": "{winner} to take the {tournament}",
@@ -859,5 +859,8 @@
   "gfx.sportsPage.colPlayer": "Player",
   "gfx.sportsPage.colRecord": "Rec",
   "gfx.sportsPage.colCP": "CP",
-  "gfx.sportsPage.colTeam": "Team"
+  "gfx.sportsPage.colTeam": "Team",
+  "gfx.sportsPage.record": "Record",
+  "gfx.sportsPage.lineup": "Lineup",
+  "gfx.sportsPage.teamCaption": "{winner}’s winning team at the {tournament}."
 }

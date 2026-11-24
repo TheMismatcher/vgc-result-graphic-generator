@@ -93,9 +93,9 @@ const makeTopCut = (mood: Mood): StandingsTemplate => ({
           ))}
         </main>
 
+        {/* The brand shows by its logo (header); the footer keeps only its tagline. */}
         <footer className="ed-foot">
-          <span>{brand.name}</span>
-          <span>{brand.tagline}</span>
+          <span className="ed-foot-tag">{brand.tagline}</span>
         </footer>
       </div>
     )

@@ -26,6 +26,8 @@ import Top8Photos, { Top8PhotosLoud, Top8PhotosWhite } from './top8-photos'
 import Top4Photos, { Top4PhotosLoud } from './top4-photos'
 import Top8Mixed, { Top8MixedLoud, Top8MixedWhite } from './top8-mixed'
 import SportsPage from './sports-page'
+import { SportsChampion, SportsChampionPhoto } from './sports-page/champion'
+import { SportsBracket } from './sports-page/bracket'
 import { SIDE_THEMES, type SideTheme } from './themes/side'
 import { makeUsage } from './usage'
 import { makeVsResult } from './vs-result'
@@ -174,7 +176,7 @@ export const STANDINGS_TEMPLATES: StandingsTemplate[] = [
   ])),
   ...tag('Editorial Paper', [[EditorialTopCutPaper, 'topcut'], [EditorialChampionPaper, 'champion'], ...EditorialPaperLayouts]),
   ...tag('Editorial Night', [[EditorialTopCutNight, 'topcut'], [EditorialChampionNight, 'champion'], ...EditorialNightLayouts]),
-  ...tag('Sports Page', [[SportsPage, 'topcut']]),
+  ...tag('Sports Page', [[SportsPage, 'topcut'], [SportsChampion, 'champion'], [SportsChampionPhoto, 'championphoto'], [SportsBracket, 'bracket']]),
   ...tag('Arena Spotlight', [[ArenaSpotlight, 'topcut'], ...ArenaSpotlightLayouts]),
   ...tag('Arena Grid', [[ArenaGrid, 'topcut'], ...ArenaGridLayouts]),
   ...tag('Arena Sunset', [[ArenaSunset, 'topcut'], ...ArenaSunsetLayouts]),
