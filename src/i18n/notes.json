@@ -554,7 +554,7 @@
   "ui.tour.done": "Tour button on the last step: closes the tour. Short label.",
   "ui.tour.stepCount": "Step counter on the tour card, shown in capitals. {n} is the step number, {total} the number of steps.",
   "ui.tour.sample.body": "Clear Data, Load sample and Save file are the header buttons' names (ui.app.startOver, ui.app.loadSample, ui.app.saveFile): use the same words.",
-  "ui.tour.tabs.body": "Standings, Usage, Replay, Team Battle and Event Results are the tab names (ui.app.tab.*): use the same words.",
+  "ui.tour.tabs.body": "Standings, Usage, Replay, Team Battle and Event Results are the tab names (ui.app.tab.*): use the same words. Limitless, Showdown, RK9, Pokédata and Reportworm are site names: don't translate.",
   "ui.tour.layout.body": "Top Cut, Top 8, Champion and Bracket refer to the layout buttons (ui.picker.layout.*).",
   "ui.tour.styles.body": "Branding is the tab name (ui.app.tab.branding).",
   "ui.tour.options.body": "Show CP earned is the checkbox's name (ui.preview.showCP). Mosaic and Route are style names (not translated); Solid and Glass are the switch options' names.",

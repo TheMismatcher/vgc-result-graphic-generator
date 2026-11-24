@@ -88,7 +88,7 @@
   "ui.tour.sample.title": "This is example data",
   "ui.tour.sample.body": "You don't need to delete anything. Importing your event replaces it. Clear Data gives you an empty start if you'd rather type it all in, and Load sample brings the example back. Save file keeps a copy of your work.",
   "ui.tour.tabs.title": "One tab for each graphic",
-  "ui.tour.tabs.body": "Standings for your top cut, Usage for the most-used Pokémon, Replay for a set, Team Battle for team events, and Event Results for how your players did at Regionals and bigger events.",
+  "ui.tour.tabs.body": "Standings for your top cut, Usage for the most-used Pokémon, Replay for a set, Team Battle for team events, and Event Results for how your players did at Regionals and bigger events. Most of them fill in from a link: Limitless for standings and usage, Showdown replays for Replay and Team Battle, and RK9, Limitless, Pokédata or Reportworm for Event Results.",
   "ui.tour.layout.title": "1. Pick a layout",
   "ui.tour.layout.body": "Choose how many players to show and how: Top Cut, Top 8 with photos, Champion, Bracket, wide 16:9 versions and more.",
   "ui.tour.styles.title": "2. Pick a style",
