@@ -51,9 +51,20 @@ export const FAIRY_BRAND: Brand = {
   colors: { main: '#b51279', second: '#f76969', highlight: '#ff4dcf' },
 }
 
+// DMV VGC Invitational: the Invitational logo (DC map with the flag's stars and bars) and its colours,
+// read from the logo's pixels: red #d3171e, black, white.
+export const INVITATIONAL_BRAND: Brand = {
+  name: 'DMV VGC Invitational',
+  tagline: '',
+  logo: asset('brand/dmv-invitational-logo.png'),
+  banner: '',
+  colors: { main: '#d3171e', second: '#000000', highlight: '#ffffff' },
+}
+
 /** The built-in looks on the Branding tab, in order. */
 export const BUILT_IN_BRANDS = [
   { id: 'dmv' as const, brand: DMV_BRAND },
+  { id: 'invitational' as const, brand: INVITATIONAL_BRAND },
   { id: 'glimwood' as const, brand: GLIMWOOD_BRAND },
   { id: 'fire' as const, brand: FIRE_BRAND },
   { id: 'fairy' as const, brand: FAIRY_BRAND },
@@ -105,14 +116,26 @@ function shiftLightness(hex: string, delta: number) {
   return `#${[hue(h + 1 / 3), hue(h), hue(h - 1 / 3)].map((v) => Math.round(v * 255).toString(16).padStart(2, '0')).join('')}`
 }
 
-/** Black or white text, whichever reads better on `hex`. */
-function inkOn(hex: string) {
+/** Relative luminance of `hex` (0 = black, 1 = white). */
+function luminance(hex: string) {
   const n = parseInt(hex.slice(1), 16)
   const [r, g, b] = [16, 8, 0].map((s) => {
     const c = ((n >> s) & 255) / 255
     return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
   })
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.4 ? '#141414' : '#ffffff'
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b
+}
+
+/** Black or white text, whichever reads better on `hex`. */
+function inkOn(hex: string) {
+  return luminance(hex) > 0.4 ? '#141414' : '#ffffff'
+}
+
+/** Outlined player names on the highlight (1st place): white as designed, but on a near-white highlight
+ *  (DMV VGC Invitational) white would vanish, so they take the main colour, or near-black if that is light too. */
+function titleOnHighlight(c: Brand['colors']) {
+  if (luminance(c.highlight) <= 0.8) return '#ffffff'
+  return inkOn(c.main) === '#ffffff' ? c.main : '#141414'
 }
 
 // The DMV artwork's own light/deep shades, used exactly when the DMV colors are in use.
@@ -136,6 +159,7 @@ export function brandVars(b: Brand): CSSProperties {
     '--brand-red-ink': inkOn(c.main),
     '--brand-blue-ink': inkOn(c.second),
     '--brand-yellow-ink': inkOn(c.highlight),
+    '--brand-yellow-title': titleOnHighlight(c),
   } as CSSProperties
 }
 

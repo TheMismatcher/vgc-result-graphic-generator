@@ -132,6 +132,10 @@
   margin: 6px 0 10px;
   padding: 4px;
 }
+/* Low specificity on purpose: styles that recolour this name keep their own colour. */
+:where(.br-champ:not(.open)) .br-champ-name.dmv-title {
+  color: var(--brand-yellow-title, #fff);
+}
 .br-champ-team {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

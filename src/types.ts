@@ -60,7 +60,7 @@ export interface Match {
 }
 
 export interface BrandSettings {
-  preset: 'dmv' | 'glimwood' | 'fire' | 'fairy' | 'custom' // built-in looks, or the user's own (saved brands)
+  preset: 'dmv' | 'invitational' | 'glimwood' | 'fire' | 'fairy' | 'custom' // built-in looks, or the user's own (saved brands)
   name: string
   tagline: string
   logo: string // PNG data URL

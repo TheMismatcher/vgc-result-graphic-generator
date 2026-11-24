@@ -137,6 +137,10 @@
 .tc-row.first .tc-sub {
   color: var(--ink);
 }
+/* Low specificity on purpose: styles that recolour this name keep their own colour. */
+:where(.tc-row.first) .tc-player .dmv-title {
+  color: var(--brand-yellow-title, #fff);
+}
 
 .tc-place {
   flex: none;
