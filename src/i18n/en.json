@@ -95,7 +95,7 @@
   "ui.tour.styles.title": "2. Pick a style",
   "ui.tour.styles.body": "Each style has its own look. Tap a card to see your event in it. The colored dots show which of your Branding colors a style uses. A number badge means it has more versions to switch between.",
   "ui.tour.data.title": "Add your results",
-  "ui.tour.data.body": "Paste a Limitless link or upload a TOM file. You can also just take a photo of the standings, even a photo of the standings on a monitor or TV. Team lists work the same way: photos of paper team sheets, screenshots, PDFs, or Pokémon Champions team screenshots. Photos and files are read on your device and never uploaded.",
+  "ui.tour.data.body": "Paste a Limitless link or import a Tournament Data file. You can also just take a photo of the standings, even a photo of the standings on a monitor or TV. Team lists work the same way: photos of paper team sheets, screenshots, PDFs, or Pokémon Champions team screenshots. Photos and files are read on your device and never uploaded.",
   "ui.tour.options.title": "Options for each graphic",
   "ui.tour.options.body": "Show CP earned adds each player's Championship Points. Some styles have extra options here too. Mosaic can shuffle its tiles or make its boxes opaque, and the Route styles switch between Solid and Glass panels or between maps.",
   "ui.tour.preview.title": "Preview and download",
