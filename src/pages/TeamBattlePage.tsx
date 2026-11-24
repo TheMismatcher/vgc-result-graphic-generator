@@ -9,6 +9,7 @@ import { replayId } from '../lib/replay'
 import { sprites } from '../data/dex'
 import { PlayerEditor } from '../components/PlayerEditor'
 import { Preview } from '../components/Preview'
+import { FormatField } from '../components/TournamentForm'
 import { Button, Card, Field, Input, Select, Textarea } from '../components/ui'
 import { useDialog } from '../components/Dialog'
 import { rich } from '../components/rich'
@@ -81,6 +82,7 @@ export function TeamBattlePage({ state, setState }: { state: AppState; setState:
           <Field label={t('ui.teamBattle.week')}>
             <Input placeholder={t('ui.teamBattle.weekPlaceholder')} value={battle.week} onChange={(e) => setBattle((x) => ({ ...x, week: e.target.value }))} />
           </Field>
+          <FormatField value={state.tournament} onChange={(tournament) => setState((s) => ({ ...s, tournament }))} />
         </Card>
 
         <div className="grid gap-4 sm:grid-cols-2">

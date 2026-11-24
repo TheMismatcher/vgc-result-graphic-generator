@@ -5,6 +5,7 @@ import { eventInfo } from '../lib/event'
 import { newPlayer } from '../lib/state'
 import { fetchReplay, findSetGames, replayId, summarize, type ReplayGame } from '../lib/replay'
 import { PlayerEditor } from '../components/PlayerEditor'
+import { EventNameFormat } from '../components/TournamentForm'
 import { Preview } from '../components/Preview'
 import { Button, Card, Field, Input, Select, Textarea } from '../components/ui'
 import { rich } from '../components/rich'
@@ -111,6 +112,7 @@ export function ReplayPage({ state, setState }: { state: AppState; setState: (fn
         <Card className="space-y-3">
           <h2 className="text-lg font-bold text-slate-900">{t('ui.replay.resultHeading')}</h2>
           <p className="text-sm text-slate-500">{t('ui.replay.resultHint')}</p>
+          <EventNameFormat value={state.tournament} onChange={(tournament) => setState((s) => ({ ...s, tournament }))} />
           <Field label={t('ui.replay.roundLabel')}>
             <Input placeholder={t('ui.replay.roundPlaceholder')} value={match.round} onChange={(e) => setMatch({ round: e.target.value })} />
           </Field>

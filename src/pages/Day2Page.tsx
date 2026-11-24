@@ -10,6 +10,7 @@ import { fetchRecord, fetchRoster, fetchTeam, fullName, rk9Id, type RosterEntry 
 import { PhotoField, PlayerEditor } from '../components/PlayerEditor'
 import { CardColorField } from '../components/CardColorField'
 import { Preview } from '../components/Preview'
+import { FormatField } from '../components/TournamentForm'
 import { Button, Card, Field, Input, Select } from '../components/ui'
 import { useDialog } from '../components/Dialog'
 import { rich } from '../components/rich'
@@ -230,6 +231,7 @@ export function Day2Page({ state, setState }: { state: AppState; setState: (fn: 
           <Field label={t('ui.day2.captionLabel')}>
             <Input placeholder={t('ui.day2.captionPlaceholder')} value={day2.caption} onChange={(e) => setDay2({ caption: e.target.value })} />
           </Field>
+          <FormatField value={state.tournament} onChange={(tournament) => setState((s) => ({ ...s, tournament }))} />
           <div className="sm:col-span-2">
             <div className="mb-1 flex items-center justify-between">
               <label htmlFor="d2-hue" className="text-sm font-medium text-slate-700">{t('ui.day2.backgroundColor')}</label>

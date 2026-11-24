@@ -8,6 +8,7 @@ import { percent, usageFromPlayers } from '../lib/usage'
 import { Combobox, type Option } from '../components/Combobox'
 import { Preview } from '../components/Preview'
 import { Button, Card, Field, Input } from '../components/ui'
+import { TournamentForm } from '../components/TournamentForm'
 import { t } from '../i18n'
 
 const POKEMON_OPTIONS: Option[] = POKEMON.map((p) => ({ id: p.id, label: p.name, icon: sprites.icon(p.id) }))
@@ -37,7 +38,12 @@ export function UsagePage({ state, setState }: { state: AppState; setState: (fn:
     setMessage('')
     try {
       const result = await importLimitlessUsage(id, limitlessTop || null)
-      setUsage({ entries: result.entries, totalTeams: result.totalTeams })
+      // The event details go to the shared tournament (the same one the Standings tab shows).
+      setState((s) => ({
+        ...s,
+        tournament: result.tournament ? { ...s.tournament, ...result.tournament } : s.tournament,
+        usage: { ...s.usage, entries: result.entries, totalTeams: result.totalTeams },
+      }))
       setMessage(t('ui.usage.counted', { count: result.totalTeams }))
     } catch (e) {
       setMessage(e instanceof Error ? e.message : String(e))
@@ -63,6 +69,9 @@ export function UsagePage({ state, setState }: { state: AppState; setState: (fn:
           </div>
           {message && <p className="text-sm text-slate-700">{message}</p>}
         </Card>
+
+        {/* The Usage graphic prints the event's name, type, date, players and format: enterable here too. */}
+        <TournamentForm value={state.tournament} onChange={(tournament) => setState((s) => ({ ...s, tournament }))} />
 
         <Card className="space-y-3">
           <h2 className="text-lg font-bold text-slate-900">{t('ui.usage.calcHeading')}</h2>
