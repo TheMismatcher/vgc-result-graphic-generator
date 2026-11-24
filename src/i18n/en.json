@@ -86,9 +86,9 @@
   "ui.tournament.division.masters": "masters",
   "ui.tournament.division.seniors": "seniors",
   "ui.tournament.division.juniors": "juniors",
-
   "ui.tournament.showDivisions": "Show division breakdown on graphics",
   "ui.tournament.showDivisionsHint": "Instead of the total ({total}), graphics show each division: {example}.",
+
   "ui.bracket.title": "Top cut bracket",
   "ui.bracket.sizeLabel": "Bracket size",
   "ui.bracket.none": "No bracket",
@@ -589,15 +589,15 @@
   "ui.credits.tools.fonts": "Fonts",
   "ui.credits.privacy.title": "Privacy",
   "ui.credits.privacy.kicker": "What we collect, and why",
-  "ui.credits.privacy.countTitle": "What we count",
-  "ui.credits.privacy.count": "Each time a graphic is copied or downloaded on the Graphics Generator, we count it: which template and style, which tab, whether it was copied or downloaded, the day, and the country it came from (plus the state in the US).",
+  "ui.credits.privacy.countTitle": "What we track",
+  "ui.credits.privacy.count": "We count each time a graphic is copied or downloaded on the Graphics Generator, specifically which template and style, which tab, whether it was copied or downloaded, the day, and the country it came from (plus the state in the US).",
   "ui.credits.privacy.whyTitle": "Why",
-  "ui.credits.privacy.why": "To see which designs people actually use, so we know what to improve, what to retire, and what to make next.",
+  "ui.credits.privacy.why": "Seeing how much each design is used tells us which templates to improve, which to retire, and what we should make next.",
   "ui.credits.privacy.notTitle": "What we don't keep",
-  "ui.credits.privacy.not": "Your IP address is only used to find the country and state, then dropped: it is never saved. We don't collect names, teams, event details, or anything you type or upload, and we don't use cookies or outside tracking services.",
+  "ui.credits.privacy.not": "Your IP address is only used to find the country and state, then dropped: it is never saved. We don't collect, and have no way of reading, player names, teams, event details, or anything you type or upload. The one exception is a link you paste to import results, which our server uses only to fetch that page. We don't use cookies or outside tracking services. We cannot see the contents of files you upload, including images and .tdf files: only the relevant data is read from them, on your device, and then stored in your browser.",
   "ui.credits.privacy.whoTitle": "Who sees it",
-  "ui.credits.privacy.who": "Only the Mismatched.gg admins. The counts are never shared or sold.",
-  "ui.credits.privacy.yoursTitle": "What you make stays with you",
+  "ui.credits.privacy.who": "Only the Mismatched.gg admins. We use it to improve our most- and least-used templates, and to decide which languages to add next.",
+  "ui.credits.privacy.yoursTitle": "What you enter stays on your device",
   "ui.credits.privacy.yours": "Everything you enter in the Graphics Generator (players, teams, photos, branding) is saved in your own browser, not on our servers.",
 
   "ui.import.notImage": "That file isn’t an image.",
@@ -703,10 +703,10 @@
   "gfx.common.cpEarned": "+{cp} CP",
 
   "gfx.facts.players": "{count, plural, one {# Player} other {# Players}}",
-
   "gfx.facts.masters": "{count, plural, one {# Master} other {# Masters}}",
   "gfx.facts.seniors": "{count, plural, one {# Senior} other {# Seniors}}",
   "gfx.facts.juniors": "{count, plural, one {# Junior} other {# Juniors}}",
+
   "gfx.common.tournament": "Tournament",
   "gfx.common.playerN": "Player {n}",
   "gfx.common.topN": "Top {count}",
