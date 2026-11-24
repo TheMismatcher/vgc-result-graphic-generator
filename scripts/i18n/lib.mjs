@@ -62,6 +62,17 @@ export async function templateText() {
         d.live ||= !t.retired
       }
     }
+    // "Condense similar styles" cards (Editorial, Arena, Game Scenes): names only, the descriptions are the styles' own.
+    for (const [list, tab] of Object.entries(TABS)) {
+      for (const t of reg.condenseTemplates(reg[list])) {
+        const card = t.variantOf ?? t.style
+        const sk = styleKey(card)
+        if (!styles.has(sk)) styles.set(sk, { english: card, tabs: new Map() })
+        const s = styles.get(sk)
+        if (s.english !== card) throw new Error(`Two style names share the key ${sk}: "${s.english}" and "${card}"`)
+        if (!s.tabs.has(tab)) s.tabs.set(tab, !!t.retired)
+      }
+    }
     return { styles, descs }
   } finally {
     await server.close()

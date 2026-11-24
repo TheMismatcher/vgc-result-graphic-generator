@@ -21,10 +21,13 @@ export interface Display {
   /** Mosaic: opaque white boxes instead of the see-through ones (the preview frame sets --mz-solid-card). */
   mosaicSolid: boolean
   setMosaicSolid: (on: boolean) => void
+  /** Style picker: similar styles share one card (Editorial, Arena, Game Scenes), picked with the Style switch. */
+  condenseStyles: boolean
+  setCondenseStyles: (on: boolean) => void
 }
 
 // map: Route 119 opens on the bridge; styles without that map open on their first one (Sinnoh Snow: Lake Acuity).
-export const DEFAULT_LOOKS: Looks = { panels: 'glass', card: 'classic', champion: 'hall', map: 'bridge', book: 'scarlet', sprites: 'render', colors: 'standard', result: 'neutral', snowfall: 'game', scene: 'climax', version: '' }
+export const DEFAULT_LOOKS: Looks = { panels: 'glass', card: 'classic', champion: 'hall', map: 'bridge', book: 'scarlet', sprites: 'render', colors: 'standard', result: 'neutral', snowfall: 'game', scene: 'climax', version: '', merged: '' }
 
 export const DisplayContext = createContext<Display>({
   showMegas: false,
@@ -39,6 +42,8 @@ export const DisplayContext = createContext<Display>({
   shuffleTiles: () => {},
   mosaicSolid: false,
   setMosaicSolid: () => {},
+  condenseStyles: false,
+  setCondenseStyles: () => {},
 })
 export const useDisplay = () => useContext(DisplayContext)
 

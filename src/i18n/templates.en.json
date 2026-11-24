@@ -1,4 +1,5 @@
 {
+  "style.arena": "Arena",
   "style.arena-grid": "Arena Grid",
   "style.arena-spotlight": "Arena Spotlight",
   "style.arena-sunset": "Arena Sunset",
@@ -11,8 +12,10 @@
   "style.dynamax": "Dynamax",
   "style.dynamax-cloud": "Dynamax Cloud",
   "style.ecruteak-city": "Ecruteak City",
+  "style.editorial": "Editorial",
   "style.editorial-night": "Editorial Night",
   "style.editorial-paper": "Editorial Paper",
+  "style.game-scenes": "Game Scenes",
   "style.ghost": "Ghost",
   "style.ghost-pixels": "Ghost Pixels",
   "style.ghost-pixels-old": "Ghost Pixels (Old)",

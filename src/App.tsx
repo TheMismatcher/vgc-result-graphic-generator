@@ -48,6 +48,8 @@ export default function App() {
     shuffleTiles: () => setState((s) => ({ ...s, settings: { ...s.settings, tileShuffle: (s.settings.tileShuffle ?? 0) + 1 } })),
     mosaicSolid: state.settings.mosaicSolid ?? false,
     setMosaicSolid: (on) => setState((s) => ({ ...s, settings: { ...s.settings, mosaicSolid: on } })),
+    condenseStyles: state.settings.condenseStyles ?? false,
+    setCondenseStyles: (on) => setState((s) => ({ ...s, settings: { ...s.settings, condenseStyles: on } })),
     setLook: (group, value) => setState((s) => ({ ...s, settings: { ...s.settings, looks: { ...s.settings.looks, [group]: value } } })),
     // CP depends on whether it's a Cup or a Challenge: that's the tournament type.
     cpEvent: cpEventFor(state.tournament.type),

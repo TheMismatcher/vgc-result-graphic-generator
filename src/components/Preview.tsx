@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom'
 import { useLayoutEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
 import type { LookGroup, StandingsLayout, Template } from '../templates/types'
 import { eventTypeKey } from '../data/options'
-import { BRAND_COLOURS, STANDINGS_LAYOUTS, type BrandColour } from '../templates/registry'
+import { BRAND_COLOURS, STANDINGS_LAYOUTS, condenseTemplates, type BrandColour } from '../templates/registry'
 import { copyPng, downloadPng, renderPngFile, slugify, canUseShareSheet } from '../lib/exportImage'
 import { brandVars, useBrand } from '../brand'
 import { useDisplay } from '../lib/display'
@@ -76,7 +76,10 @@ export function Preview<T extends Template>({
   photos?: { players: Player[]; onChange: (uid: string, patch: Partial<Player>) => void } // drag / zoom player photos in the preview
   controls?: ReactNode // extra settings for the selected style (e.g. Sports Page headline), under the switches
 }) {
-  const template = templates.find((t) => t.id === selectedId) ?? templates[0]
+  // "Condense similar styles": the same templates, with similar styles sharing one card and a Style switch.
+  const { condenseStyles, looks } = useDisplay()
+  const list = condenseStyles ? condenseTemplates(templates) : templates
+  const template = list.find((t) => t.id === selectedId) ?? list[0]
   const node = useRef<HTMLDivElement>(null)
   const [busy, setBusy] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -90,15 +93,20 @@ export function Preview<T extends Template>({
   const custom = isBackdropTemplate(template.id)
   // Styles with switches: the other versions of this style in this layout, and the switches that tell them apart.
   const family = (t: T) => t.variantOf ?? t.style
-  const kin = template.look ? templates.filter((t) => t.look && family(t) === family(template) && t.layout === template.layout) : []
+  const kin = template.look ? list.filter((t) => t.look && family(t) === family(template) && t.layout === template.layout) : []
+  // A condensed card's own switches (Map, Panels, ...) only offer what the style picked on its Style switch has.
+  const kinFor = (g: LookGroup) => (g === 'merged' ? kin : kin.filter((t) => t.look!.merged === template.look!.merged))
   const switches = (Object.keys(template.look ?? {}) as LookGroup[])
-    .map((g) => ({ g, options: Object.keys(OPTION_LABELS).filter((v) => kin.some((t) => t.look![g] === v)) }))
+    .map((g) => ({ g, options: Object.keys(OPTION_LABELS).filter((v) => kinFor(g).some((t) => t.look![g] === v)) }))
     .filter((s) => s.options.length > 1)
-  // Flip one switch, keeping the others where they are.
+  // Flip one switch, keeping the others where they are (or, where the new version can't, where they were last set).
   const flip = (g: LookGroup, v: string) => {
     setLook(g, v)
-    const same = (t: T) => (Object.keys(template.look!) as LookGroup[]).every((k) => k === g || !(k in t.look!) || t.look![k] === template.look![k])
-    const next = kin.find((t) => t.look![g] === v && same(t)) ?? kin.find((t) => t.look![g] === v)
+    const score = (t: T) =>
+      (Object.keys(t.look!) as LookGroup[]).reduce((n, k) => n + (k === g ? 0 : t.look![k] === template.look![k] ? 2 : t.look![k] === looks[k] ? 1 : 0), 0)
+    const next = kinFor(g)
+      .filter((t) => t.look![g] === v)
+      .reduce<T | undefined>((best, t) => (best && score(best) >= score(t) ? best : t), undefined)
     if (next && next.id !== template.id) onSelect(next.id)
   }
   // Player photos: drag one to move it in its frame (live, saved on release); the last one touched gets the Zoom slider.
@@ -407,8 +415,21 @@ const layoutName = (id: StandingsLayout) => t(LAYOUT_NAMES[id])
 const LOOK_LABELS: Record<LookGroup, UiKey> = {
   panels: 'ui.preview.look.panels', card: 'ui.preview.look.card', champion: 'ui.preview.look.champion', map: 'ui.preview.look.map', book: 'ui.preview.look.book',
   sprites: 'ui.preview.look.sprites', colors: 'ui.preview.look.colors', result: 'ui.preview.look.result', snowfall: 'ui.preview.look.snowfall', scene: 'ui.preview.look.scene', version: 'ui.preview.look.version',
+  merged: 'ui.preview.look.merged',
 }
 const OPTION_LABELS: Record<string, UiKey> = {
+  // "Condense similar styles": the Style switch on the Classic, Editorial, Arena and Game Scenes cards
+  classicStyle: 'ui.preview.option.classicStyle',
+  comicBook: 'ui.preview.option.comicBook',
+  night: 'ui.preview.option.night',
+  paper: 'ui.preview.option.paper',
+  spotlight: 'ui.preview.option.spotlight',
+  grid: 'ui.preview.option.grid',
+  sunset: 'ui.preview.option.sunset',
+  sinnoh: 'ui.preview.option.sinnoh',
+  ecruteakCity: 'ui.preview.option.ecruteakCity',
+  route119: 'ui.preview.option.route119',
+  glimwood: 'ui.preview.option.glimwood',
   neutral: 'ui.preview.option.neutral',
   game: 'ui.preview.option.game',
   strong: 'ui.preview.option.strong',
@@ -529,18 +550,26 @@ function BackdropControls({ glass }: { glass: boolean }) {
  * in Top Cut (or its first layout). Only the template changes, never the entered data.
  * Usage / Replay / Team Battle have no layouts: just the style cards.
  */
-export function StylePicker<T extends Template>({ templates, current, onSelect, render }: { templates: T[]; current: T; onSelect: (id: string) => void; render: (t: T) => ReactNode }) {
+export function StylePicker<T extends Template>({ templates: all, current: picked, onSelect, render }: { templates: T[]; current: T; onSelect: (id: string) => void; render: (t: T) => ReactNode }) {
   // Retired styles stay hidden unless asked for (the current one always shows, so a saved pick isn't lost).
   const [showRetired, setShowRetired] = useState(false)
+  // "Condense similar styles": Editorial, Arena, Game Scenes ... each become one card (picked on the Preview's Style switch).
+  const { looks, condenseStyles, setCondenseStyles } = useDisplay()
+  const templates = condenseStyles ? condenseTemplates(all) : all
+  const current = templates.find((t) => t.id === picked.id) ?? picked
   // The other half of a Light / Glass pair has no card: its card is the pair's (`variantOf`).
   const currentStyle = current.variantOf ?? current.style
   // Paired styles open (and preview) in the look last picked on the switch.
-  const { looks } = useDisplay()
   const prefer = (t: T) => {
     if (!t.look) return t
     const score = (x: T) => (Object.keys(x.look!) as LookGroup[]).filter((g) => x.look![g] === looks[g]).length
-    const kin = templates.filter((x) => x.look && (x.variantOf ?? x.style) === (t.variantOf ?? t.style) && x.layout === t.layout)
-    return kin.reduce((best, x) => (score(x) > score(best) ? x : best), t)
+    let kin = templates.filter((x) => x.look && (x.variantOf ?? x.style) === (t.variantOf ?? t.style) && x.layout === t.layout)
+    // Condensed cards: the style last picked on the Style switch if this card has it, else the card's first style.
+    if (t.look.merged) {
+      const merged = kin.some((x) => x.look!.merged === looks.merged) ? looks.merged : t.look.merged
+      kin = kin.filter((x) => x.look!.merged === merged)
+    }
+    return kin.reduce((best, x) => (score(x) > score(best) ? x : best), kin.includes(t) ? t : (kin[0] ?? t))
   }
   const retiredCount = new Set(templates.filter((t) => t.retired && !t.variantOf).map((t) => t.style)).size
   const styles = [...new Set(templates.filter((t) => !t.variantOf && (showRetired || !t.retired || t.style === currentStyle)).map((t) => t.style!))]
@@ -603,12 +632,18 @@ export function StylePicker<T extends Template>({ templates, current, onSelect, 
       <div>
         <div className="mb-2 flex items-center justify-between gap-2">
           <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">{layouts ? t('ui.picker.styleHeadingN') : t('ui.picker.styleHeading')}</h3>
-          {retiredCount > 0 && (
+          <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-1">
             <label className="flex items-center gap-1.5 text-xs text-slate-600">
-              <input type="checkbox" checked={showRetired} onChange={(e) => setShowRetired(e.target.checked)} />
-              {t('ui.picker.showRetired', { count: retiredCount })}
+              <input type="checkbox" checked={condenseStyles} onChange={(e) => setCondenseStyles(e.target.checked)} />
+              {t('ui.picker.condense')}
             </label>
-          )}
+            {retiredCount > 0 && (
+              <label className="flex items-center gap-1.5 text-xs text-slate-600">
+                <input type="checkbox" checked={showRetired} onChange={(e) => setShowRetired(e.target.checked)} />
+                {t('ui.picker.showRetired', { count: retiredCount })}
+              </label>
+            )}
+          </div>
         </div>
         <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-500">
           <span className="flex items-center gap-1">{brandDots(['main', 'second', 'highlight'])} {t('ui.picker.brandDotsHint')}</span>

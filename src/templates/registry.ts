@@ -103,6 +103,34 @@ export const BRAND_COLOURS: Record<string, BrandColour[]> = {
   Dynamax: ['highlight'],
   'Classic · Win': ALL,
   'Classic · Loss': ['second'],
+  // "Condense similar styles" cards (see CONDENSED_STYLES): the first style's colours, as that's what the card shows.
+  Editorial: ALL, // Editorial Night
+  Arena: ALL,
+}
+
+// "Condense similar styles" (a picker checkbox): these styles share one card, picked with the Preview's Style switch
+// (`merged` look), each keeping its own switches (Map, Panels, ...). The first style present on a tab is the card.
+export const CONDENSED_STYLES: { card: string; members: [style: string, option: string][] }[] = [
+  { card: 'Classic', members: [['Classic', 'classicStyle'], ['Comic Book', 'comicBook']] },
+  { card: 'Editorial', members: [['Editorial Night', 'night'], ['Editorial Paper', 'paper']] }, // Night first: the card's default
+  { card: 'Arena', members: [['Arena Spotlight', 'spotlight'], ['Arena Grid', 'grid'], ['Arena Sunset', 'sunset']] },
+  { card: 'Game Scenes', members: [['Sinnoh Snow', 'sinnoh'], ['Ecruteak City', 'ecruteakCity'], ['Route 119', 'route119'], ['Glimwood Tangle', 'glimwood']] },
+]
+const CONDENSED_BY_STYLE = new Map(CONDENSED_STYLES.flatMap((g) => g.members.map(([style, option]) => [style, { group: g, option }] as const)))
+/** One tab's templates with similar styles folded into one card each (ids unchanged, so saved picks still open). */
+export function condenseTemplates<T extends Template>(list: T[]): T[] {
+  // The card goes to the first member style on this tab (Event Results, say, has no Game Scenes).
+  const present = new Set(list.map((t) => t.variantOf ?? t.style))
+  const lead = new Map(CONDENSED_STYLES.map((g) => [g.card, g.members.find(([s]) => present.has(s))?.[0]]))
+  return list.map((t) => {
+    const family = t.variantOf ?? t.style ?? ''
+    const hit = CONDENSED_BY_STYLE.get(family)
+    if (!hit || t.retired) return t
+    const { group, option } = hit
+    // Style switch first, then the style's own switches.
+    const look = { merged: option, ...t.look }
+    return !t.variantOf && family === lead.get(group.card) ? { ...t, style: group.card, look } : { ...t, variantOf: group.card, look }
+  })
 }
 
 const flipEntry = ([t, l]: [StandingsTemplate, StandingsLayout]) => [withLoudFlip(t), l] as [StandingsTemplate, StandingsLayout]
