@@ -204,6 +204,10 @@
   text-transform: uppercase;
   color: var(--muted);
 }
+/* Only the tagline (no brand name), at the right where it always sat. */
+.ed-foot-tag {
+  margin-left: auto;
+}
 
 /* ---------- Champion (square) ---------- */
 .edc {

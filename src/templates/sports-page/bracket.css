@@ -1,0 +1,135 @@
+/* Sports Page Bracket (1080 x 1350): names on ink rules joined into the next round, champion's path in red. */
+
+.sp-br {
+  display: flex;
+  flex-direction: column;
+}
+/* Round names: a box-score header bar */
+.sp-br-bar {
+  position: relative;
+  display: flex;
+  margin-top: 16px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.sp-br-bar span {
+  padding: 6px 10px;
+}
+.sp-br-area {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin: 8px 0 76px;
+}
+.sp-br-empty {
+  padding: 60px 40px;
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--grey);
+}
+
+/* One entry: the name sits on its rule, the team's icons hang under it. */
+.sp-br-line {
+  position: absolute;
+  height: 0;
+  border-top: 2px solid var(--ink);
+  margin-top: -1px;
+}
+.sp-br-line.won {
+  border-top: 3px solid var(--ink);
+  margin-top: -1.5px;
+}
+.sp-br-line.won.path {
+  border-top: 4px solid var(--spot);
+  margin-top: -2px;
+}
+.sp-br-name {
+  position: absolute;
+  left: 10px;
+  right: 6px;
+  bottom: 3px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+.sp-br-name > div {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+.sp-br-cp {
+  flex: none;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--spot);
+}
+.sp-br-team {
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  display: flex;
+  line-height: 0;
+}
+.sp-br-line.lost .sp-br-name,
+.sp-br-line.lost .sp-br-team {
+  opacity: 0.45;
+}
+/* The upright joining a match's two rules; the winner's half is redrawn in red. */
+.sp-br-join {
+  position: absolute;
+  width: 0;
+  border-left: 2px solid var(--ink);
+  margin-left: -1px;
+}
+.sp-br-join.win {
+  border-left: 4px solid var(--spot);
+  margin-left: -2px;
+}
+
+/* Champion column */
+.sp-br-stampbox {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 40px;
+}
+.sp-br-champ.won.path {
+  border-top: 6px solid var(--spot);
+  margin-top: -3px;
+}
+.sp-br-champ .sp-br-name {
+  left: 8px;
+  bottom: 4px;
+}
+.sp-br-champ .sp-br-name > div {
+  font-family: 'Anton', sans-serif;
+  font-weight: 400;
+  line-height: 1;
+}
+.sp-br-below {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 0;
+}
+.sp-br-champteam {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--ink);
+}
+.sp-br-below .sp-facts dd {
+  font-size: 19px;
+}

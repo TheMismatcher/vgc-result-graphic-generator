@@ -36,8 +36,18 @@
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
-.sp-mast span:last-child {
+.sp-mast-name {
+  grid-column: 1;
+}
+.sp-mast-date {
+  grid-column: 3;
   text-align: right;
+}
+/* Stands in for the 64px logo (its border is inside that) when the brand has none. */
+.sp-mast-nologo {
+  grid-column: 2;
+  width: 0;
+  height: 64px;
 }
 
 /* Headline, printed twice: a red layer a few pixels off, then black on top */
@@ -263,3 +273,30 @@
 
 /* 5-7 players: box-score rows share the height 8 rows use (8 x 68). */
 .sp.mid .sp-box td { height: calc(590px / var(--n)); }
+
+/* Label + value facts (Champion sidebar, Bracket champion column). */
+.sp-facts {
+  margin: 0;
+}
+.sp-facts > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 4px 0;
+  border-bottom: 1px dotted var(--ink);
+}
+.sp-facts dt {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: var(--spot);
+}
+.sp-facts dd {
+  margin: 0;
+  min-width: 0;
+  font-weight: 700;
+  font-size: 22px;
+  white-space: nowrap;
+}

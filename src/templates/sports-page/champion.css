@@ -1,0 +1,243 @@
+/* Sports Page Champion + Champion + Photo (1080 x 1080). Builds on sports-page.css (.sp paper, mast,
+   headline, deck, stamp, team grid, foot). */
+
+.sp-ch {
+  display: flex;
+  flex-direction: column;
+}
+/* Stacked headline: the slot is as tall as the headline (up to two 120px lines), so a long one set
+   smaller gives its room to the picture. The ink layer is in the flow; the misprint sits under it. */
+.sp-head-stack {
+  height: auto;
+}
+.sp-head-stack .sp-headline:not(.sp-misprint) {
+  position: relative;
+}
+.sp-head-stack .sp-two {
+  line-height: 1;
+}
+/* The page between the deck and the footer rule. */
+.sp-front {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 28px;
+  padding-top: 18px;
+  margin-bottom: 70px;
+}
+
+/* Halftone screens: dots printed over the picture, the way a newspaper prints a photo. */
+.sp-screen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* Red spot-ink dots, dense behind the middle of the picture. */
+.sp-screen-spot {
+  background: radial-gradient(circle, var(--spot) 2.6px, transparent 3px) 0 0 / 11px 11px;
+  -webkit-mask-image: radial-gradient(ellipse 58% 60% at 50% 50%, #000 0%, rgba(0, 0, 0, 0.55) 50%, transparent 85%);
+  mask-image: radial-gradient(ellipse 58% 60% at 50% 50%, #000 0%, rgba(0, 0, 0, 0.55) 50%, transparent 85%);
+  opacity: 0.42;
+}
+/* Fine black dots darkening toward the edges, like the vignette of a cheap photo print. */
+.sp-screen-ink {
+  background: radial-gradient(circle, var(--ink) 1.3px, transparent 1.7px) 0 0 / 7px 7px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, transparent 45%, #000 100%);
+  mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, transparent 45%, #000 100%);
+  opacity: 0.6;
+}
+
+/* Champion: the team as the lead picture */
+.sp-pic {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.sp-pic-frame {
+  position: relative;
+  flex: 1;
+  border: 2px solid var(--ink);
+  overflow: hidden;
+  background: rgba(120, 100, 60, 0.08);
+}
+.sp-pic-team {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  place-items: center;
+  padding: 6px;
+}
+.sp-ch figure > figcaption {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid var(--ink);
+  font-size: 19px;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.25;
+  color: var(--grey);
+}
+
+/* Champion: sidebar with the stamp, facts and the lineup card */
+.sp-ch-side {
+  width: 300px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+}
+.sp-stamp-ch {
+  font-size: 52px;
+  padding: 4px 20px 0;
+  margin: 6px 0 12px;
+}
+/* The lineup card takes the rest of the sidebar; its rows share the height (tighter under a two-line deck). */
+.sp-lineup {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--ink);
+}
+.sp-lineup-head {
+  padding: 4px 10px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.sp-lineup ol {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0 10px;
+  list-style: none;
+}
+.sp-lineup li {
+  padding: 2px 0 3px;
+  border-bottom: 1px dotted var(--ink);
+  line-height: 1.1;
+}
+.sp-lineup li:last-child {
+  border-bottom: none;
+}
+.sp-lu-mon {
+  display: block;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 19px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sp-lu-item {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--grey);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Champion + Photo: the winner's photo printed in halftone, stamp over its corner */
+.sp-portrait {
+  width: 410px;
+  flex: none;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.sp-portrait-frame {
+  position: relative;
+  flex: 1;
+}
+.sp-portrait-img {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 2px solid var(--ink);
+}
+.sp-portrait-img .dmv-photo,
+.sp-portrait-img .dmv-photo-img {
+  filter: grayscale(1) contrast(1.15) brightness(1.04);
+}
+.sp-screen-photo {
+  background: radial-gradient(circle, var(--ink) 1.2px, transparent 1.6px) 0 0 / 6px 6px;
+  opacity: 0.3;
+}
+.sp .dmv-photo-empty {
+  background:
+    radial-gradient(circle, rgba(27, 26, 23, 0.28) 1.6px, transparent 2px) 0 0 / 9px 9px,
+    #d8d0bb;
+}
+.sp .dmv-photo-empty span {
+  font-family: 'Anton', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 170px;
+  color: var(--ink);
+  -webkit-text-stroke: 0;
+}
+.sp-stamp-photo {
+  position: absolute;
+  right: -30px;
+  bottom: 34px;
+  background: rgba(235, 229, 214, 0.55);
+}
+
+.sp-chp-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.sp-team-2 {
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
+}
+.sp-team-2 figure {
+  justify-content: center;
+}
+.sp-team-2 figure:nth-child(-n + 4) {
+  border-bottom: 1px dashed var(--ink);
+}
+.sp-team-2 figure:nth-child(n + 5) {
+  border-bottom: none;
+}
+.sp-facts-strip {
+  display: flex;
+  border-top: 6px solid var(--ink);
+}
+.sp-facts-strip > div {
+  flex: 0 1 auto;
+  min-width: 0;
+  display: block;
+  padding: 8px 12px 4px;
+  border-bottom: none;
+  border-left: 1px dotted var(--ink);
+}
+.sp-facts-strip > .sp-f-follow {
+  flex: 1 1 0;
+}
+.sp-facts-strip > div:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+.sp-facts-strip dd {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

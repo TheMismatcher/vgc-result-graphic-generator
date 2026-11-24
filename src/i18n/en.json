@@ -803,7 +803,7 @@
   "gfx.wide.topBurst": "Top {count}!",
   "gfx.wide.no": "No.{n}",
 
-  "gfx.sportsPage.masthead": "{brand} · Results",
+  "gfx.sportsPage.masthead": "Results",
   "gfx.sportsPage.headline": "{lastName} wins {event}",
   "gfx.sportsPage.theEvent": "the event",
   "gfx.sportsPage.deck": "{winner} to take the {tournament}",
@@ -818,5 +818,8 @@
   "gfx.sportsPage.colPlayer": "Player",
   "gfx.sportsPage.colRecord": "Rec",
   "gfx.sportsPage.colCP": "CP",
-  "gfx.sportsPage.colTeam": "Team"
+  "gfx.sportsPage.colTeam": "Team",
+  "gfx.sportsPage.record": "Record",
+  "gfx.sportsPage.lineup": "Lineup",
+  "gfx.sportsPage.teamCaption": "{winner}’s winning team at the {tournament}."
 }
