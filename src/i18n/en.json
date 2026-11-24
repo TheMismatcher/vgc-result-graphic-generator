@@ -545,7 +545,7 @@
   "ui.credits.people.title": "People",
   "ui.credits.people.kicker": "Who made Mismatched.gg",
   "ui.credits.people.nicholas": "Made the Mismatched.gg Homepage, the Graphics Generator, and Invitational Standings Page. Organizes the DMV Invitational.",
-  "ui.credits.people.tovah": "Built the Calendar bot, and worked on the site as a whole, with feedback and code edits for all parts.",
+  "ui.credits.people.tovah": "Built the Calendar Bot, Control Pannel, and worked on the site as a whole, updating all parts. She also functions as the primary server admin for Mismatched.gg.",
   "ui.credits.people.marlee": "Created the Classic, Comic Book, and Comic Book Poster templates, which served as the first templates and inspired many of the others.",
   "ui.credits.people.adri": "Created the Stream Event Results template, the basis for every Event Results template, and gave feedback on other templates. Created the DMV Falinks logo.",
   "ui.credits.people.twilite": "Came up with the idea for the DMV Invitational and organizes it with Nicholas.",
@@ -567,6 +567,9 @@
   "ui.credits.tools.pdfjs": "Reads standings PDFs",
   "ui.credits.tools.react": "The Graphics Generator's pages",
   "ui.credits.tools.htmlToImage": "Saves graphics as images",
+  "ui.credits.tools.drawsvg": "Converts code into to SVG instructions",
+  "ui.credits.tools.cairosvg": "Turns instructions into beatiful images",
+  "ui.credits.tools.stackoverflow": "[marked as duplicate]",
   "ui.credits.tools.fonts": "Fonts",
 
   "ui.import.notImage": "That file isn’t an image.",

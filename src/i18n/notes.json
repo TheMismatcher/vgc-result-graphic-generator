@@ -511,7 +511,7 @@
   "ui.credits.people.title": "Credits page: heading of the card listing the people who made the site; printed in capitals.",
   "ui.credits.people.kicker": "Credits page: small line under \"People\"; printed in capitals.",
   "ui.credits.people.nicholas": "Credits page: what Nicholas (TheMismatcher) did. Graphics Generator and DMV Invitational are names of things on the site.",
-  "ui.credits.people.tovah": "Credits page: what Tovah did. Calendar bot = the Discord bot behind the Calendar card.",
+  "ui.credits.people.tovah": "Credits page: what Tovah did. Calendar Bot = the Discord bot behind the Calendar card; Control Panel = its settings page.",
   "ui.credits.people.marlee": "Credits page: what Marlee Warwick did. Classic, Comic Book and Comic Book Poster are style names in the generator (keep as written).",
   "ui.credits.people.adri": "Credits page: what Adri did. Stream is a style name; Event Results is the generator tab (keep both as written).",
   "ui.credits.people.twilite": "Credits page: what Twilite did (co-organizer of the DMV Invitational).",
@@ -533,6 +533,9 @@
   "ui.credits.tools.pdfjs": "Credits page: what PDF.js does.",
   "ui.credits.tools.react": "Credits page: shown next to React and Material UI (what the generator's interface is built with).",
   "ui.credits.tools.htmlToImage": "Credits page: what html-to-image does.",
+  "ui.credits.tools.drawsvg": "Credits page: what drawsvg (a Python drawing library the Calendar bot uses) does.",
+  "ui.credits.tools.cairosvg": "Credits page: what CairoSVG (turns the Calendar bot's SVG drawings into images) does.",
+  "ui.credits.tools.stackoverflow": "Credits page: joke line next to Stack Overflow, in the style of its \"marked as duplicate\" label on closed questions. Keep the square brackets.",
   "ui.credits.tools.fonts": "Credits page: shown next to the font names (Montserrat, Anton…). Short label.",
   "ui.day2.photoFor": "Heading above the photo upload next to the Event Results preview. {name} is the player shown in the preview. Shown in capitals.",
   "ui.day2.photo": "Same heading when the player has no name. Shown in capitals."
