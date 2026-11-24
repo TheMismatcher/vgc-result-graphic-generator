@@ -557,7 +557,8 @@ function BackdropControls({ glass }: { glass: boolean }) {
  * in Top Cut (or its first layout). Only the template changes, never the entered data.
  * Usage / Replay / Team Battle have no layouts: just the style cards.
  */
-export function StylePicker<T extends Template>({ templates: all, current: picked, onSelect, render }: { templates: T[]; current: T; onSelect: (id: string) => void; render: (t: T) => ReactNode }) {
+// `afterLayout`: shown between the Layout row and the style cards (Standings puts its Preview there on phones).
+export function StylePicker<T extends Template>({ templates: all, current: picked, onSelect, render, afterLayout }: { templates: T[]; current: T; onSelect: (id: string) => void; render: (t: T) => ReactNode; afterLayout?: ReactNode }) {
   // Retired styles stay hidden unless asked for (the current one always shows, so a saved pick isn't lost).
   const [showRetired, setShowRetired] = useState(false)
   // "Condense similar styles": Editorial, Arena, Game Scenes ... each become one card (picked on the Preview's Style switch).
@@ -636,6 +637,7 @@ export function StylePicker<T extends Template>({ templates: all, current: picke
           {STANDINGS_LAYOUTS.some(({ id }) => !find(current.style!, id)) && <>{' '}{t('ui.picker.dashedNote', { style: styleName(currentStyle ?? '') })}</>}
         </p>
       </div>}
+      {afterLayout}
       <div>
         {/* data-tour="styles": the tour's style stop = the heading, the dots legend and the first row of cards. */}
         <div className="mb-2 flex items-center justify-between gap-2" data-tour="styles">

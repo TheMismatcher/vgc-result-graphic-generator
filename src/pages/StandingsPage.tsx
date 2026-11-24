@@ -14,7 +14,7 @@ import { BulkTeamSheetImport } from '../components/BulkTeamSheetImport'
 import { Button, Card, Field, Input } from '../components/ui'
 import { autoDeck, autoHeadline } from '../templates/sports-page'
 import { CardColorField } from '../components/CardColorField'
-import { Box, Tab, Tabs } from '@mui/material'
+import { Box, Tab, Tabs, useMediaQuery } from '@mui/material'
 import React, { type ReactNode } from 'react'
 import type { StandingsTemplate } from '../templates/types'
 import { t } from '../i18n'
@@ -104,6 +104,23 @@ export function StandingsPage({
       return next
     })
 
+  // Phones (one column): on the Templates tab the Preview sits between the Layout row and the style cards.
+  const oneColumn = useMediaQuery('(max-width: 1023.98px)')
+  const previewInPicker = oneColumn && inputTab === 0
+  const preview = (
+    <Preview
+      templates={STANDINGS_TEMPLATES}
+      selectedId={state.templates.standings}
+      onSelect={onSelect}
+      filenameBase={state.tournament.name}
+      render={render}
+      allowCP
+      showTemplates={false}
+      controls={sportsControls || cardControls}
+      photos={{ players: state.players, onChange: (uid, patch) => setPlayers((ps) => ps.map((p) => (p.uid === uid ? { ...p, ...patch } : p))) }}
+    />
+  )
+
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <Card className="space-y-2">
@@ -116,7 +133,7 @@ export function StandingsPage({
           {/* template pannel */}
           <CustomTabPanel value={inputTab} index={0}>
             {STANDINGS_TEMPLATES.length > 1 && STANDINGS_TEMPLATES.every((t) => t.style) ? (
-              <StylePicker templates={STANDINGS_TEMPLATES} current={template} onSelect={onSelect} render={render} />
+              <StylePicker templates={STANDINGS_TEMPLATES} current={template} onSelect={onSelect} render={render} afterLayout={previewInPicker && preview} />
             ) : STANDINGS_TEMPLATES.length > 1 && (
               <div>
                 <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">{t('ui.standings.templateHeading')}</h3>
@@ -200,19 +217,11 @@ export function StandingsPage({
       </Card>
       
 
-      <div className="lg:sticky lg:top-4 lg:self-start lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto lg:overscroll-contain">
-        <Preview
-          templates={STANDINGS_TEMPLATES}
-          selectedId={state.templates.standings}
-          onSelect={onSelect}
-          filenameBase={state.tournament.name}
-          render={render}
-          allowCP
-          showTemplates={false}
-          controls={sportsControls || cardControls}
-          photos={{ players: state.players, onChange: (uid, patch) => setPlayers((ps) => ps.map((p) => (p.uid === uid ? { ...p, ...patch } : p))) }}
-        />
-      </div>
+      {!previewInPicker && (
+        <div className="lg:sticky lg:top-4 lg:self-start lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto lg:overscroll-contain">
+          {preview}
+        </div>
+      )}
     </div>
   )
 }
