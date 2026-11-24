@@ -594,7 +594,7 @@
   "ui.credits.privacy.whyTitle": "Why",
   "ui.credits.privacy.why": "Seeing how much each design is used tells us which templates to improve, which to retire, and what we should make next.",
   "ui.credits.privacy.notTitle": "What we don't keep",
-  "ui.credits.privacy.not": "Your IP address is only used to find the country and state, then dropped: it is never saved. We don't collect, and have no way of reading, player names, teams, event details, or anything you type or upload. The one exception is a link you paste to import results, which our server uses only to fetch that page. We don't use cookies or outside tracking services. We cannot see the contents of files you upload, including images and .tdf files: only the relevant data is read from them, on your device, and then stored in your browser.",
+  "ui.credits.privacy.not": "Your IP address is only used to find the country and state, then dropped: it is never saved. We don't collect, and have no way of reading, player names, teams, event details, or anything you type or upload, besides links given to fetch tournament data from external sites. We don't use cookies or outside tracking services. We cannot see the contents of files you upload, including images and .tdf files – only the relevant data is read from them, on your device, and then stored in your browser.",
   "ui.credits.privacy.whoTitle": "Who sees it",
   "ui.credits.privacy.who": "Only the Mismatched.gg admins. We use it to improve our most- and least-used templates, and to decide which languages to add next.",
   "ui.credits.privacy.yoursTitle": "What you enter stays on your device",
