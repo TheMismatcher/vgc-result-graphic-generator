@@ -549,5 +549,21 @@
   "ui.credits.tools.stackoverflow": "Credits page: joke line next to Stack Overflow, in the style of its \"marked as duplicate\" label on closed questions. Keep the square brackets.",
   "ui.credits.tools.fonts": "Credits page: shown next to the font names (Montserrat, Anton…). Short label.",
   "ui.day2.photoFor": "Heading above the photo upload next to the Event Results preview. {name} is the player shown in the preview. Shown in capitals.",
-  "ui.day2.photo": "Same heading when the player has no name. Shown in capitals."
+  "ui.day2.photo": "Same heading when the player has no name. Shown in capitals.",
+  "ui.tour.open": "Header button that starts the feature tour again. Short label.",
+  "ui.tour.welcome.title": "Title of the first card of the feature tour, shown on someone's first visit. Shown in capitals.",
+  "ui.tour.start": "Button on the tour's first card that starts the tour. Short label.",
+  "ui.tour.skip": "Button on the tour's first card that closes it without starting. Short label.",
+  "ui.tour.skipTour": "Button on each tour step that closes the tour. Short label.",
+  "ui.tour.back": "Tour button: go to the previous step. Short label.",
+  "ui.tour.next": "Tour button: go to the next step. Short label.",
+  "ui.tour.done": "Tour button on the last step: closes the tour. Short label.",
+  "ui.tour.stepCount": "Step counter on the tour card, shown in capitals. {n} is the step number, {total} the number of steps.",
+  "ui.tour.sample.body": "Clear Data, Load sample and Save file are the header buttons' names (ui.app.startOver, ui.app.loadSample, ui.app.saveFile): use the same words.",
+  "ui.tour.tabs.body": "Standings, Usage, Replay, Team Battle and Event Results are the tab names (ui.app.tab.*): use the same words. Limitless, Showdown, RK9, Pokédata and Reportworm are site names: don't translate.",
+  "ui.tour.layout.body": "Top Cut, Top 8, Champion and Bracket refer to the layout buttons (ui.picker.layout.*).",
+  "ui.tour.styles.body": "Branding is the tab name (ui.app.tab.branding).",
+  "ui.tour.options.body": "Show CP earned is the checkbox's name (ui.preview.showCP). Mosaic and Route are style names (not translated); Solid and Glass are the switch options' names.",
+  "ui.tour.preview.body": "Download PNG is the button's name (ui.preview.downloadPng).",
+  "ui.tour.branding.body": "Clear Data is the header button's name (ui.app.startOver)."
 }
