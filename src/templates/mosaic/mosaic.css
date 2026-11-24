@@ -131,16 +131,16 @@
 }
 
 /* Tinted versions: soft brand tints like the Mosaic theme's other layouts. `glass` lets the tiles
-   show through; `solid` keeps the cards opaque. */
+   show through; `solid` keeps the cards opaque. "Opaque boxes" (--mz-solid-card) makes glass / semi opaque too. */
 .mz-tint {
   --mz-base: #fff;
   --mz-ink: #1f2330;
 }
 .mz-tint.glass {
-  --mz-base: rgba(255, 255, 255, 0.78);
+  --mz-base: var(--mz-solid-card, rgba(255, 255, 255, 0.78));
 }
 .mz-tint.semi {
-  --mz-base: rgba(255, 255, 255, 0.9);
+  --mz-base: var(--mz-solid-card, rgba(255, 255, 255, 0.9));
 }
 .mz-tint .mz-head {
   background: var(--mz-base);

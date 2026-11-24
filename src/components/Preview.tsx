@@ -18,7 +18,10 @@ import { t, type UiKey } from '../i18n'
 
 /** Shows a fixed-size graphic scaled down to fit its container. */
 export function Scaled({ width, height, maxWidth, children, nodeRef, fitViewport = false,}: { width: number; height: number; maxWidth?: number; children: ReactNode; nodeRef?: React.Ref<HTMLDivElement>; fitViewport?: boolean; }) {
-  const vars = { ...brandVars(useBrand()), ...opacityVars(useBackdrop().opacity) }
+  // "Opaque boxes" on the Mosaic styles: their CSS uses --mz-solid-card, when set, in place of its see-through white,
+  // and data-mz-solid keeps faded boxes (lost games) solid while their contents fade.
+  const { mosaicSolid } = useDisplay()
+  const vars = { ...brandVars(useBrand()), ...opacityVars(useBackdrop().opacity), ...(mosaicSolid ? { '--mz-solid-card': '#fff' } : {}) }
   const box = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(0.4)
   useLayoutEffect(() => {
@@ -44,7 +47,7 @@ export function Scaled({ width, height, maxWidth, children, nodeRef, fitViewport
   return (
     <div ref={box} className="w-full">
       <div style={{ width: width * scale, height: height * scale }} className="mx-auto overflow-hidden">
-        <div ref={nodeRef} style={{ ...vars, width, height, transform: `scale(${scale})`, transformOrigin: 'top left' }}>
+        <div ref={nodeRef} data-mz-solid={mosaicSolid || undefined} style={{ ...vars, width, height, transform: `scale(${scale})`, transformOrigin: 'top left' }}>
           {children}
         </div>
       </div>
@@ -78,7 +81,7 @@ export function Preview<T extends Template>({
   const [busy, setBusy] = useState(false)
   const [copied, setCopied] = useState(false)
   const [saved, setSaved] = useState<{ file: File; url: string } | null>(null) // phone: rendered image waiting to be saved
-  const { showMegas, setShowMegas, showCP, setShowCP, cpEvent, setCpEvent, setLook, shuffleTiles } = useDisplay()
+  const { showMegas, setShowMegas, showCP, setShowCP, cpEvent, setCpEvent, setLook, shuffleTiles, mosaicSolid, setMosaicSolid } = useDisplay()
   const dialog = useDialog()
   // Custom Glass: the photo is dragged on the preview; the live position stays local until the drag ends.
   const backdropCtx = useBackdrop()
@@ -234,6 +237,13 @@ export function Preview<T extends Template>({
           <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
             <input type="checkbox" className="h-4 w-4 accent-[#b3121b]" checked={showCP} onChange={(e) => setShowCP(e.target.checked)} />
             {t('ui.preview.showCP')}
+          </label>
+        )}
+        {/* Mosaic styles (not Mosaic Contrast, whose boxes are always opaque). */}
+        {template.style?.startsWith('Mosaic') && template.style !== 'Mosaic Contrast' && (
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
+            <input type="checkbox" className="h-4 w-4 accent-[#b3121b]" checked={mosaicSolid} onChange={(e) => setMosaicSolid(e.target.checked)} />
+            {t('ui.preview.mosaicSolid')}
           </label>
         )}
         {allowCP && showCP && (

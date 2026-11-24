@@ -4,7 +4,7 @@
  * semi-translucent white cards, soft brand tints and dark readable text.
  */
 .themed.theme-mosaic {
-  --mz-card: rgba(255, 255, 255, 0.9); /* same as Top Cut (Tinted Semi + Shadow) */
+  --mz-card: var(--mz-solid-card, rgba(255, 255, 255, 0.9)); /* same as Top Cut (Tinted Semi + Shadow); opaque with "Opaque boxes" */
   --mz-ink: #1f2330;
   --mz-muted: #5b6070;
   --mz-shadow: 0 8px 0 rgba(20, 24, 40, 0.22), 0 16px 30px rgba(20, 24, 40, 0.28);
@@ -129,7 +129,7 @@
   color: var(--mz-ink);
 }
 .themed.theme-mosaic .p4-plate {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--mz-solid-card, rgba(255, 255, 255, 0.9));
   border: 0;
   box-shadow: none;
   transform: none;
@@ -216,6 +216,21 @@
 }
 .themed.theme-mosaic .br-entry.lost {
   opacity: 0.65;
+}
+/* "Opaque boxes" (the preview sets data-mz-solid): faded boxes stay solid, only what's in them fades
+   (bracket losers here; lost Team Battle games, faded by team-battle.css and results.css). */
+[data-mz-solid] .themed.theme-mosaic .br-entry.lost,
+[data-mz-solid] .themed.theme-mosaic .tb-card.lost {
+  opacity: 1;
+}
+[data-mz-solid] .themed.theme-mosaic .br-entry.lost > * {
+  opacity: 0.65;
+}
+[data-mz-solid] .themed.theme-mosaic .tb-card.lost > * {
+  opacity: 0.7;
+}
+[data-mz-solid] .themed.theme-mosaic.tb-loss .tb-card.lost > * {
+  opacity: 0.72;
 }
 .themed.theme-mosaic .br-champ {
   border: 0;

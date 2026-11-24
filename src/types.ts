@@ -118,6 +118,7 @@ export interface AppState {
     showMegas: boolean
     showCP: boolean
     tileShuffle?: number // Mosaic tile wall: 0 / missing = the layout from the event's name and date; "Shuffle tiles" bumps it
+    mosaicSolid?: boolean // Mosaic: "Opaque boxes" (white boxes the tile wall doesn't show through)
     // Last pick on the Preview's switch for paired styles; every paired style opens this way
     looks?: Partial<Record<'panels' | 'card' | 'champion', string>>
   }

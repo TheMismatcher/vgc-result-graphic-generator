@@ -148,6 +148,7 @@
   "ui.preview.showCP": "CP = Championship Points.",
   "ui.preview.cpEventLabel": "Screen-reader label of the two-button switch League Cup / League Challenge.",
   "ui.preview.shuffleHint": "Shown next to the Shuffle tiles button on the Mosaic styles.",
+  "ui.preview.mosaicSolid": "Checkbox on the Mosaic styles, next to Show Mega forms: makes the see-through white boxes solid white so the tile wall doesn't show through them. Short label.",
   "ui.preview.sportsHeadline": "Label of the box for the Sports Page headline, under the Preview when the Sports Page style is picked.",
   "ui.preview.sportsDeck": "Label of the box for the line under the Sports Page headline (newspaper \"deck\").",
   "ui.preview.sportsTextHint": "Shown under the Sports Page headline boxes in the Preview.",

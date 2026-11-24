@@ -18,6 +18,9 @@ export interface Display {
   /** Mosaic tile wall: added to the wall's seed (0 = the layout from the event's name and date). */
   tileShuffle: number
   shuffleTiles: () => void
+  /** Mosaic: opaque white boxes instead of the see-through ones (the preview frame sets --mz-solid-card). */
+  mosaicSolid: boolean
+  setMosaicSolid: (on: boolean) => void
 }
 
 // map: Route 119 opens on the bridge; styles without that map open on their first one (Sinnoh Snow: Lake Acuity).
@@ -34,6 +37,8 @@ export const DisplayContext = createContext<Display>({
   setLook: () => {},
   tileShuffle: 0,
   shuffleTiles: () => {},
+  mosaicSolid: false,
+  setMosaicSolid: () => {},
 })
 export const useDisplay = () => useContext(DisplayContext)
 

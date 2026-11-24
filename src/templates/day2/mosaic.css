@@ -1,7 +1,7 @@
 /* Event Results (Mosaic): soft white cards with the Mosaic hard + soft drop shadow (scaled for 1644px). */
 .d2m-card {
   position: absolute;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--mz-solid-card, rgba(255, 255, 255, 0.92)); /* opaque with "Opaque boxes" */
   border-radius: 22px;
   box-shadow: 0 12px 0 rgba(20, 24, 40, 0.22), 0 24px 45px rgba(20, 24, 40, 0.3);
 }
