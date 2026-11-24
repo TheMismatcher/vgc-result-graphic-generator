@@ -8,6 +8,7 @@ import { BRAND_COLOURS, STANDINGS_LAYOUTS, condenseTemplates, type BrandColour }
 import { copyPng, downloadPng, renderPngFile, slugify, canUseShareSheet } from '../lib/exportImage'
 import { brandVars, useBrand } from '../brand'
 import { useDisplay } from '../lib/display'
+import { countUse } from '../lib/usageCount'
 import { BackdropContext, DEFAULT_OPACITY, isBackdropTemplate, opacityVars, readBackdrop, startDrag, useBackdrop } from '../lib/backdrop'
 import type { BackdropPhoto, Player } from '../types'
 import { PhotoFrameContext, photoFrame } from '../templates/shared/parts'
@@ -80,6 +81,8 @@ export function Preview<T extends Template>({
   const { condenseStyles, looks } = useDisplay()
   const list = condenseStyles ? condenseTemplates(templates) : templates
   const template = list.find((t) => t.id === selectedId) ?? list[0]
+  // Template use counts take the registry's own entry (its real style name, not a condensed card's).
+  const registryTemplate = templates.find((t) => t.id === template.id) ?? template
   const node = useRef<HTMLDivElement>(null)
   const [busy, setBusy] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -171,6 +174,7 @@ export function Preview<T extends Template>({
     setBusy(true)
     try {
       await copyPng(node.current, template.width, template.height)
+      countUse(registryTemplate, 'copy')
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch (e) {
@@ -193,6 +197,8 @@ export function Preview<T extends Template>({
       } else {
         await downloadPng(node.current, template.width, template.height, filename)
       }
+      // Phones: counted once the image is made (the Save button in the sheet comes after).
+      countUse(registryTemplate, 'download')
     } catch (e) {
       dialog.notify(t('ui.preview.createError', { message: e instanceof Error ? e.message : String(e) }))
     } finally {

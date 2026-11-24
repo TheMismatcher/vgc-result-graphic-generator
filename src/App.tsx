@@ -171,6 +171,16 @@ export default function App() {
         {tab === 'branding' && <BrandingPage state={state} setState={setState} />}
       </main>
       <Tour open={touring} onClose={() => setTouring(false)} />
+
+      {/* The Credits page: who made the site, and what we collect (its Privacy section). */}
+      <footer className="mx-auto max-w-7xl px-4 pb-8 text-center">
+        <a
+          href="/credits/#privacy"
+          className="inline-block rounded-full bg-[#111] px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-white hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b3121b]"
+        >
+          {t('ui.app.footer.credits')}
+        </a>
+      </footer>
     </div>
     </DisplayContext.Provider>
     </BackdropContext.Provider>
