@@ -52,7 +52,7 @@ export function StandingsPage({
   setState: (fn: (s: AppState) => AppState) => void, 
 }) {
   const [inputTab, setInputTab] = React.useState(0);
-  // The Data panel's own source tabs (Limitless / TOM File / Photo / PDF); separate from Templates / Data.
+  // The Data panel's own source tabs (Limitless / Photo / PDF); separate from Templates / Data.
   const [sourceTab, setSourceTab] = React.useState(0);
   const [bulkSheets, setBulkSheets] = React.useState(false);
   // The feature tour points at the layout and style pickers, so it opens the Templates panel.
