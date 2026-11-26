@@ -140,11 +140,20 @@ Done by Claude with the Google Sheets connector (no credentials in this repo):
 
 ### Bringing reviewed wording into the app
 
-1. From the sheet, take rows with Status `Approved` and a "Your edit" that differs from "English (in the app)".
-2. Write them as `[{ "id": "...", "text": "<Your edit>" }]` to a file and run `npm run i18n:apply -- that-file.json`.
-   It warns when the placeholders change (the code must pass them).
-3. `npx tsc -b`, render-check every touched graphic (long text can overflow), then sync the sheet so
-   "English (in the app)" matches.
+**Nicholas has the final word on wording.** His edit goes into the app exactly as he wrote it; any
+change Claude would make to it (even a typo, a period or a button name) is only a suggestion until he
+approves it.
+
+1. From the sheet, take rows with Status `Approved` or `Changed` and a "Your edit" that differs from
+   "English (in the app)".
+2. Read each edit. If you have nothing to suggest, it goes in as written. If you would change anything,
+   hold that row back (neither his text nor yours goes in yet) and send Nicholas a numbered list: his
+   text, your suggestion with the changed words in bold, and a short reason. He answers by number;
+   only then do those rows go in, with the wording he chose.
+3. Write the rows to apply as `[{ "id": "...", "text": "..." }]` to a file and run
+   `npm run i18n:apply -- that-file.json`. It warns when the placeholders change (the code must pass them).
+4. `npx tsc -b`, render-check every touched graphic and screen (long text can overflow), then sync the
+   sheet: "English (in the app)" and "Your edit" = the final text, Status `Approved`.
 
 ### Cut rows
 
