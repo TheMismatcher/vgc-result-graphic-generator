@@ -7,7 +7,6 @@ import { PlayerEditor } from '../components/PlayerEditor'
 import { Preview, Scaled, StylePicker } from '../components/Preview'
 import { TournamentForm } from '../components/TournamentForm'
 import { LimitlessImport } from '../components/LimitlessImport'
-import { TdfUpload } from '../components/tdfUpload'
 import { StandingsPhotoImport } from '../components/StandingsPhotoImport'
 import { BracketEditor } from '../components/BracketEditor'
 import { BulkTeamSheetImport } from '../components/BulkTeamSheetImport'
@@ -167,17 +166,13 @@ export function StandingsPage({
                   <Tabs value={sourceTab} onChange={(_e, v: number) => setSourceTab(v)} aria-label={t('ui.standings.sourceLabel')}>
                     {/* i18n-ignore: brand name */}
                     <Tab label="Limitless" {...a11yProps(0, 'source')} />
-                    <Tab label={t('ui.standings.sourceTom')} {...a11yProps(1, 'source')} />
-                    <Tab label={t('ui.standings.sourcePhoto')} {...a11yProps(2, 'source')} />
+                    <Tab label={t('ui.standings.sourcePhoto')} {...a11yProps(1, 'source')} />
                   </Tabs>
                 </Box>
                 <CustomTabPanel value={sourceTab} index={0}>
                   <LimitlessImport setState={setState} />
                 </CustomTabPanel>
                 <CustomTabPanel value={sourceTab} index={1}>
-                  <TdfUpload setState={setState} />
-                </CustomTabPanel>
-                <CustomTabPanel value={sourceTab} index={2}>
                   <StandingsPhotoImport setState={setState} />
                 </CustomTabPanel>
               </Card>

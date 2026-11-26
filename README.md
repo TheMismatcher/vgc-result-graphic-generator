@@ -10,7 +10,7 @@ Everything runs in the browser: graphics are drawn on the page and saved as PNGs
 - **Replay:** paste a Pokémon Showdown replay (the last game of a best-of-3 is enough) to get both teams with items, the set score, and the winner.
 - **Team Battle:** team-vs-team weeks (e.g. USPL): paste one replay per set for a graphic with every set, both teams, and the overall result. Neutral, Win, and Loss versions.
 - **Event Results:** one graphic per player at a big event, such as a Regional (e.g. who made Day 2), with name, record, team, and photo pulled from RK9.
-- **Imports:** Limitless (standings, teams, bracket, usage), RK9 (rosters, team lists, records), TOM `.tdf` files, **photos, screenshots, or PDFs of TOM standings pages** (for events that only post a picture; PDFs are read exactly), Pokepaste / Showdown exports, Showdown replays, and **Pokémon Champions team screenshots** (phone or Switch; read in the browser, even with nicknames).
+- **Imports:** Limitless (standings, teams, bracket, usage), RK9 (rosters, team lists, records), **photos, screenshots, or PDFs of TOM standings pages** (for events that only post a picture; PDFs are read exactly), Pokepaste / Showdown exports, Showdown replays, and **Pokémon Champions team screenshots** (phone or Switch; read in the browser, even with nicknames).
 - **Branding:** DMV VGC built in, or your own name, logo, and colors (type or pick hex codes). Save as many brands as you like and switch between them; they stay in your browser and can be exported to a file to share or move to another device.
 - **Extras:** Mega forms, player photos, save/open tournament files, copy image to clipboard.
 
