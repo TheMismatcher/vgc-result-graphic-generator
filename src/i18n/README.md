@@ -57,7 +57,7 @@ dialog.confirm(t('ui.branding.deleteConfirm', { name, builtIn: DMV_BRAND.name })
 - **Don't put in the catalog:** player / team / event names and other user data; Pokémon, item, move
   and ability names (they come from `public/data/names`, nine languages); brand names (DMV VGC, Play!
   Pokémon, RK9, Limitless, Showdown…) except inside a sentence; the English that the import readers
-  match against (RK9 / Limitless / TOM parsing, team-sheet natures and item names). Those files or
+  match against (RK9 / Limitless, team-sheet natures and item names). Those files or
   lines get `i18n-ignore` comments.
 - **Style names and Standings descriptions** stay as they are in the registry (style names are also
   ids). The picker shows them through `styleName()` / `templateDescription()`, which read
@@ -71,7 +71,7 @@ dialog.confirm(t('ui.branding.deleteConfirm', { name, builtIn: DMV_BRAND.name })
 - area for `ui`: `home` for the mismatched.gg home page (`home/index.html`, a plain HTML page: elements carry
   `data-i18n="key"`, see scripts/i18n/home.mjs), otherwise the tab or component: `common` (reused everywhere: Remove, Delete, Loading…), `app`,
   `standings`, `usage`, `replay`, `teamBattle`, `eventResults`, `branding`, `preview`, `picker`,
-  `player`, `bracket`, `tournament`, `import.limitless` / `import.rk9` / `import.tdf` /
+  `player`, `bracket`, `tournament`, `import.limitless` / `import.rk9` /
   `import.teamSheet` / `import.screenshot` / `import.standingsPhoto` / `import.pokepaste` /
   `import.replay`, `dialog`. Add new areas to `AREAS` in scripts/i18n/sync.mjs so the sheet names them.
 - area for `gfx`: `common` (on many styles: Player, Champion, Top Cut, +{cp} CP…), `facts` (the small
