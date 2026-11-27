@@ -172,6 +172,28 @@ export default function App() {
       </main>
       <Tour open={touring} onClose={() => setTouring(false)} />
 
+      {/* Ko-fi: the home page's support panel (same text, ui.home.kofi.*), drawn as one of this page's white cards. */}
+      <section className="mx-auto mb-6 max-w-7xl px-4">
+        {/* Phones: cup beside the title, text and button full width below (as on the home page). */}
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-2 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex sm:flex-wrap sm:gap-x-5 sm:gap-y-3 sm:px-5">
+          <div aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#29abe0] sm:h-12 sm:w-12">
+            <svg viewBox="0 0 24 24" className="h-6 w-6 sm:h-7 sm:w-7" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" /><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16" /><path d="M10 11.2c-.9-1-2.6-.4-2.6 1 0 1.3 2.6 3 2.6 3s2.6-1.7 2.6-3c0-1.4-1.7-2-2.6-1z" fill="#fff" stroke="none" /></svg>
+          </div>
+          <div className="contents sm:block sm:min-w-0 sm:flex-[1_1_320px]">
+            <h2 className="text-lg font-bold text-slate-900">{t('ui.home.kofi.title')}</h2>
+            <p className="col-span-2 text-sm text-slate-600 sm:mt-0.5">{t('ui.home.kofi.text')}</p>
+          </div>
+          <a
+            href="https://ko-fi.com/mismatchedvgc"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="col-span-2 mt-1 inline-flex items-center gap-2 justify-self-start sm:mt-0 rounded-lg bg-[#29abe0] px-4 py-2 text-sm font-bold uppercase tracking-wide text-white shadow-sm hover:bg-[#1f93c4] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#111]"
+          >
+            {t('ui.home.kofi.go')} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </section>
+
       {/* The Credits page: who made the site, and what we collect (its Privacy section). */}
       <footer className="mx-auto max-w-7xl px-4 pb-8 text-center">
         <a
